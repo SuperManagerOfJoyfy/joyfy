@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
+import flagUnitedKingdom from "./../../../assets/images/flagUnitedKingdom.png";
+
 import { MdLanguage } from "react-icons/md";
 
-import { Button } from "./Button";
 import React from "react";
+import Image from "next/image";
+import { Button } from "./Button";
 
 const meta = {
   title: "Components/Button",
@@ -34,9 +37,11 @@ const meta = {
         "Whether the button should take up the full width of its container",
     },
     startIcon: {
+      control: { type: "object" },
       description: "Icon to display at the start of the button",
     },
     endIcon: {
+      control: { type: "object" },
       description: "Icon to display at the end of the button",
     },
   },
@@ -92,6 +97,24 @@ export const FullWidth: Story = {
     fullWidth: true,
     variant: "primary",
   },
+  parameters: {
+    layout: "fullscreen",
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "100vw",
+        padding: "16px",
+        boxSizing: "border-box",
+      }}
+    >
+      <Button {...args} />
+    </div>
+  ),
 };
 
 export const Sizes: Story = {
@@ -113,6 +136,17 @@ export const WithIcon: Story = {
     variant: "primary",
     children: "Button with Start Icon",
     startIcon: <MdLanguage size={24} />,
+  },
+};
+
+export const WithPngImage: Story = {
+  args: {
+    variant: "primary",
+    size: "small",
+    children: "English",
+    startIcon: (
+      <Image src={flagUnitedKingdom} alt="UK flag" width={20} height={20} />
+    ),
   },
 };
 

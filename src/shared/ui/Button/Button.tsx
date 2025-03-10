@@ -1,7 +1,6 @@
 import { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import { clsx } from "clsx";
-
-import s from "./button.module.scss";
+import s from "./Button.module.scss";
 
 export const buttonVariant = [
   "primary",
@@ -52,7 +51,7 @@ export const Button = <T extends ElementType = "button">(
   return (
     <Component className={classNames} {...rest}>
       {startIcon && <span className={s.startIcon}>{startIcon}</span>}
-      {children && <span className={s.content}>{children}</span>}
+      {children}
       {endIcon && <span className={s.endIcon}>{endIcon}</span>}
     </Component>
   );

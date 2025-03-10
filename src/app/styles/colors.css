@@ -31,13 +31,13 @@
   --color-light-100: #fff;
   --color-light-300: #f9f7ff;
   --color-light-500: #f4f2fa;
-  --color-light-700: #dcdae0;
-  --color-light-900: #c3c1c7;
+  --color-light-700: #D5DAE0;
+  --color-light-900: #8D9094;
 
   /* dark */
-  --color-dark-100: #808080;
-  --color-dark-300: #4c4c4c;
-  --color-dark-500: #333;
-  --color-dark-700: #171717;
+  --color-dark-100: #4c4c4c;
+  --color-dark-300: #333;
+  --color-dark-500: #171717;
+  --color-dark-700: #0D0D0D;
   --color-dark-900: #000;
 }
