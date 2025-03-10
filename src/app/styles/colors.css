@@ -1,10 +1,10 @@
 :root {
   /* accent */
-  --color-accent-100: #bea6ff;
-  --color-accent-300: #a280ff;
-  --color-accent-500: #8c61ff;
-  --color-accent-700: #704ecc;
-  --color-accent-900: #382766;
+  --color-accent-100: #73A5FF;
+  --color-accent-300: #4C8DFF;
+  --color-accent-500: #397DF6;
+  --color-accent-700: #2F68CC;
+  --color-accent-900: #234E99;
 
   /* success */
   --color-success-100: #80ffbf;
@@ -26,13 +26,6 @@
   --color-warning-500: #d99000;
   --color-warning-700: #960;
   --color-warning-900: #640;
-
-  /* info */
-  --color-info-100: #73a5ff;
-  --color-info-300: #4c8dff;
-  --color-info-500: #397df6;
-  --color-info-700: #2f68cc;
-  --color-info-900: #234e99;
 
   /* light */
   --color-light-100: #fff;

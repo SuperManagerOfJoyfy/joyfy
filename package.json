@@ -36,6 +36,7 @@
     "@storybook/nextjs": "8.6.4",
     "@storybook/react": "8.6.4",
     "@storybook/test": "8.6.4",
+    "@storybook/theming": "^8.6.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -45,6 +46,7 @@
     "eslint-config-next": "15.2.1",
     "eslint-plugin-storybook": "^0.11.4",
     "playwright": "^1.51.0",
+    "sass": "^1.85.1",
     "storybook": "8.6.4",
     "typescript": "^5",
     "vitest": "^3.0.8"
