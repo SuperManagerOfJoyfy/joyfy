@@ -17,10 +17,10 @@ type Props = {
 function Tabs({ className, defaultValue, tabs }: Props) {
   return (
     <RadixTabs.Root className={s.root} defaultValue={defaultValue}>
-      <RadixTabs.List className={s.tabsList}>
+      <RadixTabs.List className={s.tabList}>
         {tabs.map((tab) => (
           <RadixTabs.Trigger
-            className={clsx(s.tabTrigger, className)}
+            className={clsx(s.tab, className)}
             disabled={tab.disabled}
             key={tab.value}
             value={tab.value}

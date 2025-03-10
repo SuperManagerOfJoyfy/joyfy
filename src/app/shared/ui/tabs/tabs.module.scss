@@ -1,15 +1,22 @@
-.tabTrigger {
+.tabList {
+  display: flex;
+}
+
+.tab {
   cursor: pointer;
   border: none;
-  padding: 6px 24px;
+  width: 100%;
+  justify-content: center;
+  padding: 6px 0 6px 0;
   font-size: var(--font-size-m);
   font-weight: 600;
-  color: var(--color-info-500);
-  border-bottom: 2px solid var(--color-info-500);
+  color: var(--color-dark-300);
+  border-bottom: 2px solid var(--color-dark-300);
   background: transparent;
-  display: inline-flex;
-  flex-shrink: 0;
-  flex-wrap: nowrap;
+
+  &:active {
+    background: rgba(115, 165, 255, 0.15);
+  }
 
   &:focus {
     border: 1px solid var(--color-info-700);
@@ -22,8 +29,15 @@
     background: rgba(35, 78, 153, 0.15);
   }
 
+  &:disabled {
+    color: var(--color-info-900);
+    border-bottom: 2px solid var(--color-info-900);
+    opacity: 0.7;
+  }
+
   &[data-state='active'] {
-    background: rgba(115, 165, 255, 0.15);
+    color: var(--color-info-500);
+    border-bottom: 2px solid var(--color-info-500);
   }
 
   &[data-disabled] {

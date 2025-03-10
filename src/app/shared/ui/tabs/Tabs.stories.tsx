@@ -15,21 +15,9 @@ export const Default: Story = {
     defaultValue: 'tab1',
 
     tabs: [
-      { title: 'SignIn', value: 'tab1' },
-      { title: 'Register', value: 'tab2' },
-      { title: 'Contact', value: 'tab3' },
-    ],
-  },
-};
-
-export const DisabledTab: Story = {
-  args: {
-    defaultValue: 'tab1',
-
-    tabs: [
-      { title: 'SignIn', value: 'tab1' },
-      { title: 'Register', value: 'tab2' },
-      { disabled: true, title: 'Contact', value: 'tab3' },
+      { title: 'Tab', value: 'tab1' },
+      { title: 'Tab', value: 'tab2' },
+      { title: 'Tab', value: 'tab3', disabled: true },
     ],
   },
 };

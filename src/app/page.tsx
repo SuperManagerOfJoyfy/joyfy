@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import styles from './page.module.css';
-import Tabs from './shared/ui/tabs/Tabs';
 
 export default function Home() {
   return (
@@ -90,14 +89,6 @@ export default function Home() {
           />
           Go to nextjs.org →
         </a>
-        <Tabs
-          tabs={[
-            { title: 'signIn', value: 'signIn' },
-            { title: 'register', value: 'register' },
-            { title: 'signOut', value: 'signOut', disabled: true },
-          ]}
-          defaultValue="signIn"
-        />
       </footer>
     </div>
   );
