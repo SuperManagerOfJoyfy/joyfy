@@ -5,6 +5,7 @@ import { action } from "@storybook/addon-actions";
 const meta: Meta<typeof TextField> = {
 	title: 'Components/TextField',
 	component: TextField,
+	tags: ["autodocs"],
 	argTypes: {
     search: {
       control: 'boolean',
