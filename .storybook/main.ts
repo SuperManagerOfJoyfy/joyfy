@@ -16,7 +16,6 @@ const config: StorybookConfig = {
     "options": {}
   },
   "staticDirs": [
-    // "..\\public"
 		"../public"
   ]
 };
