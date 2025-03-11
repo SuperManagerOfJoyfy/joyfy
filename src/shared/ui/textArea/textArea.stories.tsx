@@ -1,19 +1,18 @@
-import type { Meta } from "@storybook/react";
-
-import { useState } from "react";
-import { TextArea } from "./TextArea";
+import type { Meta } from '@storybook/react'
+import { useState } from 'react'
+import { TextArea } from './TextArea'
 
 const meta = {
   component: TextArea,
-  tags: ["autodocs"],
-  title: "UI/Text Area",
-} satisfies Meta<typeof TextArea>;
+  tags: ['autodocs'],
+  title: 'Components/Text Area',
+} satisfies Meta<typeof TextArea>
 
-export default meta;
+export default meta
 
 export const Default = {
   render: () => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('')
 
     return (
       <TextArea
@@ -22,13 +21,13 @@ export const Default = {
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-    );
+    )
   },
-};
+}
 
 export const WithError = {
   render: () => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('')
 
     return (
       <TextArea
@@ -38,13 +37,13 @@ export const WithError = {
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-    );
+    )
   },
-};
+}
 
 export const Disabled = {
   render: () => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('')
 
     return (
       <TextArea
@@ -54,6 +53,6 @@ export const Disabled = {
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-    );
+    )
   },
-};
+}
