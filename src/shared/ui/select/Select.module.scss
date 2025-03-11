@@ -1,0 +1,18 @@
+.selectTrigger {
+	border: 1px solid var(--color-dark-100);
+	border-radius: 2px;
+	font-size: var(--font-size-m);
+	// width: 210px;
+	height: 36px;
+	background: none;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 6px 12px;
+}
+
+
+.selectContent {
+	border: 1px solid var(color--light-100);
+	// width: 210px;
+}
