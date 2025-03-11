@@ -15,15 +15,13 @@ type PaginationProps = {
   totalPages?: number;
 };
 
-export const Pagination = (props: PaginationProps) => {
-  const {
-    className,
-    currentPage,
-    disabled,
-    onPageChange,
-    totalPages = 1,
-  } = props;
-
+export const Pagination = ({
+  className,
+  currentPage,
+  disabled,
+  onPageChange,
+  totalPages = 1,
+}: PaginationProps) => {
   const pages = usePagination(currentPage, totalPages);
 
   const handlePageClick = (page: "..." | number) => {
