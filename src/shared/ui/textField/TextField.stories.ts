@@ -33,16 +33,14 @@ export const Disabled: Story = {
 
 export const Search: Story = {
   args: {
-		...Primary.args,
+		placeholder: 'input search',
 		search: true
 	}
 };
 
 export const Password: Story = {
   args: {
-		...Primary.args,
 		label: "Password",
-		search: true,
 		type: 'password'
 	}
 };
