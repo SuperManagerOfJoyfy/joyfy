@@ -2,7 +2,7 @@
 	display: flex;
 	align-items: center;
 	position: relative;
-	width: 200px;
+	width: 100%;
 }
 
 .input {
@@ -51,8 +51,6 @@
 		}
   }
 
-	
-
 	&[data-icon*="start"] {
 		padding-left: 36px;
 	}
@@ -93,8 +91,4 @@
 	font-size: var(--font-size-s);
 	color: var(--color-danger-500);
 	margin-top: 4px;
-}
-
-.disabledLabel {
-	color: var(--color-dark-100);
 }
