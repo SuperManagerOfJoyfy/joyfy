@@ -1,12 +1,12 @@
-import * as React from "react";
+import { forwardRef, ComponentPropsWithoutRef, ComponentRef } from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { clsx } from "clsx";
 
 import s from "./RadioGroup.module.scss";
 
-const RadioGroupRoot = React.forwardRef<
-  React.ElementRef<typeof RadioGroupPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
+const RadioGroupRoot = forwardRef<
+  ComponentRef<typeof RadioGroupPrimitive.Root>,
+  ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Root
@@ -19,9 +19,9 @@ const RadioGroupRoot = React.forwardRef<
 
 RadioGroupRoot.displayName = RadioGroupPrimitive.Root.displayName;
 
-const RadioGroupItem = React.forwardRef<
-  React.ElementRef<typeof RadioGroupPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
+const RadioGroupItem = forwardRef<
+  ComponentRef<typeof RadioGroupPrimitive.Item>,
+  ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
 >(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Item
@@ -44,13 +44,10 @@ type Option = {
 export type RadioGroupProps = {
   errorMessage?: string;
   options: Option[];
-} & Omit<
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>,
-  "children"
->;
+} & Omit<ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>, "children">;
 
-const RadioGroup = React.forwardRef<
-  React.ElementRef<typeof RadioGroupPrimitive.Root>,
+const RadioGroup = forwardRef<
+  ComponentRef<typeof RadioGroupPrimitive.Root>,
   RadioGroupProps
 >((props, ref) => {
   const { errorMessage, options, ...restProps } = props;

@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative;
 }
 
 .root {
@@ -9,10 +10,10 @@
   flex-wrap: wrap;
   gap: 12px;
   cursor: pointer;
+  position: relative;
 
   &[data-disabled] {
     cursor: default;
-    opacity: 0.5;
   }
 }
 
@@ -37,6 +38,7 @@
 
     [data-disabled] & {
       cursor: default;
+      opacity: 0.5;
     }
   }
 }
@@ -47,12 +49,11 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   transition: 200ms all;
   background-color: transparent;
-  margin: 3px;
 
   &::before {
     content: "";
@@ -94,10 +95,7 @@
   }
 
   .option:hover:not([data-disabled]) & {
-    background-color: var(--color-dark-300);
-    width: 26px;
-    height: 26px;
-    margin: 0;
+    background-color: var(--color-dark-100);
   }
 
   .option:focus-visible & {
@@ -110,16 +108,16 @@
 
   .option:active:not([data-disabled]) & {
     background-color: var(--color-dark-100);
-    width: 26px;
-    height: 26px;
-    margin: 0;
   }
 
   .root[data-disabled] & {
-    opacity: 0.5;
-
     &::before {
-      border-color: var(--color-dark-100);
+      border-color: var(--color-dark-300);
+      border-width: 2px;
+    }
+
+    &::after {
+      background-color: var(--color-dark-300);
     }
   }
 }
