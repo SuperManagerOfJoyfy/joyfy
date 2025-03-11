@@ -1,6 +1,6 @@
-import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
-import { Sidebar, SidebarProps } from "./Sidebar";
+import React from 'react'
+import { Meta, StoryObj } from '@storybook/react'
+
 import {
   FiHome,
   FiPlusCircle,
@@ -10,75 +10,156 @@ import {
   FiBarChart2,
   FiStar,
   FiLogOut,
-} from "react-icons/fi";
+} from 'react-icons/fi'
+
+import { Sidebar } from './Sidebar'
 
 const meta: Meta<typeof Sidebar> = {
-  title: "Components/Sidebar",
+  title: 'Components/Sidebar',
   component: Sidebar,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
     nextjs: {
       appDirectory: true,
     },
   },
-};
+}
 
-export default meta;
-type Story = StoryObj<typeof Sidebar>;
+export default meta
 
-const mainItems = [
-  { id: "home", title: "Home", path: "/", icon: <FiHome /> },
-  { id: "create", title: "Create", path: "/create", icon: <FiPlusCircle /> },
-  { id: "profile", title: "My Profile", path: "/profile", icon: <FiUser /> },
+type Story = StoryObj<typeof Sidebar>
+
+const items = [
   {
-    id: "messenger",
-    title: "Messenger",
-    path: "/messenger",
+    id: 'home',
+    title: 'Home',
+    path: '/',
+    icon: <FiHome />,
+  },
+  {
+    id: 'create',
+    title: 'Create',
+    path: '/create',
+    icon: <FiPlusCircle />,
+  },
+  {
+    id: 'profile',
+    title: 'My Profile',
+    path: '/profile',
+    icon: <FiUser />,
+  },
+  {
+    id: 'messenger',
+    title: 'Messenger',
+    path: '/messenger',
     icon: <FiMessageCircle />,
   },
-  { id: "search", title: "Search", path: "/search", icon: <FiSearch /> },
-];
-
-const extraItems = [
   {
-    id: "statistics",
-    title: "Statistics",
-    path: "/statistics",
+    id: 'search',
+    title: 'Search',
+    path: '/search',
+    icon: <FiSearch />,
+    style: { marginBottom: '60px' },
+  },
+  {
+    id: 'statistics',
+    title: 'Statistics',
+    path: '/statistics',
     icon: <FiBarChart2 />,
   },
-  { id: "favorites", title: "Favorites", path: "/favorites", icon: <FiStar /> },
-];
+  {
+    id: 'favorites',
+    title: 'Favorites',
+    path: '/favorites',
+    icon: <FiStar />,
+    style: { marginBottom: '180px' },
+  },
+  {
+    id: 'logout',
+    title: 'Log Out',
+    path: '/logout',
+    icon: <FiLogOut />,
+  },
+]
 
-const bottomItems = [
-  { id: "logout", title: "Log Out", path: "/logout", icon: <FiLogOut /> },
-];
+const defaultArgs = {
+  items: items,
+  defaultItemSpacing: 8,
+}
 
 export const Default: Story = {
-  args: {
-    items: [...mainItems, ...extraItems],
-    bottomItems: bottomItems,
-  },
-  parameters: {
-    backgrounds: { default: "dark" },
-  },
-};
+  args: defaultArgs,
+}
 
 export const Active: Story = {
   args: {
-    ...Default.args,
-    activeItemId: "home",
+    ...defaultArgs,
+    activeItemId: 'home',
   },
-  parameters: {
-    backgrounds: { default: "dark" },
-  },
-};
+}
 
 export const Disabled: Story = {
   args: {
-    ...Default.args,
+    ...defaultArgs,
     disabled: true,
   },
-  parameters: {
-    backgrounds: { default: "dark" },
+}
+
+export const DisabledItem: Story = {
+  args: {
+    ...defaultArgs,
+    items: [
+      {
+        id: 'home',
+        title: 'Home',
+        path: '/',
+        icon: <FiHome />,
+        disabled: true,
+      },
+      {
+        id: 'create',
+        title: 'Create',
+        path: '/create',
+        icon: <FiPlusCircle />,
+      },
+      {
+        id: 'profile',
+        title: 'My Profile',
+        path: '/profile',
+        icon: <FiUser />,
+      },
+      {
+        id: 'messenger',
+        title: 'Messenger',
+        path: '/messenger',
+        icon: <FiMessageCircle />,
+      },
+      {
+        id: 'search',
+        title: 'Search',
+        path: '/search',
+        icon: <FiSearch />,
+        style: { marginBottom: '60px' },
+      },
+      {
+        id: 'statistics',
+        title: 'Statistics',
+        path: '/statistics',
+        icon: <FiBarChart2 />,
+      },
+      {
+        id: 'favorites',
+        title: 'Favorites',
+        path: '/favorites',
+        icon: <FiStar />,
+        style: { marginBottom: '180px' },
+      },
+      {
+        id: 'logout',
+        title: 'Log Out',
+        path: '/logout',
+        icon: <FiLogOut />,
+      },
+    ],
   },
-};
+}

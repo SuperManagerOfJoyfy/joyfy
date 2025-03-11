@@ -1,36 +1,44 @@
 .sidebar {
   width: 220px;
+  margin: 0 auto;
   height: 100%;
-  background-color: #0d0d0d;
+  background-color: transparent;
   color: var(--color-light-100);
   display: flex;
   flex-direction: column;
-  padding: 16px 0;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
-  border-right: 1px dashed #3d3d3d;
+  padding-top: 72px;
+  padding-bottom: 36px;
+  border-right: 1px solid var(--color-dark-700);
   border-radius: 5px;
-
-  &.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
 }
 
 .sidebarNav {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
   justify-content: space-between;
+}
+
+.sidebarContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sidebarGroup {
+  width: 100%;
 }
 
 .sidebarList {
   list-style: none;
   padding: 0;
   margin: 0;
-
-  &:not(:last-child) {
-    margin-bottom: 16px;
-  }
+  width: 100%;
 }
 
 .sidebarBottomList {
@@ -38,29 +46,27 @@
   padding: 0;
   margin: 0;
   margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
 }
 
 .sidebarItem {
   width: 100%;
-  margin-bottom: 4px;
 }
 
 .sidebarLink {
   display: flex;
   align-items: center;
-  padding: 12px 24px;
-  color: white;
+  padding-bottom: 24px;
+  padding-left: 60px;
+  color: var(--color-light-100);
   text-decoration: none;
   transition: all 0.2s ease;
   border-radius: 4px;
   font-size: 14px;
   line-height: 171%;
   font-weight: 500;
-  margin: 0 8px;
 
-  &:hover {
+  &:hover:not(&--disabled) {
     color: var(--color-accent-100);
 
     .icon {
@@ -70,7 +76,7 @@
 
   &:focus {
     outline: none;
-    border: 2px solid var(-color-accent-700);
+    border: 2px solid var(--color-accent-700);
   }
 
   &.active {
@@ -79,6 +85,11 @@
     .icon {
       color: var(--color-accent-500);
       fill: var(--color-accent-500);
+
+      svg {
+        fill: var(--color-accent-500);
+        stroke: var(--color-accent-500);
+      }
     }
 
     .title {
@@ -87,11 +98,29 @@
     }
   }
 
-  &.disabled {
+  &--disabled {
     cursor: not-allowed;
     color: var(--color-dark-300);
+    opacity: 0.5;
 
     .icon {
+      color: var(--color-dark-300);
+    }
+
+    .title {
+      color: var(--color-dark-300);
+    }
+  }
+}
+
+.disabled {
+  .sidebarLink {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
+
+    .icon,
+    .title {
       color: var(--color-dark-300);
     }
   }

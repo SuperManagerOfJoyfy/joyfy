@@ -1,72 +1,95 @@
-import React from "react";
-import Link from "next/link";
+import { ReactNode, CSSProperties } from 'react'
+import Link from 'next/link'
+import { clsx } from 'clsx'
 
-import styles from "./Sidebar.module.scss";
+import s from './Sidebar.module.scss'
 
 export interface SidebarItem {
-  id: string;
-  title: string;
-  path: string;
-  icon: React.ReactNode;
+  id: string
+  title: string
+  path: string
+  icon: ReactNode
+  disabled?: boolean
+  className?: string
+  style?: CSSProperties
 }
 
 export interface SidebarProps {
-  items: SidebarItem[];
-  bottomItems?: SidebarItem[];
-  activeItemId?: string;
-  onItemClick?: (item: SidebarItem) => void;
-  disabled?: boolean;
+  items: SidebarItem[]
+  activeItemId?: string
+  onItemClick?: (item: SidebarItem) => void
+  disabled?: boolean
+  className?: string
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({
+export const Sidebar = ({
   items,
-  bottomItems = [],
   activeItemId,
   onItemClick,
   disabled = false,
-}) => {
+  className = '',
+}: SidebarProps) => {
   const handleItemClick = (item: SidebarItem) => {
-    if (!disabled && onItemClick) {
-      onItemClick(item);
+    if (!disabled && !item.disabled && onItemClick) {
+      onItemClick(item)
     }
-  };
+  }
 
   const renderItem = (item: SidebarItem) => {
-    const isActive = item.id === activeItemId;
+    const isActive = item.id === activeItemId
+    const isItemDisabled = disabled || item.disabled
+
+    const linkClassNames = clsx(
+      s.sidebarLink,
+      isActive && s.active,
+      isItemDisabled && s['sidebarLink--disabled'],
+      item.className
+    )
 
     return (
-      <li key={item.id} className={styles.sidebarItem}>
+      <li
+        key={item.id}
+        className={s.sidebarItem}
+        style={item.style} 
+        data-id={item.id}
+      >
         <Link
-          href={item.path}
-          className={`${styles.sidebarLink} ${isActive ? styles.active : ""} ${
-            disabled ? styles.disabled : ""
-          }`}
+          href={isItemDisabled ? '#' : item.path}
+          className={linkClassNames}
           onClick={(e) => {
-            if (disabled) {
-              e.preventDefault();
-              return;
+            if (isItemDisabled) {
+              e.preventDefault()
+              return
             }
-            handleItemClick(item);
+            handleItemClick(item)
           }}
-          tabIndex={disabled ? -1 : 0}
+          tabIndex={isItemDisabled ? -1 : 0}
+          aria-current={isActive ? 'page' : undefined}
+          aria-disabled={isItemDisabled}
+          aria-label={item.title}
         >
-          <span className={styles.icon}>{item.icon}</span>
-          <span className={styles.title}>{item.title}</span>
+          <span className={s.icon} aria-hidden="true">
+            {item.icon}
+          </span>
+          <span className={s.title}>{item.title}</span>
         </Link>
       </li>
-    );
-  };
+    )
+  }
+
+  const sidebarClassNames = clsx(s.sidebar, disabled && s.disabled, className)
 
   return (
-    <aside className={`${styles.sidebar} ${disabled ? styles.disabled : ""}`}>
-      <nav className={styles.sidebarNav}>
-        <ul className={styles.sidebarList}>{items.map(renderItem)}</ul>
-        {bottomItems.length > 0 && (
-          <ul className={styles.sidebarBottomList}>
-            {bottomItems.map(renderItem)}
-          </ul>
-        )}
+    <aside
+      className={sidebarClassNames}
+      role="navigation"
+      aria-label="Sidebar Navigation"
+    >
+      <nav className={s.sidebarNav}>
+        <ul className={s.sidebarList}>
+          {items.map((item) => renderItem(item))}
+        </ul>
       </nav>
     </aside>
-  );
-};
+  )
+}
