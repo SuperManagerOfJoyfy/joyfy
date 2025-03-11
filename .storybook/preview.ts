@@ -4,7 +4,10 @@ import { themes } from '@storybook/theming'
 
 const preview: Preview = {
     parameters: {
-        actions: { argTypesRegex: '^on[A-Z].*' },
+        // actions: { argTypesRegex: '^on[A-Z].*' },
+				actions: {
+            handles: ['onClick', 'onChange'],
+        },
         docs: {
             theme: themes.dark,
         },
