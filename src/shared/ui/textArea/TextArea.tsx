@@ -7,9 +7,12 @@ type TextAreaProps = {
   error?: string;
 } & ComponentProps<"textarea">;
 
-export const TextArea = (props: TextAreaProps) => {
-  const { label, error, className, ...rest } = props;
-
+export const TextArea = ({
+  label,
+  error,
+  className,
+  ...props
+}: TextAreaProps) => {
   const id = useId();
 
   return (
@@ -17,7 +20,7 @@ export const TextArea = (props: TextAreaProps) => {
       <label
         className={styles.label}
         htmlFor={id}
-        aria-disabled={rest.disabled}
+        aria-disabled={props.disabled}
       >
         {label}
       </label>
@@ -25,9 +28,9 @@ export const TextArea = (props: TextAreaProps) => {
       <div className={clsx(styles.wrapper, error && styles.error)}>
         <textarea
           className={styles.textArea}
-          data-value={rest.value && "true"}
+          data-value={props.value && "true"}
           id={id}
-          {...rest}
+          {...props}
         />
       </div>
 
