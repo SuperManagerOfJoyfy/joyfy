@@ -13,6 +13,7 @@ type Props = ComponentProps<'input'> & {
 	endIcon?: ReactNode
 	onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void
 	onShowPasswordClick: () => void
+	value: string
 }
 
 export const TextField = (
@@ -26,8 +27,9 @@ export const TextField = (
 		onKeyDown,
 		onEnter,
 		onShowPasswordClick,
+		disabled,
 		type='text',
-		...props
+		...rest
 		}: Props) => {
 
 	const [showPassword, setShowPassword] = useState(false);
@@ -37,8 +39,9 @@ export const TextField = (
 		startIcon = <FiSearch />
 	}
 
-
 	const isPassword = type === 'password' ;
+	const inputType = showPassword ? 'text' : type;
+
 	const dataIconStart = startIcon ? 'start' : '';
 	const dataIconEnd = isPassword ? 'end' : '';
 	const dataIcon = dataIconStart + dataIconEnd;
@@ -65,23 +68,23 @@ export const TextField = (
 		onShowPasswordClick?.()
 	}
 
-
 	return (
 		<>
-			{label && <Label htmlFor={inputId} label={label} disabled={props.disabled}/>}
+			{label && <Label htmlFor={inputId} label={label} disabled={disabled}/>}
 			<div className={classNames.inputContainer}>
 				{startIcon && <span className={classNames.startIcon}>{startIcon}</span>}
 				<input
-				type={type}
+				type={inputType}
 				className={classNames.input}
 				onKeyDown={handleKeyDown}
 				data-icon={dataIcon}
-				{...props}
+				disabled={disabled}
+				{...rest}
 				id={inputId}/>
 
 				{isPassword &&
 				<button onClick={togglePasswordHandler} className={classNames.endIconButton}>
-					{showPassword ? <FiEyeOff /> : <FiEye />}
+						{showPassword ? <FiEye /> : <FiEyeOff />}
 				</button>}
 			</div>
 			{showError && <p className={classNames.errorText}>{errorMessage}</p>}
