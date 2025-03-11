@@ -56,26 +56,3 @@ export const Default = {
     );
   },
 };
-
-export const Disabled = {
-  render: () => {
-    const {
-      currentPage,
-      itemsPerPage,
-      totalPages,
-      handlePageChange,
-      handleItemsPerPageChange,
-    } = usePaginationState(100);
-
-    return (
-      <Pagination
-        currentPage={currentPage}
-        itemsPerPage={itemsPerPage}
-        onItemsPerPageChange={handleItemsPerPageChange}
-        onPageChange={handlePageChange}
-        totalPages={totalPages}
-        disabled
-      />
-    );
-  },
-};

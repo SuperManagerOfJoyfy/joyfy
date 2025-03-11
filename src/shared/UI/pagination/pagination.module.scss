@@ -54,21 +54,4 @@
       }
     }
   }
-
-  &[aria-disabled="true"] {
-    .button {
-      cursor: not-allowed;
-      color: var(--color-dark-300);
-      background-color: transparent;
-
-      &.active {
-        color: var(--color-dark-900);
-        background-color: var(--color-dark-300);
-      }
-    }
-
-    span {
-      color: var(--color-dark-300);
-    }
-  }
 }

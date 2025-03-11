@@ -8,7 +8,6 @@ import { usePagination } from "../../../hooks/usePagination";
 type PaginationProps = {
   className?: string;
   currentPage: number;
-  disabled?: boolean;
   itemsPerPage: number;
   onItemsPerPageChange: (items: number) => void;
   onPageChange: (page: number) => void;
@@ -18,7 +17,6 @@ type PaginationProps = {
 export const Pagination = ({
   className,
   currentPage,
-  disabled,
   onPageChange,
   totalPages = 1,
 }: PaginationProps) => {
@@ -31,7 +29,7 @@ export const Pagination = ({
   };
 
   return (
-    <div aria-disabled={disabled} className={clsx(style.pagination, className)}>
+    <div className={clsx(style.pagination, className)}>
       <div className={style.buttons}>
         <button
           className={clsx(
