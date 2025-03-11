@@ -5,31 +5,32 @@ import { action } from "@storybook/addon-actions";
 const meta: Meta<typeof SelectBox> = {
 	title: 'Components/SelectBox',
 	component: SelectBox,
+	tags: ["autodocs"],
 	argTypes: {
 		placeholder: {
 			control: "text",
-			description: "Текст, который показывается, если значение не выбрано",
-			defaultValue: "Выберите опцию",
+			description: "Text displayed when no value is selected",
+			defaultValue: "Select an option",
 		},
 		defaultValue: {
 			control: "text",
-			description: "Значение по умолчанию",
+			description: "The default value",
 		},
 		disabled: {
 			control: "boolean",
-			description: "Селект неактивен",
+			description: "Indicates if the select is disabled",
 		},
 		width: {
 			control: "text",
-			description: "Изменение ширины селекта",
+			description: "Change the width of the select box",
 		},
 		options: {
 			control: "object",
-			description: "Массив опций для выбора",
+			description: "Array of options to choose from",
 		},
 		onValueChange: {
 			action: "value changed",
-			description: "Вызывается при изменении значения",
+			description: "Called when the value is changed",
 		},
 	},
 };
