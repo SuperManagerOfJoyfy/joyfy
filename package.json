@@ -15,6 +15,7 @@
   "dependencies": {
     "@radix-ui/react-select": "^2.1.6",
     "@reduxjs/toolkit": "^2.6.1",
+    "@storybook/addon-actions": "^8.6.4",
     "clsx": "^2.1.1",
     "next": "15.2.1",
     "react": "^19.0.0",
