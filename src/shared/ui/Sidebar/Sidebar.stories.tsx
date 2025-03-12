@@ -33,51 +33,51 @@ const items = [
   {
     id: 'home',
     title: 'Home',
-    path: '/',
+    path: '#',
     icon: <FiHome />,
   },
   {
     id: 'create',
     title: 'Create',
-    path: '/create',
+    path: '#',
     icon: <FiPlusCircle />,
   },
   {
     id: 'profile',
     title: 'My Profile',
-    path: '/profile',
+    path: '#',
     icon: <FiUser />,
   },
   {
     id: 'messenger',
     title: 'Messenger',
-    path: '/messenger',
+    path: '#',
     icon: <FiMessageCircle />,
   },
   {
     id: 'search',
     title: 'Search',
-    path: '/search',
+    path: '#',
     icon: <FiSearch />,
-    style: { marginBottom: '60px' },
   },
   {
     id: 'statistics',
     title: 'Statistics',
-    path: '/statistics',
+    path: '#',
     icon: <FiBarChart2 />,
+    style: { marginTop: '60px' },
   },
   {
     id: 'favorites',
     title: 'Favorites',
-    path: '/favorites',
+    path: '#',
     icon: <FiStar />,
     style: { marginBottom: '180px' },
   },
   {
     id: 'logout',
     title: 'Log Out',
-    path: '/logout',
+    path: '#',
     icon: <FiLogOut />,
   },
 ]
@@ -89,13 +89,6 @@ const defaultArgs = {
 
 export const Default: Story = {
   args: defaultArgs,
-}
-
-export const Active: Story = {
-  args: {
-    ...defaultArgs,
-    activeItemId: 'home',
-  },
 }
 
 export const Disabled: Story = {
@@ -112,52 +105,52 @@ export const DisabledItem: Story = {
       {
         id: 'home',
         title: 'Home',
-        path: '/',
+        path: '#',
         icon: <FiHome />,
         disabled: true,
       },
       {
         id: 'create',
         title: 'Create',
-        path: '/create',
+        path: '#',
         icon: <FiPlusCircle />,
       },
       {
         id: 'profile',
         title: 'My Profile',
-        path: '/profile',
+        path: '#',
         icon: <FiUser />,
       },
       {
         id: 'messenger',
         title: 'Messenger',
-        path: '/messenger',
+        path: '#',
         icon: <FiMessageCircle />,
       },
       {
         id: 'search',
         title: 'Search',
-        path: '/search',
+        path: '#',
         icon: <FiSearch />,
         style: { marginBottom: '60px' },
       },
       {
         id: 'statistics',
         title: 'Statistics',
-        path: '/statistics',
+        path: '#',
         icon: <FiBarChart2 />,
       },
       {
         id: 'favorites',
         title: 'Favorites',
-        path: '/favorites',
+        path: '#',
         icon: <FiStar />,
         style: { marginBottom: '180px' },
       },
       {
         id: 'logout',
         title: 'Log Out',
-        path: '/logout',
+        path: '#',
         icon: <FiLogOut />,
       },
     ],
