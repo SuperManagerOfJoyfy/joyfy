@@ -2,17 +2,18 @@ import * as CheckboxRadix from '@radix-ui/react-checkbox'
 import { IoCheckmarkSharp } from 'react-icons/io5'
 import s from './checkBox.module.scss'
 import { ComponentProps, useId } from 'react'
+import { clsx } from 'clsx'
 
 type Props = {
   label?: string
 } & ComponentProps<typeof CheckboxRadix.Root>
 
-export const Checkbox = ({ checked, onCheckedChange, label, disabled }: Props) => {
+export const Checkbox = ({ checked, onCheckedChange, label, disabled, className }: Props) => {
   const id = useId()
 
   return (
     <form>
-      <div className={s.main} aria-disabled={disabled}>
+      <div className={clsx(s.main, className)} aria-disabled={disabled}>
         <CheckboxRadix.Root
           className={s.root}
           id={id}
