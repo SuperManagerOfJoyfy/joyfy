@@ -1,24 +1,36 @@
 import * as CheckboxRadix from '@radix-ui/react-checkbox'
-import {IoCheckmarkSharp} from "react-icons/io5";
-import styles from "./checkBox.module.scss";
-import {ComponentProps} from "react";
+import { IoCheckmarkSharp } from 'react-icons/io5'
+import s from './checkBox.module.scss'
+import { ComponentProps, useId } from 'react'
 
 type Props = {
-    label?: string
+  label?: string
 } & ComponentProps<typeof CheckboxRadix.Root>
 
-export const Checkbox = ({label, disabled}: Props) => (
-    <form>
-        <div className={styles.main} aria-disabled={disabled}>
-            <CheckboxRadix.Root className={styles.Root} id="c1" disabled={disabled}>
-                <CheckboxRadix.Indicator className={styles.Indicator}>
-                    <IoCheckmarkSharp/>
-                </CheckboxRadix.Indicator>
-            </CheckboxRadix.Root>
+export const Checkbox = ({ checked, onCheckedChange, label, disabled }: Props) => {
+  const id = useId()
 
-            <label className={styles.Label} htmlFor="c1">
-                {label}
-            </label>
-        </div>
+  return (
+    <form>
+      <div className={s.main} aria-disabled={disabled}>
+        <CheckboxRadix.Root
+          className={s.root}
+          id={id}
+          checked={checked}
+          onCheckedChange={onCheckedChange}
+          disabled={disabled}
+        >
+          <CheckboxRadix.Indicator className={s.indicator}>
+            <IoCheckmarkSharp />
+          </CheckboxRadix.Indicator>
+        </CheckboxRadix.Root>
+
+        {label && (
+          <label className={s.label} htmlFor={id}>
+            {label}
+          </label>
+        )}
+      </div>
     </form>
-);
+  )
+}
