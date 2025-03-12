@@ -1,4 +1,24 @@
-.main {
+.header {
+  background: var(--color-dark-700);
+  border-color: var(--color-dark-300);
+  padding: 12px 64px 12px 60px;
   width: 1280px;
   height: 60px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.logo {
+  color: var(--color-light-100);
+  font-family: var(--font-family-primary);
+  font-weight: 600;
+  font-size: 26px;
+  line-height: var(--line-height-l);
+  letter-spacing: 0;
 }

@@ -1,15 +1,23 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import {Header} from "@/shared/ui/header/Header";
+import {Header} from './Header';
 
-const meta = {
+const meta: Meta<typeof Header> = {
+    title: 'Components/Header',
     component: Header,
     tags: ['autodocs'],
-    title: 'Components/Tabs',
-} satisfies Meta<typeof Header>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Header>;
 
-export const Default = (args) => {
-    <Header {...args} />
-}
+// Состояние без авторизации (показаны кнопки Log in и Sign up)
+export const Default: Story = {
+    render: () => <Header isAuthenticated={false}/>,
+};
+
+// Состояние после авторизации (показан колокольчик)
+export const Authenticated: Story = {
+    render: () => (
+        <Header isAuthenticated={true}/>
+    ),
+};
