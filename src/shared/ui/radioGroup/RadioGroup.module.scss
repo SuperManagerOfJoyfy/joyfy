@@ -1,0 +1,136 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+
+  &[data-disabled] {
+    cursor: default;
+  }
+}
+
+.option {
+  all: unset;
+  cursor: pointer;
+
+  &[data-disabled] {
+    cursor: default;
+  }
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  label {
+    cursor: pointer;
+    color: var(--color-light-100);
+    font-size: 14px;
+
+    [data-disabled] & {
+      cursor: default;
+      opacity: 0.5;
+    }
+  }
+}
+
+.icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  transition: 200ms all;
+  background-color: transparent;
+
+  &::before {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--color-light-100, --color-light-100);
+    border-radius: 50%;
+    transition: 200ms border-color;
+    box-sizing: border-box;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    transition: 200ms background-color;
+    width: 0;
+    height: 0;
+    background-color: var(--color-light-100);
+  }
+
+  [data-state="unchecked"] & {
+    &::before {
+      border-color: var(--color-light-100);
+    }
+  }
+
+  [data-state="checked"] & {
+    &::before {
+      border-color: var(--color-light-100);
+    }
+
+    &::after {
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-light-100);
+    }
+  }
+
+  .option:hover:not([data-disabled]) & {
+    background-color: var(--color-dark-100);
+  }
+
+  .option:focus-visible & {
+    background-color: var(--color-dark-500);
+
+    &::before {
+      border-color: var(--color-light-100);
+    }
+  }
+
+  .option:active:not([data-disabled]) & {
+    background-color: var(--color-dark-100);
+  }
+
+  .root[data-disabled] & {
+    &::before {
+      border-color: var(--color-dark-300);
+      border-width: 2px;
+    }
+
+    &::after {
+      background-color: var(--color-dark-300);
+    }
+  }
+}
+
+.error {
+  color: var(--color-danger-500, --color-danger-500);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.labelText {
+  span.highlighted {
+    color: var(--color-light-100);
+    font-weight: bold;
+  }
+}
