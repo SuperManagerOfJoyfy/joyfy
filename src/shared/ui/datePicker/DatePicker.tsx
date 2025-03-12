@@ -1,4 +1,5 @@
-import DatePicker, { ReactDatePickerCustomHeaderProps, registerLocale } from 'react-datepicker';
+import { ReactDatePickerCustomHeaderProps, registerLocale } from 'react-datepicker';
+import * as RDP from 'react-datepicker'
 import React, { ComponentProps, forwardRef, useState } from 'react'
 import s from './DatePicker.module.scss'
 import { Label } from '@/shared/ui/label/Label';
@@ -10,47 +11,47 @@ import { ru } from 'date-fns/locale'
 import textFieldStyles from '../textField/TextField.module.scss'
 
 type DatePickerProps = {
-	// startDate: Date | null
-	// endDate?: Date | null
 	placeholder?: string
-	// setStartDate: (date: Date | null) => void
-	// setEndDate: (date: Date | null) => void
+	startDate1: Date | null
+	endDate1?: Date | null
+	onSetStartDate?: (date: Date | null) => void
+	onSetEndDate?: (date: Date | null) => void
 }
+
+const RDPC = (((RDP.default as any).default as any) ||
+	(RDP.default as any) ||
+	(RDP as any)) as typeof RDP.default
 
 export const DatePicker1 = (
 	{
-	// startDate,
-	// endDate,
+	startDate1,
+	endDate1,
+	onSetStartDate,
+	onSetEndDate,
 	placeholder,
-	// setStartDate,
-	// setEndDate
 }: DatePickerProps) => {
 
-	// const isRange = endDate !== undefined
 
-	const [startDate, setStartDate] = useState(new Date());
-	const [endDate, setEndDate] = useState(null as Date | null);
+	// const [startDate, setStartDate] = useState(startDate1);
+	// const [endDate, setEndDate] = useState(endDate1);
 
+	const isRange = endDate1 !== undefined
+	// const isRange = false
 
+	const datePickerHandler = (dates: [Date | null, Date | null] | Date) => {
+		console.log(dates);
 
-	const handleChange = ([newStartDate, newEndDate]: [Date, Date | null]) => {
-		setStartDate(newStartDate);
-		setEndDate(newEndDate);
-	}
-
-	const DatePickerHandler = (dates: [Date | null, Date | null] | Date) => {
-		// console.log(dates);
-
-		// if (Array.isArray(dates)) {
-		// 	const [start, end] = dates
-
-		// 	setStartDate(start)
-		// 	setEndDate?.(end)
-		// }
-		// else {
-		// 	setStartDate(dates)
-		// }
-	}
+		if (Array.isArray(dates)) {
+			const [start, end] = dates;
+			// setStartDate(start);
+			// setEndDate(end);
+			onSetStartDate?.(start);
+			onSetEndDate?.(end);
+		} else {
+			// setStartDate(dates);
+			onSetStartDate?.(dates);
+		}
+	};
 
 	const classNames = {
 		root: s.root,
@@ -61,16 +62,17 @@ export const DatePicker1 = (
 
 	return (
 		<div className={classNames.root}>
-			<DatePicker
+			{isRange ?
+			<RDPC
 				dateFormat={'dd/MM/yyyy'}
 				calendarClassName={classNames.calendar}
 				className={classNames.input}
-				onChange={handleChange}
+					onChange={datePickerHandler}
 				customInput={<CustomInput />}
 				renderCustomHeader={customHeader}
-				startDate={startDate}
-				endDate={endDate}
-				selected={startDate}
+				startDate={startDate1}
+				endDate={endDate1}
+				selected={startDate1}
 				placeholderText={placeholder}
 				// dayClassName={classNames.day}
 				showPopperArrow={false}
@@ -83,10 +85,32 @@ export const DatePicker1 = (
 						fn: (state) => state
 					},
 				]}
-				// {...(isRange ? { selectsRange: true} : {})}
-				// selectsMultiple={true}
-				selectsRange
+					selectsRange
 			/>
+		:
+				<RDPC
+					dateFormat={'dd/MM/yyyy'}
+					calendarClassName={classNames.calendar}
+					className={classNames.input}
+					onChange={() => {}}
+					customInput={<CustomInput />}
+					renderCustomHeader={customHeader}
+					startDate={startDate1}
+					// endDate={endDate}
+					selected={startDate1}
+					placeholderText={placeholder}
+					// dayClassName={classNames.day}
+					showPopperArrow={false}
+					popperModifiers={[
+						{
+							name: 'offset',
+							options: {
+								offset: [0, -11],
+							},
+							fn: (state) => state
+						},
+					]}
+				/>}
 		</div>
 	)
 }
@@ -96,42 +120,42 @@ type CustomInputProps = {
 } & ComponentProps<"input">
 
 
-// const CustomInput = ({ label, disabled, ...rest }: CustomInputProps) => {
-// 	const classNames = {
-// 		icon: clsx(s.icon, disabled && s.disabled),
-// 		inputContainer: s.inputContainer,
-// 	}
-// 	return (
-// 		<Label label={label}>
-// 			<div className={classNames.inputContainer}>
-// 				<input disabled={disabled} {...rest} />
-// 				<div className={classNames.icon}>
-// 					<LuCalendarDays />
-// 				</div>
-// 			</div>
-// 		</Label>
-// 	)
-// }
-
-
-const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
-	({ disabled, label, required, ...rest }, ref) => {
-		const classNames = {
-			icon: clsx(s.icon, disabled && s.disabled),
-			inputContainer: s.inputContainer,
-		}
-
-		return (
-			<Label label={label} >
-				<div className={classNames.inputContainer}>
-					<input disabled={disabled} ref={ref} {...rest} />
-					<div className={classNames.icon}>
-					</div>
-				</div>
-			</Label>
-		)
+const CustomInput = ({ label, disabled, ...rest }: CustomInputProps) => {
+	const classNames = {
+		icon: clsx(s.icon, disabled && s.disabled),
+		inputContainer: s.inputContainer,
 	}
-)
+	return (
+		<Label label={label}>
+			<div className={classNames.inputContainer}>
+				<input disabled={disabled} {...rest} />
+				<div className={classNames.icon}>
+					<LuCalendarDays />
+				</div>
+			</div>
+		</Label>
+	)
+}
+
+
+// const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
+// 	({ disabled, label, required, ...rest }, ref) => {
+// 		const classNames = {
+// 			icon: clsx(s.icon, disabled && s.disabled),
+// 			inputContainer: s.inputContainer,
+// 		}
+
+// 		return (
+// 			<Label label={label} >
+// 				<div className={classNames.inputContainer}>
+// 					<input disabled={disabled} ref={ref} {...rest} />
+// 					<div className={classNames.icon}>
+// 					</div>
+// 				</div>
+// 			</Label>
+// 		)
+// 	}
+// )
 
 const customHeader = ({ date, decreaseMonth, increaseMonth }: ReactDatePickerCustomHeaderProps) => {
 

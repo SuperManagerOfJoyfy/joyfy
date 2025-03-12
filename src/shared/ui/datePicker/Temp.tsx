@@ -1,19 +1,20 @@
 import { ComponentProps, FC, ReactNode, forwardRef } from 'react'
 import { ReactDatePickerCustomHeaderProps, registerLocale } from 'react-datepicker'
-import * as RDP from 'react-datepicker'
 
 import { clsx } from 'clsx'
+import * as RDP from 'react-datepicker'
 
 const RDPC = (((RDP.default as any).default as any) ||
 	(RDP.default as any) ||
 	(RDP as any)) as typeof RDP.default
 
-import { CalendarToday, KeyboardArrowLeft, KeyboardArrowRight, Label } from '../../index'
+// import { CalendarToday, KeyboardArrowLeft, KeyboardArrowRight, Label } from '../../index'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
-import textFieldStyles from './../text-field/text-field.module.scss'
-import s from './date-picker.module.scss'
+import textFieldStyles from '../textField/TextField.module.scss'
+import s from './DatePicker.module.scss'
+import { Label } from '@/shared/ui/label/Label'
 
 export type DatePickerProps = {
 	disabled?: boolean
@@ -54,7 +55,7 @@ export const DatePicker: FC<DatePickerProps> = ({
 		root: clsx(s.root, className),
 	}
 
-	const DatePickerHandler = (dates: [Date | null, Date | null] | Date) => {
+	const DatePickerHandler = (dates: Date[] | null) => {
 	
 		if (Array.isArray(dates)) {
 			const [start, end] = dates
@@ -80,22 +81,14 @@ export const DatePicker: FC<DatePickerProps> = ({
 				renderCustomHeader={CustomHeader}
 				endDate={endDate}
 				onChange={DatePickerHandler}
-				popperModifiers={[
-					{
-						name: 'offset',
-						options: {
-							offset: [0, -11],
-						},
-					},
-				]}
 
-				selectsRange={isRange}
+				// selectsRange={isRange}
 				calendarStartDay={1}
 				dayClassName={classNames.day}
 				disabled={disabled}
 				formatWeekDay={formatWeekDay}
 				locale={'ru'}
-				
+				selectsMultiple
 				popperClassName={classNames.popper}
 				required={required}
 			/>
@@ -118,11 +111,11 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
 		}
 
 		return (
-			<Label label={label} required={required}>
+			<Label label={label} >
 				<div className={classNames.inputContainer}>
 					<input disabled={disabled} ref={ref} {...rest} />
 					<div className={classNames.icon}>
-						<CalendarToday />
+						{/* <CalendarToday /> */}
 					</div>
 				</div>
 			</Label>
@@ -137,18 +130,18 @@ const CustomHeader = ({ date, decreaseMonth, increaseMonth }: ReactDatePickerCus
 		header: s.header,
 	}
 
-	const headerText = capitalizeFirstLetter(format(date, 'LLLL Y', { locale: ru }))
+	const headerText = capitalizeFirstLetter(format(date, 'LLLL y', { locale: ru }))
 
 	return (
 		<div className={classNames.header}>
 			<div>{headerText}</div>
 			<div className={classNames.buttonBox}>
 				<button className={classNames.button} onClick={decreaseMonth} type={'button'}>
-					<KeyboardArrowLeft />
+					{/* <KeyboardArrowLeft /> */}
 				</button>
 
 				<button className={classNames.button} onClick={increaseMonth} type={'button'}>
-					<KeyboardArrowRight />
+					{/* <KeyboardArrowRight /> */}
 				</button>
 			</div>
 		</div>
