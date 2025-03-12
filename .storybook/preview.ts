@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react'
 import '../src/app/globals.css'
-import {themes} from "@storybook/theming";
+import { themes } from '@storybook/theming'
 
 const preview: Preview = {
     parameters: {
@@ -23,6 +23,6 @@ const preview: Preview = {
             ],
         },
     },
-};
+}
 
-export default preview;
+export default preview
