@@ -11,13 +11,13 @@ export default meta;
 type Story = StoryObj<typeof Header>;
 
 // Состояние без авторизации (показаны кнопки Log in и Sign up)
-export const Default: Story = {
-    render: () => <Header isAuthenticated={false}/>,
+export const Unauthenticated: Story = {
+    render: () => <Header isAuthenticated={false} languageSelector={undefined}/>,
 };
 
 // Состояние после авторизации (показан колокольчик)
 export const Authenticated: Story = {
     render: () => (
-        <Header isAuthenticated={true}/>
+        <Header isAuthenticated={true} languageSelector={undefined}/>
     ),
 };
