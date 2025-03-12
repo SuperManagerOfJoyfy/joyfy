@@ -45,10 +45,10 @@
 
   .root {
     all: unset;
-    border: 2px solid var(--color-light-100);
+    border: 3px solid var(--color-light-100);
     width: 18px;
     height: 18px;
-    border-radius: 1px;
+    border-radius: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,6 +88,7 @@
     }
 
     .root{
+      border: 3px solid var(--color-dark-100);
       cursor: default;
     }
 
