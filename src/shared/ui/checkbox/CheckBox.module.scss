@@ -8,7 +8,7 @@
 
     position: absolute;
     top: 50%;
-    left: -7px;
+    left: -8px;
     z-index: -1;
     transform: translateY(-50%) scale(0);
 
@@ -46,8 +46,8 @@
   .root {
     all: unset;
     border: 3px solid var(--color-light-100);
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     border-radius: 2px;
     display: flex;
     align-items: center;
@@ -60,7 +60,7 @@
       justify-content: center;
       color: var(--color-dark-900);
       background-color: var(--color-light-100);
-      font-size: 20px;
+      font-size: 16px;
     }
   }
 
