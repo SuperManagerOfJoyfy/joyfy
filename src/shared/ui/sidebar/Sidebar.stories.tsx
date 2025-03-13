@@ -16,6 +16,7 @@ import { Sidebar } from './Sidebar'
 
 const meta: Meta<typeof Sidebar> = {
   title: 'Components/Sidebar',
+  tags: ['autodocs'],
   component: Sidebar,
   parameters: {
     layout: 'centered',
