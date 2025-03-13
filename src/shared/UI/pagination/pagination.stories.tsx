@@ -1,30 +1,30 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from '@storybook/react'
 
-import { useState } from "react";
+import { useState } from 'react'
 
-import { Pagination } from "./Pagination";
+import { Pagination } from './Pagination'
 
 const meta = {
   component: Pagination,
-  tags: ["autodocs"],
-  title: "UI/Pagination",
-} satisfies Meta<typeof Pagination>;
+  tags: ['autodocs'],
+  title: 'Components/Pagination',
+} satisfies Meta<typeof Pagination>
 
-export default meta;
+export default meta
 
-const usePaginationState = (totalItems: number, defaultItemsPerPage = 5) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+const usePaginationState = (totalItems: number, defaultItemsPerPage = 10) => {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage)
+  const totalPages = Math.ceil(totalItems / itemsPerPage)
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+    setCurrentPage(page)
+  }
 
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
-    setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1);
-  };
+    setItemsPerPage(newItemsPerPage)
+    setCurrentPage(1)
+  }
 
   return {
     currentPage,
@@ -32,8 +32,8 @@ const usePaginationState = (totalItems: number, defaultItemsPerPage = 5) => {
     totalPages,
     handlePageChange,
     handleItemsPerPageChange,
-  };
-};
+  }
+}
 
 export const Default = {
   render: () => {
@@ -43,7 +43,7 @@ export const Default = {
       totalPages,
       handlePageChange,
       handleItemsPerPageChange,
-    } = usePaginationState(100);
+    } = usePaginationState(100)
 
     return (
       <Pagination
@@ -53,6 +53,6 @@ export const Default = {
         onPageChange={handlePageChange}
         totalPages={totalPages}
       />
-    );
+    )
   },
-};
+}

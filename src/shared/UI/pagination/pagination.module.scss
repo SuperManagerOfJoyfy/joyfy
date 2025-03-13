@@ -54,4 +54,23 @@
       }
     }
   }
+
+  .perPage {
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+    padding-left: 24px;
+
+    .select {
+      height: 22px;
+      padding: 0 6px;
+      column-gap: unset;
+
+      span {
+        svg {
+          width: 16px;
+        }
+      }
+    }
+  }
 }

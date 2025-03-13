@@ -1,44 +1,90 @@
-import clsx from "clsx";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import clsx from 'clsx'
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
-import style from "./pagination.module.scss";
+import styles from './pagination.module.scss'
 
-import { usePagination } from "../../../hooks/usePagination";
+import { usePagination } from '../../../hooks/usePagination'
+import { SelectBox } from '../selectBox/SelectBox'
 
 type PaginationProps = {
-  className?: string;
-  currentPage: number;
-  itemsPerPage: number;
-  onItemsPerPageChange: (items: number) => void;
-  onPageChange: (page: number) => void;
-  totalPages?: number;
-};
+  className?: string
+  currentPage: number
+  itemsPerPage: number
+  onItemsPerPageChange: (items: number) => void
+  onPageChange: (page: number) => void
+  totalPages?: number
+}
 
 export const Pagination = ({
   className,
   currentPage,
+  itemsPerPage,
+  onItemsPerPageChange,
   onPageChange,
   totalPages = 1,
 }: PaginationProps) => {
-  const pages = usePagination(currentPage, totalPages);
+  const pages = usePagination(currentPage, totalPages)
 
-  const handlePageClick = (page: "..." | number) => {
-    if (page !== currentPage && page !== "...") {
-      onPageChange(page);
+  const handlePageClick = (page: '...' | number) => {
+    if (page !== currentPage && page !== '...') {
+      onPageChange(page)
     }
-  };
+  }
+
+  const options = [
+    {
+      value: '10',
+      children: (
+        <div>
+          <span>10</span>
+        </div>
+      ),
+    },
+    {
+      value: '20',
+      children: (
+        <div>
+          <span>20</span>
+        </div>
+      ),
+    },
+    {
+      value: '30',
+      children: (
+        <div>
+          <span>30</span>
+        </div>
+      ),
+    },
+    {
+      value: '50',
+      children: (
+        <div>
+          <span>50</span>
+        </div>
+      ),
+    },
+    {
+      value: '100',
+      children: (
+        <div>
+          <span>100</span>
+        </div>
+      ),
+    },
+  ]
 
   return (
-    <div className={clsx(style.pagination, className)}>
-      <div className={style.buttons}>
+    <div className={clsx(styles.pagination, className)}>
+      <div className={styles.buttons}>
         <button
           className={clsx(
-            style.button,
-            currentPage === 1 && style.arrowDisabled
+            styles.button,
+            currentPage === 1 && styles.arrowDisabled
           )}
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
-          type={"button"}
+          type={'button'}
           aria-label="Previous page"
         >
           <FiChevronLeft />
@@ -46,11 +92,14 @@ export const Pagination = ({
 
         {pages.map((page, index) => (
           <button
-            className={clsx(style.button, page === currentPage && style.active)}
-            disabled={page === "..."}
+            className={clsx(
+              styles.button,
+              page === currentPage && styles.active
+            )}
+            disabled={page === '...'}
             key={index}
             onClick={() => handlePageClick(Number(page))}
-            type={"button"}
+            type={'button'}
           >
             {page}
           </button>
@@ -58,18 +107,31 @@ export const Pagination = ({
 
         <button
           className={clsx(
-            style.button,
+            styles.button,
             (currentPage === totalPages || totalPages === 0) &&
-              style.arrowDisabled
+              styles.arrowDisabled
           )}
           disabled={currentPage === totalPages || totalPages === 0}
           onClick={() => onPageChange(currentPage + 1)}
-          type={"button"}
+          type={'button'}
           aria-label="Next page"
         >
           <FiChevronRight />
         </button>
       </div>
+
+      <div className={styles.perPage}>
+        <span>Show</span>
+        <SelectBox
+          className={styles.select}
+          defaultValue={itemsPerPage.toString()}
+          value={itemsPerPage.toString()}
+          onValueChange={(value) => onItemsPerPageChange(Number(value))}
+          placeholder="Choose items per page"
+          options={options}
+        />
+        <span>on page</span>
+      </div>
     </div>
-  );
-};
+  )
+}
