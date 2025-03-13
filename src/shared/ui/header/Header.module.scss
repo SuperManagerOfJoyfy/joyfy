@@ -54,6 +54,7 @@
 
 .selector {
   align-items: center;
+  width: 156px !important;
   height: 22px !important;
 }
 
@@ -67,6 +68,5 @@
 .selectItem {
   display: flex;
   align-items: center;
-  justify-content: center;
   column-gap: 12px
 }
