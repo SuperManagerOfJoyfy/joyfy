@@ -4,28 +4,21 @@ import s from './SelectBox.module.scss'
 import { FiChevronDown } from "react-icons/fi";
 import clsx from 'clsx'
 
-
 type SelectBoxProps = React.ComponentPropsWithoutRef<typeof Select.Root> & {
-	placeholder: string,
-	options: Option[]
+	placeholder?: string,
 	width?: string
 	className?: string
 }
 
-type Option = {
-	value: string
-	children: React.ReactNode
-}
-
-export const SelectBox = (
+const SelectBox = (
 	{
 		placeholder,
-		options,
 		disabled,
 		width = 'auto',
 		defaultValue,
 		onValueChange,
 		className,
+		children,
 		...props
 	}: SelectBoxProps) => (
 		<Select.Root defaultValue={defaultValue} onValueChange={onValueChange} {...props}>
@@ -40,7 +33,7 @@ export const SelectBox = (
 	
 				<Select.Content className={s.content} position="popper" avoidCollisions >
 					<Select.Viewport>
-					{options.map(o => <SelectItem key={o.value} value={o.value} children={o.children}/>)}
+					{children}
 					</Select.Viewport>
 				</Select.Content>
 	
@@ -64,3 +57,6 @@ const SelectItem = React.forwardRef<React.ComponentRef<typeof Select.Item>,
 		},
 	);
 SelectItem.displayName = "SelectItem";
+
+
+export { SelectBox, SelectItem }
