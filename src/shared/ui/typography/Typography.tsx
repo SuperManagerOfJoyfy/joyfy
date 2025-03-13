@@ -17,7 +17,7 @@ export type TypographyVariant =
 
 export type FontWeight = 'regular' | 'medium' | 'bold'
 
-export interface TextProps<T extends ElementType = 'p'> {
+export interface TypographyProps<T extends ElementType = 'p'> {
   as?: T
   children?: ReactNode
   className?: string
@@ -30,18 +30,22 @@ export function Typography<T extends ElementType = 'p'>({
   className,
   variant = 'body1',
   fontWeight,
+  children,
   ...restProps
-}: Omit<ComponentPropsWithoutRef<T>, keyof TextProps<T>> & TextProps<T>) {
-  const isBody = variant === 'body1' || variant === 'body2'
+}: Omit<ComponentPropsWithoutRef<T>, keyof TypographyProps<T>> &
+  TypographyProps<T>) {
+  const Component = as || 'p'
 
   const classNames = clsx(
     s.text,
     s[variant],
-    isBody && fontWeight && s[`fw-${fontWeight}`],
+    fontWeight && variant.startsWith('body') && s[`fw-${fontWeight}`],
     className
   )
 
-  const Component = as || 'p'
-
-  return <Component className={classNames} {...restProps} />
+  return (
+    <Component className={classNames} {...restProps}>
+      {children}
+    </Component>
+  )
 }

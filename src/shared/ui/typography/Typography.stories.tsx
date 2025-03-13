@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Typography } from './'
+import { Typography } from './Typography'
 
 const meta = {
   argTypes: {
@@ -13,13 +13,10 @@ const meta = {
         'h3',
         'body1',
         'body2',
-        'subtitle1',
-        'subtitle2',
         'caption',
         'caption2',
         'link1',
         'link2',
-        'error',
       ],
     },
     fontWeight: {
