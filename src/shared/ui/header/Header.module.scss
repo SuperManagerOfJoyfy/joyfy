@@ -2,7 +2,7 @@
   background: var(--color-dark-700);
   border-color: var(--color-dark-300);
   padding: 12px 64px 12px 60px;
-  width: 1280px;
+  max-width: 1280px;
   height: 60px;
 }
 
@@ -10,7 +10,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1280px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
 }
 
@@ -21,4 +22,11 @@
   font-size: 26px;
   line-height: var(--line-height-l);
   letter-spacing: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-height: 36px;
 }
