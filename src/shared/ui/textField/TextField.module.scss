@@ -6,7 +6,7 @@
 }
 
 .input {
-	background: transparent;
+	background-color: transparent;
 	border: 1px solid var(--color-dark-100);
 	border-radius: 2px;
 	font-size: var(--font-size-m);
@@ -29,7 +29,7 @@
 
   &:active:enabled {
     border-color: var(--color-light-100);
-		background: var(--color-dark-500);
+		background-color: var(--color-dark-500);
   }
 
 	&:disabled {
@@ -46,6 +46,8 @@
 
   &:hover:not(&:disabled) {
     border-color: var(--color-light-900);
+		background-color: var(--color-dark-500);
+		color: var(--color-light-900);
 		&.error {
 			border-color: var(--color-danger-500);
 		}
