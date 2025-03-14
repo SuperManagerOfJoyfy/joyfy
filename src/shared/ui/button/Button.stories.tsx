@@ -117,7 +117,7 @@ export const FullWidth: Story = {
 export const Sizes: Story = {
   args: {
     children: 'Button',
-    variant: 'primary',
+    variant: 'secondary',
   },
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
