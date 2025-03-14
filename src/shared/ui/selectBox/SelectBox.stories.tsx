@@ -1,4 +1,4 @@
-import { SelectBox } from "@/shared/ui/selectBox/SelectBox";
+import { SelectBox, SelectItem } from "@/shared/ui/selectBox/SelectBox";
 import { Meta, StoryObj } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
@@ -8,31 +8,33 @@ const meta: Meta<typeof SelectBox> = {
 	tags: ["autodocs"],
 	argTypes: {
 		placeholder: {
-			control: "text",
-			description: "Text displayed when no value is selected",
-			defaultValue: "Select an option",
+			control: 'text',
+			description: 'Placeholder text displayed when no option is selected.',
+			defaultValue: 'Select an option',
 		},
 		defaultValue: {
-			control: "text",
-			description: "The default value",
-		},
-		disabled: {
-			control: "boolean",
-			description: "Indicates if the select is disabled",
-		},
-		width: {
-			control: "text",
-			description: "Change the width of the select box",
-		},
-		options: {
-			control: "object",
-			description: "Array of options to choose from",
+			control: 'text',
+			description: 'The default selected value when the component is first rendered.',
 		},
 		onValueChange: {
-			action: "value changed",
-			description: "Called when the value is changed",
+			action: 'value changed',
+			description: 'Callback triggered when the selected value changes.',
 		},
-	},
+		children: {
+			description: 'List of options displayed inside the SelectBox.',
+			control: false, 
+		},
+		disabled: {
+			control: 'boolean',
+			description: 'Disables the select box if set to `true`.',
+			defaultValue: false,
+		},
+		width: {
+			control: 'text',
+			description: 'Sets the width of the SelectBox component. Accepts any valid CSS width value.',
+			defaultValue: 'auto',
+		}
+	}
 };
 
 export default meta;
@@ -42,40 +44,14 @@ export const Primary: Story = {
 	args: {
 		placeholder: 'Choose language',
 		onValueChange: action("value changed"),
-		options: [
-			{
-				value: "french",
-				children: (
-					<div>
-						<span>🇫🇷</span> French
-					</div>
-				),
-			},
-			{
-				value: "german",
-				children: (
-					<div>
-						<span>🇩🇪</span> German
-					</div>
-				),
-			},
-			{
-				value: "russian",
-				children: (
-					<div>
-						<span>🇷🇺</span> Russian
-					</div>
-				),
-			},
-			{
-				value: "english",
-				children: (
-					<div>
-						<span>🇺🇸</span> English
-					</div>
-				),
-			},
-		],
+		children: (
+				<>
+					<SelectItem value="french"><span>🇫🇷</span> French</SelectItem>
+					<SelectItem value="german"><span>🇩🇪</span> German</SelectItem>
+					<SelectItem value="russian"><span>🇷🇺</span> Russian</SelectItem>
+					<SelectItem value="english"><span>🇺🇸</span> English</SelectItem>
+				</>
+		)
 	}
 }
 
@@ -83,48 +59,24 @@ export const WithDefaultValue: Story = {
 	args: {
 		placeholder: 'Choose language',
 		defaultValue: 'german',
-		options: [
-			{
-				value: "french",
-				children: (
-					<div>
-						<span>🇫🇷</span> French
-					</div>
-				),
-			},
-			{
-				value: "german",
-				children: (
-					<div>
-						<span>🇩🇪</span> German
-					</div>
-				),
-			}
-		],
+		children: (
+			<>
+				<SelectItem value="french"><span>🇫🇷</span> French</SelectItem>
+				<SelectItem value="german"><span>🇩🇪</span> German</SelectItem>
+			</>
+		),
 	}
 }
 
 export const Disabled: Story = {
 	args: {
 		placeholder: 'Choose language',
-		options: [
-			{
-				value: "french",
-				children: (
-					<div>
-						<span>🇫🇷</span> French
-					</div>
-				),
-			},
-			{
-				value: "german",
-				children: (
-					<div>
-						<span>🇩🇪</span> German
-					</div>
-				),
-			}
-		],
+		children: (
+			<>
+				<SelectItem value="french"><span>🇫🇷</span> French</SelectItem>
+				<SelectItem value="german"><span>🇩🇪</span> German</SelectItem>
+			</>
+		),
 		disabled: true
 	}
 }
@@ -134,23 +86,26 @@ export const WithAdjustableWidth: Story = {
 	args: {
 		width: '500px',
 		placeholder: 'Choose language',
-		options: [
-			{
-				value: "french",
-				children: (
-					<div>
-						<span>🇫🇷</span> French
-					</div>
-				),
-			},
-			{
-				value: "german",
-				children: (
-					<div>
-						<span>🇩🇪</span> German
-					</div>
-				),
-			}
-		]
+		children: (
+			<>
+				<SelectItem value="french"><span>🇫🇷</span> French</SelectItem>
+				<SelectItem value="german"><span>🇩🇪</span> German</SelectItem>
+			</>
+		)
 	}
+}
+
+export const Pagination: Story = {
+	args: {
+		defaultValue:'100',
+		children: (
+			<>
+				<SelectItem value="10">10</SelectItem>
+				<SelectItem value="20">20</SelectItem>
+				<SelectItem value="30">30</SelectItem>
+				<SelectItem value="50">50</SelectItem>
+				<SelectItem value="100">100</SelectItem>
+			</>
+		)
+	},
 }
