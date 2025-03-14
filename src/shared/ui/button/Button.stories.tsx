@@ -1,11 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react'
-
-import flagUnitedKingdom from './../../../assets/images/flagUnitedKingdom.png'
-
-import { MdLanguage } from 'react-icons/md'
-
 import React from 'react'
+import type { Meta, StoryObj } from '@storybook/react'
+import { MdLanguage } from 'react-icons/md'
 import Image from 'next/image'
+import flagUnitedKingdom from './../../../assets/images/flagUnitedKingdom.png'
 import { Button } from './Button'
 
 const meta = {
@@ -120,7 +117,7 @@ export const FullWidth: Story = {
 export const Sizes: Story = {
   args: {
     children: 'Button',
-    variant: 'primary',
+    variant: 'secondary',
   },
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
