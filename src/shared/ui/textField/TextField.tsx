@@ -12,8 +12,7 @@ type Props = ComponentProps<'input'> & {
 	startIcon?: ReactNode
 	endIcon?: ReactNode
 	onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void
-	onShowPasswordClick: () => void
-	value: string
+	onShowPasswordClick?: () => void
 }
 
 export const TextField = (
