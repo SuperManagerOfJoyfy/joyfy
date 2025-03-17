@@ -67,10 +67,18 @@
       column-gap: unset;
 
       span {
-        svg {
+
+        &:nth-child(2) {
           width: 16px;
         }
       }
     }
   }
 }
+
+.item {
+  height: 24px !important;
+  padding: 0 6px !important;
+}
+
+

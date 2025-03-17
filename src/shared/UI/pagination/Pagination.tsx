@@ -3,8 +3,8 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 import styles from './pagination.module.scss'
 
-import { usePagination } from '../../../hooks/usePagination'
-import { SelectBox } from '../selectBox/SelectBox'
+import { usePagination } from '@/hooks/usePagination'
+import { SelectBox, SelectItem } from '@/shared/ui/selectBox/SelectBox'
 
 type PaginationProps = {
   className?: string
@@ -122,14 +122,14 @@ export const Pagination = ({
 
       <div className={styles.perPage}>
         <span>Show</span>
-        <SelectBox
-          className={styles.select}
-          defaultValue={itemsPerPage.toString()}
-          value={itemsPerPage.toString()}
-          onValueChange={(value) => onItemsPerPageChange(Number(value))}
-          placeholder="Choose items per page"
-          options={options}
-        />
+
+        <SelectBox className={styles.select} value={itemsPerPage.toString()} onValueChange={(v) => onItemsPerPageChange(Number(v))}>
+            {options.map(o => {
+              return <SelectItem className={styles.item} key={o.value} value={o.value}>{o.children}</SelectItem>
+            })}
+          
+        </SelectBox>
+
         <span>on page</span>
       </div>
     </div>

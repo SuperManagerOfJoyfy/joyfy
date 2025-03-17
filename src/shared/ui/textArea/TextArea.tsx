@@ -38,5 +38,3 @@ export const TextArea = ({
     </div>
   );
 };
-
-// test
