@@ -80,7 +80,7 @@
     }
   }
 
-  &:focus {
+  &:focus-visible {
     outline: none;
     border: 2px solid var(--color-accent-700);
     border-radius: 2px;

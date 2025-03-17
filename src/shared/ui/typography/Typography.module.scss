@@ -1,9 +1,4 @@
-@mixin typography(
-  $fontSize,
-  $lineHeight,
-  $fontWeight,
-  $color: var(--color-dark-900)
-) {
+@mixin typography($fontSize, $lineHeight, $fontWeight, $color: null) {
   margin: 0;
   font-size: $fontSize;
   font-weight: $fontWeight;
@@ -14,6 +9,10 @@
 
 .text {
   margin: 0;
+  margin: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .large {

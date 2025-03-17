@@ -1,8 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react'
 
+import type { Meta, StoryObj } from '@storybook/react'
 import { Typography } from './Typography'
 
 const meta = {
+  component: Typography,
+  tags: ['autodocs'],
+  title: 'Components/Typography',
+  parameters: {
+    layout: 'centered',
+  },
   argTypes: {
     variant: {
       control: { type: 'radio' },
@@ -24,12 +30,13 @@ const meta = {
       options: ['regular', 'medium', 'bold'],
     },
   },
-  component: Typography,
-  tags: ['autodocs'],
-  title: 'Components/Typography',
-  parameters: {
-    layout: 'centered',
-  },
+  decorators: [
+    (Story) => (
+      <div style={{ color: 'var(--color-dark-900)' }}>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Typography>
 
 export default meta
