@@ -10,7 +10,6 @@ type Props = ComponentProps<'input'> & {
 	label?: ReactNode
 	search?: boolean
 	startIcon?: ReactNode
-	endIcon?: ReactNode
 	onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void
 	onShowPasswordClick?: () => void
 }
@@ -22,7 +21,6 @@ export const TextField = (
 		label,
 		errorMessage,
 		startIcon,
-		endIcon,
 		onKeyDown,
 		onEnter,
 		onShowPasswordClick,
@@ -48,6 +46,7 @@ export const TextField = (
 	const showError = !!errorMessage && errorMessage.length > 0
 
 	const classNames = {
+		root: clsx(s.box, className),
 		inputContainer: s.inputContainer,
 		input: clsx(s.input, showError && s.error),
 		startIcon: s.startIcon,
@@ -62,13 +61,13 @@ export const TextField = (
 		onKeyDown?.(e)
 	}
 
-	const togglePasswordHandler = (e: MouseEvent<HTMLButtonElement>) => {
+	const togglePasswordHandler = () => {
 		setShowPassword((prev) => !prev)
 		onShowPasswordClick?.()
 	}
 
 	return (
-		<>
+		<div className={classNames.root}>
 			{label && <Label htmlFor={inputId} label={label} disabled={disabled}/>}
 			<div className={classNames.inputContainer}>
 				{startIcon && <span className={classNames.startIcon}>{startIcon}</span>}
@@ -83,10 +82,10 @@ export const TextField = (
 
 				{isPassword &&
 				<button onClick={togglePasswordHandler} className={classNames.endIconButton}>
-						{showPassword ? <FiEye /> : <FiEyeOff />}
+					{showPassword ? <FiEye /> : <FiEyeOff />}
 				</button>}
 			</div>
 			{showError && <p className={classNames.errorText}>{errorMessage}</p>}
-		</>
+		</div>
 	)
 }
