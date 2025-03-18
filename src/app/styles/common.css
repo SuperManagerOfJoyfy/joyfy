@@ -1,0 +1,5 @@
+:root {
+    --transition-duration: 0.2s;
+    --transition-timing-function: linear;
+    --transition: var(--transition-duration) var(--transition-timing-function);
+}

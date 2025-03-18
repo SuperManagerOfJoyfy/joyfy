@@ -47,11 +47,11 @@ export const Recaptcha = ({ onVerify, siteKey }: Props) => {
         onExpired={handleRecaptchaExpired}
         theme="dark"
       />
-      {false && (
+      {isVerified && (
         <div>{isVerified ? 'Проверка пройдена' : 'Проверка не пройдена'}</div>
       )}
-      {false && <div>{error}</div>}
-      {false && <div>{expired ? 'Срок действия истек' : ''}</div>}
+      {error && <div>{error}</div>}
+      {expired && <div>{expired ? 'Срок действия истек' : ''}</div>}
     </div>
   )
 }
