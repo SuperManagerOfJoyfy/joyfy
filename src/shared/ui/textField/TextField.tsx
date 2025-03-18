@@ -5,7 +5,7 @@ import { FiSearch } from "react-icons/fi";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import clsx from 'clsx';
 
-type Props = ComponentProps<'input'> & {
+export type TextFieldProps = ComponentProps<'input'> & {
 	errorMessage?: string
 	label?: ReactNode
 	search?: boolean
@@ -27,7 +27,7 @@ export const TextField = (
 		disabled,
 		type='text',
 		...rest
-		}: Props) => {
+	}: TextFieldProps) => {
 
 	const [showPassword, setShowPassword] = useState(false);
 
