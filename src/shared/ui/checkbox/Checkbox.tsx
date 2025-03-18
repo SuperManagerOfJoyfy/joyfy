@@ -8,30 +8,34 @@ type Props = {
   label?: string
 } & ComponentProps<typeof CheckboxRadix.Root>
 
-export const Checkbox = ({ checked, onCheckedChange, label, disabled, className }: Props) => {
+export const Checkbox = ({
+  checked,
+  onCheckedChange,
+  label,
+  disabled,
+  className,
+}: Props) => {
   const id = useId()
 
   return (
-    <form>
-      <div className={clsx(s.main, className)} aria-disabled={disabled}>
-        <CheckboxRadix.Root
-          className={s.root}
-          id={id}
-          checked={checked}
-          onCheckedChange={onCheckedChange}
-          disabled={disabled}
-        >
-          <CheckboxRadix.Indicator className={s.indicator}>
-            <IoCheckmarkSharp />
-          </CheckboxRadix.Indicator>
-        </CheckboxRadix.Root>
+    <div className={clsx(s.main, className)} aria-disabled={disabled}>
+      <CheckboxRadix.Root
+        className={s.root}
+        id={id}
+        checked={checked}
+        onCheckedChange={onCheckedChange}
+        disabled={disabled}
+      >
+        <CheckboxRadix.Indicator className={s.indicator}>
+          <IoCheckmarkSharp />
+        </CheckboxRadix.Indicator>
+      </CheckboxRadix.Root>
 
-        {label && (
-          <label className={s.label} htmlFor={id}>
-            {label}
-          </label>
-        )}
-      </div>
-    </form>
+      {label && (
+        <label className={s.label} htmlFor={id}>
+          {label}
+        </label>
+      )}
+    </div>
   )
 }
