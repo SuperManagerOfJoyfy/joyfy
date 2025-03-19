@@ -123,11 +123,18 @@ export const Pagination = ({
       <div className={styles.perPage}>
         <span>Show</span>
 
-        <SelectBox className={styles.select} value={itemsPerPage.toString()} onValueChange={(v) => onItemsPerPageChange(Number(v))}>
-            {options.map(o => {
-              return <SelectItem className={styles.item} key={o.value} value={o.value}>{o.children}</SelectItem>
-            })}
-          
+        <SelectBox
+          className={styles.select}
+          value={itemsPerPage.toString()}
+          onValueChange={(v) => onItemsPerPageChange(Number(v))}
+        >
+          {options.map((o) => {
+            return (
+              <SelectItem className={styles.item} key={o.value} value={o.value}>
+                {o.children}
+              </SelectItem>
+            )
+          })}
         </SelectBox>
 
         <span>on page</span>

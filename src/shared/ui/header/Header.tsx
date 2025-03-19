@@ -13,6 +13,26 @@ type Props = {
 }
 
 export const Header = ({ isAuthenticated, notification = 3 }: Props) => {
+  const options = [
+    {
+      value: 'russian',
+      children: (
+        <div className={s.selectItem}>
+          <Image src={flagRussia} alt="RU flag" width={20} height={20} />{' '}
+          Russian
+        </div>
+      ),
+    },
+    {
+      value: 'english',
+      children: (
+        <div className={s.selectItem}>
+          <Image src={flagUnitedKingdom} alt="UK flag" width={20} height={20} />{' '}
+          English
+        </div>
+      ),
+    },
+  ]
   const EnglishLanguageSelect = () => {
     return (
       <div className={s.selectItem}>
