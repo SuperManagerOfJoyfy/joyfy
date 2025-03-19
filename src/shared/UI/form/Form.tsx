@@ -9,7 +9,7 @@ import { Card } from '../card'
 import { FormTextField } from '../formTextField/FormTextField'
 import { Button } from '../button'
 
-type FormProps<T extends FieldValues> = {
+export type FormProps<T extends FieldValues> = {
   title: string
   btnText: string
   fields: { name: Path<T>; label: string; type?: string }[]
