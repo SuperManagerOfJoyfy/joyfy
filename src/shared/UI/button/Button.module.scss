@@ -1,0 +1,157 @@
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  padding: 6px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 150%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-700);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.fullWidth {
+    width: 100%;
+  }
+}
+
+.button {
+  @include button-base;
+}
+
+.primary {
+  @include button-base;
+  background-color: var(--color-accent-500);
+  color: var(--color-light-100);
+
+  &:hover:enabled {
+    background-color: var(--color-accent-100);
+  }
+
+  &:active:enabled {
+    background-color: var(--color-accent-700);
+  }
+
+  &:disabled {
+    background-color: var(--color-accent-900);
+    color: var(--color-light-900);
+  }
+}
+
+.secondary {
+  @include button-base;
+  background-color: var(--color-dark-300);
+  color: var(--color-light-100);
+
+  &:hover:enabled {
+    background-color: var(--color-dark-100);
+  }
+
+  &:active:enabled {
+    background-color: #212121;
+  }
+
+  &:disabled {
+    background-color: var(--color-dark-500);
+    color: var(--color-light-900);
+  }
+}
+
+.outline {
+  @include button-base;
+  background-color: transparent;
+  border-color: var(--color-accent-500);
+  color: var(--color-accent-500);
+
+  &:hover:enabled {
+    border-color: var(--color-accent-100);
+    color: var(--color-accent-100);
+  }
+
+  &:active:enabled {
+    border-color: var(--color-accent-700);
+    color: var(--color-accent-700);
+  }
+
+  &:disabled {
+    border-color: var(--color-accent-900);
+    color: var(--color-accent-900);
+  }
+}
+
+.text {
+  @include button-base;
+  background-color: transparent;
+  color: var(--color-accent-500);
+
+  &:hover:enabled {
+    color: var(--color-accent-100);
+  }
+
+  &:active:enabled {
+    color: var(--color-accent-700);
+  }
+
+  &:disabled {
+    color: var(--color-accent-900);
+  }
+}
+
+.link {
+  @include button-base;
+  background-color: transparent;
+  color: var(--color-accent-500);
+  padding: 0;
+  border: none;
+  text-decoration: underline;
+
+  &:hover:enabled {
+    text-decoration: underline;
+  }
+
+  &:active:enabled {
+    color: var(--color-accent-700);
+  }
+
+  &:disabled {
+    color: var(--color-accent-900);
+  }
+}
+
+.small {
+  height: 36px;
+  padding: 6px 12px;
+}
+
+.medium {
+  height: 36px;
+  padding: 6px 24px;
+}
+
+.large {
+  height: 48px;
+  padding: 0 20px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.startIcon,
+.endIcon {
+  display: flex;
+  align-items: center;
+}
