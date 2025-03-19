@@ -12,29 +12,31 @@ import { FiSearch } from 'react-icons/fi'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import clsx from 'clsx'
 
-type Props = ComponentProps<'input'> & {
-  errorMessage?: string
-  label?: ReactNode
-  search?: boolean
-  startIcon?: ReactNode
-  onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void
-  onShowPasswordClick?: () => void
+
+export type TextFieldProps = ComponentProps<'input'> & {
+	errorMessage?: string
+	label?: ReactNode
+	search?: boolean
+	startIcon?: ReactNode
+	onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void
+	onShowPasswordClick?: () => void
 }
 
-export const TextField = ({
-  className,
-  search,
-  label,
-  errorMessage,
-  startIcon,
-  onKeyDown,
-  onEnter,
-  onShowPasswordClick,
-  disabled,
-  type = 'text',
-  ...rest
-}: Props) => {
-  const [showPassword, setShowPassword] = useState(false)
+export const TextField = (
+	{
+		className,
+		search,
+		label,
+		errorMessage,
+		startIcon,
+		onKeyDown,
+		onEnter,
+		onShowPasswordClick,
+		disabled,
+		type='text',
+		...rest
+	}: TextFieldProps) => {
+
 
   const inputId = useId()
   if (search) {

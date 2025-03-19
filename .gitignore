@@ -43,3 +43,9 @@ next-env.d.ts
 *storybook.log
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/watcherTasks.xml
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+

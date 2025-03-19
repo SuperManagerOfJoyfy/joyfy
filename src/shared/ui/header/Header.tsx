@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './Header.module.scss'
-import { SelectBox } from '@/shared/ui/selectBox/SelectBox'
+import { SelectBox, SelectItem } from '@/shared/ui/selectBox/SelectBox'
 import { Button } from '@/shared/ui/button'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import flagUnitedKingdom from '@/assets/images/flagUnitedKingdom.png'
@@ -33,6 +33,21 @@ export const Header = ({ isAuthenticated, notification = 3 }: Props) => {
       ),
     },
   ]
+  const EnglishLanguageSelect = () => {
+    return (
+      <div className={s.selectItem}>
+        <Image src={flagUnitedKingdom} alt="UK flag" width={20} height={20} />{' '}
+        English
+      </div>
+    )
+  }
+  const RussianLanguageSelect = () => {
+    return (
+      <div className={s.selectItem}>
+        <Image src={flagRussia} alt="RU flag" width={20} height={20} /> Russian
+      </div>
+    )
+  }
 
   return (
     <header className={s.header}>
@@ -47,19 +62,25 @@ export const Header = ({ isAuthenticated, notification = 3 }: Props) => {
                   <span className={s.number}>{notification}</span>
                 )}
               </div>
-              <SelectBox
-                className={s.selector}
-                placeholder={'Chose language'}
-                options={options}
-              />
+              <SelectBox className={s.selector} placeholder={'Chose language'}>
+                <SelectItem value={'English'}>
+                  <EnglishLanguageSelect />
+                </SelectItem>
+                <SelectItem value={'Russian'}>
+                  <RussianLanguageSelect />
+                </SelectItem>
+              </SelectBox>
             </div>
           ) : (
             <div className={s.actions}>
-              <SelectBox
-                className={s.selector}
-                placeholder={'Chose language'}
-                options={options}
-              />
+              <SelectBox className={s.selector} placeholder={'Chose language'}>
+                <SelectItem value={'English'}>
+                  <EnglishLanguageSelect />
+                </SelectItem>
+                <SelectItem value={'Russian'}>
+                  <RussianLanguageSelect />
+                </SelectItem>
+              </SelectBox>
               <div className={s.buttons}>
                 <Button size={'small'} variant={'text'}>
                   Log in

@@ -4,19 +4,18 @@ import { ComponentPropsWithoutRef, ReactNode } from 'react';
 import s from './Label.module.scss'
 
 type Props = {
-	label: ReactNode
+	label?: ReactNode
 	disabled?: boolean
-	htmlFor?: string
 } & ComponentPropsWithoutRef<'label'>
 
-export const Label = ({ children, label, className, disabled, htmlFor, ...rest}: Props) => {
+export const Label = ({ children, label, className, disabled, ...rest}: Props) => {
 
 	const classNames = {
-		label: clsx(s.label, disabled && s.disabled)
+		label: clsx(s.label, className, disabled && s.disabled)
 	}
 
 	return (
-		<LabelRadixUI.Root htmlFor={htmlFor}>
+		<LabelRadixUI.Root {...rest}>
 			{
 			label && 
 			<div className={classNames.label}>
