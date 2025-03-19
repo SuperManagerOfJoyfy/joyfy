@@ -44,4 +44,8 @@ next-env.d.ts
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/watcherTasks.xml
 
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
 .idea
+
