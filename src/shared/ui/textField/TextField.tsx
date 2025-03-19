@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react'
 import s from './TextField.module.scss'
-import { Label } from '@/shared/UI_temp/label/Label'
+import { Label } from '@/shared/ui/label/Label'
 import { FiSearch } from 'react-icons/fi'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import clsx from 'clsx'

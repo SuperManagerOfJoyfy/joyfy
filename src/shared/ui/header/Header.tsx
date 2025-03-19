@@ -1,7 +1,7 @@
 import React from 'react'
 import s from './Header.module.scss'
 import { SelectBox } from '@/shared/ui/selectBox/SelectBox'
-import { Button } from '@/shared/UI_temp/button'
+import { Button } from '@/shared/ui/button'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import flagUnitedKingdom from '@/assets/images/flagUnitedKingdom.png'
 import flagRussia from '@/assets/images/flagRussia.png'

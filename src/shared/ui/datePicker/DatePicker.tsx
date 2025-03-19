@@ -5,7 +5,7 @@ import {
 import * as RDP from 'react-datepicker'
 import React, { ComponentProps, forwardRef, useEffect, useState } from 'react'
 import s from './DatePicker.module.scss'
-import { Label } from '@/shared/UI_temp/label/Label'
+import { Label } from '@/shared/ui/label/Label'
 import { LuCalendarDays } from 'react-icons/lu'
 import {
   MdOutlineKeyboardArrowLeft,

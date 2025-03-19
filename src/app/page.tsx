@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Modal } from '@/shared/UI_temp'
+import { Button, Modal } from '@/shared/ui'
 import { useState } from 'react'
 
 function App() {

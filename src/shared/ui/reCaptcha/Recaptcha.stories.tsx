@@ -1,4 +1,4 @@
-import { Recaptcha } from '@/shared/UI_temp/reCaptcha/Recaptcha'
+import { Recaptcha } from '@/shared/ui/reCaptcha/Recaptcha'
 import { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof Recaptcha> = {

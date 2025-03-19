@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { DatePicker } from '@/shared/UI_temp/datePicker/DatePicker'
+import { DatePicker } from '@/shared/ui/datePicker/DatePicker'
 
 const meta: Meta<typeof DatePicker> = {
   title: 'Components/DatePicker',
