@@ -1,5 +1,5 @@
 import { Button } from "@/shared/ui/button";
-import { InfoBlock } from "@/shared/ui/infoBlock/InfoBlock";
+import { InfoBlock } from "./InfoBlock";
 import { Meta, StoryObj } from "@storybook/react";
 import infoImg from './../../../../public/images/infoBox/confirm.png'
 import expiredImg from './../../../../public/images/infoBox/expired.png'
