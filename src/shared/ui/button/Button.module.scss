@@ -36,11 +36,11 @@
   background-color: var(--color-accent-500);
   color: var(--color-light-100);
 
-  &:hover:enabled {
+  &:hover:not(:disabled) {
     background-color: var(--color-accent-100);
   }
 
-  &:active:enabled {
+  &:active:not(:disabled) {
     background-color: var(--color-accent-700);
   }
 
@@ -55,11 +55,11 @@
   background-color: var(--color-dark-300);
   color: var(--color-light-100);
 
-  &:hover:enabled {
+  &:hover:not(:disabled) {
     background-color: var(--color-dark-100);
   }
 
-  &:active:enabled {
+  &:active:not(:disabled) {
     background-color: #212121;
   }
 
@@ -75,12 +75,12 @@
   border-color: var(--color-accent-500);
   color: var(--color-accent-500);
 
-  &:hover:enabled {
+  &:hover:not(:disabled) {
     border-color: var(--color-accent-100);
     color: var(--color-accent-100);
   }
 
-  &:active:enabled {
+  &:active:not(:disabled) {
     border-color: var(--color-accent-700);
     color: var(--color-accent-700);
   }
@@ -96,11 +96,11 @@
   background-color: transparent;
   color: var(--color-accent-500);
 
-  &:hover:enabled {
+  &:hover:not(:disabled) {
     color: var(--color-accent-100);
   }
 
-  &:active:enabled {
+  &:active:not(:disabled) {
     color: var(--color-accent-700);
   }
 
@@ -117,11 +117,12 @@
   border: none;
   text-decoration: underline;
 
-  &:hover:enabled {
+  &:hover:not(:disabled) {
+    color: var(--color-accent-100);
     text-decoration: underline;
   }
 
-  &:active:enabled {
+  &:active:not(:disabled) {
     color: var(--color-accent-700);
   }
 
