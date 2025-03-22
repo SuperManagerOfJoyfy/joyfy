@@ -1,22 +1,27 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
+import pluginJs from '@eslint/js'
+import pluginReact from 'eslint-plugin-react'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
-
-const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
+  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
+  pluginReact.configs.flat.recommended,
   {
+    plugins: {
+      prettier: require('eslint-plugin-prettier'), // Плагин для Prettier
+    },
     rules: {
-      'no-unused-vars': 'warn',
-      '@typescript-eslint/no-unused-vars': 'warn',
+      'prettier/prettier': 'error', // Ошибки при нарушении правил Prettier
+      quotes: ['error', 'single'], // Использовать одинарные кавычки
+      indent: ['error', 2], // Отступы в 2 пробела
+    },
+    languageOptions: {
+      sourceType: 'module', // Использовать модули (import/export)
+      ecmaVersion: 'latest', // Использовать последнюю версию ECMAScript
     },
   },
 ]
-
-export default eslintConfig
