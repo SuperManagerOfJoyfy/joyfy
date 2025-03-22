@@ -37,7 +37,7 @@ export const TextField = (
 		...rest
 	}: TextFieldProps) => {
 
-
+	const [showPassword, setShowPassword] = useState(false);
   const inputId = useId()
   if (search) {
     startIcon = <FiSearch />
