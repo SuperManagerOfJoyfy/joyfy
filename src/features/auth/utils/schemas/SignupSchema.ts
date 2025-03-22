@@ -1,6 +1,6 @@
 import {z} from 'zod'
 
-const passwordError = 'Password must contain a-z, A-Z, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _` { | } ~'
+const passwordError = 'Password must contain at least one uppercase letter, one number, and one special character.'
 
 export const SignupSchema = z.object({
 	username: z
@@ -22,10 +22,10 @@ export const SignupSchema = z.object({
 	confirmPassword: z.string(),
 	
 	agreeToTerms: z
-	.literal(true, {errorMap: () => ({message: 'You must agree the Terms & Conditions'})} )
+	.literal(true, {errorMap: () => ({message: 'You must agree to the Terms & Conditions'})} )
 	
 }).refine( (arg) => arg.password ===arg.confirmPassword, {
-	message: 'The passwords must match',
+	message: 'Your passwords don’t match. Try again.',
 	path: ['confirmPassword']
 })
 
