@@ -1,13 +1,12 @@
-import { Button } from "@/shared/ui/button";
-import { InfoBlock } from "./InfoBlock";
 import { Meta, StoryObj } from "@storybook/react";
-import infoImg from './../../../../public/images/infoBox/confirm.png'
-import expiredImg from './../../../../public/images/infoBox/expired.png'
-import { TextField } from "@/shared/ui/textField/TextField";
+import infoImg from '@/features/auth/assets/images/EmailVerification/confirm.png'
+import expiredImg from '@/features/auth/assets/images/EmailVerification/expired.png'
+import { EmailVerification } from "./EmailVerification";
+import { Button, TextField } from "@/shared/ui";
 
-const meta: Meta<typeof InfoBlock> = {
-	title: 'Components/InfoBlock',
-	component: InfoBlock,
+const meta: Meta<typeof EmailVerification> = {
+	title: 'Features/EmailVerification',
+	component: EmailVerification,
 	tags: ["autodocs"],
 	argTypes: {
 		title: {
@@ -29,7 +28,7 @@ const meta: Meta<typeof InfoBlock> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof InfoBlock>;
+type Story = StoryObj<typeof EmailVerification>;
 
 export const Informative: Story = {
 	args: {
