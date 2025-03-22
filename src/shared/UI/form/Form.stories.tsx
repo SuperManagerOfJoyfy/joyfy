@@ -3,15 +3,12 @@ import { Form, FormProps } from '@/shared/ui/form/Form'
 import { FieldValues, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FcGoogle } from 'react-icons/fc'
-import { FaGithub } from 'react-icons/fa'
 
 const meta = {
   component: Form,
   tags: ['autodocs'],
   title: 'Components/Form',
   argTypes: {
-    title: { control: 'text' },
     onSubmit: { action: 'submitted' },
   },
 } satisfies Meta<typeof Form>
@@ -29,13 +26,6 @@ const signInSchema = z.object({
   password: z.string().min(6, 'Invalid password'),
 })
 
-const socialButtons = (
-  <div style={{ display: 'flex', gap: '60px', justifyContent: 'center' }}>
-    <FcGoogle style={{ height: '36px', width: '36px' }} />
-    <FaGithub style={{ height: '36px', width: '36px' }} />
-  </div>
-)
-
 const addContent = (
   <div
     style={{
@@ -51,11 +41,9 @@ const addContent = (
 )
 
 const FormWrapper = <T extends FieldValues>({
-  title,
   btnText,
   fields,
   schema,
-  socialAuthButtons,
   additionalContent,
 }: FormProps<T>) => {
   const { handleSubmit } = useForm({
@@ -64,12 +52,10 @@ const FormWrapper = <T extends FieldValues>({
 
   return (
     <Form
-      title={title}
       btnText={btnText}
       fields={fields}
       schema={schema}
       onSubmit={() => handleSubmit(console.log)}
-      socialAuthButtons={socialAuthButtons}
       additionalContent={additionalContent}
     />
   )
@@ -77,7 +63,6 @@ const FormWrapper = <T extends FieldValues>({
 
 export const Default: Story = {
   args: {
-    title: 'Sign Up',
     btnText: 'Register',
     fields: [
       { name: 'username', label: 'Username' },
@@ -92,9 +77,8 @@ export const Default: Story = {
   render: (args) => <FormWrapper {...args} />,
 }
 
-export const WithAuthIconsAndAdditionalContent: Story = {
+export const WithAdditionalContent: Story = {
   args: {
-    title: 'Sign In',
     btnText: 'Sign In',
     fields: [
       { name: 'email', label: 'Email', type: 'email' },
@@ -104,7 +88,7 @@ export const WithAuthIconsAndAdditionalContent: Story = {
     onSubmit: async (data) => {
       console.log('Form submitted:', data)
     },
-    socialAuthButtons: socialButtons,
+
     additionalContent: addContent,
   },
   render: (args) => <FormWrapper {...args} />,
