@@ -9,7 +9,6 @@ import { Button } from '../button'
 import { FormTextField } from '../formTextField/FormTextField'
 
 export type FormProps<T extends FieldValues> = {
-  //title: string
   btnText: string
   fields: { name: Path<T>; label?: string; type?: string }[]
   schema: ZodType<T>
@@ -19,16 +18,16 @@ export type FormProps<T extends FieldValues> = {
 }
 
 export const Form = <T extends FieldValues>({
-  //title,
   btnText,
   fields,
   schema,
   onSubmit,
   additionalContent,
 }: FormProps<T>) => {
-  const { control, handleSubmit } = useForm<T>({
+  const { control, handleSubmit, formState } = useForm<T>({
     resolver: zodResolver(schema),
   })
+  console.log('Validation errors:', formState.errors)
   return (
     <div className={s.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)} className={s.form}>

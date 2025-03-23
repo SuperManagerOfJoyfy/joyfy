@@ -1,7 +1,7 @@
 'use client'
 
 import { Control, FieldPath, FieldValues, useController } from 'react-hook-form'
-import { TextField, Props as TextFieldProps } from '../textField/TextField'
+import { TextField, TextFieldProps } from '../textField/TextField'
 
 type FormTextFieldProps<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>
@@ -18,6 +18,12 @@ export const FormTextField = <TFieldValues extends FieldValues>({
     fieldState: { error },
   } = useController({ control, name })
   return (
-    <TextField {...rest} {...field} errorMessage={error?.message} id={name} />
+    <TextField
+      {...rest}
+      {...field}
+      value={field.value ?? ''}
+      errorMessage={error?.message}
+      id={name}
+    />
   )
 }

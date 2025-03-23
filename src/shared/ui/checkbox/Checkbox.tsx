@@ -6,14 +6,15 @@ import { clsx } from 'clsx'
 
 type Props = {
   label?: string
+  labelClassName?: string
 } & ComponentProps<typeof CheckboxRadix.Root>
 
 export const Checkbox = ({
-  checked,
-  onCheckedChange,
   label,
-  disabled,
   className,
+  labelClassName,
+  disabled,
+  ...rest
 }: Props) => {
   const id = useId()
 
@@ -22,9 +23,8 @@ export const Checkbox = ({
       <CheckboxRadix.Root
         className={s.root}
         id={id}
-        checked={checked}
-        onCheckedChange={onCheckedChange}
         disabled={disabled}
+        {...rest}
       >
         <CheckboxRadix.Indicator className={s.indicator}>
           <IoCheckmarkSharp />
@@ -32,7 +32,7 @@ export const Checkbox = ({
       </CheckboxRadix.Root>
 
       {label && (
-        <label className={s.label} htmlFor={id}>
+        <label className={clsx(s.label, labelClassName)} htmlFor={id}>
           {label}
         </label>
       )}
