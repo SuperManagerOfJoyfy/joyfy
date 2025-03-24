@@ -1,4 +1,3 @@
-
 import type { Meta, StoryObj } from '@storybook/react'
 import { Typography } from './Typography'
 
@@ -32,7 +31,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ color: 'var(--color-dark-900)' }}>
+      <div style={{ color: 'var(--color-light-100)' }}>
         <Story />
       </div>
     ),
