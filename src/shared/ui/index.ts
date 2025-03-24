@@ -1,3 +1,4 @@
+import { ControlledCheckbox } from './controlledCheckbox/ControlledCheckbox'
 // Imports
 export { Recaptcha } from './reCaptcha/index'
 export { Button } from './button'
@@ -15,3 +16,4 @@ export { Tabs } from './tabs'
 export { Scroll } from './scroll'
 export { FormTextField } from './formTextField'
 export { Card } from './card'
+export { ControlledCheckbox } from './controlledCheckbox'

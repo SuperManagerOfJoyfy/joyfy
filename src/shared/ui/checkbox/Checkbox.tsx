@@ -4,7 +4,7 @@ import s from './checkBox.module.scss'
 import { ComponentProps, useId } from 'react'
 import { clsx } from 'clsx'
 
-type Props = {
+export type CheckboxProps = {
   label?: string
   labelClassName?: string
 } & ComponentProps<typeof CheckboxRadix.Root>
@@ -15,7 +15,7 @@ export const Checkbox = ({
   labelClassName,
   disabled,
   ...rest
-}: Props) => {
+}: CheckboxProps) => {
   const id = useId()
 
   return (
