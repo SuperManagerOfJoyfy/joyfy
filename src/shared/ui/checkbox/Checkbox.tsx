@@ -1,18 +1,20 @@
 import * as CheckboxRadix from '@radix-ui/react-checkbox'
+import { clsx } from 'clsx'
+import { ComponentProps, ReactNode, useId } from 'react'
 import { IoCheckmarkSharp } from 'react-icons/io5'
 import s from './checkBox.module.scss'
-import { ComponentProps, useId } from 'react'
-import { clsx } from 'clsx'
 
 export type CheckboxProps = {
-  label?: string
-  labelClassName?: string
+  label?: ReactNode
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
 } & ComponentProps<typeof CheckboxRadix.Root>
 
 export const Checkbox = ({
   label,
   className,
-  labelClassName,
+  checked,
+  onCheckedChange,
   disabled,
   ...rest
 }: CheckboxProps) => {
@@ -24,6 +26,8 @@ export const Checkbox = ({
         className={s.root}
         id={id}
         disabled={disabled}
+        checked={checked} // ✅ Ensure controlled behavior
+        onCheckedChange={onCheckedChange}
         {...rest}
       >
         <CheckboxRadix.Indicator className={s.indicator}>
@@ -32,7 +36,7 @@ export const Checkbox = ({
       </CheckboxRadix.Root>
 
       {label && (
-        <label className={clsx(s.label, labelClassName)} htmlFor={id}>
+        <label className={clsx(s.label)} htmlFor={id}>
           {label}
         </label>
       )}

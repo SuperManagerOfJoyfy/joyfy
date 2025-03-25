@@ -25,13 +25,9 @@ export const SignupSchema = z
 
     confirmPassword: z.string(),
 
-    agreeToTerms: z
-      .boolean()
-      .default(false)
-      .catch(false)
-      .refine((val) => val === true, {
-        message: 'You must agree to the Terms & Conditions',
-      }),
+    agreeToTerms: z.literal(true, {
+      errorMap: () => ({ message: 'You must agree to the Terms & Conditions' }),
+    }),
   })
   .refine((arg) => arg.password === arg.confirmPassword, {
     message: 'Your passwords don’t match. Try again.',

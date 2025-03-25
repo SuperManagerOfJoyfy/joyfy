@@ -1,54 +1,42 @@
 'use client'
-import { Path, SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { ReactNode } from 'react'
+import Link from 'next/link'
+import { Path, SubmitHandler } from 'react-hook-form'
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
-import Link from 'next/link'
 import { z } from 'zod'
 
-import {
-  Card,
-  Checkbox,
-  ControlledCheckbox,
-  Form,
-  Typography,
-} from '@/shared/ui'
+import { Card, Form, Typography } from '@/shared/ui'
 import { SignupSchema } from '../utils/schemas/SignupSchema'
 import s from './signupForm.module.scss'
 
 const fields: {
   name: Path<z.infer<typeof SignupSchema>>
-  label: string
+  label: ReactNode
   type?: string
 }[] = [
   { name: 'username', label: 'Username' },
   { name: 'email', label: 'Email', type: 'email' },
   { name: 'password', label: 'Password', type: 'password' },
   { name: 'confirmPassword', label: 'Password confirmation', type: 'password' },
+  {
+    name: 'agreeToTerms',
+    label: (
+      <span className={s.label}>
+        I agree to the <Link href="/terms-of-service">Terms of Service</Link>{' '}
+        and <Link href="/privacy-policy">Privacy Policy</Link>
+      </span>
+    ),
+    type: 'checkbox',
+  },
 ]
 
 export const SignupForm = () => {
-  const { control, handleSubmit } = useForm<z.infer<typeof SignupSchema>>({
-    resolver: zodResolver(SignupSchema),
-    defaultValues: { agreeToTerms: false },
-  })
-
   const handleSignupSubmit: SubmitHandler<z.infer<typeof SignupSchema>> = (
     data
   ) => {
     console.log('Form submitted with:', data)
   }
-
-  const additionalContent = (
-    <div className={s.contentContainer}>
-      <ControlledCheckbox
-        control={control}
-        name="agreeToTerms"
-        labelClassName={s.checkboxLabel}
-        label="I agree to the Terms of Service and Privacy Policy"
-      />
-    </div>
-  )
 
   return (
     <Card className={s.card}>
@@ -66,7 +54,6 @@ export const SignupForm = () => {
         fields={fields}
         schema={SignupSchema}
         onSubmit={handleSignupSubmit}
-        additionalContent={additionalContent}
       />
       <div className={s.footer}>
         <Typography>Do you have an account?</Typography>

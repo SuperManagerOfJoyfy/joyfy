@@ -8,7 +8,7 @@ type FormTextFieldProps<TFieldValues extends FieldValues> = {
   name: FieldPath<TFieldValues>
 } & Omit<TextFieldProps, 'id' | 'onChange' | 'value'>
 
-export const FormTextField = <TFieldValues extends FieldValues>({
+export const ControlledTextField = <TFieldValues extends FieldValues>({
   control,
   name,
   ...rest

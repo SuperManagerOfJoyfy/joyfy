@@ -49,6 +49,14 @@
   text-align: center;
 }
 
+.label {
+  font-size: 12px;
+
+  a {
+    color: var(--color-accent-500);
+  }
+}
+
 .link {
   text-decoration: none;
   color: var(--color-accent-500);
