@@ -7,7 +7,7 @@ export { DatePicker } from './datePicker'
 export { Form } from './form'
 
 export { ControlledCheckbox, ControlledTextField } from './controlledComponents'
-export { InfoBlock } from './infoBlock'
+
 export { Modal } from './modal'
 export { RadioGroup, RadioGroupItem, RadioGroupRoot } from './radioGroup'
 export { Recaptcha } from './reCaptcha/index'

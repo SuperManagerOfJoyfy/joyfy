@@ -7,7 +7,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { z } from 'zod'
 
 import { Card, Form, Typography } from '@/shared/ui'
-import { SignupSchema } from '../utils/schemas/SignupSchema'
+import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
 import s from './signupForm.module.scss'
 
 const fields: {

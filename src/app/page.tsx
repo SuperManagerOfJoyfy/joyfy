@@ -1,4 +1,4 @@
-import { SignupForm } from '@/features/auth/signupForm/SignupForm'
+import { SignupForm } from '@/features/auth/ui/signupForm/SignupForm'
 
 export default function Home() {
   return (
