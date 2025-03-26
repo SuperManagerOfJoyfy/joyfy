@@ -28,11 +28,13 @@ export const Form = <T extends FieldValues>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
   })
-  console.log('🚨 Validation errors:', formState.errors)
-  console.log('✅ Current form values:', control._formValues)
+
+  const handleFormSubmit: SubmitHandler<T> = (data) => {
+    onSubmit(data)
+  }
   return (
     <div className={s.formContainer}>
-      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+      <form onSubmit={handleSubmit(handleFormSubmit)} className={s.form}>
         {fields.map(({ name, label, type }) =>
           type === 'checkbox' ? (
             <ControlledCheckbox
