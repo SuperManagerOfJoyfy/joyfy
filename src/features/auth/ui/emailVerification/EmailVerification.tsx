@@ -1,8 +1,8 @@
-import { Typography } from '@/shared/ui/typography'
 import Image, { StaticImageData } from 'next/image'
 import React, { ComponentProps } from 'react'
-import s from './InfoBlock.module.scss'
+import s from './EmailVerification.module.scss'
 import clsx from 'clsx'
+import { Typography } from '@/shared/ui'
 
 type Props = {
 	title: string
@@ -11,7 +11,7 @@ type Props = {
 	className: string
 } & ComponentProps<'div'>
 
-export const InfoBlock = ({ title, description, imageSrc, children, className }: Props) => {
+export const EmailVerification = ({ title, description, imageSrc, children, className }: Props) => {
 	return (
 		<div className={clsx(s.container, className)}>
 			<Typography variant='h2' as='h2'>{title}</Typography>
