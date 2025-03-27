@@ -1,0 +1,13 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 378px;
+  padding: 23px 24px 30px;
+
+  .buttonsWrapper {
+    .button {
+      background-color: unset;
+    }
+  }
+}

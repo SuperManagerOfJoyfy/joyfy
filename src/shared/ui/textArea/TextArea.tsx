@@ -1,8 +1,8 @@
 import { ComponentProps, useId } from "react";
 import clsx from "clsx";
-import styles from "./textArea.module.scss";
+import s from "./textArea.module.scss";
 
-type TextAreaProps = {
+type Props = {
   label?: string;
   error?: string;
 } & ComponentProps<"textarea">;
@@ -12,29 +12,29 @@ export const TextArea = ({
   error,
   className,
   ...props
-}: TextAreaProps) => {
+}: Props) => {
   const id = useId();
 
   return (
-    <div className={clsx(styles.textAreaContainer, className)}>
+    <div className={clsx(s.textAreaContainer, className)}>
       <label
-        className={styles.label}
+        className={s.label}
         htmlFor={id}
         aria-disabled={props.disabled}
       >
         {label}
       </label>
 
-      <div className={clsx(styles.wrapper, error && styles.error)}>
+      <div className={clsx(s.wrapper, error && s.error)}>
         <textarea
-          className={styles.textArea}
+          className={s.textArea}
           data-value={props.value && "true"}
           id={id}
           {...props}
         />
       </div>
 
-      <span className={styles.errorText}>{error}</span>
+      <span className={s.errorText}>{error}</span>
     </div>
   );
 };

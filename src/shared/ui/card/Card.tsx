@@ -1,6 +1,6 @@
 import { ComponentProps } from "react";
 import clsx from "clsx";
-import styles from "./card.module.scss";
+import s from "./card.module.scss";
 
 export const Card = ({
   children,
@@ -8,7 +8,7 @@ export const Card = ({
   ...props
 }: ComponentProps<"div">) => {
   return (
-    <div className={clsx(styles.card, className)} {...props}>
+    <div className={clsx(s.card, className)} {...props}>
       {children}
     </div>
   );
