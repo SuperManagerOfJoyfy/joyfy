@@ -1,9 +1,9 @@
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
-import s from './socialIcons.module.scss'
+import s from './socialLinks.module.scss'
 import Link from 'next/link'
 
-export const SocialIcons = () => {
+export const SocialLinks = () => {
   // replace href with actual route
   return (
     <div className={s.iconsContainer}>

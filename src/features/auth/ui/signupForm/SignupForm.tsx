@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Path, SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Card, Form, SocialIcons, Typography } from '@/shared/ui'
+import { Card, Form, SocialLinks, Typography } from '@/shared/ui'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
 import s from './signupForm.module.scss'
 
@@ -42,7 +42,7 @@ export const SignupForm = () => {
         Sign Up
       </Typography>
 
-      <SocialIcons />
+      <SocialLinks />
 
       <Form
         btnText="Sign Up"
