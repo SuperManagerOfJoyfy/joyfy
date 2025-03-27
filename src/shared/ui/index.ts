@@ -1,3 +1,4 @@
+import { SocialIcons } from './socialIcons/SocialIcons'
 // Imports
 export { Button } from './button'
 export { Card } from './card'
@@ -14,6 +15,7 @@ export { Recaptcha } from './reCaptcha/index'
 export { Scroll } from './scroll'
 export { SelectBox, SelectItem } from './selectBox'
 export { Sidebar } from './sidebar'
+export { SocialIcons } from './socialIcons'
 export { Tabs } from './tabs'
 export { TextField } from './textField'
 export { Typography } from './typography'

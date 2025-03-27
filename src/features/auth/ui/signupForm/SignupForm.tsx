@@ -2,11 +2,9 @@
 import { ReactNode } from 'react'
 import Link from 'next/link'
 import { Path, SubmitHandler } from 'react-hook-form'
-import { FaGithub } from 'react-icons/fa'
-import { FcGoogle } from 'react-icons/fc'
 import { z } from 'zod'
 
-import { Card, Form, Typography } from '@/shared/ui'
+import { Card, Form, SocialIcons, Typography } from '@/shared/ui'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
 import s from './signupForm.module.scss'
 
@@ -44,10 +42,7 @@ export const SignupForm = () => {
         Sign Up
       </Typography>
 
-      <div className={s.iconsContainer}>
-        <FcGoogle className={s.icon} />
-        <FaGithub className={s.icon} />
-      </div>
+      <SocialIcons />
 
       <Form
         btnText="Sign Up"
