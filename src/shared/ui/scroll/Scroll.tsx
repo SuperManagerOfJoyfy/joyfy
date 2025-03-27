@@ -5,7 +5,7 @@ type Props = React.ComponentPropsWithoutRef<typeof ScrollArea.Root> & {
   children: React.ReactNode
 }
 
-function Scroll({ children }: Props) {
+export const Scroll = ({ children }: Props) => {
   return (
     <ScrollArea.Root className={s.root}>
       <ScrollArea.Viewport className={s.viewport}>
@@ -20,5 +20,3 @@ function Scroll({ children }: Props) {
     </ScrollArea.Root>
   )
 }
-
-export default Scroll

@@ -1,15 +1,28 @@
 html {
-    box-sizing: border-box;
-    font-size: 100%;
+  box-sizing: border-box;
+  font-size: 100%;
 
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    font-size: 14px;
+    background-color: #171717 !important; /* Ensures autofilled background matches manual input */
+    -webkit-text-fill-color: white !important; /* Ensures text color remains consistent */
+    -webkit-box-shadow: 0 0 0px 1000px #171717 inset !important; /* Forces background color */
+    transition: background-color 5000s ease-in-out 0s; /* Prevents quick white flash */
+  }
 }
 
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
 input,
@@ -18,24 +31,24 @@ select,
 textarea,
 optgroup,
 option {
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    font-style: inherit;
-    color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  color: inherit;
 }
 
 a:visited {
-    color: inherit;
+  color: inherit;
 }
 
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 
-    font-family: var(--font-family-primary), sans-serif;
-    line-height: var(--line-height-m);
-    color: var(--color-light-100);
+  font-family: var(--font-family-primary), sans-serif;
+  line-height: var(--line-height-m);
+  color: var(--color-light-100);
 
-    background-color: var(--color-dark-900);
+  background-color: var(--color-dark-900);
 }
