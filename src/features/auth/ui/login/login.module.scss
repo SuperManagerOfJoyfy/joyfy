@@ -16,6 +16,10 @@
     .forgot {
       color: var(--color-light-900);
       text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
