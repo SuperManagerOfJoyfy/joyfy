@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { Path, SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Card, Form, SocialLinks, Typography } from '@/shared/ui'
+import { Card, Form, Typography } from '@/shared/ui'
+import { SocialLinks } from '../socialLinks'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
 import s from './signupForm.module.scss'
 
