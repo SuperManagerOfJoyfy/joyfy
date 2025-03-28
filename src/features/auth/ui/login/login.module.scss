@@ -6,8 +6,17 @@
   padding: 23px 24px 30px;
 
   .buttonsWrapper {
+    display: flex;
+    column-gap: 60px;
+    margin-top: 13px;
+
     .button {
+      padding: 0;
       background-color: unset;
+
+      &:hover {
+        transform: scale(1.2);
+      }
     }
   }
 }
