@@ -5,18 +5,32 @@
   max-width: 378px;
   padding: 23px 24px 30px;
 
-  .buttonsWrapper {
-    display: flex;
-    column-gap: 60px;
+  .socialLinksWrap {
     margin-top: 13px;
+  }
 
-    .button {
-      padding: 0;
-      background-color: unset;
+  .content {
+    width: 100%;
+    text-align: end;
 
-      &:hover {
-        transform: scale(1.2);
-      }
+    .forgot {
+      color: var(--color-light-900);
+      text-decoration: none;
+    }
+  }
+
+  .account {
+    margin-top: 18px;
+  }
+
+  .signUp {
+    margin-top: 6px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 }
