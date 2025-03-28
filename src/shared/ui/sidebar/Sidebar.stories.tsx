@@ -1,6 +1,4 @@
-import React from 'react'
 import { Meta, StoryObj } from '@storybook/react'
-
 import {
   FiHome,
   FiPlusCircle,
@@ -13,6 +11,8 @@ import {
 } from 'react-icons/fi'
 
 import { Sidebar } from './Sidebar'
+import { createSidebarItems } from '@/shared/utils/SidebarItem/SidebarItem'
+
 
 const meta: Meta<typeof Sidebar> = {
   title: 'Components/Sidebar',
@@ -30,130 +30,174 @@ export default meta
 
 type Story = StoryObj<typeof Sidebar>
 
-const items = [
-  {
-    id: 'home',
-    title: 'Home',
-    path: '#',
-    icon: <FiHome />,
-  },
-  {
-    id: 'create',
-    title: 'Create',
-    path: '#',
-    icon: <FiPlusCircle />,
-  },
-  {
-    id: 'profile',
-    title: 'My Profile',
-    path: '#',
-    icon: <FiUser />,
-  },
-  {
-    id: 'messenger',
-    title: 'Messenger',
-    path: '#',
-    icon: <FiMessageCircle />,
-  },
-  {
-    id: 'search',
-    title: 'Search',
-    path: '#',
-    icon: <FiSearch />,
-  },
-  {
-    id: 'statistics',
-    title: 'Statistics',
-    path: '#',
-    icon: <FiBarChart2 />,
-    style: { marginTop: '60px' },
-  },
-  {
-    id: 'favorites',
-    title: 'Favorites',
-    path: '#',
-    icon: <FiStar />,
-    style: { marginBottom: '180px' },
-  },
-  {
-    id: 'logout',
-    title: 'Log Out',
-    path: '#',
-    icon: <FiLogOut />,
-  },
-]
-
-const defaultArgs = {
-  items: items,
-  defaultItemSpacing: 8,
-}
+const userSidebarItems = createSidebarItems('user')
+const adminSidebarItems = createSidebarItems('admin')
 
 export const Default: Story = {
-  args: defaultArgs,
+  args: {
+    items: userSidebarItems,
+    activePath: '/',
+  },
 }
 
 export const Disabled: Story = {
   args: {
-    ...defaultArgs,
+    items: userSidebarItems,
     disabled: true,
+    activePath: '/',
   },
 }
 
 export const DisabledItem: Story = {
   args: {
-    ...defaultArgs,
+    activePath: '/',
     items: [
       {
         id: 'home',
         title: 'Home',
-        path: '#',
+        path: '/',
         icon: <FiHome />,
         disabled: true,
       },
       {
         id: 'create',
         title: 'Create',
-        path: '#',
+        path: '/create',
         icon: <FiPlusCircle />,
       },
       {
         id: 'profile',
         title: 'My Profile',
-        path: '#',
+        path: '/profile',
         icon: <FiUser />,
       },
       {
         id: 'messenger',
         title: 'Messenger',
-        path: '#',
+        path: '/messages',
         icon: <FiMessageCircle />,
       },
       {
         id: 'search',
         title: 'Search',
-        path: '#',
+        path: '/search',
         icon: <FiSearch />,
         style: { marginBottom: '60px' },
       },
       {
         id: 'statistics',
         title: 'Statistics',
-        path: '#',
+        path: '/stats',
         icon: <FiBarChart2 />,
       },
       {
         id: 'favorites',
         title: 'Favorites',
-        path: '#',
+        path: '/favorites',
         icon: <FiStar />,
         style: { marginBottom: '180px' },
       },
       {
         id: 'logout',
         title: 'Log Out',
-        path: '#',
         icon: <FiLogOut />,
+        onClick: () => console.log('Logging out...'),
       },
     ],
   },
 }
+
+export const AdminSidebar: Story = {
+  args: {
+    items: adminSidebarItems,
+    activePath: '/admin/stats',
+  },
+}
+
+// import { Meta, StoryObj } from '@storybook/react'
+
+// import { Sidebar, SidebarItem } from './Sidebar'
+// import { createSidebarItems } from '@/shared/utils/SidebarItem/SidebarItem'
+
+// const meta: Meta<typeof Sidebar> = {
+//   title: 'Components/Sidebar',
+//   component: Sidebar,
+//   parameters: {
+//     layout: 'centered',
+//     nextjs: {
+//       appDirectory: true,
+//     },
+//   },
+// }
+// export default meta
+
+// type Story = StoryObj<typeof Sidebar>
+
+// const renderSidebar = ({
+//   role = 'user',
+//   activeId,
+//   disabled,
+//   disableItemIds = [],
+//   handlers = {},
+// }: {
+//   role?: 'user' | 'admin'
+//   activeId?: string
+//   disabled?: boolean
+//   disableItemIds?: string[]
+//   handlers?: Parameters<typeof createSidebarItems>[1]
+// }) => {
+//   const items = createSidebarItems(role, handlers)
+
+//   return (
+//     <Sidebar disabled={disabled}>
+//       {items.map((item) => (
+//         <SidebarItem
+//           key={item.id}
+//           id={item.id}
+//           title={item.title}
+//           path={item.path}
+//           icon={item.icon}
+//           active={item.id === activeId}
+//           style={item.style}
+//           disabled={disableItemIds.includes(item.id)}
+//           onClick={item.onClick}
+//         />
+//       ))}
+//     </Sidebar>
+//   )
+// }
+
+// export const Default: Story = {
+//   render: () =>
+//     renderSidebar({
+//       role: 'user',
+//       activeId: 'home',
+//       handlers: {
+//         onLogout: () => console.log('Logging out'),
+//       },
+//     }),
+// }
+
+// export const DisabledSidebar: Story = {
+//   render: () =>
+//     renderSidebar({
+//       role: 'user',
+//       disabled: true,
+//     }),
+// }
+
+// export const WithDisabledItem: Story = {
+//   render: () =>
+//     renderSidebar({
+//       role: 'user',
+//       disableItemIds: ['home'],
+//     }),
+// }
+
+// export const AdminSidebar: Story = {
+//   render: () =>
+//     renderSidebar({
+//       role: 'admin',
+//       activeId: 'stats',
+//     }),
+// }
