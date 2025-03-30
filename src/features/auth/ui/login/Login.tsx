@@ -4,20 +4,21 @@ import s from './login.module.scss'
 import clsx from 'clsx'
 import { SocialLinks } from '@/features/auth/ui/socialLinks'
 import { z } from 'zod'
+import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
 
 type Props = {
   className?: string
 }
 
-const signInSchema = z.object({
-  email: z.string().email('Invalid email'),
-  password: z.string().min(6, 'Invalid password'),
+const loginSchema = z.object({
+  email: EmailSchema,
+  password: z.string().min(1, 'Required'),
 })
 
 export const Login = ({ className }: Props) => {
-  const fields: any = [
-    { name: 'email', label: 'Email', type: 'email' },
-    { name: 'password', label: 'Password', type: 'password' },
+  const fields = [
+    { name: 'email' as const, label: 'Email', type: 'email' },
+    { name: 'password' as const, label: 'Password', type: 'password' },
   ]
 
   const additionalContent = (
@@ -39,7 +40,7 @@ export const Login = ({ className }: Props) => {
       <Form
         btnText="Sign In"
         fields={fields}
-        schema={signInSchema}
+        schema={loginSchema}
         onSubmit={console.log}
         additionalContent={additionalContent}
       />
