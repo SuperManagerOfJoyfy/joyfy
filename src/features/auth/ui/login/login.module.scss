@@ -14,6 +14,7 @@
     text-align: end;
 
     .forgot {
+      font-size: var(--font-size-s);
       color: var(--color-light-900);
       text-decoration: none;
 
@@ -29,8 +30,9 @@
 
   .signUp {
     margin-top: 6px;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-m);
+    color: var(--color-accent-500);
     text-decoration: none;
 
     &:hover {

@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import { SocialLinks } from '@/features/auth/ui/socialLinks'
 import { z } from 'zod'
 import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
+import Link from 'next/link'
 
 type Props = {
   className?: string
@@ -23,9 +24,9 @@ export const Login = ({ className }: Props) => {
 
   const additionalContent = (
     <div className={s.content}>
-      <Typography as="a" href="test" variant="body2" className={s.forgot}>
+      <Link href="test" className={s.forgot}>
         Forgot Password
-      </Typography>
+      </Link>
     </div>
   )
 
@@ -49,9 +50,9 @@ export const Login = ({ className }: Props) => {
         Don't have an account?
       </Typography>
 
-      <Typography as="a" href="test2" variant="link1" className={s.signUp}>
+      <Link href="test2" className={s.signUp}>
         Sign Up
-      </Typography>
+      </Link>
     </Card>
   )
 }
