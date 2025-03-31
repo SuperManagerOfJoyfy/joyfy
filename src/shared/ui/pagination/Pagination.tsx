@@ -1,12 +1,12 @@
 import clsx from 'clsx'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
-import styles from './pagination.module.scss'
+import s from './pagination.module.scss'
 
-import { usePagination } from '@/hooks/usePagination'
 import { SelectBox, SelectItem } from '@/shared/ui/selectBox/SelectBox'
+import { usePagination } from '@/shared/hooks/usePagination'
 
-type PaginationProps = {
+type Props = {
   className?: string
   currentPage: number
   itemsPerPage: number
@@ -22,7 +22,7 @@ export const Pagination = ({
   onItemsPerPageChange,
   onPageChange,
   totalPages = 1,
-}: PaginationProps) => {
+}: Props) => {
   const pages = usePagination(currentPage, totalPages)
 
   const handlePageClick = (page: '...' | number) => {
@@ -75,13 +75,10 @@ export const Pagination = ({
   ]
 
   return (
-    <div className={clsx(styles.pagination, className)}>
-      <div className={styles.buttons}>
+    <div className={clsx(s.pagination, className)}>
+      <div className={s.buttons}>
         <button
-          className={clsx(
-            styles.button,
-            currentPage === 1 && styles.arrowDisabled
-          )}
+          className={clsx(s.button, currentPage === 1 && s.arrowDisabled)}
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
           type={'button'}
@@ -92,10 +89,7 @@ export const Pagination = ({
 
         {pages.map((page, index) => (
           <button
-            className={clsx(
-              styles.button,
-              page === currentPage && styles.active
-            )}
+            className={clsx(s.button, page === currentPage && s.active)}
             disabled={page === '...'}
             key={index}
             onClick={() => handlePageClick(Number(page))}
@@ -107,9 +101,8 @@ export const Pagination = ({
 
         <button
           className={clsx(
-            styles.button,
-            (currentPage === totalPages || totalPages === 0) &&
-              styles.arrowDisabled
+            s.button,
+            (currentPage === totalPages || totalPages === 0) && s.arrowDisabled
           )}
           disabled={currentPage === totalPages || totalPages === 0}
           onClick={() => onPageChange(currentPage + 1)}
@@ -120,17 +113,17 @@ export const Pagination = ({
         </button>
       </div>
 
-      <div className={styles.perPage}>
+      <div className={s.perPage}>
         <span>Show</span>
 
         <SelectBox
-          className={styles.select}
+          className={s.select}
           value={itemsPerPage.toString()}
           onValueChange={(v) => onItemsPerPageChange(Number(v))}
         >
           {options.map((o) => {
             return (
-              <SelectItem className={styles.item} key={o.value} value={o.value}>
+              <SelectItem className={s.item} key={o.value} value={o.value}>
                 {o.children}
               </SelectItem>
             )
