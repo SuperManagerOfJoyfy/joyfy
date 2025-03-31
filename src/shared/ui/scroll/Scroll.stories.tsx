@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react'
-import Scroll from './Scroll'
+import { Scroll } from './Scroll'
 
 import './stories.css'
 
