@@ -15,6 +15,7 @@ export type FormProps<T extends FieldValues> = {
   onSubmit: SubmitHandler<T>
   type?: string
   additionalContent?: ReactNode
+  disabled?: boolean
 }
 
 export const Form = <T extends FieldValues>({
@@ -23,6 +24,7 @@ export const Form = <T extends FieldValues>({
   schema,
   onSubmit,
   additionalContent,
+  disabled = false,
 }: FormProps<T>) => {
   const { control, handleSubmit, formState } = useForm<T>({
     resolver: zodResolver(schema),
@@ -42,6 +44,7 @@ export const Form = <T extends FieldValues>({
               control={control}
               name={name}
               label={label}
+              disabled={disabled}
             />
           ) : (
             <ControlledTextField
@@ -50,6 +53,7 @@ export const Form = <T extends FieldValues>({
               name={name}
               label={label}
               type={type || 'text'}
+              disabled={disabled}
             />
           )
         )}
@@ -58,7 +62,7 @@ export const Form = <T extends FieldValues>({
           <div className={s.additionalContent}>{additionalContent}</div>
         )}
 
-        <Button type="submit" fullWidth>
+        <Button type="submit" fullWidth disabled={disabled}>
           {btnText}
         </Button>
       </form>

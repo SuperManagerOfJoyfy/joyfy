@@ -6,6 +6,7 @@ import { IoNotificationsOutline } from 'react-icons/io5'
 import flagUnitedKingdom from '@/assets/images/flagUnitedKingdom.png'
 import flagRussia from '@/assets/images/flagRussia.png'
 import Image, { StaticImageData } from 'next/image'
+import Link from 'next/link'
 
 type Props = {
   isAuthenticated: boolean
@@ -26,10 +27,15 @@ const LanguageSelect = ({ flag, language }: LanguageSelectProps) => (
 
 const AuthActions = () => (
   <div className={s.buttons}>
-    <Button size={'small'} variant={'text'}>
+    <Button as={Link} href="/auth/login" size={'small'} variant={'text'}>
       Log in
     </Button>
-    <Button size={'small'} variant={'primary'}>
+    <Button
+      as={Link}
+      href="/auth/registration"
+      size={'small'}
+      variant={'primary'}
+    >
       Sign up
     </Button>
   </div>

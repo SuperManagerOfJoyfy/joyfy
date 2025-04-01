@@ -147,8 +147,19 @@
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
+  @include button-base;
+  padding: 6px;
+  background-color: transparent;
+  border: none;
+
+  color: inherit;
+
+  &:hover:not(:disabled),
+  &:active:not(:disabled),
+  &:disabled {
+    background-color: transparent;
+    color: inherit;
+  }
 }
 
 .startIcon,

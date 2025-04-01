@@ -6,6 +6,7 @@ import { SocialLinks } from '@/features/auth/ui/socialLinks'
 import { z } from 'zod'
 import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
 import Link from 'next/link'
+import { useState } from 'react'
 
 type Props = {
   className?: string
@@ -17,6 +18,8 @@ const loginSchema = z.object({
 })
 
 export const Login = ({ className }: Props) => {
+  const [isSocialLoading, setIsSocialLoading] = useState(false)
+
   const fields = [
     { name: 'email' as const, label: 'Email', type: 'email' },
     { name: 'password' as const, label: 'Password', type: 'password' },
@@ -30,12 +33,17 @@ export const Login = ({ className }: Props) => {
     </div>
   )
 
+  const disableAll = isSocialLoading
+
   return (
     <Card className={clsx(s.card, className)}>
       <Typography variant="h1">Sign In</Typography>
 
       <div className={s.socialLinksWrap}>
-        <SocialLinks />
+        <SocialLinks
+          isDisabled={disableAll}
+          onStartLoading={() => setIsSocialLoading(true)}
+        />
       </div>
 
       <Form
@@ -44,6 +52,7 @@ export const Login = ({ className }: Props) => {
         schema={loginSchema}
         onSubmit={console.log}
         additionalContent={additionalContent}
+        disabled={disableAll}
       />
 
       <Typography variant="body1" className={s.account}>
