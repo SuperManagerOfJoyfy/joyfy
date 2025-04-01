@@ -1,9 +1,10 @@
+import { SignupForm } from '@/features/auth/ui/signupForm'
 import React from 'react'
 
 const Page = () => {
   return (
-    <div>
-      Reg Page
+    <div className="container">
+      <SignupForm />
     </div>
   )
 }

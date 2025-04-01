@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { Header } from '@/shared/ui/header/Header'
 import { ReduxProvider } from '@/shared/providers/ReduxProvider'
+import '@/app/globals.css'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
@@ -15,12 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <ReduxProvider>
-        <Header isAuthenticated={true} />
-        <main>
-          {children}
-        </main>
-      </ReduxProvider>
+        <ReduxProvider>
+          <Header isAuthenticated={false} />
+          <main>{children}</main>
+        </ReduxProvider>
       </body>
     </html>
   )

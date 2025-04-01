@@ -21,8 +21,8 @@ html {
 *::before,
 *::after {
   box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 input,
@@ -51,4 +51,17 @@ body {
   color: var(--color-light-100);
 
   background-color: var(--color-dark-900);
+  min-height: 100vh;
+}
+
+main {
+  max-width: 60rem;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  margin-top: 24px;
 }
