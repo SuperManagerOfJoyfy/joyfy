@@ -24,7 +24,11 @@ export const Form = <T extends FieldValues>({
   onSubmit,
   additionalContent,
 }: FormProps<T>) => {
-  const { control, handleSubmit, formState } = useForm<T>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<T>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
   })
@@ -58,7 +62,7 @@ export const Form = <T extends FieldValues>({
           <div className={s.additionalContent}>{additionalContent}</div>
         )}
 
-        <Button type="submit" fullWidth>
+        <Button type="submit" fullWidth disabled={!isValid}>
           {btnText}
         </Button>
       </form>

@@ -53,7 +53,7 @@ export const SignupForm = () => {
       />
       <div className={s.footer}>
         <Typography>Do you have an account?</Typography>
-        <Link href="signin" className={s.link}>
+        <Link href="/auth/login" className={s.link}>
           Sign In
         </Link>
       </div>
