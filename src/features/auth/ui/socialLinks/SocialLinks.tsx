@@ -3,7 +3,8 @@
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import s from './socialLinks.module.scss'
-import { Button } from '@/shared/ui'
+import Link from 'next/link'
+import type { MouseEvent as ReactMouseEvent } from 'react'
 
 type SocialLinksProps = {
   isDisabled: boolean
@@ -14,36 +15,39 @@ export const SocialLinks = ({
   isDisabled,
   onStartLoading,
 }: SocialLinksProps) => {
+
   const base = process.env.NEXT_PUBLIC_API_BASE_URL
 
-  const handleGoogleLogin = () => {
+  const handleClick = (
+    e: ReactMouseEvent<HTMLAnchorElement>,
+    provider: 'google' | 'github'
+  ) => {
+    if (isDisabled) {
+      e.preventDefault()
+      return
+    }
     onStartLoading()
-    window.location.href = `${base}/auth/google`
-  }
-
-  const handleGithubLogin = () => {
-    onStartLoading()
-    window.location.href = `${base}/auth/github`
   }
 
   return (
     <div className={s.iconsContainer}>
-      <Button
-        variant={'icon'}
-        onClick={handleGoogleLogin}
-        className={s.iconBtn}
-        disabled={isDisabled}
+      <Link
+        href={`${base}/auth/google`}
+        onClick={(e) => handleClick(e, 'google')}
+        className={`${s.iconBtn} ${isDisabled ? s.disabled : ''}`}
+        aria-disabled={isDisabled}
       >
         <FcGoogle className={s.icon} />
-      </Button>
-      <Button
-        variant={'icon'}
-        onClick={handleGithubLogin}
-        className={s.iconBtn}
-        disabled={isDisabled}
+      </Link>
+
+      <Link
+        href={`${base}/auth/github`}
+        onClick={(e) => handleClick(e, 'github')}
+        className={`${s.iconBtn} ${isDisabled ? s.disabled : ''}`}
+        aria-disabled={isDisabled}
       >
         <FaGithub className={s.icon} />
-      </Button>
+      </Link>
     </div>
   )
 }
