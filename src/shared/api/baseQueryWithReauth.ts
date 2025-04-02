@@ -1,35 +1,3 @@
-// export const baseApi = createApi({
-//   baseQuery: async (args, api, extraOptions) => {
-//     const result = await fetchBaseQuery({
-//       baseUrl: process.env.REACT_APP_BASE_URL,
-//       credentials: "include",
-//       prepareHeaders: (headers) => {
-//         headers.set("API-KEY", `${process.env.REACT_APP_API_KEY}`)
-//         headers.set("Authorization", `Bearer ${process.env.REACT_APP_AUTH_TOKEN2}`)
-//       },
-//     })(args, api, extraOptions)
-//
-//     handleError(api, result)
-//
-//     return result
-//   },
-//   endpoints: () => ({}),
-//   tagTypes: [],
-//   refetchOnFocus: true,
-//   refetchOnReconnect: true
-// })
-
-// import { createApi } from '@reduxjs/toolkit/query/react'
-//
-// import { baseQueryWithReauth } from './baseQueryWithReauth'
-//
-// export const baseApi = createApi({
-//   baseQuery: baseQueryWithReauth,
-//   endpoints: () => ({}),
-//   reducerPath: 'baseApi',
-//   tagTypes: ['Decks', 'CardLearn', 'Me', 'Cards', 'MinMaxCards', 'Deck'],
-// })
-
 import { fetchBaseQuery } from '@reduxjs/toolkit/query'
 import type {
   BaseQueryFn,
@@ -42,7 +10,7 @@ import Router from 'next/router'
 const mutex = new Mutex()
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://inctagram.work/api/v1",
+  baseUrl: 'https://gateway.joyfy.online/api/v1',
   credentials: "include",
   prepareHeaders: (headers) => {
     if (typeof window !== "undefined") {
