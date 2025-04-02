@@ -1,5 +1,4 @@
-import { Typography } from '@/shared/ui/typography'
-import { Card } from '@/shared/ui/card'
+import { Typography, Card } from '@/shared/ui'
 
 export default function Home() {
   return (

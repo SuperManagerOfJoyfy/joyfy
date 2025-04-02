@@ -10,6 +10,7 @@
   justify-content: space-between;
   align-items: center;
   height: 36px;
+  max-width: 80rem;
   width: 100%;
   margin: 0 auto;
 }
@@ -68,5 +69,5 @@
 .selectItem {
   display: flex;
   align-items: center;
-  column-gap: 12px
+  column-gap: 12px;
 }
