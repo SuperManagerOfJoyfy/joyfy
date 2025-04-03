@@ -1,9 +1,11 @@
-import React from 'react'
+'use client'
+
+import { Login } from '@/features/auth/ui/login/Login'
 
 const Page = () => {
   return (
-    <div>
-      Login Page
+    <div className="container">
+      <Login />
     </div>
   )
 }

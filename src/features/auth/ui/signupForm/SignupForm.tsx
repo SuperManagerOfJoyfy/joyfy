@@ -1,5 +1,6 @@
 'use client'
-import { ReactNode } from 'react'
+
+import { ReactNode, useState } from 'react'
 import Link from 'next/link'
 import { Path, SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
@@ -31,11 +32,15 @@ const fields: {
 ]
 
 export const SignupForm = () => {
+  const [isSocialLoading, setIsSocialLoading] = useState(false)
+
   const handleSignupSubmit: SubmitHandler<z.infer<typeof SignupSchema>> = (
     data
   ) => {
     console.log('Form submitted with:', data)
   }
+
+  const disableAll = isSocialLoading
 
   return (
     <Card className={s.card}>
@@ -43,17 +48,22 @@ export const SignupForm = () => {
         Sign Up
       </Typography>
 
-      <SocialLinks />
+      <SocialLinks
+        isDisabled={disableAll}
+        onStartLoading={() => setIsSocialLoading(true)}
+      />
 
       <Form
         btnText="Sign Up"
         fields={fields}
         schema={SignupSchema}
         onSubmit={handleSignupSubmit}
+        disabled={disableAll}
       />
+
       <div className={s.footer}>
         <Typography>Do you have an account?</Typography>
-        <Link href="signin" className={s.link}>
+        <Link href="/auth/login" className={s.link}>
           Sign In
         </Link>
       </div>
