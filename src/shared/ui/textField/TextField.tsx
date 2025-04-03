@@ -89,7 +89,7 @@ export const TextField = ({
         />
 
         {isPassword && (
-          <button
+          <button type='button'
             onClick={togglePasswordHandler}
             className={classNames.endIconButton}
           >
