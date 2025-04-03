@@ -7,7 +7,8 @@ import flagUnitedKingdom from '@/assets/images/flagUnitedKingdom.png'
 import flagRussia from '@/assets/images/flagRussia.png'
 import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
-
+import Logo from '../../../../public/logo/logo.png'
+import Letters from '../../../../public/logo/letters.png'
 type Props = {
   isAuthenticated: boolean
   notification?: number
@@ -44,7 +45,10 @@ const AuthActions = () => (
 export const Header = ({ isAuthenticated, notification = 3 }: Props) => (
   <header className={s.header}>
     <div className={s.container}>
-      <div className={s.logo}>Inctagram</div>
+      <div className={s.logo}>
+				<Image src={Logo} alt="logo" width={45} height={45} />
+				<Image src={Letters} alt="logo" height={30} />
+			</div>
       <div>
         <div className={s.actions}>
           <div className={s.notifications}>

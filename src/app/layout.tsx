@@ -7,6 +7,10 @@ import s from './layout.module.scss'
 export const metadata: Metadata = {
   title: 'Joyfy',
   description: 'Platform for sharing and discovering visual stories',
+	icons: {
+		icon: '/favicon.svg',
+		apple: 'apple-touch-icon.png',
+	}
 }
 
 export default function RootLayout({
@@ -16,6 +20,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+			<head>
+			</head>
       <body>
         <ReduxProvider>
           <Header isAuthenticated={false} />
