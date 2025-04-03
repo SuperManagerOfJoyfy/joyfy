@@ -149,3 +149,59 @@ export const CustomSized: Story = {
     )
   },
 }
+
+export const CustomOpacity: Story = {
+  args: {
+    open: false,
+    title: 'Custom Opacity Modal',
+    size: 'md',
+  },
+  render: (args) => {
+    const [internalOpen, setInternalOpen] = useState(args.open)
+
+    useEffect(() => {
+      setInternalOpen(args.open)
+    }, [args.open])
+
+    const handleOpenChange = (isOpen: boolean) => {
+      setInternalOpen(isOpen)
+      args.onOpenChange?.(isOpen)
+    }
+
+    return (
+      <>
+        <Button onClick={() => handleOpenChange(true)}>
+          Open Opacity Overlay
+        </Button>
+        <Modal
+          {...args}
+          open={internalOpen}
+          onOpenChange={handleOpenChange}
+          overlayOpacity={1}
+        >
+          <div
+            style={{
+              padding: '20px 0',
+              display: 'flex',
+              flexDirection: 'column',
+              height: '400px',
+            }}
+          >
+            <Typography variant="body1">
+              This modal has an overlay with 100% opacity.
+            </Typography>
+            <div
+              style={{
+                marginTop: 'auto',
+                display: 'flex',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Button onClick={() => handleOpenChange(false)}>Close</Button>
+            </div>
+          </div>
+        </Modal>
+      </>
+    )
+  },
+}
