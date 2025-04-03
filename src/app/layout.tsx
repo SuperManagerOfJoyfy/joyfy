@@ -6,7 +6,7 @@ import s from './layout.module.scss'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
-  description: 'bla-bla',
+  description: 'Platform for sharing and discovering visual stories',
 }
 
 export default function RootLayout({

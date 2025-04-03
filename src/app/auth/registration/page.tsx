@@ -1,12 +1,17 @@
+'use client'
 import { SignupForm } from '@/features/auth/ui/signupForm'
-import React from 'react'
+import SentEmailModal from '@/features/auth/ui/sentEmailModal/SentEmailModal'
+import { useState } from 'react'
 
-const Page = () => {
+const Resistration = () => {
+	const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <div className="container">
-      <SignupForm />
+			<SignupForm onSubmitSuccess={() => { setModalOpen(true) }}/>
+			 <SentEmailModal open={modalOpen} />
     </div>
   )
 }
 
-export default Page
+export default Resistration

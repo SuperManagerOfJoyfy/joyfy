@@ -1,13 +1,13 @@
 'use client'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Path, SubmitHandler } from 'react-hook-form'
+import { Path } from 'react-hook-form'
 import { z } from 'zod'
-
 import { Card, Form, Typography } from '@/shared/ui'
 import { SocialLinks } from '../socialLinks'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
 import s from './signupForm.module.scss'
+import { useRegisterMutation } from '@/features/auth/api/authApi'
 
 const fields: {
   name: Path<z.infer<typeof SignupSchema>>
@@ -30,12 +30,50 @@ const fields: {
   },
 ]
 
-export const SignupForm = () => {
-  const handleSignupSubmit: SubmitHandler<z.infer<typeof SignupSchema>> = (
-    data
-  ) => {
-    console.log('Form submitted with:', data)
-  }
+type Props = {
+	onSubmitSuccess?: () => void
+}
+
+export const SignupForm = ({ onSubmitSuccess }: Props) => {
+  const [isSocialLoading, setIsSocialLoading] = useState(false)
+	const [signup, {isLoading, error}] = useRegisterMutation()
+	const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+	useEffect(() => {
+		if (!error) return;
+
+		let errMsg: string;
+
+		if ('status' in error) {
+			if (typeof error.status === 'number' && error.data) {
+
+				errMsg = (error.data as { message?: string }).message || 'Ошибка сервера';
+			} else if ('error' in error) {
+
+				errMsg = error.error;
+			} else {
+				errMsg = 'Неизвестная ошибка';
+			}
+		} else {
+			errMsg = error.message || 'Произошла ошибка';
+		}
+		setErrorMsg(errMsg);
+		console.error('Ошибка:', errMsg);
+
+	}, [error]);
+	
+	const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
+		try {
+			const result = await signup(data).unwrap()
+			onSubmitSuccess?.();
+			return result
+		} catch (err: any) {
+			console.error('Ошибка регистрации:', err.data?.message);
+			throw err;
+		}
+	}
+
+  const disableAll = isSocialLoading || isLoading
 
   return (
     <Card className={s.card}>
@@ -43,14 +81,23 @@ export const SignupForm = () => {
         Sign Up
       </Typography>
 
-      <SocialLinks />
-
+      <SocialLinks
+        isDisabled={disableAll}
+        onStartLoading={() => setIsSocialLoading(true)}
+      />
+			{errorMsg && (
+				<div className={s.error} >
+					{errorMsg}
+				</div>
+			)}
       <Form
         btnText="Sign Up"
         fields={fields}
         schema={SignupSchema}
         onSubmit={handleSignupSubmit}
+        disabled={disableAll}
       />
+
       <div className={s.footer}>
         <Typography>Do you have an account?</Typography>
         <Link href="/auth/login" className={s.link}>

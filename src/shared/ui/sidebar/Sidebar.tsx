@@ -38,8 +38,31 @@ export const Sidebar = ({
     onItemClick?.(item)
   }
 
+  const isPathActive = (
+    itemPath: string | undefined,
+    currentPath: string | undefined
+  ): boolean => {
+    if (!itemPath || !currentPath) return false
+
+    const normalizedItemPath = itemPath.endsWith('/')
+      ? itemPath.slice(0, -1)
+      : itemPath
+    const normalizedCurrentPath = currentPath.endsWith('/')
+      ? currentPath.slice(0, -1)
+      : currentPath
+
+    if (normalizedCurrentPath === normalizedItemPath) return true
+    if (
+      normalizedItemPath !== '/' &&
+      normalizedCurrentPath.startsWith(normalizedItemPath + '/')
+    )
+      return true
+
+    return false
+  }
+
   const renderItem = (item: SidebarItem) => {
-    const isActive = item.path === activePath
+    const isActive = isPathActive(item.path, activePath)
     const isItemDisabled = disabled || item.disabled
 
     const linkClassNames = clsx(
