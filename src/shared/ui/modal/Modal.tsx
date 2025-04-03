@@ -12,16 +12,16 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 
 import clsx from 'clsx'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, MotionProps } from 'framer-motion'
 
 import { Card } from '../card'
-import { modalAnimations } from './ModalAnimations'
 import s from './Modal.module.scss'
 import { Typography } from '../typography'
+import { getOverlayAnimation, windowAnimation } from './ModalAnimations'
 
-type ModalSize = 'sm' | 'md' | 'lg' | 'auto'
+export type ModalSize = 'sm' | 'md' | 'lg' | 'auto'
 
-type ModalProps = {
+export type ModalProps = {
   children?: ReactNode
   onOpenChange?: (open: boolean) => void
   open: boolean
@@ -29,6 +29,7 @@ type ModalProps = {
   size?: ModalSize
   className?: string
   style?: CSSProperties
+  overlayOpacity?: number
 } & Omit<
   ComponentPropsWithoutRef<typeof DialogPrimitive.Root>,
   'onOpenChange' | 'open'
@@ -44,11 +45,14 @@ export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>(
       style,
       onOpenChange,
       open,
+      overlayOpacity,
       ...props
     },
     ref
   ) => {
     const contentClasses = clsx(s.content, s[`size${size}`], className)
+
+    const overlayAnimation = getOverlayAnimation(overlayOpacity)
 
     return (
       <DialogPrimitive.Root
@@ -62,16 +66,13 @@ export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>(
             {open && (
               <>
                 <DialogPrimitive.Overlay asChild>
-                  <motion.div
-                    {...modalAnimations.overlay}
-                    className={s.overlay}
-                  />
+                  <motion.div {...overlayAnimation} className={s.overlay} />
                 </DialogPrimitive.Overlay>
 
                 <div className={s.modal} ref={ref}>
                   <DialogPrimitive.Content asChild forceMount>
                     <motion.div
-                      {...modalAnimations.window}
+                      {...windowAnimation}
                       className={contentClasses}
                       style={style}
                     >

@@ -1,16 +1,6 @@
 'use client'
+import OauthLoginSuccess from '@/features/auth/ui/oauthLoginSuccess/oauthLoginSuccess'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-
-const GithubCallback = () => {
-  const router = useRouter()
-
-  useEffect(() => {
-    router.push('/')
-  }, [router])
-
-  return <p>Loading..</p>
+export default function OauthLoginSuccessPage() {
+  return <OauthLoginSuccess />
 }
-
-export default GithubCallback
