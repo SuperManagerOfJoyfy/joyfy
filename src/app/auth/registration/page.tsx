@@ -1,6 +1,6 @@
 'use client'
 
-import { SignupForm } from '@/features/auth/ui/signupForm'
+import { SignupForm } from '@/features/auth/ui'
 
 const Page = () => {
   return (

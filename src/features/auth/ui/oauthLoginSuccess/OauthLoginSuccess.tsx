@@ -5,7 +5,7 @@ import { useOAuthLogin } from '../../hooks/useOAuthLogin'
 
 import s from './oauthLoginSuccess.module.scss'
 
-export default function OauthLoginSuccess() {
+export const OauthLoginSuccess = () => {
   const { isLoading, error, retry } = useOAuthLogin()
 
   return (
@@ -17,7 +17,9 @@ export default function OauthLoginSuccess() {
         </div>
       ) : (
         <div>
-          <Typography >{isLoading ? 'Completing login...' : 'Redirecting...'}</Typography>
+          <Typography>
+            {isLoading ? 'Completing login...' : 'Redirecting...'}
+          </Typography>
           {isLoading && <div className={s.loader} />}
         </div>
       )}
