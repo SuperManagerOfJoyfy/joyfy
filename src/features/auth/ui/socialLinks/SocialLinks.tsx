@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
-import { Button, Typography } from '@/shared/ui'
+import { Button } from '@/shared/ui'
+import { toast } from 'react-toastify'
 import s from './socialLinks.module.scss'
 
 type SocialLinksProps = {
@@ -11,13 +11,17 @@ type SocialLinksProps = {
   onStartLoading: () => void
 }
 
-export const SocialLinks = ({ isDisabled, onStartLoading }: SocialLinksProps) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
-  const [error, setError] = useState<string | null>(null)
+type SocialProvider = 'google' | 'github'
 
-  const handleClick = (
+export const SocialLinks = ({
+  isDisabled,
+  onStartLoading,
+}: SocialLinksProps) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+
+  const handleSocialLogin = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    provider: 'google' | 'github'
+    provider: SocialProvider
   ) => {
     if (isDisabled) {
       e.preventDefault()
@@ -26,50 +30,43 @@ export const SocialLinks = ({ isDisabled, onStartLoading }: SocialLinksProps) =>
 
     if (!baseUrl) {
       e.preventDefault()
-      setError('API URL is not set.')
+      toast.error('API URL is not configured. Please contact support.')
       return
     }
 
     onStartLoading()
-    setError(null)
+  }
 
-    try {
-      localStorage.setItem('auth_pending', provider)
-      localStorage.setItem('auth_timestamp', Date.now().toString())
-    } catch (err) {
-      console.error('Failed to store auth state:', err)
+  const renderSocialButton = (provider: SocialProvider) => {
+    const config = {
+      google: {
+        icon: <FcGoogle className={s.icon} />,
+        url: `${baseUrl}/auth/google`,
+      },
+      github: {
+        icon: <FaGithub className={s.icon} />,
+        url: `${baseUrl}/auth/github`,
+      },
     }
+
+    return (
+      <Button
+        as="a"
+        variant="icon"
+        href={config[provider].url}
+        onClick={(e) => handleSocialLogin(e, provider)}
+        className={`${s.iconBtn} ${isDisabled ? s.disabled : ''}`}
+        aria-disabled={isDisabled}
+      >
+        {config[provider].icon}
+      </Button>
+    )
   }
 
   return (
     <div className={s.iconsContainer}>
-      <Button
-        as="a"
-        variant="icon"
-        href={`${baseUrl}/auth/google`}
-        onClick={(e) => handleClick(e, 'google')}
-        className={`${s.iconBtn} ${isDisabled ? s.disabled : ''}`}
-        aria-disabled={isDisabled}
-      >
-        <FcGoogle className={s.icon} />
-      </Button>
-
-      <Button
-        as="a"
-        variant="icon"
-        href={`${baseUrl}/auth/github`}
-        onClick={(e) => handleClick(e, 'github')}
-        className={`${s.iconBtn} ${isDisabled ? s.disabled : ''}`}
-        aria-disabled={isDisabled}
-      >
-        <FaGithub className={s.icon} />
-      </Button>
-
-      {error && (
-        <Typography variant="caption" className={s.error}>
-          {error}
-        </Typography>
-      )}
+      {renderSocialButton('google')}
+      {renderSocialButton('github')}
     </div>
   )
 }

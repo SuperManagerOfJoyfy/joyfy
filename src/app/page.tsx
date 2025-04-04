@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from 'next/navigation'
 
 import { Sidebar } from '@/shared/ui/sidebar'
-import { createSidebarItems } from '@/shared/utils/SidebarItem/SidebarItem'
+import { createSidebarItems } from '@/shared/utils/temp/SidebarItem'
 import { Typography, Card, Button } from '@/shared/ui'
 import { useClearAllDataMutation } from '@/features/auth/api/authApi'
 
