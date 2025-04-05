@@ -2,83 +2,60 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  useGetMeQuery,
-  //   useProcessOAuthTokenMutation,
-} from '@/features/auth/api/authApi'
-// import { saveAccessToken } from '@/features/auth/utils/tokenStorage/TokenStorage'
+
+import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { toast } from 'react-toastify'
 
 export const useOAuthLogin = () => {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
-  const [tokenProcessed, setTokenProcessed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [processToken] = useProcessOAuthTokenMutation()
-
-  const {
-    data: user,
-    isSuccess,
-    isError,
-  } = useGetMeQuery(undefined, {
-    skip: !tokenProcessed,
-  })
+  const { refetch } = useGetMeQuery(undefined, { skip: true })
 
   useEffect(() => {
-    const handleOAuthLogin = async () => {
+    const completeAuth = async () => {
       try {
-        console.log(
-          '🔄 Fetching access token from /auth/github/login-success...'
-        )
+        const user = await refetch().unwrap()
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/github/login-success`,
-          {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        if (user) {
+          toast.success('Successfully signed in! Redirecting...')
+          router.push('/')
+        }
+      } catch (err) {
+        let message = 'Authentication failed. Please try again.'
+
+        if (
+          typeof err === 'object' &&
+          err !== null &&
+          'data' in err &&
+          typeof err.data === 'object' &&
+          err.data &&
+          'message' in err.data
+        ) {
+          const backendMsg = (err.data as { message?: string }).message
+          if (typeof backendMsg === 'string') {
+            message = backendMsg
           }
-        )
-
-        const data = await res.json()
-
-        if (!data.accessToken) {
-          throw new Error('accessToken not found in response')
         }
 
-        console.log('✅ accessToken received:', data.accessToken)
-
-        saveAccessToken(data.accessToken)
-        await processToken({ token: data.accessToken }).unwrap()
-        setTokenProcessed(true)
-      } catch (err) {
-        console.error('❌ OAuth handling error:', err)
-        setError('Authentication error. Please try again.')
+        setError(message)
+        toast.error(message)
+        console.error('OAuth login error:', err)
+      } finally {
         setIsLoading(false)
       }
     }
 
-    handleOAuthLogin()
-  }, [processToken])
-
-  useEffect(() => {
-    if (tokenProcessed) {
-      if (isSuccess && user) {
-        console.log('✅ Authentication successful, redirecting...')
-        localStorage.removeItem('auth_pending')
-        localStorage.removeItem('auth_timestamp')
-        router.push('/')
-      } else if (isError) {
-        setError('Failed to fetch user data.')
-        setIsLoading(false)
-      }
-    }
-  }, [tokenProcessed, user, isSuccess, isError, router])
+    completeAuth()
+  }, [refetch, router])
 
   return {
     isLoading,
     error,
-    retry: () => location.reload(),
+    retry: () => {
+      setError(null)
+      setIsLoading(true)
+      refetch()
+    },
   }
 }
