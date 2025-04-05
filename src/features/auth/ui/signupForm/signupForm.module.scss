@@ -47,6 +47,11 @@
 
 .footer {
   text-align: center;
+  a {
+    text-decoration: none;
+    color: var(--color-accent-500);
+    font-weight: 600;
+  }
 }
 
 .label {
@@ -57,12 +62,7 @@
   }
 }
 
-.link {
-  text-decoration: none;
-  color: var(--color-accent-500);
-}
-
 .error {
-	color: red;
-	text-align: center;
+  color: red;
+  text-align: center;
 }
