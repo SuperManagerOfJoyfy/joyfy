@@ -5,15 +5,17 @@ import { useState } from 'react'
 
 const Registration = () => {
   const [modalOpen, setModalOpen] = useState(false)
+  const [registeredEmail, setRegisteredEmail] = useState('')
 
   return (
     <div className="container">
       <SignupForm
-        onSubmitSuccess={() => {
+        onSubmitSuccess={(email: string) => {
           setModalOpen(true)
+          setRegisteredEmail(email)
         }}
       />
-      <SentEmailModal open={modalOpen} />
+      <SentEmailModal open={modalOpen} email={registeredEmail} />
     </div>
   )
 }
