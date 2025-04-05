@@ -1,6 +1,6 @@
 'use client'
 
-import { Login } from '@/features/auth/ui/login/Login'
+import { Login } from '@/features/auth/ui'
 
 const Page = () => {
   return (

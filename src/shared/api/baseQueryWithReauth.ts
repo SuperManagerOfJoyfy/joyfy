@@ -5,13 +5,13 @@ import type {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
-import Router from 'next/router'
+import { redirect } from 'next/navigation'
 
 const mutex = new Mutex()
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'https://gateway.joyfy.online/api/v1',
-  credentials: "include",
+  credentials: 'include',
   prepareHeaders: (headers) => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('access_token')
@@ -49,7 +49,7 @@ export const baseQueryWithReauth: BaseQueryFn<
 
           result = await baseQuery(args, api, extraOptions)
         } else {
-          await Router.push('/auth/login')
+          redirect('/auth/login')
         }
       } finally {
         release()
