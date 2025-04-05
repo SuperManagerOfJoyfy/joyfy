@@ -12,7 +12,6 @@ export type FormProps<T extends FieldValues> = {
   btnText: string
   fields: { name: Path<T>; label?: ReactNode; type?: string }[]
   schema: ZodType<T>
-  // onSubmit: (data: T) => Promise<any>
   onSubmit: SubmitHandler<T>
   type?: string
   additionalContent?: ReactNode
@@ -35,11 +34,8 @@ export const Form = <T extends FieldValues>({
   } = useForm<T>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
+    reValidateMode: 'onChange',
   })
-
-  // const handleFormSubmit: SubmitHandler<T> = (data) => {
-  // 	onSubmit(data)
-  // }
 
   const handleFormSubmit: SubmitHandler<T> = async (data) => {
     try {

@@ -22,7 +22,7 @@ export const ControlledTextField = <TFieldValues extends FieldValues>({
     <TextField
       {...rest}
       {...field}
-      value={field.value ?? ''}
+      value={field.value}
       errorMessage={error?.message}
       id={name}
     />

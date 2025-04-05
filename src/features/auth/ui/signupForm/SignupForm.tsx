@@ -17,7 +17,7 @@ const fields: {
   { name: 'username', label: 'Username' },
   { name: 'email', label: 'Email', type: 'email' },
   { name: 'password', label: 'Password', type: 'password' },
-  { name: 'confirmPassword', label: 'Password confirmation', type: 'password' },
+  { name: 'confirmPassword', label: 'Confirm password', type: 'password' },
   {
     name: 'agreeToTerms',
     label: (
@@ -31,47 +31,45 @@ const fields: {
 ]
 
 type Props = {
-	onSubmitSuccess?: () => void
+  onSubmitSuccess?: () => void
 }
 
 export const SignupForm = ({ onSubmitSuccess }: Props) => {
   const [isSocialLoading, setIsSocialLoading] = useState(false)
-	const [signup, {isLoading, error}] = useRegisterMutation()
-	const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [signup, { isLoading, error }] = useRegisterMutation()
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
-	useEffect(() => {
-		if (!error) return;
+  useEffect(() => {
+    if (!error) return
 
-		let errMsg: string;
+    let errMsg: string
 
-		if ('status' in error) {
-			if (typeof error.status === 'number' && error.data) {
+    if ('status' in error) {
+      if (typeof error.status === 'number' && error.data) {
+        errMsg =
+          (error.data as { message?: string }).message || 'Ошибка сервера'
+      } else if ('error' in error) {
+        errMsg = error.error
+      } else {
+        errMsg = 'Неизвестная ошибка'
+      }
+    } else {
+      errMsg = error.message || 'Произошла ошибка'
+    }
+    setErrorMsg(errMsg)
+    console.error('Ошибка:', errMsg)
+  }, [error])
 
-				errMsg = (error.data as { message?: string }).message || 'Ошибка сервера';
-			} else if ('error' in error) {
-
-				errMsg = error.error;
-			} else {
-				errMsg = 'Неизвестная ошибка';
-			}
-		} else {
-			errMsg = error.message || 'Произошла ошибка';
-		}
-		setErrorMsg(errMsg);
-		console.error('Ошибка:', errMsg);
-
-	}, [error]);
-	
-	const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
-		try {
-			const result = await signup(data).unwrap()
-			onSubmitSuccess?.();
-			return result
-		} catch (err: any) {
-			console.error('Ошибка регистрации:', err.data?.message);
-			throw err;
-		}
-	}
+  const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
+    try {
+      const result = await signup(data).unwrap()
+      onSubmitSuccess?.()
+      return result
+    } catch (err: any) {
+      console.error('Ошибка регистрации:', err.data?.message)
+      throw err
+    }
+  }
 
   const disableAll = isSocialLoading || isLoading
 
@@ -85,11 +83,7 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
         isDisabled={disableAll}
         onStartLoading={() => setIsSocialLoading(true)}
       />
-			{errorMsg && (
-				<div className={s.error} >
-					{errorMsg}
-				</div>
-			)}
+      {errorMsg && <div className={s.error}>{errorMsg}</div>}
       <Form
         btnText="Sign Up"
         fields={fields}
