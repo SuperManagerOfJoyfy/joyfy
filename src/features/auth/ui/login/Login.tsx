@@ -1,12 +1,12 @@
 import { Form, Typography } from '@/shared/ui'
 import { Card } from '@/shared/ui/card'
-import s from './login.module.scss'
 import clsx from 'clsx'
 import { SocialLinks } from '@/features/auth/ui/socialLinks'
 import { z } from 'zod'
 import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
 import Link from 'next/link'
 import { useState } from 'react'
+import s from './login.module.scss'
 
 type Props = {
   className?: string
@@ -59,7 +59,7 @@ export const Login = ({ className }: Props) => {
         Don't have an account?
       </Typography>
 
-      <Link href="test2" className={s.signUp}>
+      <Link href="/auth/registration" className={s.signUp}>
         Sign Up
       </Link>
     </Card>
