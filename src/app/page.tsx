@@ -8,7 +8,20 @@ import { useClearAllDataMutation } from '@/features/auth/api/authApi'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
-import ClipLoader from 'react-spinners/ClipLoader'
+import { ClipLoader } from 'react-spinners'
+
+const LoadingSpinner = () => (
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+    }}
+  >
+    <ClipLoader size={50} color="#2563eb" />
+  </div>
+)
 
 export default function Home() {
   const router = useRouter()
@@ -29,26 +42,16 @@ export default function Home() {
       await clearAllData().unwrap()
       await logoutUser()
       router.push('/auth/login')
+      toast.success('All data has been cleared')
     } catch (err) {
-      toast.error('Something went wrong')
+      toast.error('Failed to clear data')
     } finally {
       setIsClearing(false)
     }
   }
 
   if (authLoading || isClearing) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <ClipLoader size={50} color="#2563eb" />
-      </div>
-    )
+    return <LoadingSpinner />
   }
 
   return (
@@ -59,7 +62,7 @@ export default function Home() {
 
       <div>
         <Button onClick={handleClear} disabled={isClearing}>
-          Clear All Data
+          {isClearing ? 'Clearing...' : 'Clear All Data'}
         </Button>
         <Card>
           <Typography as="h2" fontWeight="bold">

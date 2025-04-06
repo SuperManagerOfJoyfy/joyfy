@@ -54,6 +54,6 @@ export const useAuth = () => {
     isError: result.isError,
     isSuccess: result.isSuccess,
     refetch: triggerGetMe,
-    logoutUser, 
+    logoutUser,
   }
 }

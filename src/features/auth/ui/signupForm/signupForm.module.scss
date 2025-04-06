@@ -61,3 +61,10 @@
   text-decoration: none;
   color: var(--color-accent-500);
 }
+
+.disabledLink {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+  text-decoration: none;
+}

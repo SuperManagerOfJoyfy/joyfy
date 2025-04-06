@@ -63,9 +63,15 @@ export const SignupForm = () => {
 
       <div className={s.footer}>
         <Typography>Do you have an account?</Typography>
-        <Link href="/auth/login" className={s.link}>
-          Sign In
-        </Link>
+        {disableAll ? (
+          <span className={`${s.link} ${s.disabledLink}`} aria-disabled="true">
+            Sign In
+          </span>
+        ) : (
+          <Link href="/auth/login" className={s.link}>
+            Sign In
+          </Link>
+        )}
       </div>
     </Card>
   )

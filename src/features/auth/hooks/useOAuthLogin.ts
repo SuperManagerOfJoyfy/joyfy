@@ -3,17 +3,34 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 
+type ErrorWithData = {
+  data?: {
+    message?: string
+  }
+}
+
 export const useOAuthLogin = () => {
   const router = useRouter()
   const [triggerGetMe] = useLazyGetMeQuery()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const completeAuth = useCallback(async () => {
-    try {
-      setError(null)
-      setIsLoading(true)
+  const extractErrorMessage = (err: unknown): string => {
+    if (typeof err === 'object' && err !== null && 'data' in err) {
+      const errorData = err as ErrorWithData
+      return (
+        errorData.data?.message || 'Authentication failed. Please try again.'
+      )
+    }
 
+    return 'Authentication failed. Please try again.'
+  }
+
+  const completeAuth = useCallback(async () => {
+    setError(null)
+    setIsLoading(true)
+
+    try {
       const user = await triggerGetMe().unwrap()
 
       if (user) {
@@ -21,24 +38,10 @@ export const useOAuthLogin = () => {
         router.push('/')
       }
     } catch (err) {
-      let message = 'Authentication failed. Please try again.'
-      if (
-        typeof err === 'object' &&
-        err !== null &&
-        'data' in err &&
-        typeof err.data === 'object' &&
-        err.data &&
-        'message' in err.data
-      ) {
-        const backendMsg = (err.data as { message?: string }).message
-        if (typeof backendMsg === 'string') {
-          message = backendMsg
-        }
-      }
-
-      setError(message)
+      const message = extractErrorMessage(err)
       toast.error(message)
       console.error('OAuth login error:', err)
+      setError(message)
     } finally {
       setIsLoading(false)
     }
