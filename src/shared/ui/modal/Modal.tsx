@@ -12,11 +12,11 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 
 import clsx from 'clsx'
-import { motion, AnimatePresence, MotionProps } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import { Card } from '../card'
 import s from './Modal.module.scss'
-import { Typography } from '../typography'
+import { Typography } from '@/shared/ui'
 import { getOverlayAnimation, windowAnimation } from './ModalAnimations'
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'auto'

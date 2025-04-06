@@ -1,3 +1,4 @@
+'use client'
 import * as CheckboxRadix from '@radix-ui/react-checkbox'
 import { clsx } from 'clsx'
 import { ComponentProps, ReactNode, useId } from 'react'

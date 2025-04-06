@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import s from './Header.module.scss'
 import { SelectBox, SelectItem } from '@/shared/ui/selectBox/SelectBox'
