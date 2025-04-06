@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { Button } from '@/shared/ui'
@@ -35,6 +36,14 @@ export const SocialLinks = ({
     }
 
     onStartLoading()
+    // setError(null)
+
+    try {
+      localStorage.setItem('auth_pending', provider)
+      localStorage.setItem('auth_timestamp', Date.now().toString())
+    } catch (err) {
+      console.error('Failed to store auth state:', err)
+    }
   }
 
   const renderSocialButton = (provider: SocialProvider) => {

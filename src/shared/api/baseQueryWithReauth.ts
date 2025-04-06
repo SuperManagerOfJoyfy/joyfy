@@ -5,23 +5,17 @@ import type {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
-import { redirect } from 'next/navigation'
 
 const mutex = new Mutex()
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'https://gateway.joyfy.online/api/v1',
-  credentials: 'include',
-  prepareHeaders: (headers) => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('access_token')
+  prepareHeaders(headers) {
+    // headers.set('Access-Control-Allow-Credentials', 'true')
 
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`)
-      }
-    }
     return headers
   },
+  credentials: 'include',
 })
 
 export const baseQueryWithReauth: BaseQueryFn<
@@ -32,24 +26,23 @@ export const baseQueryWithReauth: BaseQueryFn<
   await mutex.waitForUnlock()
 
   let result = await baseQuery(args, api, extraOptions)
-  if (result.error && result.error.status === 401) {
+
+  if (result.error?.status === 401) {
+
     if (!mutex.isLocked()) {
       const release = await mutex.acquire()
       try {
-        const refreshResult = (await baseQuery(
+
+        const refreshResult = await baseQuery(
           { url: '/auth/refresh-token', method: 'POST' },
           api,
           extraOptions
-        )) as any
-        // убрать as any
+        )
 
-        if (refreshResult.data) {
-          // ???
-          localStorage.setItem('access_token', refreshResult.data.accessToken)
-
+        if (!refreshResult.error) {
           result = await baseQuery(args, api, extraOptions)
         } else {
-          redirect('/auth/login')
+          console.log('Refresh token failed:', refreshResult.error)
         }
       } finally {
         release()
@@ -59,5 +52,6 @@ export const baseQueryWithReauth: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions)
     }
   }
+
   return result
 }

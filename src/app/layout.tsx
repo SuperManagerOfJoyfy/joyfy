@@ -21,7 +21,7 @@ export default function RootLayout({
       <body>
         <ReduxProvider>
           <ToastContainer />
-          <Header isAuthenticated={false} />
+          <Header />
           <main className={s.main}>
             <div className={s.mainContainer}>{children}</div>
           </main>

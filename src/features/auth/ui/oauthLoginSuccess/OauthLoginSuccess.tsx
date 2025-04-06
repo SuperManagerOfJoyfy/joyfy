@@ -1,27 +1,19 @@
 'use client'
 
-import { Button, Typography } from '@/shared/ui'
 import { useOAuthLogin } from '../../hooks/useOAuthLogin'
 
-import s from './oauthLoginSuccess.module.scss'
-
-export const OauthLoginSuccess = () => {
+export default function OauthLoginSuccess() {
   const { isLoading, error, retry } = useOAuthLogin()
 
   return (
-    <div className={s.container}>
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
       {error ? (
-        <div>
-          <Typography className={s.error}>{error}</Typography>
-          <Button onClick={retry}>Try again</Button>
-        </div>
+        <>
+          <p style={{ color: 'red' }}>{error}</p>
+          <button onClick={retry}>Try Again</button>
+        </>
       ) : (
-        <div>
-          <Typography>
-            {isLoading ? 'Completing login...' : 'Redirecting...'}
-          </Typography>
-          {isLoading && <div className={s.loader} />}
-        </div>
+        <p>{isLoading ? 'Completing authentication...' : 'Redirecting...'}</p>
       )}
     </div>
   )
