@@ -1,13 +1,14 @@
 'use client'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useState } from 'react'
+import { z } from 'zod'
+import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Path } from 'react-hook-form'
-import { z } from 'zod'
 import { Card, Form, Typography } from '@/shared/ui'
 import { SocialLinks } from '../socialLinks'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
-import s from './signupForm.module.scss'
 import { useRegisterMutation } from '@/features/auth/api/authApi'
+import s from './signupForm.module.scss'
 
 const fields: {
   name: Path<z.infer<typeof SignupSchema>>
@@ -17,7 +18,7 @@ const fields: {
   { name: 'username', label: 'Username' },
   { name: 'email', label: 'Email', type: 'email' },
   { name: 'password', label: 'Password', type: 'password' },
-  { name: 'confirmPassword', label: 'Password confirmation', type: 'password' },
+  { name: 'confirmPassword', label: 'Confirm password', type: 'password' },
   {
     name: 'agreeToTerms',
     label: (
@@ -31,47 +32,24 @@ const fields: {
 ]
 
 type Props = {
-	onSubmitSuccess?: () => void
+  onSubmitSuccess?: (email: string) => void
 }
 
 export const SignupForm = ({ onSubmitSuccess }: Props) => {
   const [isSocialLoading, setIsSocialLoading] = useState(false)
-	const [signup, {isLoading, error}] = useRegisterMutation()
-	const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [signup, { isLoading }] = useRegisterMutation()
 
-	useEffect(() => {
-		if (!error) return;
-
-		let errMsg: string;
-
-		if ('status' in error) {
-			if (typeof error.status === 'number' && error.data) {
-
-				errMsg = (error.data as { message?: string }).message || 'Ошибка сервера';
-			} else if ('error' in error) {
-
-				errMsg = error.error;
-			} else {
-				errMsg = 'Неизвестная ошибка';
-			}
-		} else {
-			errMsg = error.message || 'Произошла ошибка';
-		}
-		setErrorMsg(errMsg);
-		console.error('Ошибка:', errMsg);
-
-	}, [error]);
-	
-	const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
-		try {
-			const result = await signup(data).unwrap()
-			onSubmitSuccess?.();
-			return result
-		} catch (err: any) {
-			console.error('Ошибка регистрации:', err.data?.message);
-			throw err;
-		}
-	}
+  const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
+    try {
+      const result = await signup(data).unwrap()
+      onSubmitSuccess?.(data.email)
+      return result
+    } catch (err: any) {
+      const errorMsg =
+        err?.data?.message || err?.error || 'Registration failed. Try again.'
+      toast.error(errorMsg)
+    }
+  }
 
   const disableAll = isSocialLoading || isLoading
 
@@ -85,11 +63,7 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
         isDisabled={disableAll}
         onStartLoading={() => setIsSocialLoading(true)}
       />
-			{errorMsg && (
-				<div className={s.error} >
-					{errorMsg}
-				</div>
-			)}
+
       <Form
         btnText="Sign Up"
         fields={fields}
