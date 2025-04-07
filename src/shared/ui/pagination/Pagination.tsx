@@ -4,7 +4,7 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import s from './pagination.module.scss'
 
 import { SelectBox, SelectItem } from '@/shared/ui/selectBox/SelectBox'
-import { usePagination } from '@/shared/hooks/usePagination'
+import { usePagination } from '@/shared/ui/pagination/hooks/usePagination'
 
 type Props = {
   className?: string

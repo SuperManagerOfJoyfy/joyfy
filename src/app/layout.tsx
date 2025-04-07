@@ -1,10 +1,11 @@
 import { Metadata } from 'next'
 import { Header } from '@/shared/ui/header/Header'
-import { ReduxProvider } from '@/shared/providers/ReduxProvider'
-import '@/app/globals.css'
-import s from './layout.module.scss'
+import { ReduxProvider } from '@/app/providers/ReduxProvider'
+import '@/styles/globals.css'
+import s from '../styles/layout.module.scss'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { AuthProvider } from '@/app/providers/AuthProvider'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
@@ -24,11 +25,17 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          <ToastContainer />
-          <Header isAuthenticated={false} />
-          <main className={s.main}>
-            <div className={s.mainContainer}>{children}</div>
-          </main>
+          <AuthProvider>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+            />
+            <Header />
+            <main className={s.main}>
+              <div className={s.mainContainer}>{children}</div>
+            </main>
+          </AuthProvider>
         </ReduxProvider>
       </body>
     </html>

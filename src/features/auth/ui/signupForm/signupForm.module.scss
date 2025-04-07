@@ -65,3 +65,15 @@
   color: red;
   text-align: center;
 }
+
+.error {
+	color: red;
+	text-align: center;
+}
+
+.disabledLink {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+  text-decoration: none;
+}

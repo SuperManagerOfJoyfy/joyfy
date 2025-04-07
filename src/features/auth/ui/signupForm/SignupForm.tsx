@@ -18,13 +18,13 @@ const fields: {
   { name: 'username', label: 'Username' },
   { name: 'email', label: 'Email', type: 'email' },
   { name: 'password', label: 'Password', type: 'password' },
-  { name: 'confirmPassword', label: 'Confirm password', type: 'password' },
+  { name: 'passwordConfirmation', label: 'Confirm password', type: 'password' },
   {
     name: 'agreeToTerms',
     label: (
       <span className={s.label}>
-        I agree to the <Link href="/terms-of-service">Terms of Service</Link>{' '}
-        and <Link href="/privacy-policy">Privacy Policy</Link>
+        I agree to the <Link href="/auth/terms-of-service">Terms of Service</Link>{' '}
+        and <Link href="/auth/privacy-policy">Privacy Policy</Link>
       </span>
     ),
     type: 'checkbox',
@@ -74,9 +74,15 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
 
       <div className={s.footer}>
         <Typography>Do you have an account?</Typography>
-        <Link href="/auth/login" className={s.link}>
-          Sign In
-        </Link>
+        {disableAll ? (
+          <span className={`${s.link} ${s.disabledLink}`} aria-disabled="true">
+            Sign In
+          </span>
+        ) : (
+          <Link href="/auth/login" className={s.link}>
+            Sign In
+          </Link>
+        )}
       </div>
     </Card>
   )
