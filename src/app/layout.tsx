@@ -20,8 +20,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          <ToastContainer />
-          <Header isAuthenticated={false} />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+          />
+          <Header />
           <main className={s.main}>
             <div className={s.mainContainer}>{children}</div>
           </main>

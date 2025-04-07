@@ -49,3 +49,5 @@ next-env.d.ts
 !.vscode/extensions.json
 .idea
 
+
+certificates
