@@ -1,8 +1,11 @@
 'use client'
 
-import { Button, Typography } from '@/shared/ui'
 import { useOAuthLogin } from '../../hooks/useOAuthLogin'
-import { ClipLoader } from 'react-spinners'
+import { useAuth } from '../../hooks/useAuth'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { Button, Typography } from '@/shared/ui'
+import { Loader } from '@/shared/ui/loader/Loader'
 import s from './oauthLoginSuccess.module.scss'
 
 type ErrorViewProps = {
@@ -22,20 +25,36 @@ type LoadingViewProps = {
 }
 
 const LoadingView = ({ message }: LoadingViewProps) => (
-  <div className={s.loadingContainer} role="status" aria-busy="true">
-    <ClipLoader color="#5e60ce" size={40} />
-    <Typography className={s.loadingText}>{message}</Typography>
-  </div>
+  <Loader message={message} />
 )
 
 export const OauthLoginSuccess = () => {
   const { isLoading, error, retry } = useOAuthLogin()
+  const { isAuthenticated } = useAuth()
+  const [isRedirecting, setIsRedirecting] = useState(false)
+  const router = useRouter()
 
-  if (error) return <ErrorView message={error} onRetry={retry} />
+  useEffect(() => {
+    if (isAuthenticated && !isRedirecting) {
+      setIsRedirecting(true)
+    }
+  }, [isAuthenticated, isRedirecting])
 
-  return (
-    <LoadingView
-      message={isLoading ? 'Completing authentication...' : 'Redirecting...'}
-    />
-  )
+  useEffect(() => {
+    if (isRedirecting) {
+      router.push('/')
+    }
+  }, [isRedirecting, router])
+
+  if (error) {
+    return <ErrorView message={error} onRetry={retry} />
+  }
+
+  const message = isRedirecting
+    ? 'Redirecting...'
+    : isLoading
+      ? 'Completing authentication...'
+      : 'Please wait...'
+
+  return <LoadingView message={message} />
 }

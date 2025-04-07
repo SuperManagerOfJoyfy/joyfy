@@ -5,6 +5,7 @@ import '@/app/globals.css'
 import s from './layout.module.scss'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { AuthProvider } from '@/shared/providers/AuthProvider'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
@@ -20,15 +21,17 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-          />
-          <Header />
-          <main className={s.main}>
-            <div className={s.mainContainer}>{children}</div>
-          </main>
+          <AuthProvider>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+            />
+            <Header />
+            <main className={s.main}>
+              <div className={s.mainContainer}>{children}</div>
+            </main>
+          </AuthProvider>
         </ReduxProvider>
       </body>
     </html>

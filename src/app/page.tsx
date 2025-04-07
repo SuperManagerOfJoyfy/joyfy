@@ -8,20 +8,8 @@ import { useClearAllDataMutation } from '@/features/auth/api/authApi'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
-import { ClipLoader } from 'react-spinners'
+import { Loader } from '@/shared/ui/loader/Loader'
 
-const LoadingSpinner = () => (
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-    }}
-  >
-    <ClipLoader size={50} color="#2563eb" />
-  </div>
-)
 
 export default function Home() {
   const router = useRouter()
@@ -51,7 +39,7 @@ export default function Home() {
   }
 
   if (authLoading || isClearing) {
-    return <LoadingSpinner />
+    return <Loader />
   }
 
   return (

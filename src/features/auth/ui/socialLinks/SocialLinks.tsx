@@ -4,6 +4,9 @@ import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { Button } from '@/shared/ui'
 import { toast } from 'react-toastify'
+import { useAuth } from '../../hooks/useAuth'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 import s from './socialLinks.module.scss'
 
 type SocialLinksProps = {
@@ -18,6 +21,26 @@ export const SocialLinks = ({
   onStartLoading,
 }: SocialLinksProps) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+  const { isAuthenticated } = useAuth()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const provider = searchParams.get('provider')
+    const error = searchParams.get('error')
+
+    if (provider && error) {
+      toast.error(`Authentication with ${provider} failed: ${error}`)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/')
+    }
+  }, [isAuthenticated, router])
+
+  if (isAuthenticated) return null
 
   const handleSocialLogin = (
     e: React.MouseEvent<HTMLAnchorElement>,
