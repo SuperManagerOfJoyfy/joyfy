@@ -14,15 +14,15 @@ export const SignupSchema = z
     email: EmailSchema,
     password: PasswordSchema,
 
-    confirmPassword: z.string(),
+    passwordConfirmation: z.string(),
 
     agreeToTerms: z.literal(true, {
       errorMap: () => ({ message: 'You must agree to the Terms & Conditions' }),
     }),
   })
-  .refine((arg) => arg.password === arg.confirmPassword, {
+  .refine((arg) => arg.password === arg.passwordConfirmation, {
     message: 'Your passwords don’t match. Try again.',
-    path: ['confirmPassword'],
+    path: ['passwordConfirmation'],
   })
 
 type SignupSchema = z.infer<typeof SignupSchema>

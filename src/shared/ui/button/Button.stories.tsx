@@ -2,7 +2,7 @@ import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { MdLanguage } from 'react-icons/md'
 import Image from 'next/image'
-import flagUnitedKingdom from './../../../assets/images/flagUnitedKingdom.png'
+import flagUnitedKingdom from '../header/assets/flagUnitedKingdom.png'
 import { Button } from './Button'
 
 const meta = {
