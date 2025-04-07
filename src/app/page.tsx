@@ -9,6 +9,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { Loader } from '@/shared/ui/loader/Loader'
+import { LogoutModal } from '@/features/auth/ui/logout/LogoutModal'
 
 
 export default function Home() {
@@ -19,9 +20,7 @@ export default function Home() {
   const [isClearing, setIsClearing] = useState(false)
 
   const sidebarItems = createSidebarItems('user', {
-    onLogout: () => {
-      console.log('onLogout')
-    },
+    onLogout: logoutUser,
   })
 
   const handleClear = async () => {
@@ -45,7 +44,10 @@ export default function Home() {
   return (
     <div style={{ display: 'flex' }}>
       {isAuthenticated && (
-        <Sidebar items={sidebarItems} activePath={pathname} />
+        <>
+          <Sidebar items={sidebarItems} activePath={pathname} />
+          <LogoutModal onOpenChange={} open={} onConfirm={}/>
+        </>
       )}
 
       <div>
