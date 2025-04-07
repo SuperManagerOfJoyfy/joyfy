@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 import { Header } from '@/shared/ui/header/Header'
-import { ReduxProvider } from '@/shared/providers/ReduxProvider'
-import '@/app/globals.css'
-import s from './layout.module.scss'
+import { ReduxProvider } from '@/app/providers/ReduxProvider'
+import '@/styles/globals.css'
+import s from '../styles/layout.module.scss'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { AuthProvider } from '@/shared/providers/AuthProvider'
+import { AuthProvider } from '@/app/providers/AuthProvider'
 
 export const metadata: Metadata = {
   title: 'Joyfy',

@@ -6,12 +6,13 @@ import type {
 } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
 
+
 const mutex = new Mutex()
 let lastRefreshResult: boolean | null = null
 let lastRefreshAttempt = 0
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://gateway.joyfy.online/api/v1',
+  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   prepareHeaders(headers) {
     return headers
   },
