@@ -1,13 +1,13 @@
 'use client'
-
 import { ReactNode, useState } from 'react'
-import Link from 'next/link'
-import { Path, SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
-
+import { toast } from 'react-toastify'
+import Link from 'next/link'
+import { Path } from 'react-hook-form'
 import { Card, Form, Typography } from '@/shared/ui'
 import { SocialLinks } from '../socialLinks'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
+import { useRegisterMutation } from '@/features/auth/api/authApi'
 import s from './signupForm.module.scss'
 
 const fields: {
@@ -18,7 +18,7 @@ const fields: {
   { name: 'username', label: 'Username' },
   { name: 'email', label: 'Email', type: 'email' },
   { name: 'password', label: 'Password', type: 'password' },
-  { name: 'confirmPassword', label: 'Password confirmation', type: 'password' },
+  { name: 'confirmPassword', label: 'Confirm password', type: 'password' },
   {
     name: 'agreeToTerms',
     label: (
@@ -31,16 +31,27 @@ const fields: {
   },
 ]
 
-export const SignupForm = () => {
-  const [isSocialLoading, setIsSocialLoading] = useState(false)
+type Props = {
+  onSubmitSuccess?: (email: string) => void
+}
 
-  const handleSignupSubmit: SubmitHandler<z.infer<typeof SignupSchema>> = (
-    data
-  ) => {
-    console.log('Form submitted with:', data)
+export const SignupForm = ({ onSubmitSuccess }: Props) => {
+  const [isSocialLoading, setIsSocialLoading] = useState(false)
+  const [signup, { isLoading }] = useRegisterMutation()
+
+  const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
+    try {
+      const result = await signup(data).unwrap()
+      onSubmitSuccess?.(data.email)
+      return result
+    } catch (err: any) {
+      const errorMsg =
+        err?.data?.message || err?.error || 'Registration failed. Try again.'
+      toast.error(errorMsg)
+    }
   }
 
-  const disableAll = isSocialLoading
+  const disableAll = isSocialLoading || isLoading
 
   return (
     <Card className={s.card}>

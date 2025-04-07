@@ -26,14 +26,26 @@ export const Form = <T extends FieldValues>({
   additionalContent,
   disabled = false,
 }: FormProps<T>) => {
-  const { control, handleSubmit, formState } = useForm<T>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+    reset,
+  } = useForm<T>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
+    reValidateMode: 'onChange',
   })
 
-  const handleFormSubmit: SubmitHandler<T> = (data) => {
-    onSubmit(data)
+  const handleFormSubmit: SubmitHandler<T> = async (data) => {
+    try {
+      await onSubmit(data)
+      reset()
+    } catch (err) {
+      console.error(err)
+    }
   }
+
   return (
     <div className={s.formContainer}>
       <form onSubmit={handleSubmit(handleFormSubmit)} className={s.form}>

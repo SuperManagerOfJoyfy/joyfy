@@ -23,7 +23,7 @@ export const ControlledCheckbox = <T extends FieldValues>({
   return (
     <div>
       <Checkbox
-        checked={!!value}
+        checked={value}
         onCheckedChange={onChange}
         {...checkboxProps}
         {...field}

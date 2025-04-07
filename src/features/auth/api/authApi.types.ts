@@ -45,3 +45,12 @@ export type NewPasswordRequest = {
 export type RefreshTokenResponse = {
   accessToken: string
 }
+
+export type SignUpArgs = {
+  username: string
+  email: string
+  password: string
+  confirmEmail: string
+  agreeToTerms: boolean
+}
+

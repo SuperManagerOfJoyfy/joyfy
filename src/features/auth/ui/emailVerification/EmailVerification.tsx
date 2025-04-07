@@ -8,7 +8,7 @@ type Props = {
 	title: string
 	description: string
 	imageSrc: StaticImageData,
-	className: string
+	className?: string
 } & ComponentProps<'div'>
 
 export const EmailVerification = ({ title, description, imageSrc, children, className }: Props) => {
