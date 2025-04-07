@@ -13,13 +13,13 @@ export const SignupSchema = z
 
     email: EmailSchema,
     password: PasswordSchema,
-
-    confirmPassword: z.string(),
+    confirmPassword: PasswordSchema,
 
     agreeToTerms: z.literal(true, {
       errorMap: () => ({ message: 'You must agree to the Terms & Conditions' }),
     }),
   })
+
   .refine((arg) => arg.password === arg.confirmPassword, {
     message: 'Your passwords don’t match. Try again.',
     path: ['confirmPassword'],
