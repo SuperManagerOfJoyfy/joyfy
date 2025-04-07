@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { Sidebar } from '@/shared/ui/sidebar'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
-import { Typography, Card, Button } from '@/shared/ui'
+import { Button, Card, Typography } from '@/shared/ui'
 import { useClearAllDataMutation } from '@/features/auth/api/authApi'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { toast } from 'react-toastify'
@@ -11,16 +11,19 @@ import { useState } from 'react'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { LogoutModal } from '@/features/auth/ui/logout/LogoutModal'
 
-
 export default function Home() {
   const router = useRouter()
   const pathname = usePathname()
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [clearAllData] = useClearAllDataMutation()
   const { isAuthenticated, isLoading: authLoading, logoutUser } = useAuth()
   const [isClearing, setIsClearing] = useState(false)
 
+  const onLogoutModalOpenChangeHandler = (isOpen: boolean) => {
+    setIsModalOpen(isOpen)
+  }
   const sidebarItems = createSidebarItems('user', {
-    onLogout: logoutUser,
+    onLogout: () => {},
   })
 
   const handleClear = async () => {
@@ -40,13 +43,17 @@ export default function Home() {
   if (authLoading || isClearing) {
     return <Loader />
   }
-
+  debugger
   return (
     <div style={{ display: 'flex' }}>
       {isAuthenticated && (
         <>
           <Sidebar items={sidebarItems} activePath={pathname} />
-          <LogoutModal onOpenChange={} open={} onConfirm={}/>
+          <LogoutModal
+            open={isModalOpen}
+            onOpenChange={onLogoutModalOpenChangeHandler}
+            onLogout={logoutUser}
+          />
         </>
       )}
 
