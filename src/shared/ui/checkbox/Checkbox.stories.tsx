@@ -38,3 +38,10 @@ export const Default: Story = {
     disabled: false,
   },
 }
+
+export const WithError: Story = {
+	args: {
+		label: 'Check-box',
+		errorMessage: 'You need to agree to Terms & Conditions'
+	},
+}

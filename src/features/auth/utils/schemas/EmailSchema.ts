@@ -2,4 +2,4 @@ import { z } from 'zod'
 
 export const EmailSchema= z
 		.string()
-		.email('The email must match the format example@example.com')
+		.email('Email must match format example@example.com')

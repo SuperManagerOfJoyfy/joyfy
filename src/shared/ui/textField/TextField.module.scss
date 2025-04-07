@@ -1,6 +1,7 @@
 .box {
 	display: flex;
 	flex-direction: column;
+	position: relative;
 }
 
 .inputContainer {
@@ -97,4 +98,9 @@
 .errorText {
 	font-size: var(--font-size-s);
 	color: var(--color-danger-500);
+	white-space: nowrap;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	bottom: -1.5rem;
 }
