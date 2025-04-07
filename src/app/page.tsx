@@ -1,77 +1,26 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
-
+import { usePathname } from 'next/navigation'
 import { Sidebar } from '@/shared/ui/sidebar'
-import { createSidebarItems } from '@/shared/utils/SidebarItem/SidebarItem'
-import { Button, Card, Modal, Typography } from '@/shared/ui'
-import {
-  useClearAllDataMutation,
-  useLogoutMutation,
-} from '@/features/auth/api/authApi'
-import { useState } from 'react'
+import { Button, Card, Typography } from '@/shared/ui'
+import { useLogout } from '@/shared/hooks/useLogout'
+import { LogoutModal } from '@/features/auth/ui/logout/LogoutModal'
 
 export default function Home() {
   const pathname = usePathname()
-  const router = useRouter()
 
-  const [clearAllData] = useClearAllDataMutation()
-  const [onLogout] = useLogoutMutation()
-
-  let [isModalOpen, setIsModalOpen] = useState(false)
-
-  const handleOpenChange = (isOpen: boolean) => {
-    setIsModalOpen(isOpen)
-  }
-
-  const sidebarItems = createSidebarItems('user', {
-    onLogout: () => {
-      handleOpenChange(true)
-    },
-  })
-
-  const onLogoutHandler = async () => {
-    try {
-      await onLogout({}).unwrap()
-      router.push('/auth/login')
-    } catch (error) {
-      console.log('Failed to logout:', error)
-    }
-  }
-
-  const handleClearData = async () => {
-    try {
-      await clearAllData({}).unwrap()
-      console.log('All data cleared successfully')
-      router.push('/auth/login')
-    } catch (error) {
-      console.error('Failed to clear data:', error)
-    }
-  }
+  const {
+    isModalOpen,
+    sidebarItems,
+    handleClearData,
+    handleOpenChange,
+    onLogoutHandler
+  } = useLogout()
 
   return (
     <div style={{ display: 'flex' }}>
-      <Sidebar items={sidebarItems} activePath={pathname} />
-      <Modal open={isModalOpen} title="Logout" onOpenChange={handleOpenChange}>
-        <div style={{ padding: '30px 0 12px' }}>
-          <Typography variant="body1" style={{ marginBottom: '18px' }}>
-            Are you really want to log out of your account?
-          </Typography>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              style={{ margin: '10px' }}
-              onClick={() => {
-                setIsModalOpen(false)
-              }}
-            >
-              No
-            </Button>
-            <Button style={{ margin: '10px' }} onClick={onLogoutHandler}>
-              Yes
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      <Sidebar items={sidebarItems} activePath={pathname}  />
+      <LogoutModal open={isModalOpen} onOpenChange={handleOpenChange} onConfirm={onLogoutHandler}/>
       <Button onClick={handleClearData}>Clear All Data</Button>
       <div>
         <Card>
