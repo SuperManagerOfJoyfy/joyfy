@@ -8,16 +8,19 @@ import Link from 'next/link'
 import { useState } from 'react'
 import s from './login.module.scss'
 
-type Props = {
-  className?: string
-}
-
 const loginSchema = z.object({
   email: EmailSchema,
   password: z.string().min(1, 'Required'),
 })
 
-export const Login = ({ className }: Props) => {
+type Props = {
+  className?: string
+  onSubmit: (data: LoginFormValues) => void
+}
+
+export type LoginFormValues = z.infer<typeof loginSchema>
+
+export const Login = ({ className, onSubmit }: Props) => {
   const [isSocialLoading, setIsSocialLoading] = useState(false)
 
   const fields = [
@@ -27,7 +30,7 @@ export const Login = ({ className }: Props) => {
 
   const additionalContent = (
     <div className={s.content}>
-      <Link href="test" className={s.forgot}>
+      <Link href="forgot password" className={s.forgot}>
         Forgot Password
       </Link>
     </div>
@@ -50,7 +53,7 @@ export const Login = ({ className }: Props) => {
         btnText="Sign In"
         fields={fields}
         schema={loginSchema}
-        onSubmit={console.log}
+        onSubmit={onSubmit}
         additionalContent={additionalContent}
         disabled={disableAll}
       />

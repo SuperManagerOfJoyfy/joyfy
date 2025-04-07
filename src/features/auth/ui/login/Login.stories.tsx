@@ -11,6 +11,6 @@ export default meta
 
 export const Default = {
   render: () => {
-    return <Login />
+    return <Login onSubmit={console.log} />
   },
 }
