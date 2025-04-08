@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
-import s from '/logoutModal.module.scss'
+import s from './logoutModal.module.scss'
 
 type Props = {
   email?: string
