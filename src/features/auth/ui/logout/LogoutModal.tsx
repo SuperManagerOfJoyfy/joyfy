@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
-import s from '/logoutModal.module.scss'
+import s from './logoutModal.module.scss'
 
 type Props = {
   email?: string
@@ -22,7 +22,12 @@ export const LogoutModal = ({ onLogout, open, onOpenChange, email }: Props) => {
           <Button variant={'secondary'} className={s.button} onClick={onLogout}>
             Yes
           </Button>
-          <Button className={s.button} onClick={() => {onOpenChange(false)}}>
+          <Button
+            className={s.button}
+            onClick={() => {
+              onOpenChange(false)
+            }}
+          >
             No
           </Button>
         </div>
