@@ -13,8 +13,7 @@ export const SignupSchema = z
 
     email: EmailSchema,
     password: PasswordSchema,
-
-    passwordConfirmation: z.string(),
+    passwordConfirmation: PasswordSchema,
 
     agreeToTerms: z.literal(true, {
       errorMap: () => ({ message: 'You must agree to the Terms & Conditions' }),

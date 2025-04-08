@@ -10,6 +10,10 @@ import { AuthProvider } from '@/app/providers/AuthProvider'
 export const metadata: Metadata = {
   title: 'Joyfy',
   description: 'Platform for sharing and discovering visual stories',
+	icons: {
+		icon: '/favicon.svg',
+		apple: 'apple-touch-icon.png',
+	}
 }
 
 export default function RootLayout({

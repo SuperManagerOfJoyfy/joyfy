@@ -10,6 +10,12 @@ import flagRussia from '@/shared/ui/header/assets/flagRussia.png'
 import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import Logo from '../../../../public/logo/logo.png'
+import Letters from '../../../../public/logo/letters.png'
+type Props = {
+  isAuthenticated: boolean
+  notification?: number
+}
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -41,7 +47,10 @@ export const Header = () => {
   return (
     <header className={s.header}>
       <div className={s.container}>
-        <div className={s.logo}>Inctagram</div>
+        <div className={s.logo}>
+				<Image src={Logo} alt="logo" width={45} height={45} />
+				<Image src={Letters} alt="logo" height={30} />
+			</div>
         <div>
           <div className={s.actions}>
             <div className={s.notifications}>

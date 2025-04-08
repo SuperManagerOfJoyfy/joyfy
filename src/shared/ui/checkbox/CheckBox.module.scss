@@ -45,7 +45,7 @@
 
   .root {
     all: unset;
-    border: 3px solid var(--color-light-100);
+    border: 2px solid var(--color-light-100);
     width: 14px;
     height: 14px;
     border-radius: 2px;
@@ -103,4 +103,11 @@
       }
     }
   }
+	.error {
+		font-size: var(--font-size-s);
+		color: var(--color-danger-500);
+		position: absolute;
+		bottom: 0;
+		bottom: -1.5rem;
+	}
 }

@@ -27,8 +27,8 @@ export const ControlledCheckbox = <T extends FieldValues>({
         onCheckedChange={onChange}
         {...checkboxProps}
         {...field}
+				errorMessage={error?.message}
       />
-      {error && <span className={s.error}>{error.message}</span>}
     </div>
   )
 }
