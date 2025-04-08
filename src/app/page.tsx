@@ -1,49 +1,36 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Sidebar } from '@/shared/ui/sidebar'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 import { Button, Card, Typography } from '@/shared/ui'
-import { useClearAllDataMutation } from '@/features/auth/api/authApi'
 import { useAuth } from '@/features/auth/hooks/useAuth'
-import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { LogoutModal } from '@/features/auth/ui/logout/LogoutModal'
+import { LogoutModal } from '@/features/auth/ui'
+import { useClear } from '@/features/auth/hooks/useClear'
 
 export default function Home() {
-  const router = useRouter()
   const pathname = usePathname()
+
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [clearAllData] = useClearAllDataMutation()
+  const { isClearing, handleClear } = useClear()
   const { isAuthenticated, isLoading: authLoading, logoutUser } = useAuth()
-  const [isClearing, setIsClearing] = useState(false)
+
+  const handleLogout = async () => {}
 
   const onLogoutModalOpenChangeHandler = (isOpen: boolean) => {
     setIsModalOpen(isOpen)
   }
+
   const sidebarItems = createSidebarItems('user', {
-    onLogout: () => {},
+    onLogout: () => setIsModalOpen(true),
   })
 
-  const handleClear = async () => {
-    setIsClearing(true)
-    try {
-      await clearAllData().unwrap()
-      await logoutUser()
-      router.push('/auth/login')
-      toast.success('All data has been cleared')
-    } catch (err) {
-      toast.error('Failed to clear data')
-    } finally {
-      setIsClearing(false)
-    }
+  if (authLoading || isClearing) {
+    return <Loader message="Processing..." />
   }
 
-  if (authLoading || isClearing) {
-    return <Loader />
-  }
-  debugger
   return (
     <div style={{ display: 'flex' }}>
       {isAuthenticated && (
@@ -52,7 +39,7 @@ export default function Home() {
           <LogoutModal
             open={isModalOpen}
             onOpenChange={onLogoutModalOpenChangeHandler}
-            onLogout={logoutUser}
+            onLogout={handleLogout}
           />
         </>
       )}
