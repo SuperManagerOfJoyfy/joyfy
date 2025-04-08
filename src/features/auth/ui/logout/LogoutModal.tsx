@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
+import s from '/logoutModal.module.scss'
 
 type Props = {
   email?: string
@@ -9,18 +10,19 @@ type Props = {
   onOpenChange: (isOpen: boolean) => void
   onLogout: () => void
 }
-export const LogoutModal = ({ onLogout, open, onOpenChange }: Props) => {
+export const LogoutModal = ({ onLogout, open, onOpenChange, email }: Props) => {
   return (
     <Modal open={open} title="Log Out" onOpenChange={onOpenChange}>
-      <div style={{ padding: '30px 0 12px' }}>
-        <Typography variant="body1" style={{ marginBottom: '18px' }}>
+      <div className={s.modal}>
+        <Typography variant="body1" className={s.typography}>
           Are you really want to log out of your account?
+          {email}
         </Typography>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant={'secondary'} style={{ margin: '10px' }} onClick={onLogout}>
+        <div className={s.buttons}>
+          <Button variant={'secondary'} className={s.button} onClick={onLogout}>
             Yes
           </Button>
-          <Button style={{ margin: '10px' }} onClick={() => {onOpenChange(false)}}>
+          <Button className={s.button} onClick={() => {onOpenChange(false)}}>
             No
           </Button>
         </div>
