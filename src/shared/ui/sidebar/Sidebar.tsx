@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, CSSProperties } from 'react'
+import { ReactNode, CSSProperties, memo } from 'react'
 import Link from 'next/link'
 import { clsx } from 'clsx'
 
@@ -25,7 +25,32 @@ export type SidebarProps = {
   className?: string
 }
 
-export const Sidebar = ({
+const determineActiveState = (
+  itemPath: string | undefined, 
+  currentPath: string | undefined
+): boolean => {
+  if (!itemPath || !currentPath) return false
+  
+  if (itemPath === '/') {
+    return currentPath === '/' || currentPath === ''
+  }
+  
+  if (itemPath === currentPath) return true
+  
+  const normalizedItemPath = itemPath.endsWith('/') ? itemPath.slice(0, -1) : itemPath
+  const normalizedCurrentPath = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath
+  
+  if (normalizedItemPath === normalizedCurrentPath) return true
+  
+  if (normalizedItemPath !== '/' && normalizedCurrentPath.startsWith(normalizedItemPath + '/')) {
+    const remainingPath = normalizedCurrentPath.slice(normalizedItemPath.length + 1)
+    return !remainingPath.includes('/')
+  }
+  
+  return false
+}
+
+export const Sidebar = memo(({
   items,
   activePath,
   onItemClick,
@@ -38,31 +63,8 @@ export const Sidebar = ({
     onItemClick?.(item)
   }
 
-  const isPathActive = (
-    itemPath: string | undefined,
-    currentPath: string | undefined
-  ): boolean => {
-    if (!itemPath || !currentPath) return false
-
-    const normalizedItemPath = itemPath.endsWith('/')
-      ? itemPath.slice(0, -1)
-      : itemPath
-    const normalizedCurrentPath = currentPath.endsWith('/')
-      ? currentPath.slice(0, -1)
-      : currentPath
-
-    if (normalizedCurrentPath === normalizedItemPath) return true
-    if (
-      normalizedItemPath !== '/' &&
-      normalizedCurrentPath.startsWith(normalizedItemPath + '/')
-    )
-      return true
-
-    return false
-  }
-
   const renderItem = (item: SidebarItem) => {
-    const isActive = isPathActive(item.path, activePath)
+    const isActive = determineActiveState(item.path, activePath)
     const isItemDisabled = disabled || item.disabled
 
     const linkClassNames = clsx(
@@ -127,8 +129,12 @@ export const Sidebar = ({
       aria-label="Sidebar Navigation"
     >
       <nav className={s.sidebarNav}>
-        <ul className={s.sidebarList}>{items.map(renderItem)}</ul>
+        <ul className={s.sidebarList}>
+          {items.map(renderItem)}
+        </ul>
       </nav>
     </aside>
   )
-}
+})
+
+Sidebar.displayName = 'Sidebar'
