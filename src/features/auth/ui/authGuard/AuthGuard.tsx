@@ -8,6 +8,7 @@ import { Typography } from '@/shared/ui'
 import { useAuth } from '../../hooks/useAuth'
 import { Loader } from '@/shared/ui/loader/Loader'
 import s from './authGuard.module.scss'
+import { PATH } from '@/shared/config/routes'
 
 type AuthGuardProps = {
   children: ReactNode
@@ -18,7 +19,7 @@ type AuthGuardProps = {
 export const AuthGuard = ({
   children,
   requireAuth = false,
-  redirectPath = requireAuth ? '/login' : '/',
+  redirectPath = requireAuth ? PATH.AUTH.LOGIN : PATH.ROOT,
 }: AuthGuardProps) => {
   const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()

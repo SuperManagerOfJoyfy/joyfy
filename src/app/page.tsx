@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { LogoutModal } from '@/features/auth/ui/logout/LogoutModal'
+import { PATH } from '@/shared/config/routes'
 
 export default function Home() {
   const router = useRouter()
@@ -31,7 +32,7 @@ export default function Home() {
     try {
       await clearAllData().unwrap()
       await logoutUser()
-      router.push('/auth/login')
+      router.push(PATH.AUTH.LOGIN)
       toast.success('All data has been cleared')
     } catch (err) {
       toast.error('Failed to clear data')
@@ -43,7 +44,6 @@ export default function Home() {
   if (authLoading || isClearing) {
     return <Loader />
   }
-  debugger
   return (
     <div style={{ display: 'flex' }}>
       {isAuthenticated && (

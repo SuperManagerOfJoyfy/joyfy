@@ -13,6 +13,7 @@ import {
   FiUsers,
 } from 'react-icons/fi'
 import { SidebarItem } from '../../ui/sidebar'
+import { PATH } from '@/shared/config/routes'
 
 type SidebarActionHandlers = {
   onLogout?: () => void
@@ -27,25 +28,25 @@ export const createSidebarItems = (
     {
       id: 'users',
       title: 'Users list',
-      path: '/admin/users',
+      path: PATH.ADMIN.USERS,
       icon: <FiUsers />,
     },
     {
       id: 'stats',
       title: 'Statistics',
-      path: '/admin/stats',
+      path: PATH.ADMIN.STATISTICS,
       icon: <FiTrendingUp />,
     },
     {
       id: 'payments',
       title: 'Payments list',
-      path: '/admin/payments',
+      path: PATH.ADMIN.PAYMENTS,
       icon: <FiCreditCard />,
     },
     {
       id: 'posts',
       title: 'Posts list',
-      path: '/admin/posts',
+      path: PATH.ADMIN.POSTS,
       icon: <FiImage />,
     },
   ]
@@ -54,44 +55,44 @@ export const createSidebarItems = (
     {
       id: 'home',
       title: 'Home',
-      path: '/',
+      path: PATH.ROOT,
       icon: <FiHome />,
     },
     {
       id: 'create',
       title: 'Create',
-      path: '/create',
+      path: PATH.USER.CREATE,
       icon: <FiPlusCircle />,
     },
     {
       id: 'profile',
       title: 'My Profile',
-      path: '/profile',
+      path: PATH.USER.PROFILE,
       icon: <FiUser />,
     },
     {
       id: 'messenger',
-      title: 'Messenger',
+      title: PATH.USER.MESSAGES,
       path: '/messages',
       icon: <FiMessageCircle />,
     },
     {
       id: 'search',
       title: 'Search',
-      path: '/search',
+      path: PATH.USER.SEARCH,
       icon: <FiSearch />,
     },
     {
       id: 'statistics',
       title: 'Statistics',
-      path: '/stats',
+      path: PATH.USER.STATISTICS,
       icon: <FiBarChart2 />,
       style: { marginTop: '60px' },
     },
     {
       id: 'favorites',
       title: 'Favorites',
-      path: '/favorites',
+      path: PATH.USER.FAVORITES,
       icon: <FiStar />,
       style: { marginBottom: '180px' },
     },

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { Button, Typography } from '@/shared/ui'
 import { Loader } from '@/shared/ui/loader/Loader'
 import s from './oauthLoginSuccess.module.scss'
+import { PATH } from '@/shared/config/routes'
 
 type ErrorViewProps = {
   message: string
@@ -42,7 +43,7 @@ export const OauthLoginSuccess = () => {
 
   useEffect(() => {
     if (isRedirecting) {
-      router.push('/')
+      router.push(PATH.ROOT)
     }
   }, [isRedirecting, router])
 

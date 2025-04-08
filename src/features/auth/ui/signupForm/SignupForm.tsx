@@ -9,6 +9,7 @@ import { SocialLinks } from '../socialLinks'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
 import { useRegisterMutation } from '@/features/auth/api/authApi'
 import s from './signupForm.module.scss'
+import { PATH } from '@/shared/config/routes'
 
 const fields: {
   name: Path<z.infer<typeof SignupSchema>>
@@ -23,8 +24,8 @@ const fields: {
     name: 'agreeToTerms',
     label: (
       <span className={s.label}>
-        I agree to the <Link href="/auth/terms-of-service">Terms of Service</Link>{' '}
-        and <Link href="/auth/privacy-policy">Privacy Policy</Link>
+        I agree to the <Link href={PATH.AUTH.TERMS_OF_SERVICE} target='_blank'>Terms of Service</Link>{' '}
+				and <Link href={PATH.AUTH.PRIVACY_POLICY} target='_blank'>Privacy Policy</Link>
       </span>
     ),
     type: 'checkbox',
@@ -79,7 +80,7 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
             Sign In
           </span>
         ) : (
-          <Link href="/auth/login" className={s.link}>
+          <Link href={PATH.AUTH.LOGIN} className={s.link}>
             Sign In
           </Link>
         )}
