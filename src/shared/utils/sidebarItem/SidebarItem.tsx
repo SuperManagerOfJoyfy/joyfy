@@ -100,6 +100,7 @@ export const createSidebarItems = (
       title: 'Log Out',
       icon: <FiLogOut />,
       onClick: handlers.openLogoutModal,
+      className: 'logoutItem',
     },
   ]
 

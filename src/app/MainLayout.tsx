@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation'
 import { Sidebar } from '@/shared/ui/sidebar'
 import { LogoutModal } from '@/features/auth/ui'
 import { useAuth } from '@/features/auth/hooks/useAuth'
-import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 import { Header } from '@/shared/ui/header/Header'
 import { Loader } from '@/shared/ui/loader/Loader'
+import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 
 import s from '../styles/layout.module.scss'
 
