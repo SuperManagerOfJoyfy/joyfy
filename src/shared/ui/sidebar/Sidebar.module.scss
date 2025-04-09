@@ -38,7 +38,6 @@
     margin-bottom: 0;
   }
 }
-
 .sidebarLink {
   display: inline-flex;
   align-items: center;
@@ -50,7 +49,7 @@
   line-height: 171%;
   font-weight: 500;
 
-  &:hover:not(.disabled) {
+  &:hover:not(.sidebarLink--disabled) {
     color: var(--color-accent-100);
 
     .icon {
@@ -58,43 +57,12 @@
     }
   }
 
-  &:active {
-    color: var(--color-accent-500);
-
-    .icon {
-      color: var(--color-accent-300);
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-
-      svg {
-        fill: var(--color-accent-300);
-        stroke: var(--color-dark-700);
-        stroke-width: 2px;
-      }
-    }
-  }
-
-  &:focus-visible {
-    outline: none;
-    border: 2px solid var(--color-accent-700);
-    border-radius: 2px;
-  }
-
   &.active {
     color: var(--color-accent-500);
 
     .icon {
-      color: var(--color-accent-300);
+      color: var(--color-accent-500);
       font-size: 24px;
-      width: 24px;
-      height: 24px;
-
-      svg {
-        fill: var(--color-accent-300);
-        stroke: var(--color-dark-700);
-        stroke-width: 2px;
-      }
     }
   }
 
@@ -120,6 +88,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-light-100);
+  color: inherit;
   font-size: 24px;
+}
+
+.logoutItem {
+  @extend .sidebarLink;
+  background-color: inherit;
+  cursor: pointer;
+  border: none;
 }

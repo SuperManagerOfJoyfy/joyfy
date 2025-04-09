@@ -8,7 +8,7 @@ type Props = {
   email: string
 }
 
-const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
+ export const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
   const [internalOpen, setInternalOpen] = useState(open)
 
   useEffect(() => {
@@ -42,5 +42,3 @@ const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
     </>
   )
 }
-
-export default SentEmailModal

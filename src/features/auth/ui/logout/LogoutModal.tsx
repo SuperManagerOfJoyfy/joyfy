@@ -22,7 +22,12 @@ export const LogoutModal = ({ onLogout, open, onOpenChange, email }: Props) => {
           <Button variant={'secondary'} className={s.button} onClick={onLogout}>
             Yes
           </Button>
-          <Button className={s.button} onClick={() => {onOpenChange(false)}}>
+          <Button
+            className={s.button}
+            onClick={() => {
+              onOpenChange(false)
+            }}
+          >
             No
           </Button>
         </div>

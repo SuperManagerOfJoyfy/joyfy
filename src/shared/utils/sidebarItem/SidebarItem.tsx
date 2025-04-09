@@ -72,8 +72,8 @@ export const createSidebarItems = (
     },
     {
       id: 'messenger',
-      title: PATH.USER.MESSAGES,
-      path: '/messages',
+      title: 'Messenger',
+      path: '/messenger',
       icon: <FiMessageCircle />,
     },
     {
@@ -85,7 +85,7 @@ export const createSidebarItems = (
     {
       id: 'statistics',
       title: 'Statistics',
-      path: PATH.USER.STATISTICS,
+      path: '/statistics',
       icon: <FiBarChart2 />,
       style: { marginTop: '60px' },
     },
@@ -99,9 +99,9 @@ export const createSidebarItems = (
     {
       id: 'logout',
       title: 'Log Out',
-      path: '#',
       icon: <FiLogOut />,
       onClick: handlers.onLogout,
+      className: 'logoutItem',
     },
   ]
 
