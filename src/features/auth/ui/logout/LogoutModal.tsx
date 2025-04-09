@@ -3,6 +3,7 @@
 import React from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
 import s from './logoutModal.module.scss'
+import Link from 'next/link'
 
 type Props = {
   email?: string
@@ -11,6 +12,7 @@ type Props = {
   onLogout: () => void
 }
 export const LogoutModal = ({ onLogout, open, onOpenChange, email }: Props) => {
+
   return (
     <Modal open={open} title="Log Out" onOpenChange={onOpenChange}>
       <div className={s.modal}>
@@ -19,7 +21,7 @@ export const LogoutModal = ({ onLogout, open, onOpenChange, email }: Props) => {
           {email}
         </Typography>
         <div className={s.buttons}>
-          <Button variant={'secondary'} className={s.button} onClick={onLogout}>
+          <Button as={Link} href="/auth/login" variant={'secondary'} className={s.button} onClick={onLogout}>
             Yes
           </Button>
           <Button
