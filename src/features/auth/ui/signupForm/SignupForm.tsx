@@ -55,6 +55,7 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
       const errorMsg =
         err?.data?.message || err?.error || 'Registration failed. Try again.'
       toast.error(errorMsg)
+			throw err
     }
   }
 
