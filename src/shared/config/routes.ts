@@ -11,10 +11,10 @@ export const PATH = {
 
 	USER: {
 		PROFILE: '/profile',
-		MESSAGES: '/messages',
+		MESSENGER: '/messenger',
 		SEARCH: '/search',
 		CREATE: '/create',
-		STATISTICS: '/stats',
+		STATISTICS: '/statistics',
 		FAVORITES: '/favorites',
 	},
 

@@ -73,7 +73,7 @@ export const createSidebarItems = (
     {
       id: 'messenger',
       title: 'Messenger',
-      path: '/messenger',
+      path: PATH.USER.MESSENGER,
       icon: <FiMessageCircle />,
     },
     {
@@ -85,7 +85,7 @@ export const createSidebarItems = (
     {
       id: 'statistics',
       title: 'Statistics',
-      path: '/statistics',
+      path: PATH.USER.STATISTICS,
       icon: <FiBarChart2 />,
       style: { marginTop: '60px' },
     },
