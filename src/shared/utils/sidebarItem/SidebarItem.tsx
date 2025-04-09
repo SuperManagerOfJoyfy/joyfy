@@ -12,7 +12,7 @@ import {
   FiUser,
   FiUsers,
 } from 'react-icons/fi'
-import { SidebarItem } from '.'
+import { SidebarItem } from '../../ui/sidebar'
 
 type SidebarActionHandlers = {
   onLogout?: () => void

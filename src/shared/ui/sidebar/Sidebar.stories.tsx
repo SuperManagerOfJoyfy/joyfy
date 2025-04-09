@@ -12,7 +12,7 @@ import {
 
 import { Sidebar } from './Sidebar'
 
-import { createSidebarItems } from '@/shared/ui/sidebar/SidebarItem'
+import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 
 const meta: Meta<typeof Sidebar> = {
   title: 'Components/Sidebar',
