@@ -12,7 +12,7 @@ import {
   FiUser,
   FiUsers,
 } from 'react-icons/fi'
-import { SidebarItem } from '../../ui/sidebar'
+import { SidebarItem } from '.'
 
 type SidebarActionHandlers = {
   onLogout?: () => void
@@ -98,9 +98,9 @@ export const createSidebarItems = (
     {
       id: 'logout',
       title: 'Log Out',
-      path: '#',
       icon: <FiLogOut />,
       onClick: handlers.onLogout,
+      className: 'logoutItem',
     },
   ]
 
