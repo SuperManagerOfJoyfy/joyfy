@@ -16,12 +16,13 @@ const loginSchema = z.object({
 
 type Props = {
   className?: string
+  isLoading: boolean
   onSubmit: (data: LoginFormValues) => void
 }
 
 export type LoginFormValues = z.infer<typeof loginSchema>
 
-export const Login = ({ className, onSubmit }: Props) => {
+export const Login = ({ className, isLoading, onSubmit }: Props) => {
   const [isSocialLoading, setIsSocialLoading] = useState(false)
 
   const fields = [
@@ -37,15 +38,13 @@ export const Login = ({ className, onSubmit }: Props) => {
     </div>
   )
 
-  const disableAll = isSocialLoading
-
   return (
     <Card className={clsx(s.card, className)}>
       <Typography variant="h1">Sign In</Typography>
 
       <div className={s.socialLinksWrap}>
         <SocialLinks
-          isDisabled={disableAll}
+          isDisabled={isSocialLoading}
           onStartLoading={() => setIsSocialLoading(true)}
         />
       </div>
@@ -56,7 +55,7 @@ export const Login = ({ className, onSubmit }: Props) => {
         schema={loginSchema}
         onSubmit={onSubmit}
         additionalContent={additionalContent}
-        disabled={disableAll}
+        disabled={isLoading}
       />
 
       <Typography variant="body1" className={s.account}>

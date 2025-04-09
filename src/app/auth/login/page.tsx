@@ -9,7 +9,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth'
 import { toast } from 'react-toastify'
 
 const Page = () => {
-  const [login] = useLoginMutation()
+  const [login, { isLoading }] = useLoginMutation()
   const router = useRouter()
   const { refetchUser } = useAuth()
 
@@ -26,7 +26,7 @@ const Page = () => {
 
   return (
     <div className="container">
-      <Login onSubmit={handleLogin} />
+      <Login isLoading={isLoading} onSubmit={handleLogin} />
     </div>
   )
 }
