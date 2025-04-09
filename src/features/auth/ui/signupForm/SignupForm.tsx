@@ -45,7 +45,7 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
 				type: 'checkbox',
 			},
 		]
-
+	//!FIX any
   const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
     try {
       const result = await signup(data).unwrap()
