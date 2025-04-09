@@ -11,26 +11,7 @@ import { useRegisterMutation } from '@/features/auth/api/authApi'
 import s from './signupForm.module.scss'
 import { PATH } from '@/shared/config/routes'
 
-const fields: {
-  name: Path<z.infer<typeof SignupSchema>>
-  label: ReactNode
-  type?: string
-}[] = [
-  { name: 'username', label: 'Username' },
-  { name: 'email', label: 'Email', type: 'email' },
-  { name: 'password', label: 'Password', type: 'password' },
-  { name: 'passwordConfirmation', label: 'Confirm password', type: 'password' },
-  {
-    name: 'agreeToTerms',
-    label: (
-      <span className={s.label}>
-        I agree to the <Link href={PATH.AUTH.TERMS_OF_SERVICE} target='_blank'>Terms of Service</Link>{' '}
-				and <Link href={PATH.AUTH.PRIVACY_POLICY} target='_blank'>Privacy Policy</Link>
-      </span>
-    ),
-    type: 'checkbox',
-  },
-]
+
 
 type Props = {
   onSubmitSuccess?: (email: string) => void
@@ -39,6 +20,31 @@ type Props = {
 export const SignupForm = ({ onSubmitSuccess }: Props) => {
   const [isSocialLoading, setIsSocialLoading] = useState(false)
   const [signup, { isLoading }] = useRegisterMutation()
+	const disableAll = isSocialLoading || isLoading
+
+
+	const fields: {
+		name: Path<z.infer<typeof SignupSchema>>
+		label: ReactNode
+		type?: string
+	}[] = [
+			{ name: 'username', label: 'Username' },
+			{ name: 'email', label: 'Email', type: 'email' },
+			{ name: 'password', label: 'Password', type: 'password' },
+			{ name: 'passwordConfirmation', label: 'Confirm password', type: 'password' },
+			{
+				name: 'agreeToTerms',
+				label: (
+					<span className={s.label}>
+						I agree to the {' '}
+						{disableAll ? (<span className={s.disabledLink}>Terms of Service</span>) : <Link href={PATH.AUTH.TERMS_OF_SERVICE} target='_blank'>Terms of Service</Link>}
+						{' '}
+						and {' '} {disableAll ? (<span className={s.disabledLink}>Privacy Policy</span>) : <Link href={PATH.AUTH.PRIVACY_POLICY} target='_blank'>Privacy Policy</Link>}
+					</span>
+				),
+				type: 'checkbox',
+			},
+		]
 
   const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
     try {
@@ -51,8 +57,6 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
       toast.error(errorMsg)
     }
   }
-
-  const disableAll = isSocialLoading || isLoading
 
   return (
     <Card className={s.card}>
