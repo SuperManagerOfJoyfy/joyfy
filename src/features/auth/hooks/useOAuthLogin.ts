@@ -1,5 +1,8 @@
+'use client'
+
 import { useLazyGetMeQuery } from '@/features/auth/api/authApi'
 import { PATH } from '@/shared/config/routes'
+import { AUTH_MESSAGES } from '@/shared/config/messages'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
@@ -9,14 +12,6 @@ type ErrorWithData = {
     message?: string
   }
   status?: number
-}
-
-const queryErrorMessages: Record<string, string> = {
-  email_exists:
-    'This email is already registered with a different method. Please use your original login method.',
-  account_not_found: 'Account not found. Please register first.',
-  unauthorized: 'Authentication failed. Please try again.',
-  unknown: 'Authentication error. Please try again later.',
 }
 
 export const useOAuthLogin = () => {
@@ -32,20 +27,21 @@ export const useOAuthLogin = () => {
 
     if (typeof err === 'object' && err !== null && 'data' in err) {
       const errorData = err as ErrorWithData
+      const msg = errorData.data?.message?.toLowerCase() || ''
 
-      if (errorData.data?.message?.includes('email already exists')) {
-        return queryErrorMessages.email_exists
+      if (msg.includes('email already exists')) {
+        return AUTH_MESSAGES.queryErrors.email_exists
       }
 
-      if (errorData.data?.message?.includes('account not found')) {
-        return queryErrorMessages.account_not_found
+      if (msg.includes('account not found')) {
+        return AUTH_MESSAGES.queryErrors.account_not_found
       }
 
       if (errorData.status === 401) {
-        return queryErrorMessages.unauthorized
+        return AUTH_MESSAGES.queryErrors.unauthorized
       }
 
-      return errorData.data?.message || queryErrorMessages.unknown
+      return errorData.data?.message || AUTH_MESSAGES.queryErrors.unknown
     }
 
     if (err instanceof Error) {
@@ -58,7 +54,7 @@ export const useOAuthLogin = () => {
       return err.message
     }
 
-    return queryErrorMessages.unknown
+    return AUTH_MESSAGES.queryErrors.unknown
   }
 
   const completeAuth = useCallback(async () => {
@@ -69,7 +65,7 @@ export const useOAuthLogin = () => {
       const user = await triggerGetMe().unwrap()
 
       if (user) {
-        toast.success('Successfully signed in! Redirecting...')
+        toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
         router.push(PATH.ROOT)
       }
     } catch (err) {
@@ -85,7 +81,9 @@ export const useOAuthLogin = () => {
   useEffect(() => {
     if (queryError) {
       const message =
-        queryErrorMessages[queryError] || queryErrorMessages.unknown
+        AUTH_MESSAGES.queryErrors[
+          queryError as keyof typeof AUTH_MESSAGES.queryErrors
+        ] || AUTH_MESSAGES.queryErrors.unknown
       setError(message)
       setIsLoading(false)
       toast.error(message)
