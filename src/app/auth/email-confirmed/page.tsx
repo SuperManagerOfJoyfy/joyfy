@@ -6,6 +6,8 @@ import infoImg from '@/features/auth/assets/images/EmailVerification/confirm.png
 import { useSearchParams } from 'next/navigation'
 import { useConfirmEmailMutation } from '@/features/auth/api/authApi'
 import Link from 'next/link'
+import { PATH } from '@/shared/config/routes'
+import { Loader } from '@/shared/ui/loader/Loader'
 
 const EmailConfirmation = () => {
 	const searchParams = useSearchParams()
@@ -19,12 +21,12 @@ const EmailConfirmation = () => {
 	}, [code])
 
 	if (isUninitialized || isLoading) {
-		return <div>Loading...</div>;
+		return <Loader fullScreen/>
 	}
 	return (
 		<EmailVerification title='Congratulations!' description='Your email has been confirmed' imageSrc={infoImg} className=''>
 			<div style={{ marginTop: '54px', maxWidth: '182px', width: '100%' }}>
-				<Button as={Link} fullWidth href='/auth/login'>Sign in</Button>
+				<Button as={Link} fullWidth href={PATH.AUTH.LOGIN}>Sign in</Button>
 			</div>
 		</EmailVerification>
 	)

@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 import { ReduxProvider } from './providers/ReduxProvider'
 import { AuthProvider } from './providers/AuthProvider'
-import { ToastContainer } from 'react-toastify'
 import MainLayout from './MainLayout'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/globals.css'
+import { ToastSnackbar } from '@/shared/ui/toastSnackbar/ToastSnackbar'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
@@ -26,11 +26,7 @@ export default function RootLayout({
       <body>
         <ReduxProvider>
           <AuthProvider>
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-            />
+            <ToastSnackbar />
             <MainLayout>{children}</MainLayout>
           </AuthProvider>
         </ReduxProvider>

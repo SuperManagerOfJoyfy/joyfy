@@ -7,6 +7,7 @@ import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
 import Link from 'next/link'
 import { useState } from 'react'
 import s from './login.module.scss'
+import { PATH } from '@/shared/config/routes'
 
 const loginSchema = z.object({
   email: EmailSchema,
@@ -62,7 +63,7 @@ export const Login = ({ className, onSubmit }: Props) => {
         Don't have an account?
       </Typography>
 
-      <Link href="/auth/registration" className={s.signUp}>
+      <Link href={PATH.AUTH.REGISTRATION} className={s.signUp}>
         Sign Up
       </Link>
     </Card>

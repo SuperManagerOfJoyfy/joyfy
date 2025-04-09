@@ -40,4 +40,12 @@
     --color-dark-500: #171717;
     --color-dark-700: #0d0d0d;
     --color-dark-900: #000;
+
+		/* toastify */
+
+	--toastify-icon-error: #d24a65;
+	--toastify-progressbar-error: linear-gradient(90deg, #ff1744, #f982ac, #db7eff);
+	--toastify-progressbar-warning: linear-gradient(90deg, #fdd835, #ffa000, #db7eff);
+	--toastify-progressbar-info: linear-gradient(90deg, #2979ff, #7c4dff, #b073f7);
+	--toastify-progressbar-success: linear-gradient(90deg, #6f00ff,#8a2be2,#00c853);
 }

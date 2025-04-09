@@ -12,6 +12,7 @@ import Link from 'next/link'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import Logo from '../../../../public/logo/logo.png'
 import Letters from '../../../../public/logo/letters.png'
+import { PATH } from '@/shared/config/routes'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -27,10 +28,10 @@ const LanguageSelect = ({ flag, language }: LanguageSelectProps) => (
 
 const AuthActions = () => (
   <div className={s.buttons}>
-    <Button as={Link} href="/auth/login" size="small" variant="text">
+    <Button as={Link} href={PATH.AUTH.LOGIN} size="small" variant="text">
       Log in
     </Button>
-    <Button as={Link} href="/auth/registration" size="small" variant="primary">
+    <Button as={Link} href={PATH.AUTH.REGISTRATION} size="small" variant="primary">
       Sign up
     </Button>
   </div>
@@ -50,10 +51,10 @@ export const Header = () => {
   return (
     <header className={s.header}>
       <div className={s.container}>
-        <div className={s.logo}>
-          <Image src={Logo} alt="logo" width={45} height={45} />
-          <Image src={Letters} alt="logo" height={30} />
-        </div>
+        <Link href={PATH.ROOT} className={s.logo}>
+	          <Image src={Logo} alt="logo" width={45} height={45} />
+	          <Image src={Letters} alt="logo" height={30} />
+	        </Link>
         <div className={s.actions}>
           <div className={s.notificationContainer}>
             {isAuthenticated && (
