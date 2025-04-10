@@ -1,4 +1,5 @@
 import { useLazyGetMeQuery } from '@/features/auth/api/authApi'
+import { PATH } from '@/shared/config/routes'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
@@ -69,7 +70,7 @@ export const useOAuthLogin = () => {
 
       if (user) {
         toast.success('Successfully signed in! Redirecting...')
-        router.push('/')
+        router.push(PATH.ROOT)
       }
     } catch (err) {
       const message = extractErrorMessage(err)

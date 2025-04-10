@@ -2,7 +2,7 @@
   background: var(--color-dark-700);
   border-bottom: 1px solid var(--color-dark-300);
   padding: 12px 62px 12px 60px;
-  height: 60px;
+  height: var(--header-height);
 }
 
 .container {
@@ -21,9 +21,9 @@
   font-weight: 600;
   font-size: 26px;
   letter-spacing: 8px;
-	display: flex;
-	align-items: center;
-	gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .actions {
@@ -32,11 +32,18 @@
   align-items: center;
 }
 
+.notificationContainer {
+  width: 20px;
+  margin-right: 45px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
 .notifications {
   position: relative;
   display: flex;
   font-size: 20px;
-  margin-right: 45px;
   cursor: pointer;
 }
 
@@ -72,4 +79,10 @@
   display: flex;
   align-items: center;
   column-gap: 12px;
+}
+
+.authActions {
+  display: flex;
+  align-items: center;
+  min-width: 150px;
 }

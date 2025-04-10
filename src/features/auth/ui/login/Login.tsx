@@ -7,6 +7,7 @@ import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
 import Link from 'next/link'
 import { useState } from 'react'
 import s from './login.module.scss'
+import { PATH } from '@/shared/config/routes'
 
 const loginSchema = z.object({
   email: EmailSchema,
@@ -15,12 +16,13 @@ const loginSchema = z.object({
 
 type Props = {
   className?: string
+  isLoading: boolean
   onSubmit: (data: LoginFormValues) => void
 }
 
 export type LoginFormValues = z.infer<typeof loginSchema>
 
-export const Login = ({ className, onSubmit }: Props) => {
+export const Login = ({ className, isLoading, onSubmit }: Props) => {
   const [isSocialLoading, setIsSocialLoading] = useState(false)
 
   const fields = [
@@ -36,15 +38,13 @@ export const Login = ({ className, onSubmit }: Props) => {
     </div>
   )
 
-  const disableAll = isSocialLoading
-
   return (
     <Card className={clsx(s.card, className)}>
       <Typography variant="h1">Sign In</Typography>
 
       <div className={s.socialLinksWrap}>
         <SocialLinks
-          isDisabled={disableAll}
+          isDisabled={isSocialLoading}
           onStartLoading={() => setIsSocialLoading(true)}
         />
       </div>
@@ -55,14 +55,14 @@ export const Login = ({ className, onSubmit }: Props) => {
         schema={loginSchema}
         onSubmit={onSubmit}
         additionalContent={additionalContent}
-        disabled={disableAll}
+        disabled={isLoading}
       />
 
       <Typography variant="body1" className={s.account}>
         Don't have an account?
       </Typography>
 
-      <Link href="/auth/registration" className={s.signUp}>
+      <Link href={PATH.AUTH.REGISTRATION} className={s.signUp}>
         Sign Up
       </Link>
     </Card>

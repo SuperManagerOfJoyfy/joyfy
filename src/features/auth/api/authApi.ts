@@ -18,7 +18,7 @@ export const authApi = joyfyApi.injectEndpoints({
         url: '/auth/me',
         method: 'GET',
       }),
-      transformResponse: (response: MeResponse) => {
+      transformResponse: (response: MeResponse, meta) => {
         console.log('🔍 getMe raw response:', response)
         return response
       },
@@ -90,6 +90,14 @@ export const authApi = joyfyApi.injectEndpoints({
       invalidatesTags: ['User'],
     }),
 
+    logoutDevice: builder.mutation<void, string>({
+      query: (deviceId) => ({
+        url: `/auth/devices/${deviceId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['User', 'Auth'],
+    }),
+
     clearAllData: builder.mutation<void, void>({
       query: () => ({
         url: '/auth/all-data',
@@ -116,6 +124,7 @@ export const {
   useRecoverPasswordMutation,
   useNewPasswordMutation,
   useLogoutAllSessionsMutation,
+  useLogoutDeviceMutation,
   useClearAllDataMutation,
   useRefreshTokenMutation,
   useLazyGetMeQuery,

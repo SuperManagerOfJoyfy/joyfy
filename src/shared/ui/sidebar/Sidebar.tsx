@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, CSSProperties } from 'react'
+import { ReactNode, CSSProperties, memo } from 'react'
 import Link from 'next/link'
 import { clsx } from 'clsx'
 
@@ -25,61 +25,99 @@ export type SidebarProps = {
   className?: string
 }
 
-export const Sidebar = ({
-  items,
-  activePath,
-  onItemClick,
-  disabled = false,
-  className = '',
-}: SidebarProps) => {
-  const handleItemClick = (item: SidebarItem) => {
-    if (disabled || item.disabled) return
-    item.onClick?.()
-    onItemClick?.(item)
+const determineActiveState = (
+  itemPath: string | undefined,
+  currentPath: string | undefined
+): boolean => {
+  if (!itemPath || !currentPath) return false
+
+  if (itemPath === '/') {
+    return currentPath === '/' || currentPath === ''
   }
 
-  const isPathActive = (
-    itemPath: string | undefined,
-    currentPath: string | undefined
-  ): boolean => {
-    if (!itemPath || !currentPath) return false
+  if (itemPath === currentPath) return true
 
-    const normalizedItemPath = itemPath.endsWith('/')
-      ? itemPath.slice(0, -1)
-      : itemPath
-    const normalizedCurrentPath = currentPath.endsWith('/')
-      ? currentPath.slice(0, -1)
-      : currentPath
+  const normalizedItemPath = itemPath.endsWith('/')
+    ? itemPath.slice(0, -1)
+    : itemPath
+  const normalizedCurrentPath = currentPath.endsWith('/')
+    ? currentPath.slice(0, -1)
+    : currentPath
 
-    if (normalizedCurrentPath === normalizedItemPath) return true
-    if (
-      normalizedItemPath !== '/' &&
-      normalizedCurrentPath.startsWith(normalizedItemPath + '/')
+  if (normalizedItemPath === normalizedCurrentPath) return true
+
+  if (
+    normalizedItemPath !== '/' &&
+    normalizedCurrentPath.startsWith(normalizedItemPath + '/')
+  ) {
+    const remainingPath = normalizedCurrentPath.slice(
+      normalizedItemPath.length + 1
     )
-      return true
-
-    return false
+    return !remainingPath.includes('/')
   }
 
-  const renderItem = (item: SidebarItem) => {
-    const isActive = isPathActive(item.path, activePath)
-    const isItemDisabled = disabled || item.disabled
+  return false
+}
 
-    const linkClassNames = clsx(
-      s.sidebarLink,
-      isItemDisabled && s['sidebarLink--disabled'],
-      isActive && !isItemDisabled && s.active,
-      item.className
-    )
+export const Sidebar = memo(
+  ({
+    items,
+    activePath,
+    onItemClick,
+    disabled = false,
+    className = '',
+  }: SidebarProps) => {
+    const handleItemClick = (item: SidebarItem) => {
+      if (disabled || item.disabled) return
+      item.onClick?.()
+      onItemClick?.(item)
+    }
 
-    if (!item.path) {
+    const renderItem = (item: SidebarItem) => {
+      const isActive = determineActiveState(item.path, activePath)
+      const isItemDisabled = disabled || item.disabled
+
+      const linkClassNames = clsx(
+        s.sidebarLink,
+        isItemDisabled && s['sidebarLink--disabled'],
+        isActive && !isItemDisabled && s.active,
+        item.className && s[item.className]
+      )
+
+      if (!item.path) {
+        return (
+          <li key={item.id} className={s.sidebarItem} style={item.style}>
+            <button
+              type="button"
+              className={linkClassNames}
+              onClick={() => handleItemClick(item)}
+              disabled={isItemDisabled}
+              aria-disabled={isItemDisabled}
+              aria-label={item.title}
+            >
+              <span className={s.icon} aria-hidden="true">
+                {item.icon}
+              </span>
+              <span className={s.title}>{item.title}</span>
+            </button>
+          </li>
+        )
+      }
+
       return (
         <li key={item.id} className={s.sidebarItem} style={item.style}>
-          <button
-            type="button"
+          <Link
+            href={isItemDisabled ? '#' : item.path}
             className={linkClassNames}
-            onClick={() => handleItemClick(item)}
-            disabled={isItemDisabled}
+            onClick={(e) => {
+              if (isItemDisabled) {
+                e.preventDefault()
+                return
+              }
+              handleItemClick(item)
+            }}
+            tabIndex={isItemDisabled ? -1 : 0}
+            aria-current={isActive ? 'page' : undefined}
             aria-disabled={isItemDisabled}
             aria-label={item.title}
           >
@@ -87,48 +125,25 @@ export const Sidebar = ({
               {item.icon}
             </span>
             <span className={s.title}>{item.title}</span>
-          </button>
+          </Link>
         </li>
       )
     }
 
+    const sidebarClassNames = clsx(s.sidebar, disabled && s.disabled, className)
+
     return (
-      <li key={item.id} className={s.sidebarItem} style={item.style}>
-        <Link
-          href={isItemDisabled ? '#' : item.path}
-          className={linkClassNames}
-          onClick={(e) => {
-            if (isItemDisabled) {
-              e.preventDefault()
-              return
-            }
-            handleItemClick(item)
-          }}
-          tabIndex={isItemDisabled ? -1 : 0}
-          aria-current={isActive ? 'page' : undefined}
-          aria-disabled={isItemDisabled}
-          aria-label={item.title}
-        >
-          <span className={s.icon} aria-hidden="true">
-            {item.icon}
-          </span>
-          <span className={s.title}>{item.title}</span>
-        </Link>
-      </li>
+      <aside
+        className={sidebarClassNames}
+        role="navigation"
+        aria-label="Sidebar Navigation"
+      >
+        <nav className={s.sidebarNav}>
+          <ul className={s.sidebarList}>{items.map(renderItem)}</ul>
+        </nav>
+      </aside>
     )
   }
+)
 
-  const sidebarClassNames = clsx(s.sidebar, disabled && s.disabled, className)
-
-  return (
-    <aside
-      className={sidebarClassNames}
-      role="navigation"
-      aria-label="Sidebar Navigation"
-    >
-      <nav className={s.sidebarNav}>
-        <ul className={s.sidebarList}>{items.map(renderItem)}</ul>
-      </nav>
-    </aside>
-  )
-}
+Sidebar.displayName = 'Sidebar'

@@ -1,6 +1,5 @@
 import { Button, Modal, Typography } from '@/shared/ui'
 import React, { useEffect, useState } from 'react'
-import s from './SentEmailModal.module.scss'
 
 type Props = {
   open: boolean
@@ -8,7 +7,7 @@ type Props = {
   email: string
 }
 
-const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
+ export const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
   const [internalOpen, setInternalOpen] = useState(open)
 
   useEffect(() => {
@@ -27,7 +26,6 @@ const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
         open={internalOpen}
         onOpenChange={handleOpenChange}
         title="Email sent"
-        className={s.modalOverlay}
         overlayOpacity={1}
       >
         <div style={{ padding: '30px 0 12px' }}>
@@ -42,5 +40,3 @@ const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
     </>
   )
 }
-
-export default SentEmailModal

@@ -1,17 +1,19 @@
 import { Metadata } from 'next'
-import { Header } from '@/shared/ui/header/Header'
-import { ReduxProvider } from '@/app/providers/ReduxProvider'
-import '@/styles/globals.css'
-import s from '../styles/layout.module.scss'
-import { ToastContainer } from 'react-toastify'
+import { ReduxProvider } from './providers/ReduxProvider'
+import { AuthProvider } from './providers/AuthProvider'
+import MainLayout from './MainLayout'
+
 import 'react-toastify/dist/ReactToastify.css'
-import { AuthProvider } from '@/app/providers/AuthProvider'
+import '@/styles/globals.css'
+import { ToastSnackbar } from '@/shared/ui/toastSnackbar/ToastSnackbar'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
   description: 'Platform for sharing and discovering visual stories',
   icons: {
+
     icon: '/fav.svg',
+
   },
 }
 
@@ -25,15 +27,8 @@ export default function RootLayout({
       <body>
         <ReduxProvider>
           <AuthProvider>
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-            />
-            <Header />
-            <main className={s.main}>
-              <div className={s.mainContainer}>{children}</div>
-            </main>
+            <ToastSnackbar />
+            <MainLayout>{children}</MainLayout>
           </AuthProvider>
         </ReduxProvider>
       </body>

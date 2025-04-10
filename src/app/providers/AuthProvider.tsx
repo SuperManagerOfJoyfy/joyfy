@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       toast.info('Logged out successfully')
     } catch (error: any) {
       if (error?.status === 401) {
-        console.warn('Already unauthorized')
+        toast.info('Logged out successfully')
       } else {
         toast.error('Error during logout')
         console.error('Logout error:', error)
