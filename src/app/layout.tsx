@@ -11,8 +11,9 @@ export const metadata: Metadata = {
   title: 'Joyfy',
   description: 'Platform for sharing and discovering visual stories',
   icons: {
-    icon: '/favicon.svg',
-    apple: 'apple-touch-icon.png',
+
+    icon: '/fav.svg',
+
   },
 }
 
