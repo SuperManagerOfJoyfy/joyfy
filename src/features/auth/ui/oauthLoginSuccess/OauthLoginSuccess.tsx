@@ -3,11 +3,11 @@
 import { useOAuthLogin } from '../../hooks/useOAuthLogin'
 import { useAuth } from '../../hooks/useAuth'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Button, Typography } from '@/shared/ui'
 import { Loader } from '@/shared/ui/loader/Loader'
-import s from './oauthLoginSuccess.module.scss'
 import { PATH } from '@/shared/config/routes'
+import s from './oauthLoginSuccess.module.scss'
 
 type ErrorViewProps = {
   message: string
@@ -21,11 +21,7 @@ const ErrorView = ({ message, onRetry }: ErrorViewProps) => (
   </div>
 )
 
-type LoadingViewProps = {
-  message: string
-}
-
-const LoadingView = ({ message }: LoadingViewProps) => (
+const LoadingView = ({ message }: { message: string }) => (
   <Loader message={message} />
 )
 
@@ -38,24 +34,19 @@ export const OauthLoginSuccess = () => {
   useEffect(() => {
     if (isAuthenticated && !isRedirecting) {
       setIsRedirecting(true)
-    }
-  }, [isAuthenticated, isRedirecting])
-
-  useEffect(() => {
-    if (isRedirecting) {
       router.push(PATH.ROOT)
     }
-  }, [isRedirecting, router])
+  }, [isAuthenticated, isRedirecting, router])
+
+  const message = useMemo(() => {
+    if (isRedirecting) return 'Redirecting...'
+    if (isLoading) return 'Completing authentication...'
+    return 'Please wait...'
+  }, [isRedirecting, isLoading])
 
   if (error) {
     return <ErrorView message={error} onRetry={retry} />
   }
-
-  const message = isRedirecting
-    ? 'Redirecting...'
-    : isLoading
-      ? 'Completing authentication...'
-      : 'Please wait...'
 
   return <LoadingView message={message} />
 }

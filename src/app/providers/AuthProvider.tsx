@@ -15,6 +15,7 @@ import React, {
 } from 'react'
 
 import { toast } from 'react-toastify'
+import { AUTH_MESSAGES } from '@/shared/config/messages'
 
 type AuthContextType = {
   user: MeResponse | null
@@ -22,7 +23,7 @@ type AuthContextType = {
   isLoading: boolean
   isError: boolean
   checkAuth: () => Promise<MeResponse | null>
-  logoutUser: () => Promise<void>
+  logoutUser: () => Promise<'success' | 'unauthorized' | 'error'>
   refetchUser: () => Promise<MeResponse | null>
 }
 
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(userData)
 
         if (showToast) {
-          toast.success('Successfully authenticated')
+          toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
         }
 
         return userData
@@ -61,15 +62,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               setUser(userData)
 
               if (showToast) {
-                toast.success('Session restored')
+                toast.success(AUTH_MESSAGES.SESSION_RESTORED)
               }
 
               return userData
-            } catch (getMeError) {
+            } catch {
               setUser(null)
               return null
             }
-          } catch (refreshError) {
+          } catch {
             setUser(null)
             return null
           }
@@ -85,16 +86,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     [triggerGetMe, refreshToken, refreshAttempted]
   )
 
-  const logoutUser = async (): Promise<void> => {
+  const logoutUser = async (): Promise<
+    'success' | 'unauthorized' | 'error'
+  > => {
     try {
       await logout().unwrap()
-      toast.info('Logged out successfully')
+      return 'success'
     } catch (error: any) {
       if (error?.status === 401) {
-        toast.info('Logged out successfully')
+        return 'unauthorized'
       } else {
-        toast.error('Error during logout')
-        console.error('Logout error:', error)
+        console.error(AUTH_MESSAGES.LOGOUT_ERROR, error)
+        return 'error'
       }
     } finally {
       setUser(null)

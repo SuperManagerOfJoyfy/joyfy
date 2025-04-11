@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useMemo, useState } from 'react'
+import { ReactNode, useEffect, useMemo, useState, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import { Sidebar } from '@/shared/ui/sidebar'
 import { LogoutModal } from '@/features/auth/ui'
@@ -22,20 +22,25 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
 
+  const openLogoutModal = useCallback(() => {
+    setIsModalOpen(true)
+  }, [])
 
   const sidebarItems = useMemo(
     () =>
       createSidebarItems('user', {
-        openLogoutModal: () => setIsModalOpen(true),
+        openLogoutModal,
       }),
-    []
+    [openLogoutModal]
   )
 
   useEffect(() => {
-    if (pendingPath && pathname === pendingPath) {
+    if (pathname === pendingPath) {
       setPendingPath(null)
     }
   }, [pathname, pendingPath])
+
+  const showLoader = pendingPath && pathname !== pendingPath
 
   return (
     <div className={s.layoutWrapper}>
@@ -58,7 +63,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </div>
         )}
 
-        {pendingPath && pathname !== pendingPath ? (
+        {showLoader ? (
           <div className={s.loaderWrapper}>
             <Loader message="Loading page..." />
           </div>
