@@ -5,7 +5,7 @@ import type {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
-
+import { PATH } from '../config/routes'
 
 const mutex = new Mutex()
 let lastRefreshResult: boolean | null = null
@@ -26,16 +26,47 @@ export const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   await mutex.waitForUnlock()
 
-  let result = await baseQuery(args, api, extraOptions)
-
+  const isAuthMeRequest = typeof args !== 'string' && args.url === '/auth/me'
   const isRefreshEndpoint =
     typeof args !== 'string' &&
     args.url === '/auth/refresh-token' &&
     args.method === 'POST'
+  const isLoginEndpoint =
+    typeof args !== 'string' &&
+    args.url === '/auth/login' &&
+    args.method === 'POST'
+
+  const currentPath =
+    typeof window !== 'undefined' ? window.location.pathname : ''
+
+  const isPublicPage = [
+    PATH.ROOT,
+    PATH.AUTH.REGISTRATION,
+    PATH.AUTH.LOGIN,
+    PATH.AUTH.PRIVACY_POLICY,
+    PATH.AUTH.TERMS_OF_SERVICE,
+    PATH.AUTH.EMAIL_CONFIRMED,
+  ].includes(currentPath)
+
+  if (isLoginEndpoint) {
+    const result = await baseQuery(args, api, extraOptions)
+    return result
+  }
+
+  let result = await baseQuery(args, api, extraOptions)
+
+  if (isAuthMeRequest && !result.error) {
+    return result
+  }
+
+  if (isAuthMeRequest && isPublicPage && result.error?.status === 401) {
+    return { data: null, meta: {} }
+  }
 
   if (result.error?.status === 401 && !isRefreshEndpoint) {
     const currentTime = Date.now()
-    const refreshCooldown = 3000 
+    const refreshCooldown = 3000
+
     if (
       lastRefreshResult === false &&
       currentTime - lastRefreshAttempt < refreshCooldown
@@ -68,7 +99,7 @@ export const baseQueryWithReauth: BaseQueryFn<
           console.log('Token refresh failed:', refreshResult.error)
           lastRefreshResult = false
 
-          if (typeof args !== 'string' && args.url !== '/auth/me') {
+          if (!(isAuthMeRequest && isPublicPage)) {
             api.dispatch({ type: 'auth/logoutUser' })
           }
         }
