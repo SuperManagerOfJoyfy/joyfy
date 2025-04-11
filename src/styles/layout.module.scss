@@ -12,7 +12,7 @@
 .layoutWrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: calc(100vh - 60px);
 }
 
 .containerLayout {
@@ -37,6 +37,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: hidden;
   height: 100%;
   width: 100%;
 }

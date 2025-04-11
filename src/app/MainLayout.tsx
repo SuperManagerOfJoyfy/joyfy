@@ -63,13 +63,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </div>
         )}
 
-        {showLoader ? (
-          <div className={s.loaderWrapper}>
-            <Loader message="Loading page..." />
-          </div>
-        ) : (
-          <main className={s.content}>{children}</main>
-        )}
+        <main className={s.content}>
+          {showLoader ? (
+            <div className={s.loaderWrapper}>
+              <Loader message="Loading..." />
+            </div>
+          ) : (
+            children
+          )}
+        </main>
       </div>
     </div>
   )

@@ -18,7 +18,7 @@ export type SidebarItem = {
   onClick?: () => void
 }
 
-export type SidebarProps = {
+type Props = {
   items: SidebarItem[]
   activePath?: string
   onItemClick?: (item: SidebarItem) => void
@@ -67,7 +67,7 @@ export const Sidebar = memo(
     onItemClick,
     disabled = false,
     className = '',
-  }: SidebarProps) => {
+  }: Props) => {
     const handleItemClick = (item: SidebarItem) => {
       if (disabled || item.disabled) return
       item.onClick?.()
