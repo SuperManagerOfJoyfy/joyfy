@@ -18,7 +18,7 @@ export const authApi = joyfyApi.injectEndpoints({
         url: '/auth/me',
         method: 'GET',
       }),
-      transformResponse: (response: MeResponse, meta) => {
+      transformResponse: (response: MeResponse) => {
         console.log('🔍 getMe raw response:', response)
         return response
       },
@@ -54,8 +54,7 @@ export const authApi = joyfyApi.injectEndpoints({
       query: () => ({
         url: '/auth/logout',
         method: 'POST',
-      }),
-      invalidatesTags: ['User', 'Auth'],
+      })
     }),
 
     resendEmailConfirmation: builder.mutation<void, EmailInputDto>({

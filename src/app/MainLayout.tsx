@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useMemo, useState, useCallback } from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Sidebar } from '@/shared/ui/sidebar'
 import { LogoutModal } from '@/features/auth/ui'
@@ -24,9 +24,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
 
-  const openLogoutModal = useCallback(() => {
+  const onOpenLogoutModalHandler = (value:boolean) => {
+    setIsModalOpen(value)
+  }
+
+  const openLogoutModal = () => {
     setIsModalOpen(true)
-  }, [])
+  }
 
   const sidebarItems = useMemo(
     () =>
@@ -59,7 +63,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             />
             <LogoutModal
               open={isModalOpen}
-              onOpenChange={setIsModalOpen}
+              onOpenLogoutModalHandler={onOpenLogoutModalHandler}
               onLogout={logoutUser}
             />
           </div>

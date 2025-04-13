@@ -41,4 +41,11 @@
       text-decoration: underline;
     }
   }
+
+  .signUp, .forgot {
+    &[aria-disabled="true"] {
+      color: var(--color-dark-100);
+      pointer-events: none;
+    }
+  }
 }
