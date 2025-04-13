@@ -3,14 +3,18 @@ import { AUTH_MESSAGES } from '@/shared/config/messages'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
+import { useDispatch } from 'react-redux'
+import { authApi } from '../api/authApi'
 
 export const useLogout = () => {
   const [logout, { isLoading }] = useLogoutMutation()
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const logoutUser = useCallback(async () => {
     try {
       await logout().unwrap()
+      dispatch(authApi.util.resetApiState())
       router.push('/auth/login')
       return 'success'
     } catch (error: any) {
@@ -22,7 +26,7 @@ export const useLogout = () => {
       console.error('[Logout error]:', error)
       return 'error'
     }
-  }, [logout, router])
+  }, [logout, router, dispatch])
 
   return { logoutUser, isLoading }
 }
