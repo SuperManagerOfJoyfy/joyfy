@@ -44,7 +44,7 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
 
       <div className={s.socialLinksWrap}>
         <SocialLinks
-          isDisabled={isSocialLoading}
+          isDisabled={isSocialLoading || isLoading}
           onStartLoading={() => setIsSocialLoading(true)}
         />
       </div>
@@ -55,10 +55,10 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
         schema={loginSchema}
         onSubmit={onSubmit}
         additionalContent={additionalContent}
-        disabled={isLoading}
+        disabled={isSocialLoading || isLoading}
       />
 
-      <Typography variant="body1" className={s.account}>
+      <Typography variant="body1" dis className={s.account}>
         Don't have an account?
       </Typography>
 
