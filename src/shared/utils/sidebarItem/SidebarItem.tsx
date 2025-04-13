@@ -32,7 +32,7 @@ import { SidebarItem } from '../../ui/sidebar'
 import { PATH } from '@/shared/config/routes'
 
 type SidebarActionHandlers = {
-  openLogoutModal?: () => void
+  onOpenLogoutModalHandler?: () => void
   onCreatePost?: () => void
 }
 
@@ -128,7 +128,7 @@ export const createSidebarItems = (
       title: 'Log Out',
       icon: <FiLogOut />,
       activeIcon: <FaSignOutAlt />,
-      onClick: handlers.openLogoutModal,
+      onClick: handlers.onOpenLogoutModalHandler,
       className: 'logoutItem',
     },
   ]

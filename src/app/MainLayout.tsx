@@ -19,25 +19,19 @@ type MainLayoutProps = {
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
   const { isAuthenticated } = useAuth()
-  const { logoutUser, isLoading: isLogoutLoading } = useLogout()
+  const { logoutUser } = useLogout()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
 
-  const onOpenLogoutModalHandler = (value:boolean) => {
-    setIsModalOpen(value)
-  }
-
-  const openLogoutModal = () => {
-    setIsModalOpen(true)
-  }
+  const onOpenLogoutModalHandler = (value = true) => setIsModalOpen(value)
 
   const sidebarItems = useMemo(
     () =>
       createSidebarItems('user', {
-        openLogoutModal,
+        onOpenLogoutModalHandler,
       }),
-    [openLogoutModal]
+    [onOpenLogoutModalHandler]
   )
 
   useEffect(() => {
