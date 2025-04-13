@@ -9,26 +9,40 @@ import { PATH } from '@/shared/config/routes'
 type Props = {
   email?: string
   open: boolean
-  openLogoutModal: (value: boolean) => void
+  onOpenLogoutModalHandler: (value: boolean) => void
   onLogout: () => Promise<'success' | 'unauthorized' | 'error'>
 }
-export const LogoutModal = ({ onLogout, open, openLogoutModal, email }: Props) => {
-
+export const LogoutModal = ({
+  onLogout,
+  open,
+  onOpenLogoutModalHandler,
+  email,
+}: Props) => {
   return (
-    <Modal open={open} title="Log Out" onOpenChange={() => openLogoutModal(false)}>
+    <Modal
+      open={open}
+      title="Log Out"
+      onOpenChange={() => onOpenLogoutModalHandler(false)}
+    >
       <div className={s.modal}>
         <Typography variant="body1" className={s.typography}>
           Are you really want to log out of your account?
           {email}
         </Typography>
         <div className={s.buttons}>
-          <Button as={Link} href={PATH.AUTH.LOGIN} variant={'secondary'} className={s.button} onClick={onLogout}>
+          <Button
+            as={Link}
+            href={PATH.AUTH.LOGIN}
+            variant={'secondary'}
+            className={s.button}
+            onClick={onLogout}
+          >
             Yes
           </Button>
           <Button
             className={s.button}
             onClick={() => {
-              openLogoutModal(false)
+              onOpenLogoutModalHandler(false)
             }}
           >
             No
