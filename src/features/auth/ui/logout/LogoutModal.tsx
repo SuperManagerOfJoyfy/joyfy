@@ -3,7 +3,6 @@
 import React from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
 import s from './logoutModal.module.scss'
-import Link from 'next/link'
 import { PATH } from '@/shared/config/routes'
 import { useRouter } from 'next/navigation'
 
