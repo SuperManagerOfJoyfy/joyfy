@@ -18,7 +18,7 @@ export const authApi = joyfyApi.injectEndpoints({
         url: '/auth/me',
         method: 'GET',
       }),
-      transformResponse: (response: MeResponse, meta) => {
+      transformResponse: (response: MeResponse) => {
         console.log('🔍 getMe raw response:', response)
         return response
       },
