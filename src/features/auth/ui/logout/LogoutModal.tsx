@@ -5,6 +5,7 @@ import { Button, Modal, Typography } from '@/shared/ui'
 import s from './logoutModal.module.scss'
 import Link from 'next/link'
 import { PATH } from '@/shared/config/routes'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   email?: string
@@ -18,6 +19,16 @@ export const LogoutModal = ({
   onOpenLogoutModalHandler,
   email,
 }: Props) => {
+  const router = useRouter()
+
+  const onLogoutButtonClickHandler = async () => {
+    const result = await onLogout()
+    if (result === 'success') {
+      router.push(PATH.AUTH.LOGIN)
+      onOpenLogoutModalHandler(false)
+    }
+  }
+
   return (
     <Modal
       open={open}
@@ -31,11 +42,9 @@ export const LogoutModal = ({
         </Typography>
         <div className={s.buttons}>
           <Button
-            as={Link}
-            href={PATH.AUTH.LOGIN}
-            variant={'secondary'}
+            variant="secondary"
             className={s.button}
-            onClick={onLogout}
+            onClick={onLogoutButtonClickHandler}
           >
             Yes
           </Button>
