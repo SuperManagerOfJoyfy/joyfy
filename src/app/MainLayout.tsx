@@ -22,9 +22,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
 
-  const openLogoutModal = useCallback(() => {
-    setIsModalOpen(true)
-  }, [])
+  const openLogoutModal = (value: boolean) => {
+    setIsModalOpen(value)
+  }
 
   const sidebarItems = useMemo(
     () =>
@@ -57,7 +57,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             />
             <LogoutModal
               open={isModalOpen}
-              onOpenChange={setIsModalOpen}
+              openLogoutModal={openLogoutModal}
               onLogout={logoutUser}
             />
           </div>

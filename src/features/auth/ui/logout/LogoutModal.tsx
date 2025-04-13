@@ -4,30 +4,31 @@ import React from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
 import s from './logoutModal.module.scss'
 import Link from 'next/link'
+import { PATH } from '@/shared/config/routes'
 
 type Props = {
   email?: string
   open: boolean
-  onOpenChange: (isOpen: boolean) => void
-  onLogout: () => void
+  openLogoutModal: (value: boolean) => void
+  onLogout: () => Promise<'success' | 'unauthorized' | 'error'>
 }
-export const LogoutModal = ({ onLogout, open, onOpenChange, email }: Props) => {
+export const LogoutModal = ({ onLogout, open, openLogoutModal, email }: Props) => {
 
   return (
-    <Modal open={open} title="Log Out" onOpenChange={onOpenChange}>
+    <Modal open={open} title="Log Out" onOpenChange={() => openLogoutModal(false)}>
       <div className={s.modal}>
         <Typography variant="body1" className={s.typography}>
           Are you really want to log out of your account?
           {email}
         </Typography>
         <div className={s.buttons}>
-          <Button as={Link} href="/auth/login" variant={'secondary'} className={s.button} onClick={onLogout}>
+          <Button as={Link} href={PATH.AUTH.LOGIN} variant={'secondary'} className={s.button} onClick={onLogout}>
             Yes
           </Button>
           <Button
             className={s.button}
             onClick={() => {
-              onOpenChange(false)
+              openLogoutModal(false)
             }}
           >
             No

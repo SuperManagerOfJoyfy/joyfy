@@ -54,8 +54,7 @@ export const authApi = joyfyApi.injectEndpoints({
       query: () => ({
         url: '/auth/logout',
         method: 'POST',
-      }),
-      invalidatesTags: ['User', 'Auth'],
+      })
     }),
 
     resendEmailConfirmation: builder.mutation<void, EmailInputDto>({
