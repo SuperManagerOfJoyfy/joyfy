@@ -32,7 +32,11 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
 
   const additionalContent = (
     <div className={s.content}>
-      <Link href="forgot password" className={s.forgot}>
+      <Link
+        href="forgot password"
+        aria-disabled={isSocialLoading || isLoading}
+        className={s.forgot}
+      >
         Forgot Password
       </Link>
     </div>
@@ -58,11 +62,15 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
         disabled={isSocialLoading || isLoading}
       />
 
-      <Typography variant="body1" dis className={s.account}>
+      <Typography variant="body1" className={s.account}>
         Don't have an account?
       </Typography>
 
-      <Link href={PATH.AUTH.REGISTRATION} className={s.signUp}>
+      <Link
+        href={PATH.AUTH.REGISTRATION}
+        aria-disabled={isSocialLoading || isLoading}
+        className={s.signUp}
+      >
         Sign Up
       </Link>
     </Card>
