@@ -10,6 +10,7 @@ import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 
 import s from '../styles/layout.module.scss'
+import { useLogout } from '@/features/auth/hooks/useLogout'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -17,7 +18,8 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
-  const { logoutUser, isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth()
+  const { logoutUser, isLoading: isLogoutLoading } = useLogout()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
