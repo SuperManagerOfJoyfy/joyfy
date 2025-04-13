@@ -8,6 +8,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import s from './socialLinks.module.scss'
+import { PATH } from '@/shared/config/routes'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
 
@@ -52,7 +53,7 @@ export const SocialLinks = ({
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/')
+      router.push(PATH.ROOT)
     }
   }, [isAuthenticated, router])
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { authApi } from '../api/authApi'
+import { PATH } from '@/shared/config/routes'
 
 export const useLogout = () => {
   const [logout, { isLoading }] = useLogoutMutation()
@@ -15,7 +16,7 @@ export const useLogout = () => {
     try {
       await logout().unwrap()
       dispatch(authApi.util.resetApiState())
-      router.push('/auth/login')
+      router.push(PATH.AUTH.LOGIN)
       return 'success'
     } catch (error: any) {
       const status = error?.status
