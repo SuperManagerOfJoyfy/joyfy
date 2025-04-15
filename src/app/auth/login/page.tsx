@@ -24,8 +24,8 @@ const Page = () => {
 
       router.push(PATH.ROOT)
     } catch (error) {
-      toast.error('Could not sign in')
       setIsRedirecting(false)
+			throw error
     }
   }
 

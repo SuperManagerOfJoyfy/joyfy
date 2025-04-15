@@ -17,7 +17,6 @@ export const useLogout = () => {
       const status = error?.status
       if (status === 401) return 'unauthorized'
 
-      toast.error(AUTH_MESSAGES.LOGOUT_ERROR)
       console.error('[Logout error]:', error)
       return 'error'
     }
