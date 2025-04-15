@@ -11,13 +11,14 @@ export type SidebarItem = {
   title: string
   path?: string
   icon: ReactNode
+  activeIcon?: ReactNode
   disabled?: boolean
   className?: string
   style?: CSSProperties
   onClick?: () => void
 }
 
-export type SidebarProps = {
+type Props = {
   items: SidebarItem[]
   activePath?: string
   onItemClick?: (item: SidebarItem) => void
@@ -66,7 +67,7 @@ export const Sidebar = memo(
     onItemClick,
     disabled = false,
     className = '',
-  }: SidebarProps) => {
+  }: Props) => {
     const handleItemClick = (item: SidebarItem) => {
       if (disabled || item.disabled) return
       item.onClick?.()
@@ -84,6 +85,9 @@ export const Sidebar = memo(
         item.className && s[item.className]
       )
 
+      const iconToRender =
+        isActive && item.activeIcon ? item.activeIcon : item.icon
+
       if (!item.path) {
         return (
           <li key={item.id} className={s.sidebarItem} style={item.style}>
@@ -96,7 +100,7 @@ export const Sidebar = memo(
               aria-label={item.title}
             >
               <span className={s.icon} aria-hidden="true">
-                {item.icon}
+                {iconToRender}
               </span>
               <span className={s.title}>{item.title}</span>
             </button>
@@ -122,7 +126,7 @@ export const Sidebar = memo(
             aria-label={item.title}
           >
             <span className={s.icon} aria-hidden="true">
-              {item.icon}
+              {iconToRender}
             </span>
             <span className={s.title}>{item.title}</span>
           </Link>

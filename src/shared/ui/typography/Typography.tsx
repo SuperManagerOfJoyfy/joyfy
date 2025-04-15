@@ -3,7 +3,7 @@ import { clsx } from 'clsx'
 
 import s from './Typography.module.scss'
 
-export type TypographyVariant =
+type TypographyVariant =
   | 'large'
   | 'h1'
   | 'h2'
@@ -15,9 +15,9 @@ export type TypographyVariant =
   | 'link1'
   | 'link2'
 
-export type FontWeight = 'regular' | 'medium' | 'bold'
+type FontWeight = 'regular' | 'medium' | 'bold'
 
-export interface TypographyProps<T extends ElementType = 'p'> {
+type Props<T extends ElementType = 'p'> = {
   as?: T
   children?: ReactNode
   className?: string
@@ -32,8 +32,7 @@ export function Typography<T extends ElementType = 'p'>({
   fontWeight,
   children,
   ...restProps
-}: Omit<ComponentPropsWithoutRef<T>, keyof TypographyProps<T>> &
-  TypographyProps<T>) {
+}: Omit<ComponentPropsWithoutRef<T>, keyof Props<T>> & Props<T>) {
   const Component = as || 'p'
 
   const classNames = clsx(

@@ -3,9 +3,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-	height: 100%;
+  height: 100%;
   gap: 12px;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 .inline {
@@ -14,18 +14,8 @@
   gap: 8px;
 }
 
-// .spinner {
-//   width: 40px;
-//   height: 40px;
-//   border: 4px solid rgba(94, 96, 206, 0.2);
-//   border-top-color: var(--color-accent-500);
-//   border-radius: 50%;
-//   animation: spin 0.8s linear infinite;
-// }
-
 .message {
   font-size: 14px;
-  // color: var(--color-accent-500);
   color: var(--color-light-100);
   text-align: center;
 }
@@ -37,68 +27,70 @@
 }
 
 .loaderWrapper {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 50px;
-	height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
 }
 
 .loaderSvg {
-	width: 100%;
-	height: 100%;
-	animation: rotate 2s linear infinite;
+  width: 100%;
+  height: 100%;
+  animation: rotate 2s linear infinite;
+  display: block;
+  overflow: hidden;
 }
 
 .loaderCircle {
-	stroke: url(#gradient);
-	stroke-dasharray: 90, 150;
-	stroke-dashoffset: 0;
-	stroke-linecap: round;
-	animation: dash 1.5s ease-in-out infinite;
+  stroke: url(#gradient);
+  stroke-dasharray: 90, 150;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite;
 }
 
 /* SVG gradient definition */
 .loaderSvg::before {
-	content: '';
-	display: block;
-	position: absolute;
+  content: '';
+  display: block;
+  position: absolute;
 }
 
 .loaderSvg {
-	position: relative;
+  position: relative;
 }
 
 .loaderSvg defs {
-	pointer-events: none;
+  pointer-events: none;
 }
 
 .loaderSvg > circle {
-	stroke: url(#loaderGradient);
+  stroke: url(#loaderGradient);
 }
 
 /* Gradient */
 .loaderSvg defs {
-	position: absolute;
+  position: absolute;
 }
 
 @keyframes rotate {
-	100% {
-		transform: rotate(360deg);
-	}
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes dash {
-	0% {
-		stroke-dasharray: 1, 150;
-		stroke-dashoffset: 0;
-	}
-	50% {
-		stroke-dasharray: 90, 150;
-		stroke-dashoffset: -35;
-	}
-	100% {
-		stroke-dasharray: 90, 150;
-		stroke-dashoffset: -124;
-	}
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
 }

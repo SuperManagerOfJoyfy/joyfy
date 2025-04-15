@@ -1,103 +1,62 @@
-import { useLazyGetMeQuery } from '@/features/auth/api/authApi'
-import { PATH } from '@/shared/config/routes'
+'use client'
+
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 
-type ErrorWithData = {
-  data?: {
-    message?: string
-  }
-  status?: number
-}
-
-const queryErrorMessages: Record<string, string> = {
-  email_exists:
-    'This email is already registered with a different method. Please use your original login method.',
-  account_not_found: 'Account not found. Please register first.',
-  unauthorized: 'Authentication failed. Please try again.',
-  unknown: 'Authentication error. Please try again later.',
-}
+import { useAuth } from '@/features/auth/hooks/useAuth'
+import { PATH } from '@/shared/config/routes'
+import { AUTH_MESSAGES } from '@/shared/config/messages'
 
 export const useOAuthLogin = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const queryError = searchParams.get('error')
-  const [triggerGetMe] = useLazyGetMeQuery()
+
+  const { isAuthenticated, isLoading, isError, refetchUser } = useAuth()
   const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  const extractErrorMessage = (err: unknown): string => {
-    console.error('Raw OAuth error:', err)
-
-    if (typeof err === 'object' && err !== null && 'data' in err) {
-      const errorData = err as ErrorWithData
-
-      if (errorData.data?.message?.includes('email already exists')) {
-        return queryErrorMessages.email_exists
-      }
-
-      if (errorData.data?.message?.includes('account not found')) {
-        return queryErrorMessages.account_not_found
-      }
-
-      if (errorData.status === 401) {
-        return queryErrorMessages.unauthorized
-      }
-
-      return errorData.data?.message || queryErrorMessages.unknown
-    }
-
-    if (err instanceof Error) {
-      if (
-        err.message.includes('Network') ||
-        err.message.includes('ECONNREFUSED')
-      ) {
-        return 'Connection error. Please check your internet connection and try again.'
-      }
-      return err.message
-    }
-
-    return queryErrorMessages.unknown
-  }
-
-  const completeAuth = useCallback(async () => {
-    setError(null)
-    setIsLoading(true)
-
-    try {
-      const user = await triggerGetMe().unwrap()
-
-      if (user) {
-        toast.success('Successfully signed in! Redirecting...')
-        router.push(PATH.ROOT)
-      }
-    } catch (err) {
-      const message = extractErrorMessage(err)
-      toast.error(message)
-      console.error('OAuth login error:', err)
-      setError(message)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [triggerGetMe, router])
 
   useEffect(() => {
     if (queryError) {
       const message =
-        queryErrorMessages[queryError] || queryErrorMessages.unknown
+        AUTH_MESSAGES.queryErrors[
+          queryError as keyof typeof AUTH_MESSAGES.queryErrors
+        ] || AUTH_MESSAGES.queryErrors.unknown
       setError(message)
-      setIsLoading(false)
       toast.error(message)
-      return
     }
+  }, [queryError])
 
-    completeAuth()
-  }, [queryError, completeAuth])
+  useEffect(() => {
+    if (!queryError && isError) {
+      const message = AUTH_MESSAGES.queryErrors.unauthorized
+      setError(message)
+      toast.error(message)
+    }
+  }, [isError, queryError])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
+      router.push(PATH.ROOT)
+    }
+  }, [isAuthenticated, router])
+
+  const retry = useCallback(async () => {
+    setError(null)
+    try {
+      const user = await refetchUser()
+      if (user) {
+        toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
+      }
+    } catch {
+      toast.error(AUTH_MESSAGES.queryErrors.unknown)
+    }
+  }, [refetchUser])
 
   return {
     isLoading,
     error,
-    retry: completeAuth,
+    retry,
   }
 }

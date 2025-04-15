@@ -1,8 +1,8 @@
-import { forwardRef, ComponentPropsWithoutRef, ComponentRef } from "react";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { clsx } from "clsx";
+import { forwardRef, ComponentPropsWithoutRef, ComponentRef } from 'react'
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
+import { clsx } from 'clsx'
 
-import s from "./RadioGroup.module.scss";
+import s from './RadioGroup.module.scss'
 
 const RadioGroupRoot = forwardRef<
   ComponentRef<typeof RadioGroupPrimitive.Root>,
@@ -14,10 +14,10 @@ const RadioGroupRoot = forwardRef<
       {...props}
       ref={ref}
     />
-  );
-});
+  )
+})
 
-RadioGroupRoot.displayName = RadioGroupPrimitive.Root.displayName;
+RadioGroupRoot.displayName = RadioGroupPrimitive.Root.displayName
 
 const RadioGroupItem = forwardRef<
   ComponentRef<typeof RadioGroupPrimitive.Item>,
@@ -31,26 +31,26 @@ const RadioGroupItem = forwardRef<
     >
       <div className={s.icon} />
     </RadioGroupPrimitive.Item>
-  );
-});
+  )
+})
 
-RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
+RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName
 
 type Option = {
-  label: string;
-  value: string;
-};
+  label: string
+  value: string
+}
 
-export type RadioGroupProps = {
-  errorMessage?: string;
-  options: Option[];
-} & Omit<ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>, "children">;
+type Props = {
+  errorMessage?: string
+  options: Option[]
+} & Omit<ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>, 'children'>
 
 const RadioGroup = forwardRef<
   ComponentRef<typeof RadioGroupPrimitive.Root>,
-  RadioGroupProps
+  Props
 >((props, ref) => {
-  const { errorMessage, options, ...restProps } = props;
+  const { errorMessage, options, ...restProps } = props
 
   return (
     <div className={s.container}>
@@ -66,9 +66,9 @@ const RadioGroup = forwardRef<
       </RadioGroupRoot>
       {errorMessage && <div className={s.error}>{errorMessage}</div>}
     </div>
-  );
-});
+  )
+})
 
-RadioGroup.displayName = "RadioGroup";
+RadioGroup.displayName = 'RadioGroup'
 
-export { RadioGroup, RadioGroupItem, RadioGroupRoot };
+export { RadioGroup, RadioGroupItem, RadioGroupRoot }

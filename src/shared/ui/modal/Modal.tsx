@@ -19,9 +19,9 @@ import s from './Modal.module.scss'
 import { Typography } from '../typography'
 import { getOverlayAnimation, windowAnimation } from './ModalAnimations'
 
-export type ModalSize = 'sm' | 'md' | 'lg' | 'auto'
+type ModalSize = 'sm' | 'md' | 'lg' | 'auto'
 
-export type ModalProps = {
+type Props = {
   children?: ReactNode
   onOpenChange?: (open: boolean) => void
   open: boolean
@@ -35,7 +35,7 @@ export type ModalProps = {
   'onOpenChange' | 'open'
 >
 
-export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>(
+export const Modal = forwardRef<ComponentRef<'div'>, Props>(
   (
     {
       children,

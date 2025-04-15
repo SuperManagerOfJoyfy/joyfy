@@ -31,7 +31,7 @@ export default meta
 type Story = StoryObj<typeof Sidebar>
 
 const userSidebarItems = createSidebarItems('user', {
-  onLogout: () => console.log('Logging out from user sidebar...'),
+  onOpenLogoutModalHandler: () => console.log('Logging out from user sidebar...'),
 })
 
 const adminSidebarItems = createSidebarItems('admin')
@@ -53,7 +53,6 @@ export const Disabled: Story = {
 
 export const DisabledItem: Story = {
   args: {
-    activePath: '/',
     items: [
       {
         id: 'home',
@@ -104,6 +103,7 @@ export const DisabledItem: Story = {
         id: 'logout',
         title: 'Log Out',
         icon: <FiLogOut />,
+        className: 'logoutItem',
         onClick: () => console.log('Logging out...'),
       },
     ],

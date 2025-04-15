@@ -10,6 +10,7 @@ import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 
 import s from '../styles/layout.module.scss'
+import { useLogout } from '@/features/auth/hooks/useLogout'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -17,25 +18,29 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
-  const { logoutUser, isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth()
+  const { logoutUser } = useLogout()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
 
+  const onOpenLogoutModalHandler = (value = true) => setIsModalOpen(value)
 
   const sidebarItems = useMemo(
     () =>
       createSidebarItems('user', {
-        openLogoutModal: () => setIsModalOpen(true),
+        onOpenLogoutModalHandler,
       }),
-    []
+    [onOpenLogoutModalHandler]
   )
 
   useEffect(() => {
-    if (pendingPath && pathname === pendingPath) {
+    if (pathname === pendingPath) {
       setPendingPath(null)
     }
   }, [pathname, pendingPath])
+
+  const showLoader = pendingPath && pathname !== pendingPath
 
   return (
     <div className={s.layoutWrapper}>
@@ -52,19 +57,21 @@ export default function MainLayout({ children }: MainLayoutProps) {
             />
             <LogoutModal
               open={isModalOpen}
-              onOpenChange={setIsModalOpen}
+              onOpenLogoutModalHandler={onOpenLogoutModalHandler}
               onLogout={logoutUser}
             />
           </div>
         )}
 
-        {pendingPath && pathname !== pendingPath ? (
-          <div className={s.loaderWrapper}>
-            <Loader message="Loading page..." />
-          </div>
-        ) : (
-          <main className={s.content}>{children}</main>
-        )}
+        <main className={s.content}>
+          {showLoader ? (
+            <div className={s.loaderWrapper}>
+              <Loader message="Loading..." />
+            </div>
+          ) : (
+            children
+          )}
+        </main>
       </div>
     </div>
   )

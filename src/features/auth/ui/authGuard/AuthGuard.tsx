@@ -1,14 +1,12 @@
 'use client'
 
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-
-import { Typography } from '@/shared/ui'
 
 import { useAuth } from '../../hooks/useAuth'
 import { Loader } from '@/shared/ui/loader/Loader'
-import s from './authGuard.module.scss'
 import { PATH } from '@/shared/config/routes'
+import s from './authGuard.module.scss'
 
 type AuthGuardProps = {
   children: ReactNode
@@ -24,27 +22,26 @@ export const AuthGuard = ({
   const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
 
+  const shouldRedirect = useMemo(() => {
+    if (isLoading) return false
+    return requireAuth ? !isAuthenticated : isAuthenticated
+  }, [isAuthenticated, isLoading, requireAuth])
+
   useEffect(() => {
-    if (!isLoading) {
-      if (
-        (requireAuth && !isAuthenticated) ||
-        (!requireAuth && isAuthenticated)
-      ) {
-        router.push(redirectPath)
-      }
+    if (shouldRedirect) {
+      router.push(redirectPath)
     }
-  }, [isAuthenticated, isLoading, requireAuth, redirectPath, router])
+  }, [shouldRedirect, redirectPath, router])
 
   if (isLoading) {
     return (
       <div className={s.loadingContainer} role="status" aria-busy="true">
         <Loader />
-        <Typography className={s.loadingText}>Loading...</Typography>
       </div>
     )
   }
 
-  if ((requireAuth && !isAuthenticated) || (!requireAuth && isAuthenticated)) {
+  if (shouldRedirect) {
     return null
   }
 
