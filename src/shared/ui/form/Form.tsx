@@ -42,7 +42,7 @@ export const Form = <T extends FieldValues>({
       await onSubmit(data)
       reset()
     } catch (err) {
-      console.error(err)
+      console.log(err)
     }
   }
 
