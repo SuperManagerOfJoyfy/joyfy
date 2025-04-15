@@ -55,12 +55,12 @@ export const baseQueryWithReauth: BaseQueryFn<
 
   let result = await baseQuery(args, api, extraOptions)
 
-  if (isAuthMeRequest && !result.error) {
-    return result
-  }
-
   if (isAuthMeRequest && isPublicPage && result.error?.status === 401) {
     return { data: null, meta: {} }
+  }
+
+  if (isAuthMeRequest && !result.error) {
+    return result
   }
 
   if (result.error?.status === 401 && !isRefreshEndpoint) {

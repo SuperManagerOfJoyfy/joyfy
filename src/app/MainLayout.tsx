@@ -10,6 +10,7 @@ import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 
 import s from '../styles/layout.module.scss'
+import { useLogout } from '@/features/auth/hooks/useLogout'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -17,25 +18,20 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
-  const { logoutUser, isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth()
+  const { logoutUser } = useLogout()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
 
-  const onOpenLogoutModalHandler = (value:boolean) => {
-    setIsModalOpen(value)
-  }
-
-  const openLogoutModal = () => {
-    setIsModalOpen(true)
-  }
+  const onOpenLogoutModalHandler = (value = true) => setIsModalOpen(value)
 
   const sidebarItems = useMemo(
     () =>
       createSidebarItems('user', {
-        openLogoutModal,
+        onOpenLogoutModalHandler,
       }),
-    [openLogoutModal]
+    [onOpenLogoutModalHandler]
   )
 
   useEffect(() => {

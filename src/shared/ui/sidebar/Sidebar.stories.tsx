@@ -31,7 +31,7 @@ export default meta
 type Story = StoryObj<typeof Sidebar>
 
 const userSidebarItems = createSidebarItems('user', {
-  openLogoutModal: () => console.log('Logging out from user sidebar...'),
+  onOpenLogoutModalHandler: () => console.log('Logging out from user sidebar...'),
 })
 
 const adminSidebarItems = createSidebarItems('admin')
