@@ -15,11 +15,12 @@ html {
         -webkit-box-shadow: 0 0 0 1000px #171717 inset !important; /* Forces background color */
         transition: background-color 5000s ease-in-out 0s; /* Prevents quick white flash */
     }
+
+    input:-webkit-autofill:disabled {
+        -webkit-text-fill-color: #4c4c4c !important; /* Text color for disabled input with autofill */
+    }
 }
 
-input:-webkit-autofill:disabled {
-    -webkit-text-fill-color: #4c4c4c !important; /* Text color for disabled input with autofill */
-}
 
 *,
 *::before,
