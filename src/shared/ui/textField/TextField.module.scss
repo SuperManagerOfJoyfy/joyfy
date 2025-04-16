@@ -44,6 +44,12 @@
 		&::placeholder {
 			color: var(--color-dark-100);
 		}
+
+		&~.startIcon,
+    &~.endIconButton {
+     color: var(--color-dark-100);
+     cursor: not-allowed;
+    }
   }
 
 	&.error {

@@ -6,18 +6,22 @@ import type {
 } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
 import { PATH } from '../config/routes'
+import { handleErrors } from '@/shared/utils/handleErrors/handleErrors'
 
 const mutex = new Mutex()
 let lastRefreshResult: boolean | null = null
 let lastRefreshAttempt = 0
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-  prepareHeaders(headers) {
-    return headers
-  },
-  credentials: 'include',
-})
+
+export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
+	async (args, api, extraOptions) => {
+		const result = await fetchBaseQuery({
+		baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+		credentials: 'include',
+		prepareHeaders: (headers) => headers,
+	})(args, api, extraOptions)
+		return result
+	}
 
 export const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
@@ -50,6 +54,7 @@ export const baseQueryWithReauth: BaseQueryFn<
 
   if (isLoginEndpoint) {
     const result = await baseQuery(args, api, extraOptions)
+		handleErrors(api, result)
     return result
   }
 
@@ -98,7 +103,7 @@ export const baseQueryWithReauth: BaseQueryFn<
         } else {
           console.log('Token refresh failed:', refreshResult.error)
           lastRefreshResult = false
-
+ 					// handleErrors(api, refreshResult)
           if (!(isAuthMeRequest && isPublicPage)) {
             api.dispatch({ type: 'auth/logoutUser' })
           }
@@ -116,6 +121,8 @@ export const baseQueryWithReauth: BaseQueryFn<
       }
     }
   }
+
+	handleErrors(api, result)
 
   return result
 }
