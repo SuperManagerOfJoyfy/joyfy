@@ -1,18 +1,17 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import s from './Header.module.scss'
-import { SelectBox, SelectItem } from '@/shared/ui/selectBox/SelectBox'
-import { Button } from '@/shared/ui/button'
+import Link from 'next/link'
+import Image, { StaticImageData } from 'next/image'
 import { IoNotificationsOutline } from 'react-icons/io5'
+import { Button, SelectBox, SelectItem } from '@/shared/ui'
+import { PATH } from '@/shared/config/routes'
+import { useAuth } from '@/features/auth/hooks/useAuth'
+import Letters from '../../../../public/logo/letters.png'
+import Logo from '../../../../public/logo/logo.png'
 import flagUnitedKingdom from '@/shared/ui/header/assets/flagUnitedKingdom.png'
 import flagRussia from '@/shared/ui/header/assets/flagRussia.png'
-import Image, { StaticImageData } from 'next/image'
-import Link from 'next/link'
-import { useAuth } from '@/features/auth/hooks/useAuth'
-import Logo from '../../../../public/logo/logo.png'
-import Letters from '../../../../public/logo/letters.png'
-import { PATH } from '@/shared/config/routes'
+import s from './Header.module.scss'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -31,7 +30,12 @@ const AuthActions = () => (
     <Button as={Link} href={PATH.AUTH.LOGIN} size="small" variant="text">
       Log in
     </Button>
-    <Button as={Link} href={PATH.AUTH.REGISTRATION} size="small" variant="primary">
+    <Button
+      as={Link}
+      href={PATH.AUTH.REGISTRATION}
+      size="small"
+      variant="primary"
+    >
       Sign up
     </Button>
   </div>
@@ -52,9 +56,9 @@ export const Header = () => {
     <header className={s.header}>
       <div className={s.container}>
         <Link href={PATH.ROOT} className={s.logo}>
-	          <Image src={Logo} alt="logo" width={45} height={45} />
-	          <Image src={Letters} alt="logo" height={30} />
-	        </Link>
+          <Image src={Logo} alt="logo" width={45} height={45} />
+          <Image src={Letters} alt="logo" height={30} />
+        </Link>
         <div className={s.actions}>
           <div className={s.notificationContainer}>
             {isAuthenticated && (
