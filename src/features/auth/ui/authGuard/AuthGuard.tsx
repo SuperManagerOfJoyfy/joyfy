@@ -1,9 +1,8 @@
 'use client'
 
-import { ReactNode, useEffect, useMemo } from 'react'
+import { ReactNode, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-
-import { useAuth } from '../../hooks/useAuth'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { PATH } from '@/shared/config/routes'
 import s from './authGuard.module.scss'
@@ -19,13 +18,13 @@ export const AuthGuard = ({
   requireAuth = false,
   redirectPath = requireAuth ? PATH.AUTH.LOGIN : PATH.ROOT,
 }: AuthGuardProps) => {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { data: user, isLoading } = useGetMeQuery(undefined, { skip: false })
   const router = useRouter()
 
   const shouldRedirect = useMemo(() => {
     if (isLoading) return false
-    return requireAuth ? !isAuthenticated : isAuthenticated
-  }, [isAuthenticated, isLoading, requireAuth])
+    return requireAuth ? !user : !!user
+  }, [user, isLoading, requireAuth])
 
   useEffect(() => {
     if (shouldRedirect) {

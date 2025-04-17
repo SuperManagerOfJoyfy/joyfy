@@ -6,7 +6,7 @@ import Image, { StaticImageData } from 'next/image'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import { Button, SelectBox, SelectItem } from '@/shared/ui'
 import { PATH } from '@/shared/config/routes'
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 import Letters from '../../../../public/logo/letters.png'
 import Logo from '../../../../public/logo/logo.png'
 import flagUnitedKingdom from '@/shared/ui/header/assets/flagUnitedKingdom.png'
@@ -43,14 +43,14 @@ const AuthActions = () => (
 
 export const Header = () => {
   const [notificationCount] = useState(3)
-  const { isAuthenticated, isLoading } = useAuth()
+  const { data: user, isLoading } = useGetMeQuery(undefined, { skip: false })
   const [showButtons, setShowButtons] = useState(true)
 
   useEffect(() => {
     if (!isLoading) {
-      setShowButtons(!isAuthenticated)
+      setShowButtons(!user)
     }
-  }, [isLoading, isAuthenticated])
+  }, [isLoading, user])
 
   return (
     <header className={s.header}>
@@ -61,7 +61,7 @@ export const Header = () => {
         </Link>
         <div className={s.actions}>
           <div className={s.notificationContainer}>
-            {isAuthenticated && (
+            {user && (
               <div className={s.notifications}>
                 <IoNotificationsOutline />
                 {notificationCount !== 0 && (
@@ -80,7 +80,9 @@ export const Header = () => {
             </SelectItem>
           </SelectBox>
 
-          <div className={s.authActions}>{showButtons && <AuthActions />}</div>
+          <div className={s.authActions}>
+            {showButtons && !user && <AuthActions />}
+          </div>
         </div>
       </div>
     </header>

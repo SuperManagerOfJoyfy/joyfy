@@ -3,8 +3,10 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
-
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import {
+  useGetMeQuery,
+  useRefreshTokenMutation,
+} from '@/features/auth/api/authApi'
 import { PATH } from '@/shared/config/routes'
 import { AUTH_MESSAGES } from '@/shared/config/messages'
 
@@ -13,7 +15,15 @@ export const useOAuthLogin = () => {
   const searchParams = useSearchParams()
   const queryError = searchParams.get('error')
 
-  const { isAuthenticated, isLoading, isError, refetchUser } = useAuth()
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    isError: isUserError,
+    isSuccess: isUserSuccess,
+  } = useGetMeQuery(undefined, { skip: false })
+  const [refreshToken, { isLoading: isRefreshLoading }] =
+    useRefreshTokenMutation()
+
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -28,34 +38,37 @@ export const useOAuthLogin = () => {
   }, [queryError])
 
   useEffect(() => {
-    if (!queryError && isError) {
+    if (!queryError && isUserError) {
       const message = AUTH_MESSAGES.queryErrors.unauthorized
       setError(message)
       toast.error(message)
     }
-  }, [isError, queryError])
+  }, [isUserError, queryError])
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isUserSuccess && user) {
       toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
       router.push(PATH.ROOT)
     }
-  }, [isAuthenticated, router])
+  }, [isUserSuccess, user, router])
 
   const retry = useCallback(async () => {
     setError(null)
     try {
-      const user = await refetchUser()
-      if (user) {
-        toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
+      const refreshResponse = await refreshToken().unwrap()
+      if (refreshResponse.accessToken) {
+        const { data } = await useGetMeQuery(undefined, { skip: false })
+        if (data) {
+          toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
+        }
       }
     } catch {
       toast.error(AUTH_MESSAGES.queryErrors.unknown)
     }
-  }, [refetchUser])
+  }, [refreshToken])
 
   return {
-    isLoading,
+    isLoading: isUserLoading || isRefreshLoading,
     error,
     retry,
   }

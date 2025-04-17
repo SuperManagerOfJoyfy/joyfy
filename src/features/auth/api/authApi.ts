@@ -31,7 +31,9 @@ export const authApi = joyfyApi.injectEndpoints({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['User'],
     }),
+    
 
     confirmEmail: builder.mutation<void, ConfirmEmailRequest>({
       query: (body) => ({
@@ -54,7 +56,8 @@ export const authApi = joyfyApi.injectEndpoints({
       query: () => ({
         url: '/auth/logout',
         method: 'POST',
-      })
+      }),
+      invalidatesTags: ['User'],
     }),
 
     resendEmailConfirmation: builder.mutation<void, EmailInputDto>({
