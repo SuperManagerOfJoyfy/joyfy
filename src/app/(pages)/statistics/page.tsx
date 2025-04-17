@@ -1,19 +1,13 @@
 'use client'
 
 import { Typography } from '@/shared/ui'
-import { Loader } from '@/shared/ui/loader/Loader'
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import { AuthGuard } from '@/features/auth/ui'
 
 export default function Statistics() {
-  const { isLoading } = useAuth()
-
-  if (isLoading) {
-    return <Loader message="Loading..." />
-  }
 
   return (
-    <div style={{ padding: '2rem' }}>
+       <AuthGuard requireAuth>
       <Typography variant="h1">Statistics Page</Typography>
-    </div>
+    </AuthGuard>
   )
 }
