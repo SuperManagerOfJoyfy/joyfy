@@ -1,17 +1,14 @@
 'use client'
-import { ReactNode, useState } from 'react'
-import { z } from 'zod'
-import { toast } from 'react-toastify'
+import { useState } from 'react'
 import Link from 'next/link'
-import { Path } from 'react-hook-form'
+import { z } from 'zod'
+import { useRegisterMutation } from '@/features/auth/api/authApi'
+import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
+import { PATH } from '@/shared/config/routes'
 import { Card, Form, Typography } from '@/shared/ui'
 import { SocialLinks } from '../socialLinks'
-import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
-import { useRegisterMutation } from '@/features/auth/api/authApi'
+import { useSignupFields } from './useSignupFormFields'
 import s from './signupForm.module.scss'
-import { PATH } from '@/shared/config/routes'
-
-
 
 type Props = {
   onSubmitSuccess?: (email: string) => void
@@ -20,38 +17,16 @@ type Props = {
 export const SignupForm = ({ onSubmitSuccess }: Props) => {
   const [isSocialLoading, setIsSocialLoading] = useState(false)
   const [signup, { isLoading }] = useRegisterMutation()
-	const disableAll = isSocialLoading || isLoading
+  const disableAll = isSocialLoading || isLoading
 
-
-	const fields: {
-		name: Path<z.infer<typeof SignupSchema>>
-		label: ReactNode
-		type?: string
-	}[] = [
-			{ name: 'username', label: 'Username' },
-			{ name: 'email', label: 'Email', type: 'email' },
-			{ name: 'password', label: 'Password', type: 'password' },
-			{ name: 'passwordConfirmation', label: 'Confirm password', type: 'password' },
-			{
-				name: 'agreeToTerms',
-				label: (
-					<span className={s.label}>
-						I agree to the {' '}
-						{disableAll ? (<span className={s.disabledLink}>Terms of Service</span>) : <Link href={PATH.AUTH.TERMS_OF_SERVICE} target='_blank'>Terms of Service</Link>}
-						{' '}
-						and {' '} {disableAll ? (<span className={s.disabledLink}>Privacy Policy</span>) : <Link href={PATH.AUTH.PRIVACY_POLICY} target='_blank'>Privacy Policy</Link>}
-					</span>
-				),
-				type: 'checkbox',
-			},
-		]
+  const fields = useSignupFields(disableAll)
 
   const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
     try {
-    	await signup(data).unwrap()
+      await signup(data).unwrap()
       onSubmitSuccess?.(data.email)
     } catch (err) {
-			throw err
+      throw err
     }
   }
 
