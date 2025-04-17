@@ -1,5 +1,3 @@
-'use client'
-
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { Button } from '@/shared/ui'
@@ -49,13 +47,10 @@ export const SocialLinks = ({
 
   useEffect(() => {
     if (user) {
-    if (user) {
       router.push(PATH.ROOT)
     }
   }, [user, router])
-  }, [user, router])
 
-  if (user) return null 
   if (user) return null 
 
   const handleSocialLogin = (

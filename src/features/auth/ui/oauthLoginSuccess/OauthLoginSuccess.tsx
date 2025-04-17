@@ -1,5 +1,3 @@
-'use client'
-
 import { useOAuthLogin } from '../../hooks/useOAuthLogin'
 import { Button, Typography } from '@/shared/ui'
 import { Loader } from '@/shared/ui/loader/Loader'

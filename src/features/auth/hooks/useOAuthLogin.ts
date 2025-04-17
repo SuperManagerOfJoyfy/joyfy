@@ -7,10 +7,6 @@ import {
   useGetMeQuery,
   useRefreshTokenMutation,
 } from '@/features/auth/api/authApi'
-import {
-  useGetMeQuery,
-  useRefreshTokenMutation,
-} from '@/features/auth/api/authApi'
 import { PATH } from '@/shared/config/routes'
 import { AUTH_MESSAGES } from '@/shared/config/messages'
 
@@ -30,7 +26,6 @@ export const useOAuthLogin = () => {
       toast.error(message, { toastId: 'url-error' })
       return
     }
-
   }, [queryError])
 
   const [refreshToken, { isLoading: isRefreshLoading }] =
@@ -64,10 +59,8 @@ export const useOAuthLogin = () => {
       toast.error(AUTH_MESSAGES.queryErrors.unknown)
     }
   }, [refreshToken])
-  }, [refreshToken])
 
   return {
-    isLoading: isUserLoading || isRefreshLoading,
     isLoading: isUserLoading || isRefreshLoading,
     error,
     retry,
