@@ -4,11 +4,10 @@ import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Sidebar } from '@/shared/ui/sidebar'
 import { LogoutModal } from '@/features/auth/ui'
-import { useAuth } from '@/features/auth/hooks/useAuth'
 import { Header } from '@/shared/ui/header/Header'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
-
+import { useGetMeQuery} from '@/features/auth/api/authApi'
 import s from '../styles/layout.module.scss'
 import { useLogout } from '@/features/auth/hooks/useLogout'
 
@@ -18,7 +17,11 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
-  const { isAuthenticated } = useAuth()
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    isError: isUserError,
+  } = useGetMeQuery(undefined, { skip: false })
   const { logoutUser } = useLogout()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -42,11 +45,19 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   const showLoader = pendingPath && pathname !== pendingPath
 
+  if (isUserLoading) {
+    return (
+      <div className={s.layoutWrapper}>
+        <Loader />
+      </div>
+    )
+  }
+
   return (
     <div className={s.layoutWrapper}>
       <Header />
       <div className={s.containerLayout}>
-        {isAuthenticated && (
+        {user && (
           <div className={s.sidebarContainer}>
             <Sidebar
               items={sidebarItems}

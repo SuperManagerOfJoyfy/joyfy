@@ -23,7 +23,7 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
 		return result
 	}
 
-export const baseQueryWithReauth: BaseQueryFn<
+  export const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
@@ -54,18 +54,14 @@ export const baseQueryWithReauth: BaseQueryFn<
 
   if (isLoginEndpoint) {
     const result = await baseQuery(args, api, extraOptions)
-		handleErrors(api, result)
+    handleErrors(api, result)
     return result
   }
 
   let result = await baseQuery(args, api, extraOptions)
 
-  if (isAuthMeRequest && isPublicPage && result.error?.status === 401) {
+  if (isAuthMeRequest && result.error?.status === 401) {
     return { data: null, meta: {} }
-  }
-
-  if (isAuthMeRequest && !result.error) {
-    return result
   }
 
   if (result.error?.status === 401 && !isRefreshEndpoint) {
@@ -103,7 +99,6 @@ export const baseQueryWithReauth: BaseQueryFn<
         } else {
           console.log('Token refresh failed:', refreshResult.error)
           lastRefreshResult = false
- 					// handleErrors(api, refreshResult)
           if (!(isAuthMeRequest && isPublicPage)) {
             api.dispatch({ type: 'auth/logoutUser' })
           }
@@ -122,7 +117,7 @@ export const baseQueryWithReauth: BaseQueryFn<
     }
   }
 
-	handleErrors(api, result)
+  handleErrors(api, result)
 
   return result
 }
