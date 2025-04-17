@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import {
   useGetMeQuery,
@@ -14,16 +14,6 @@ export const useOAuthLogin = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const queryError = searchParams.get('error')
-
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    isError: isUserError,
-    isSuccess: isUserSuccess,
-  } = useGetMeQuery(undefined, { skip: false })
-  const [refreshToken, { isLoading: isRefreshLoading }] =
-    useRefreshTokenMutation()
-
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -33,35 +23,39 @@ export const useOAuthLogin = () => {
           queryError as keyof typeof AUTH_MESSAGES.queryErrors
         ] || AUTH_MESSAGES.queryErrors.unknown
       setError(message)
-      toast.error(message)
+      toast.error(message, { toastId: 'url-error' })
+      return
     }
+
   }, [queryError])
 
-  useEffect(() => {
-    if (!queryError && isUserError) {
-      const message = AUTH_MESSAGES.queryErrors.unauthorized
-      setError(message)
-      toast.error(message)
-    }
-  }, [isUserError, queryError])
+  const [refreshToken, { isLoading: isRefreshLoading }] =
+    useRefreshTokenMutation()
+
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    isError: isUserError,
+    isSuccess,
+  } = useGetMeQuery(undefined, {
+    skip: !!queryError,
+  })
 
   useEffect(() => {
-    if (isUserSuccess && user) {
-      toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
+    if (isSuccess && user) {
+      toast.success(AUTH_MESSAGES.AUTH_SUCCESS, { toastId: 'success-toast' })
       router.push(PATH.ROOT)
+    } else if (isUserError && !queryError) {
+      const message = AUTH_MESSAGES.queryErrors.unauthorized
+      setError(message)
+      toast.error(message, { toastId: 'query-error' })
     }
-  }, [isUserSuccess, user, router])
+  }, [isSuccess, isUserError, user, router, queryError])
 
   const retry = useCallback(async () => {
     setError(null)
     try {
-      const refreshResponse = await refreshToken().unwrap()
-      if (refreshResponse.accessToken) {
-        const { data } = await useGetMeQuery(undefined, { skip: false })
-        if (data) {
-          toast.success(AUTH_MESSAGES.AUTH_SUCCESS)
-        }
-      }
+      await refreshToken().unwrap()
     } catch {
       toast.error(AUTH_MESSAGES.queryErrors.unknown)
     }

@@ -1,0 +1,55 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  max-width: 500px;
+  padding: 2rem;
+}
+
+.svgContainer {
+  width: 100%;
+  max-width: 300px;
+}
+
+.svgText {
+  width: 100%;
+  height: auto;
+}
+
+.svgNumber {
+  font-size: 80px;
+  font-weight: 800;
+  fill: url(#notFoundGradient);
+  font-family: sans-serif;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: var(--color-light-100);
+}
+
+.description {
+  color: var(--color-light-100);
+}
+
+.button {
+  min-width: 160px;
+}
