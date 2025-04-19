@@ -30,7 +30,7 @@ export const useSignupFields = (disableAll: boolean) => {
             target="_blank"
             className={disableAll ? s.disabledLink : ''}
           >
-            Terms of Service
+            Terms of Service{' '}
           </Link>
           and{' '}
           <Link

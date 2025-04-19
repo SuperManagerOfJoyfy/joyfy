@@ -26,15 +26,18 @@ export const Form = <T extends FieldValues>({
   additionalContent,
   disabled = false,
 }: FormProps<T>) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { isValid },
-    reset,
-  } = useForm<T>({
+  const { control, handleSubmit, watch, reset } = useForm<T>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
+  })
+
+  const values = watch()
+
+  const allFieldsFilled = fields.every((field) => {
+    const value = values[field.name]
+    if (field.type === 'checkbox') return Boolean(value)
+    return value !== undefined && value !== ''
   })
 
   const handleFormSubmit: SubmitHandler<T> = async (data) => {
@@ -74,7 +77,7 @@ export const Form = <T extends FieldValues>({
           <div className={s.additionalContent}>{additionalContent}</div>
         )}
 
-        <Button type="submit" fullWidth disabled={disabled}>
+        <Button type="submit" fullWidth disabled={disabled || !allFieldsFilled}>
           {btnText}
         </Button>
       </form>
