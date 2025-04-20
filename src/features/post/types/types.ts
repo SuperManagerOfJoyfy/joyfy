@@ -12,3 +12,16 @@ export type PostDraft = {
   description: string
   currentStep: number
 }
+
+export type CreatePostRequest = {
+  description: string
+}
+
+export type PostResponse = {
+  postId: string
+  username: string
+  userId: string
+  description: string
+  createdAt: string
+  updatedAt: string
+}
