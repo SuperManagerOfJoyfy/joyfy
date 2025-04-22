@@ -36,7 +36,7 @@ export const LogoutModal = ({
     >
       <div className={s.modal}>
         <Typography variant="body1" className={s.typography}>
-          Are you really want to log out of your account?
+          Do you really want to log out of your account?
           {email}
         </Typography>
         <div className={s.buttons}>
