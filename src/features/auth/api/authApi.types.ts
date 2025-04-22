@@ -16,7 +16,7 @@ export type LoginResponse = {
 }
 
 export type RegisterRequest = {
-  username: string
+  userName: string
   email: string
   password: string
   passwordConfirmation: string
@@ -24,7 +24,7 @@ export type RegisterRequest = {
 }
 
 export type ConfirmEmailRequest = {
-  code: string
+  confirmationCode: string
 }
 
 export type EmailInputDto = {

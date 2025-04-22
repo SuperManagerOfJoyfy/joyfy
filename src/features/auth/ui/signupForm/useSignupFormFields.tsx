@@ -12,7 +12,7 @@ export const useSignupFields = (disableAll: boolean) => {
     label: ReactNode
     type?: string
   }[] = [
-    { name: 'username', label: 'Username' },
+    { name: 'userName', label: 'Username' },
     { name: 'email', label: 'Email', type: 'email' },
     { name: 'password', label: 'Password', type: 'password' },
     {

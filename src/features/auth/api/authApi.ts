@@ -100,16 +100,9 @@ export const authApi = joyfyApi.injectEndpoints({
       invalidatesTags: ['User', 'Auth'],
     }),
 
-    clearAllData: builder.mutation<void, void>({
-      query: () => ({
-        url: '/auth/all-data',
-        method: 'DELETE',
-      }),
-    }),
-
     refreshToken: builder.mutation<RefreshTokenResponse, void>({
       query: () => ({
-        url: '/auth/refresh-token',
+        url: '/auth/update-tokens',
         method: 'POST',
       }),
     }),
@@ -125,9 +118,9 @@ export const {
   useResendEmailConfirmationMutation,
   useRecoverPasswordMutation,
   useNewPasswordMutation,
-  useLogoutAllSessionsMutation,
-  useLogoutDeviceMutation,
-  useClearAllDataMutation,
+  // useLogoutAllSessionsMutation,
+  // useLogoutDeviceMutation,
+  // useClearAllDataMutation,
   useRefreshTokenMutation,
   useLazyGetMeQuery,
 } = authApi
