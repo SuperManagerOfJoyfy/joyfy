@@ -1,9 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect, ChangeEvent, DragEvent } from 'react'
-import Image from 'next/image'
-import { FiCamera, FiX, FiUpload } from 'react-icons/fi'
-
+import { FiCamera, FiPlus } from 'react-icons/fi'
 import { Button, Typography } from '@/shared/ui'
 import {
   ACCEPTED_TYPES,
@@ -11,27 +9,33 @@ import {
 } from '@/features/post/utils/constats'
 
 import s from './stepUpload.module.scss'
+import Image from 'next/image'
+import { IoClose } from 'react-icons/io5'
 
 type StepUploadProps = {
   onClose: () => void
-  onUploadComplete?: (imageData: File) => void
+  onNext: (files: File[]) => void
 }
 
-export const StepUpload = ({ onClose, onUploadComplete }: StepUploadProps) => {
+export const StepUpload = ({ onClose, onNext }: StepUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState<string | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [previews, setPreviews] = useState<string[]>([])
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
+  // Clean up object URLs when component unmounts or when previews change
   useEffect(() => {
     return () => {
-      if (preview && preview.startsWith('blob:')) {
-        URL.revokeObjectURL(preview)
-      }
+      previews.forEach((preview) => {
+        if (preview && preview.startsWith('blob:')) {
+          URL.revokeObjectURL(preview)
+        }
+      })
     }
-  }, [preview])
+  }, [previews])
 
   const validateFile = (file: File) => {
     if (!ACCEPTED_TYPES.includes(file.type)) {
@@ -44,7 +48,9 @@ export const StepUpload = ({ onClose, onUploadComplete }: StepUploadProps) => {
   }
 
   const handleSelectClick = () => {
-    fileInputRef.current?.click()
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
   }
 
   const processFile = (file: File) => {
@@ -57,27 +63,45 @@ export const StepUpload = ({ onClose, onUploadComplete }: StepUploadProps) => {
     setIsLoading(true)
     setError(null)
 
-    const objectUrl = URL.createObjectURL(file)
-    setPreview(objectUrl)
-    setSelectedFile(file)
-    setIsLoading(false)
-    return true
+    try {
+      const objectUrl = URL.createObjectURL(file)
+      setPreviews((prev) => [...prev, objectUrl])
+      setSelectedFiles((prev) => [...prev, file])
+      return true
+    } catch (err) {
+      setError('Failed to process image')
+      return false
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const files = e.target.files
+    if (!files || files.length === 0) return
 
+    const file = files[0]
     processFile(file)
+
+    // Reset the input so the same file can be selected again if needed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
-  const clearSelection = () => {
-    if (preview && preview.startsWith('blob:')) {
-      URL.revokeObjectURL(preview)
+  const removeImage = (index: number) => {
+    // Revoke the URL for the removed preview
+    if (previews[index] && previews[index].startsWith('blob:')) {
+      URL.revokeObjectURL(previews[index])
     }
-    setPreview(null)
-    setSelectedFile(null)
-    if (fileInputRef.current) fileInputRef.current.value = ''
+
+    setPreviews((prev) => prev.filter((_, i) => i !== index))
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index))
+
+    // Adjust current index if needed
+    if (index <= currentImageIndex && currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1)
+    }
   }
 
   const handleDragOver = (e: DragEvent) => {
@@ -100,10 +124,21 @@ export const StepUpload = ({ onClose, onUploadComplete }: StepUploadProps) => {
   }
 
   const handleContinue = () => {
-    if (selectedFile && onUploadComplete) {
-      onUploadComplete(selectedFile)
+    if (selectedFiles.length > 0) {
+      onNext(selectedFiles)
     }
-    onClose()
+  }
+
+  const handlePrevImage = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1)
+    }
+  }
+
+  const handleNextImage = () => {
+    if (currentImageIndex < previews.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1)
+    }
   }
 
   return (
@@ -117,32 +152,14 @@ export const StepUpload = ({ onClose, onUploadComplete }: StepUploadProps) => {
         aria-label="Upload photo"
       />
 
-      <div
-        className={`${s.dropzone} ${isDragging ? s.dragging : ''} ${
-          preview ? s.hasPreview : ''
-        }`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        {preview ? (
-          <div className={s.previewContainer}>
-            <Image
-              src={preview}
-              alt="Preview"
-              width={300}
-              height={300}
-              className={s.preview}
-            />
-            <button
-              onClick={clearSelection}
-              className={s.clearButton}
-              aria-label="Remove image"
-            >
-              <FiX size={20} />
-            </button>
-          </div>
-        ) : (
+      {selectedFiles.length === 0 ? (
+        <div
+          className={`${s.dropzone} ${isDragging ? s.dragging : ''}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={handleSelectClick}
+        >
           <div className={s.placeholder}>
             <FiCamera size={48} className={s.icon} />
             <Typography variant="body2" className={s.dropText}>
@@ -151,8 +168,77 @@ export const StepUpload = ({ onClose, onUploadComplete }: StepUploadProps) => {
                 : 'Drag and drop your image here or click to browse'}
             </Typography>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className={s.sliderContainer}>
+          <div className={s.cropContainer}>
+            {previews.length > 1 && (
+              <div className={s.navigationControls}>
+                <button
+                  onClick={handlePrevImage}
+                  disabled={currentImageIndex === 0}
+                  className={s.navButton}
+                  type="button"
+                >
+                  &lt;
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  disabled={currentImageIndex === previews.length - 1}
+                  className={s.navButton}
+                  type="button"
+                >
+                  &gt;
+                </button>
+              </div>
+            )}
+
+            <div className={s.imageWrapper}>
+              {previews[currentImageIndex] && (
+                <Image
+                  src={previews[currentImageIndex]}
+                  alt={`Preview ${currentImageIndex + 1}`}
+                  width={500}
+                  height={500}
+                  className={s.preview}
+                />
+              )}
+              <Button
+                variant="icon"
+                onClick={() => removeImage(currentImageIndex)}
+                className={s.clearButton}
+                aria-label="Remove image"
+              >
+                <IoClose size={24} />
+              </Button>
+            </div>
+
+            {previews.length > 1 && (
+              <div className={s.pagination}>
+                {previews.map((_, idx) => (
+                  <div
+                    key={`indicator-${idx}`}
+                    className={`${s.paginationDot} ${idx === currentImageIndex ? s.active : ''}`}
+                    onClick={() => setCurrentImageIndex(idx)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {selectedFiles.length < 10 && (
+            <Button
+              variant="outline"
+              onClick={handleSelectClick}
+              className={s.addMoreButton}
+              aria-label="Add more images"
+            >
+              <FiPlus size={20} />
+              <span>Add more</span>
+            </Button>
+          )}
+        </div>
+      )}
 
       {error && (
         <Typography variant="body2" className={s.error}>
@@ -161,29 +247,29 @@ export const StepUpload = ({ onClose, onUploadComplete }: StepUploadProps) => {
       )}
 
       <div className={s.buttons}>
-        <Button
-          onClick={handleSelectClick}
-          disabled={isLoading}
-          variant="primary"
-          fullWidth
-          className={s.button}
-        >
-          {isLoading ? 'Loading...' : 'Select from Computer'}
-        </Button>
-
-        {preview ? (
+        {selectedFiles.length === 0 ? (
+          <>
+            <Button
+              onClick={handleSelectClick}
+              disabled={isLoading}
+              variant="primary"
+              fullWidth
+              className={s.button}
+            >
+              {isLoading ? 'Loading...' : 'Select from Computer'}
+            </Button>
+            <Button variant="outline" fullWidth className={s.button}>
+              Open Draft
+            </Button>
+          </>
+        ) : (
           <Button
             onClick={handleContinue}
             variant="primary"
             fullWidth
             className={s.button}
-            startIcon={<FiUpload />}
           >
-            Continue
-          </Button>
-        ) : (
-          <Button variant="outline" fullWidth className={s.button}>
-            Open Draft
+            Next
           </Button>
         )}
       </div>

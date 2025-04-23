@@ -25,12 +25,21 @@ export const ClosePostModal = ({
         <div className={s.buttonContainer}>
           <Button
             variant="outline"
-            onClick={() => onConfirm(false)}
+            onClick={() => {
+              onConfirm(false)
+              onClose()
+            }}
             title="Discard"
           >
             Discard
           </Button>
-          <Button onClick={() => onConfirm(true)} title="Save draft">
+          <Button
+            onClick={() => {
+              onConfirm(true)
+              onClose() 
+            }}
+            title="Save draft"
+          >
             Save draft
           </Button>
         </div>
