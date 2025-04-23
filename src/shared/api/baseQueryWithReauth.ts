@@ -22,7 +22,7 @@ export const baseQuery: BaseQueryFn<
     baseUrl: `https://joyfy.online/api/v1`,
     credentials: 'include',
     prepareHeaders: (headers) => {
-      const token = LocalStorage.getToken() 
+      const token = LocalStorage.getToken()
       if (token) {
         headers.set('Authorization', `Bearer ${token}`)
       }
@@ -42,7 +42,7 @@ export const baseQueryWithReauth: BaseQueryFn<
   const isAuthMeRequest = typeof args !== 'string' && args.url === '/auth/me'
   const isRefreshEndpoint =
     typeof args !== 'string' &&
-    args.url === '/api/v1/auth/update-tokens' &&
+    args.url === '/auth/update-tokens' &&
     args.method === 'POST'
   const isLoginEndpoint =
     typeof args !== 'string' &&
@@ -95,7 +95,7 @@ export const baseQueryWithReauth: BaseQueryFn<
         console.log('Attempting to refresh token')
 
         const refreshResult = await baseQuery(
-          { url: '/api/v1/auth/update-tokens', method: 'POST' }, 
+          { url: '/auth/update-tokens', method: 'POST' },
           api,
           extraOptions
         )
@@ -105,15 +105,19 @@ export const baseQueryWithReauth: BaseQueryFn<
           lastRefreshResult = true
 
           const data = refreshResult.data as { accessToken: string }
-          LocalStorage.setToken(data.accessToken) 
+          LocalStorage.setToken(data.accessToken)
 
           result = await baseQuery(args, api, extraOptions)
         } else {
           console.log('Token refresh failed:', refreshResult.error)
           lastRefreshResult = false
           if (!(isAuthMeRequest && isPublicPage)) {
-            api.dispatch({ type: 'auth/logoutUser' })
-            LocalStorage.removeToken() 
+            await baseQuery(
+              { url: '/auth/logout', method: 'POST' },
+              api,
+              extraOptions
+            )
+            LocalStorage.removeToken()
           }
         }
       } finally {
