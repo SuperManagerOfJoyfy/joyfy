@@ -16,7 +16,7 @@ export const useLogout = () => {
       toast.success(AUTH_MESSAGES.LOGOUT_SUCCESS)
       return 'success'
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(AUTH_MESSAGES.LOGOUT_ERROR)
       return 'error'
     }
   }, [logout, dispatch])

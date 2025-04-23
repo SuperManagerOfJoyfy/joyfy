@@ -1,8 +1,8 @@
 export type MeResponse = {
   userId: string
-  username: string
+  userName: string
   email: string
-  deviceId: string
+  isBlocked: boolean
 }
 
 export type LoginRequest = {
