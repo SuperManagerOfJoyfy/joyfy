@@ -7,23 +7,32 @@ import type {
 import { Mutex } from 'async-mutex'
 import { PATH } from '../config/routes'
 import { handleErrors } from '@/shared/utils/handleErrors/handleErrors'
+import LocalStorage from '../utils/localStorage/localStorage'
 
 const mutex = new Mutex()
 let lastRefreshResult: boolean | null = null
 let lastRefreshAttempt = 0
 
+export const baseQuery: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  const result = await fetchBaseQuery({
+    baseUrl: `https://joyfy.online/api/v1`,
+    credentials: 'include',
+    prepareHeaders: (headers) => {
+      const token = LocalStorage.getToken() 
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+      return headers
+    },
+  })(args, api, extraOptions)
+  return result
+}
 
-export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
-	async (args, api, extraOptions) => {
-		const result = await fetchBaseQuery({
-		baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-		credentials: 'include',
-		prepareHeaders: (headers) => headers,
-	})(args, api, extraOptions)
-		return result
-	}
-
-  export const baseQueryWithReauth: BaseQueryFn<
+export const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
@@ -33,7 +42,7 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
   const isAuthMeRequest = typeof args !== 'string' && args.url === '/auth/me'
   const isRefreshEndpoint =
     typeof args !== 'string' &&
-    args.url === '/auth/refresh-token' &&
+    args.url === '/api/v1/auth/update-tokens' &&
     args.method === 'POST'
   const isLoginEndpoint =
     typeof args !== 'string' &&
@@ -86,7 +95,7 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
         console.log('Attempting to refresh token')
 
         const refreshResult = await baseQuery(
-          { url: '/auth/refresh-token', method: 'POST' },
+          { url: '/api/v1/auth/update-tokens', method: 'POST' }, 
           api,
           extraOptions
         )
@@ -95,12 +104,16 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
           console.log('Token refresh successful')
           lastRefreshResult = true
 
+          const data = refreshResult.data as { accessToken: string }
+          LocalStorage.setToken(data.accessToken) 
+
           result = await baseQuery(args, api, extraOptions)
         } else {
           console.log('Token refresh failed:', refreshResult.error)
           lastRefreshResult = false
           if (!(isAuthMeRequest && isPublicPage)) {
             api.dispatch({ type: 'auth/logoutUser' })
+            LocalStorage.removeToken() 
           }
         }
       } finally {
