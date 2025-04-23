@@ -4,7 +4,6 @@ import { joyfyApi } from '@/shared/api/joyfyApi'
 
 export const store = configureStore({
   reducer: {
-
     [joyfyApi.reducerPath]: joyfyApi.reducer,
   },
 

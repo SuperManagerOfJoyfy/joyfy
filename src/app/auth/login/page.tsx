@@ -21,7 +21,12 @@ const Page = () => {
 
   async function handleLogin(data: LoginFormValues) {
     try {
-      await login(data).unwrap()
+      await login(data)
+        .unwrap()
+        .then((response) =>
+          localStorage.setItem('accessToken', response.accessToken)
+        )
+
       setIsRedirecting(true)
 
       router.push(PATH.ROOT)
@@ -31,11 +36,11 @@ const Page = () => {
     }
   }
 
-  if (isRedirecting || isUserLoading) return <Loader /> 
+  if (isRedirecting || isUserLoading) return <Loader />
 
   if (user) {
-    router.push(PATH.ROOT) 
-    return <Loader /> 
+    router.push(PATH.ROOT)
+    return <Loader />
   }
 
   return (

@@ -22,7 +22,7 @@ export const baseQuery: BaseQueryFn<
     baseUrl: `https://joyfy.online/api/v1`,
     credentials: 'include',
     prepareHeaders: (headers) => {
-      const token = LocalStorage.getToken() 
+      const token = LocalStorage.getToken()
       if (token) {
         headers.set('Authorization', `Bearer ${token}`)
       }
@@ -105,7 +105,8 @@ export const baseQueryWithReauth: BaseQueryFn<
           lastRefreshResult = true
 
           const data = refreshResult.data as { accessToken: string }
-          LocalStorage.setToken(data.accessToken) 
+
+          LocalStorage.setToken(data.accessToken)
 
           result = await baseQuery(args, api, extraOptions)
         } else {
