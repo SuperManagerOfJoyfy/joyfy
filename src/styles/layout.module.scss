@@ -1,35 +1,29 @@
-.main {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
 
-.mainContainer {
-  max-width: 1280px;
-  width: 100%;
-  margin: 0 auto;
-}
 .layoutWrapper {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px);
+	min-height: 100vh;
 }
 
 .containerLayout {
   display: flex;
   flex: 1;
-  height: calc(100vh - 60px);
+  height: calc(100vh - var(--header-height));
+	max-width: 1280px;
+	width: 100%;
+	padding: 0 60px;
+	margin: 0px auto;
 }
 
 .sidebarContainer {
-  max-width: 240px;
-  height: 100%;
+	max-width: 160px;
+	width: 100%;
   display: flex;
 }
 
 .content {
   flex: 1;
-  padding: 20px;
+  padding: 36px 0 0 24px;
   overflow-y: auto;
 }
 
