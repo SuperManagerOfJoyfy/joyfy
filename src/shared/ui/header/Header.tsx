@@ -56,8 +56,8 @@ export const Header = () => {
     <header className={s.header}>
       <div className={s.container}>
         <Link href={PATH.ROOT} className={s.logo}>
-          <Image src={Logo} alt="logo" width={45} height={45} />
-          <Image src={Letters} alt="logo" height={30} />
+          <Image src={Logo} alt="logo" width={40} height={40} />
+          <Image src={Letters} alt="logo" height={20} />
         </Link>
         <div className={s.actions}>
           <div className={s.notificationContainer}>
