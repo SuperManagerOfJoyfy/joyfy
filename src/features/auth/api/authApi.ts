@@ -9,6 +9,7 @@ import {
   NewPasswordRequest,
   RefreshTokenResponse,
   LoginResponse,
+  GoogleLoginRequest,
 } from './authApi.types'
 
 export const authApi = joyfyApi.injectEndpoints({
@@ -33,7 +34,6 @@ export const authApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
-    
 
     confirmEmail: builder.mutation<void, ConfirmEmailRequest>({
       query: (body) => ({
@@ -84,26 +84,21 @@ export const authApi = joyfyApi.injectEndpoints({
       }),
     }),
 
-    logoutAllSessions: builder.mutation<void, void>({
-      query: () => ({
-        url: '/auth/devices',
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['User'],
-    }),
-
-    logoutDevice: builder.mutation<void, string>({
-      query: (deviceId) => ({
-        url: `/auth/devices/${deviceId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['User', 'Auth'],
-    }),
-
     refreshToken: builder.mutation<RefreshTokenResponse, void>({
       query: () => ({
         url: '/auth/update-tokens',
         method: 'POST',
+      }),
+    }),
+
+    googleLogin: builder.mutation<LoginResponse, GoogleLoginRequest>({
+      query: (body) => ({
+        url: '/auth/google/login',
+        method: 'POST',
+        body: {
+          code: body.code,
+          redirectUrl: body.redirectUrl,
+        },
       }),
     }),
   }),
@@ -118,9 +113,7 @@ export const {
   useResendEmailConfirmationMutation,
   useRecoverPasswordMutation,
   useNewPasswordMutation,
-  // useLogoutAllSessionsMutation,
-  // useLogoutDeviceMutation,
-  // useClearAllDataMutation,
   useRefreshTokenMutation,
   useLazyGetMeQuery,
+  useGoogleLoginMutation,
 } = authApi
