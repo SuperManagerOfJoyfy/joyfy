@@ -1,31 +1,57 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Modal } from '@/shared/ui/modal'
-import { StepUpload } from '../stepUpload/StepUpload'
-import { StepCrop } from '../stepCrop/StepCrop'
-import { StepDescription } from '../stepDescription/StepDescription'
 import {
   AspectRatioType,
+  DraftData,
   FilterType,
   PostCreationStep,
+  PublishData,
 } from '@/features/post/types/types'
+import { StepUpload } from '../stepUpload'
+import { StepCrop } from '../stepCrop/StepCrop'
 import { StepFilters } from '../stepFilters/StepFilters'
+import { StepDescription } from '../stepDescription/StepDescription'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
 
-type Props = {
+const DRAFT_STORAGE_KEY = 'postDraft'
+
+type CreatePostModalProps = {
   open: boolean
   onClose: () => void
-  onPublish: (formData: FormData) => void
+  onPublish: (formData: PublishData) => void
 }
 
-export const CreatePostModal = ({ open, onClose, onPublish }: Props) => {
+export const CreatePostModal = ({
+  open,
+  onClose,
+  onPublish,
+}: CreatePostModalProps) => {
   const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [aspectRatio, setAspectRatio] = useState<AspectRatioType>('1:1')
   const [zoom, setZoom] = useState(1)
   const [filter, setFilter] = useState<FilterType>('Normal')
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
+  const [hasDraft, setHasDraft] = useState(false)
+
+  useEffect(() => {
+    const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY)
+    if (savedDraft) {
+      try {
+        const parsedDraft = JSON.parse(savedDraft) as DraftData
+
+        setAspectRatio(parsedDraft.aspectRatio)
+        setFilter(parsedDraft.filter)
+        setZoom(parsedDraft.zoom)
+        setHasDraft(true)
+      } catch (error) {
+        console.error('Error parsing draft data', error)
+        localStorage.removeItem(DRAFT_STORAGE_KEY)
+      }
+    }
+  }, [])
 
   const handleCloseButtonClick = () => {
     if (currentStep !== 'upload' && selectedFiles.length > 0) {
@@ -58,26 +84,30 @@ export const CreatePostModal = ({ open, onClose, onPublish }: Props) => {
   }
 
   const handlePublish = (files: File[], description: string) => {
-    const formData = new FormData()
-    files.forEach((file, index) => {
-      formData.append(`image${index}`, file)
+    localStorage.removeItem(DRAFT_STORAGE_KEY)
+    setHasDraft(false)
+
+    onPublish({
+      files,
+      description,
+      aspectRatio,
+      filter,
+      zoom,
     })
-    formData.append('description', description)
-    formData.append('aspectRatio', aspectRatio)
-    formData.append('filter', filter)
-    formData.append('zoom', zoom.toString())
-    onPublish(formData)
   }
 
   const handleConfirmClose = (saveDraft: boolean) => {
-    if (saveDraft) {
-      const draft = {
-        files: selectedFiles,
+    if (saveDraft && selectedFiles.length > 0) {
+      const draft: DraftData = {
         aspectRatio,
         filter,
         zoom,
+        timestamp: Date.now(),
       }
-      localStorage.setItem('postDraft', JSON.stringify(draft))
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft))
+    } else {
+      localStorage.removeItem(DRAFT_STORAGE_KEY)
+      setHasDraft(false)
     }
 
     setIsCloseModalOpen(false)
@@ -89,7 +119,7 @@ export const CreatePostModal = ({ open, onClose, onPublish }: Props) => {
       case 'upload':
         return 'Add Photo'
       case 'crop':
-        return 'Crop'
+        return 'Cropping'
       case 'filter':
         return 'Filters'
       case 'description':
@@ -99,18 +129,25 @@ export const CreatePostModal = ({ open, onClose, onPublish }: Props) => {
     }
   }
 
+  const getModalSize = () => {
+    if (currentStep === 'filter') return 'lg'
+    if (currentStep === 'description') return 'md'
+    return 'md'
+  }
+
   return (
     <>
       <Modal
         open={open}
         onOpenChange={handleCloseButtonClick}
         title={getModalTitle()}
-        size={currentStep === 'filter' ? 'lg' : 'md'}
+        size={getModalSize()}
       >
         {currentStep === 'upload' && (
           <StepUpload
             onClose={handleCloseButtonClick}
             onNext={handleFilesSelected}
+            hasDraft={hasDraft}
           />
         )}
         {currentStep === 'crop' && (
@@ -118,6 +155,8 @@ export const CreatePostModal = ({ open, onClose, onPublish }: Props) => {
             files={selectedFiles}
             onBack={() => setCurrentStep('upload')}
             onNext={handleCropComplete}
+            initialAspectRatio={aspectRatio}
+            initialZoom={zoom}
           />
         )}
         {currentStep === 'filter' && (
@@ -125,6 +164,7 @@ export const CreatePostModal = ({ open, onClose, onPublish }: Props) => {
             files={selectedFiles}
             aspectRatio={aspectRatio}
             zoom={zoom}
+            initialFilter={filter}
             onBack={() => setCurrentStep('crop')}
             onNext={handleFilterComplete}
           />

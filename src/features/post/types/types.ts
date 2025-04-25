@@ -1,64 +1,41 @@
-export type FilterType =
-  | 'Normal'
-  | 'Clarendon'
-  | 'Gingham'
-  | 'Moon'
-  | 'Lark'
-  | 'Reyes'
-  | 'Juno'
-  | 'Slumber'
-  | 'Crema'
-  | 'Ludwig'
-  | 'Aden'
-  | 'Perpetua'
+export const MAX_IMAGES = 10
+export const MAX_FILE_SIZE_MB = 20
+export const ACCEPTED_TYPES = ['image/jpeg', 'image/png']
+export const MAX_DESCRIPTION_LENGTH = 500
 
+export const FILTERS = [
+  'Normal',
+  'Clarendon',
+  'Gingham',
+  'Moon',
+  'Lark',
+  'Reyes',
+  'Juno',
+  'Slumber',
+  'Crema',
+  'Ludwig',
+  'Aden',
+  'Perpetua',
+] as const
 
-export type AspectRatioType = '1:1' | '4:5' | '16:9'
+export const ASPECT_RATIOS = ['1:1', '4:5', '16:9'] as const
 
-export type PostImage = {
-  id: string
-  file: File
-  url: string
-  filter?: FilterType
-  aspectRatio?: AspectRatioType
-  zoom?: number
-}
-
-export type PostDraft = {
-  images: PostImage[]
-  description: string
-  currentStep: number
-}
-
-export type CreatePostRequest =
-  | FormData
-  | {
-      description: string
-    }
-
-export type CreatePostWithImageRequest = {
-  image: File
-  description: string
-  filter?: FilterType
-  aspectRatio?: AspectRatioType
-  zoom?: number
-}
-
-export type PostResponse = {
-  postId: string
-  username: string
-  userId: string
-  description: string
-  createdAt: string
-  updatedAt: string
-  images?: string[]
-}
+export type FilterType = (typeof FILTERS)[number]
+export type AspectRatioType = (typeof ASPECT_RATIOS)[number]
 
 export type PostCreationStep = 'upload' | 'crop' | 'filter' | 'description'
 
-export type ConfirmationDialogProps = {
-  isOpen: boolean
-  onConfirm: () => void
-  onCancel: () => void
-  message: string
+export type PublishData = {
+  files: File[]
+  description: string
+  aspectRatio?: AspectRatioType
+  filter?: FilterType
+  zoom?: number
+}
+
+export type DraftData = {
+  aspectRatio: AspectRatioType
+  filter: FilterType
+  zoom: number
+  timestamp: number
 }

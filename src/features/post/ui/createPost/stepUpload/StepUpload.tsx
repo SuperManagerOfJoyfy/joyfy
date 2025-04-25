@@ -1,36 +1,40 @@
 'use client'
 
-import { useRef, useState, useEffect, ChangeEvent, DragEvent } from 'react'
-import { FiCamera, FiPlus } from 'react-icons/fi'
+import { useCallback, useState, useEffect } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { FiCamera, FiPlus, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import { IoClose } from 'react-icons/io5'
 import { Button, Typography } from '@/shared/ui'
+import Image from 'next/image'
 import {
   ACCEPTED_TYPES,
   MAX_FILE_SIZE_MB,
+  MAX_IMAGES,
 } from '@/features/post/utils/constats'
 
-import s from './stepUpload.module.scss'
-import Image from 'next/image'
-import { IoClose } from 'react-icons/io5'
+import s from './StepUpload.module.scss'
 
 type StepUploadProps = {
   onClose: () => void
   onNext: (files: File[]) => void
+  hasDraft?: boolean
 }
 
-export const StepUpload = ({ onClose, onNext }: StepUploadProps) => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
+export const StepUpload = ({
+  onClose,
+  onNext,
+  hasDraft = false,
+}: StepUploadProps) => {
   const [error, setError] = useState<string | null>(null)
   const [previews, setPreviews] = useState<string[]>([])
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isDragActive, setIsDragActive] = useState(false)
 
-  // Clean up object URLs when component unmounts or when previews change
   useEffect(() => {
     return () => {
       previews.forEach((preview) => {
-        if (preview && preview.startsWith('blob:')) {
+        if (preview.startsWith('blob:')) {
           URL.revokeObjectURL(preview)
         }
       })
@@ -47,79 +51,79 @@ export const StepUpload = ({ onClose, onNext }: StepUploadProps) => {
     return null
   }
 
-  const handleSelectClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click()
-    }
-  }
+  const processFiles = useCallback(
+    (acceptedFiles: File[]) => {
+      if (selectedFiles.length + acceptedFiles.length > MAX_IMAGES) {
+        setError(`You can only upload a maximum of ${MAX_IMAGES} images`)
+        return
+      }
 
-  const processFile = (file: File) => {
-    const errorMessage = validateFile(file)
-    if (errorMessage) {
-      setError(errorMessage)
-      return false
-    }
+      const validFiles: File[] = []
+      const newPreviews: string[] = []
 
-    setIsLoading(true)
-    setError(null)
+      for (const file of acceptedFiles) {
+        const errorMessage = validateFile(file)
+        if (errorMessage) {
+          setError(errorMessage)
+          continue
+        }
 
-    try {
-      const objectUrl = URL.createObjectURL(file)
-      setPreviews((prev) => [...prev, objectUrl])
-      setSelectedFiles((prev) => [...prev, file])
-      return true
-    } catch (err) {
-      setError('Failed to process image')
-      return false
-    } finally {
-      setIsLoading(false)
-    }
-  }
+        try {
+          const objectUrl = URL.createObjectURL(file)
+          validFiles.push(file)
+          newPreviews.push(objectUrl)
+        } catch (err) {
+          console.error('Failed to process file:', err)
+        }
+      }
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files || files.length === 0) return
+      setSelectedFiles((prev) => [...prev, ...validFiles])
+      setPreviews((prev) => [...prev, ...newPreviews])
+      setError(null)
+    },
+    [selectedFiles.length]
+  )
 
-    const file = files[0]
-    processFile(file)
-
-    // Reset the input so the same file can be selected again if needed
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
-  }
+  const {
+    getRootProps,
+    getInputProps,
+    open: openFileDialog,
+  } = useDropzone({
+    accept: {
+      'image/jpeg': [],
+      'image/png': [],
+    },
+    maxSize: MAX_FILE_SIZE_MB * 1024 * 1024,
+    onDrop: processFiles,
+    onDragEnter: () => setIsDragActive(true),
+    onDragLeave: () => setIsDragActive(false),
+    onDropAccepted: () => setIsDragActive(false),
+    onDropRejected: (rejections) => {
+      setIsDragActive(false)
+      const error = rejections[0]?.errors[0]?.message || 'Invalid file'
+      setError(error)
+    },
+    multiple: true,
+    maxFiles: MAX_IMAGES,
+    noClick: false,
+  })
 
   const removeImage = (index: number) => {
-    // Revoke the URL for the removed preview
+    const newPreviews = [...previews]
+    const newFiles = [...selectedFiles]
+
     if (previews[index] && previews[index].startsWith('blob:')) {
       URL.revokeObjectURL(previews[index])
     }
 
-    setPreviews((prev) => prev.filter((_, i) => i !== index))
-    setSelectedFiles((prev) => prev.filter((_, i) => i !== index))
+    newPreviews.splice(index, 1)
+    newFiles.splice(index, 1)
 
-    // Adjust current index if needed
-    if (index <= currentImageIndex && currentImageIndex > 0) {
-      setCurrentImageIndex(currentImageIndex - 1)
-    }
-  }
+    setPreviews(newPreviews)
+    setSelectedFiles(newFiles)
 
-  const handleDragOver = (e: DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
-
-  const handleDragLeave = () => {
-    setIsDragging(false)
-  }
-
-  const handleDrop = (e: DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-
-    const file = e.dataTransfer.files?.[0]
-    if (file) {
-      processFile(file)
+    if (currentImageIndex >= newPreviews.length) {
+      setCurrentImageIndex(Math.max(0, newPreviews.length - 1))
     }
   }
 
@@ -141,37 +145,63 @@ export const StepUpload = ({ onClose, onNext }: StepUploadProps) => {
     }
   }
 
+  const openDraft = () => {
+    console.log('Open draft clicked')
+    alert(
+      'Draft functionality is limited in this demo. In a real app, files would need to be stored on the server to be restored.'
+    )
+  }
+
   return (
     <div className={s.container}>
-      <input
-        type="file"
-        ref={fileInputRef}
-        accept="image/jpeg,image/png"
-        onChange={handleFileChange}
-        style={{ display: 'none' }}
-        aria-label="Upload photo"
-      />
-
       {selectedFiles.length === 0 ? (
-        <div
-          className={`${s.dropzone} ${isDragging ? s.dragging : ''}`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={handleSelectClick}
-        >
-          <div className={s.placeholder}>
-            <FiCamera size={48} className={s.icon} />
-            <Typography variant="body2" className={s.dropText}>
-              {isDragging
-                ? 'Drop the image here'
-                : 'Drag and drop your image here or click to browse'}
-            </Typography>
+        <>
+          <div
+            {...getRootProps()}
+            className={`${s.dropzone} ${isDragActive ? s.dragging : ''}`}
+          >
+            <input {...getInputProps()} aria-label="Upload photo" />
+            <div className={s.placeholder}>
+              <FiCamera size={48} className={s.icon} />
+              <Typography variant="body2" className={s.dropText}>
+                {isDragActive
+                  ? 'Drop the image here'
+                  : 'Drag and drop your image here or click to browse'}
+              </Typography>
+            </div>
           </div>
-        </div>
+
+          {error && (
+            <Typography variant="body2" className={s.error}>
+              {error}
+            </Typography>
+          )}
+
+          <div className={s.buttons}>
+            <Button
+              onClick={openFileDialog}
+              variant="primary"
+              fullWidth
+              className={s.button}
+            >
+              Select from Computer
+            </Button>
+
+            {hasDraft && (
+              <Button
+                onClick={openDraft}
+                variant="outline"
+                fullWidth
+                className={s.button}
+              >
+                Open Draft
+              </Button>
+            )}
+          </div>
+        </>
       ) : (
-        <div className={s.sliderContainer}>
-          <div className={s.cropContainer}>
+        <>
+          <div className={s.sliderContainer}>
             {previews.length > 1 && (
               <div className={s.navigationControls}>
                 <button
@@ -179,16 +209,18 @@ export const StepUpload = ({ onClose, onNext }: StepUploadProps) => {
                   disabled={currentImageIndex === 0}
                   className={s.navButton}
                   type="button"
+                  aria-label="Previous image"
                 >
-                  &lt;
+                  <FiChevronLeft size={20} />
                 </button>
                 <button
                   onClick={handleNextImage}
                   disabled={currentImageIndex === previews.length - 1}
                   className={s.navButton}
                   type="button"
+                  aria-label="Next image"
                 >
-                  &gt;
+                  <FiChevronRight size={20} />
                 </button>
               </div>
             )}
@@ -220,59 +252,46 @@ export const StepUpload = ({ onClose, onNext }: StepUploadProps) => {
                     key={`indicator-${idx}`}
                     className={`${s.paginationDot} ${idx === currentImageIndex ? s.active : ''}`}
                     onClick={() => setCurrentImageIndex(idx)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Go to image ${idx + 1}`}
                   />
                 ))}
               </div>
             )}
+
+            {selectedFiles.length < MAX_IMAGES && (
+              <Button
+                variant="outline"
+                onClick={openFileDialog}
+                className={s.addMoreButton}
+                aria-label="Add more images"
+              >
+                <FiPlus size={20} />
+                <span>Add more</span>
+              </Button>
+            )}
           </div>
 
-          {selectedFiles.length < 10 && (
-            <Button
-              variant="outline"
-              onClick={handleSelectClick}
-              className={s.addMoreButton}
-              aria-label="Add more images"
-            >
-              <FiPlus size={20} />
-              <span>Add more</span>
-            </Button>
+          {error && (
+            <Typography variant="body2" className={s.error}>
+              {error}
+            </Typography>
           )}
-        </div>
-      )}
 
-      {error && (
-        <Typography variant="body2" className={s.error}>
-          {error}
-        </Typography>
-      )}
-
-      <div className={s.buttons}>
-        {selectedFiles.length === 0 ? (
-          <>
+          <div className={s.buttons}>
             <Button
-              onClick={handleSelectClick}
-              disabled={isLoading}
+              onClick={handleContinue}
               variant="primary"
               fullWidth
               className={s.button}
+              disabled={selectedFiles.length === 0}
             >
-              {isLoading ? 'Loading...' : 'Select from Computer'}
+              Next
             </Button>
-            <Button variant="outline" fullWidth className={s.button}>
-              Open Draft
-            </Button>
-          </>
-        ) : (
-          <Button
-            onClick={handleContinue}
-            variant="primary"
-            fullWidth
-            className={s.button}
-          >
-            Next
-          </Button>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

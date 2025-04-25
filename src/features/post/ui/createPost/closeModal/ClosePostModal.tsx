@@ -27,7 +27,7 @@ export const ClosePostModal = ({
             variant="outline"
             onClick={() => {
               onConfirm(false)
-              onClose()
+              // onClose()
             }}
             title="Discard"
           >
@@ -36,7 +36,7 @@ export const ClosePostModal = ({
           <Button
             onClick={() => {
               onConfirm(true)
-              onClose() 
+              // onClose()
             }}
             title="Save draft"
           >
