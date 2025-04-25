@@ -11,7 +11,8 @@ export type LoginRequest = {
 }
 
 export type LoginResponse = {
-  accessToken: string
+	success: boolean
+  message: string
 }
 
 export type RegisterRequest = {

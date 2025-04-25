@@ -10,6 +10,8 @@ import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 import { useGetMeQuery} from '@/features/auth/api/authApi'
 import s from '../styles/layout.module.scss'
 import { useLogout } from '@/features/auth/hooks/useLogout'
+import { useDispatch } from 'react-redux'
+import { setUserData } from '@/features/auth/model/authSlice'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -17,6 +19,7 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
+	const dispatch = useDispatch()
   const {
     data: user,
     isLoading: isUserLoading,
@@ -36,6 +39,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
       }),
     [onOpenLogoutModalHandler]
   )
+	useEffect(() => {
+		if (user) {
+			dispatch(setUserData(user))
+		}
+	}, [user, dispatch])
 
   useEffect(() => {
     if (pathname === pendingPath) {
