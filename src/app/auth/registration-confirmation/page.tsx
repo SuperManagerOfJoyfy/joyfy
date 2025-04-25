@@ -17,7 +17,7 @@ const EmailConfirmation = () => {
 	useEffect(() => {
 		if (!code) return;
 
-		confirmEmail({ code })
+		confirmEmail({ confirmationCode: code })
 	}, [code])
 
 	if (isUninitialized || isLoading) {

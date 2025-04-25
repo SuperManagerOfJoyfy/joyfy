@@ -1,5 +1,3 @@
-'use client'
-
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { Button } from '@/shared/ui'
@@ -34,11 +32,7 @@ export const SocialLinks = ({
   isDisabled,
   onStartLoading,
 }: SocialLinksProps) => {
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    isError: isUserError,
-  } = useGetMeQuery() 
+  const { data: user } = useGetMeQuery() 
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -46,11 +40,7 @@ export const SocialLinks = ({
     const provider = searchParams.get('provider')
     const error = searchParams.get('error')
 
-    if (
-      provider &&
-      error &&
-      Object.keys(SOCIAL_AUTH_CONFIG).includes(provider)
-    ) {
+    if (provider && error && Object.keys(SOCIAL_AUTH_CONFIG).includes(provider)) {
       toast.error(`Authentication with ${provider} failed: ${error}`)
     }
   }, [searchParams])

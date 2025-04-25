@@ -2,10 +2,9 @@ import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
 import { PasswordSchema } from '@/features/auth/utils/schemas/PasswordSchema'
 import { z } from 'zod'
 
-
 export const SignupSchema = z
   .object({
-    username: z
+    userName: z
       .string()
       .min(6, 'Minimum number of characters 6')
       .max(30, 'Maximum number of characters 30')
@@ -20,7 +19,7 @@ export const SignupSchema = z
     }),
   })
   .refine((arg) => arg.password === arg.passwordConfirmation, {
-    message: 'Your passwords don’t match. Try again.',
+    message: 'Passwords do not match. Try again.',
     path: ['passwordConfirmation'],
   })
 

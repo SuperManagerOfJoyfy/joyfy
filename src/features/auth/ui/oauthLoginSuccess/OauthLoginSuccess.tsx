@@ -1,16 +1,16 @@
-'use client'
-
 import { useOAuthLogin } from '../../hooks/useOAuthLogin'
 import { Button, Typography } from '@/shared/ui'
 import { Loader } from '@/shared/ui/loader/Loader'
+
 import s from './oauthLoginSuccess.module.scss'
 
-type ErrorViewProps = {
+const ErrorView = ({
+  message,
+  onRetry,
+}: {
   message: string
   onRetry: () => void
-}
-
-const ErrorView = ({ message, onRetry }: ErrorViewProps) => (
+}) => (
   <div className={s.errorContainer} role="alert">
     <Typography className={s.errorText}>{message}</Typography>
     <Button onClick={onRetry}>Try again</Button>
