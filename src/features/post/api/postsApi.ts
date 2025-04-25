@@ -2,9 +2,9 @@ import {
   GetAllPostsResponse,
   UploadImageResponse,
   CreatePostRequest,
-  Item,
 } from '@/features/post/api/postsApi.types'
 import { joyfyApi } from '@/shared/api/joyfyApi'
+import { PostItem } from '../types/types'
 
 export const postsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -29,7 +29,7 @@ export const postsApi = joyfyApi.injectEndpoints({
         method: 'DELETE',
       }),
     }),
-    createPost: builder.mutation<Item, CreatePostRequest>({
+    createPost: builder.mutation<PostItem, CreatePostRequest>({
       query: (payload) => ({
         url: '/posts',
         method: 'POST',
