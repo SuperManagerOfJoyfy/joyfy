@@ -48,7 +48,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   if (isUserLoading) {
     return (
       <div className={s.layoutWrapper}>
-        <Loader />
+        <Loader fullScreen/>
       </div>
     )
   }
