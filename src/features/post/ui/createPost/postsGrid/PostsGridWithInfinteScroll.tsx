@@ -12,7 +12,7 @@ export const PostsGridWithInfinteScroll = () => {
 
 	const posts = data?.items
 
-	if (!posts) return null;
+	if (!posts || posts.length === 0) return <div>No posts yet...</div>;
 
 	return (
 		<div>
