@@ -1,6 +1,6 @@
 export type MeResponse = {
   userId: string
-  username: string
+  userName: string
   email: string
   deviceId: string
 }
@@ -11,7 +11,7 @@ export type LoginRequest = {
 }
 
 export type LoginResponse = {
-  success: boolean
+	success: boolean
   message: string
 }
 
