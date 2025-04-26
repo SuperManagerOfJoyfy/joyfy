@@ -6,12 +6,12 @@ import Image, { StaticImageData } from 'next/image'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import { Button, SelectBox, SelectItem } from '@/shared/ui'
 import { PATH } from '@/shared/config/routes'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 import Letters from '../../../../public/logo/letters.png'
 import Logo from '../../../../public/logo/logo.png'
 import flagUnitedKingdom from '@/shared/ui/header/assets/flagUnitedKingdom.png'
 import flagRussia from '@/shared/ui/header/assets/flagRussia.png'
 import s from './Header.module.scss'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -43,7 +43,7 @@ const AuthActions = () => (
 
 export const Header = () => {
   const [notificationCount] = useState(3)
-  const { data: user, isLoading } = useGetMeQuery(undefined, { skip: false })
+  const { user, isLoading } = useAuth()
   const [showButtons, setShowButtons] = useState(true)
 
   useEffect(() => {

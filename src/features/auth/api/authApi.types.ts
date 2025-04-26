@@ -1,9 +1,7 @@
 export type MeResponse = {
   userId: string
   userName: string
-  userName: string
   email: string
-  isBlocked: boolean
   isBlocked: boolean
 }
 
@@ -23,9 +21,6 @@ export type RegisterRequest = {
   passwordConfirmation?: string
   agreeToTerms?: boolean
   baseUrl: string
-  passwordConfirmation?: string
-  agreeToTerms?: boolean
-  baseUrl: string
 }
 
 export type ConfirmEmailRequest = {
@@ -35,13 +30,11 @@ export type ConfirmEmailRequest = {
 export type EmailInputDto = {
   email: string
   baseUrl?: string
-  baseUrl?: string
 }
 
 export type RecoverPasswordRequest = {
   email: string
   recaptcha: string
-  baseUrl: string
   baseUrl: string
 }
 
@@ -75,16 +68,4 @@ export type OAuthLoginResponse = {
   accessToken: string
   email: string
 }
-export type GoogleLoginRequest = {
-  redirectUrl: string
-  code: string
-}
 
-export interface GithubLoginRequest {
-  redirectUrl: string
-}
-
-export type OAuthLoginResponse = {
-  accessToken: string
-  email: string
-}
