@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { z } from 'zod'
 import { useRegisterMutation } from '@/features/auth/api/authApi'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
+import { RegisterRequest } from '@/features/auth/api/authApi.types'
 import { PATH } from '@/shared/config/routes'
 import { Card, Form, Typography } from '@/shared/ui'
 import { SocialLinks } from '../socialLinks'
@@ -22,8 +23,12 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
   const fields = useSignupFields(disableAll)
 
   const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
+    const registerData: RegisterRequest = {
+      ...data,
+      baseUrl: window.location.origin,
+    }
     try {
-      await signup(data).unwrap()
+      await signup(registerData).unwrap()
       onSubmitSuccess?.(data.email)
     } catch (err) {
       throw err
