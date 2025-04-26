@@ -15,15 +15,8 @@ type StepCropProps = {
   initialZoom?: number
 }
 
-export const StepCrop = ({
-  files,
-  onBack,
-  onNext,
-  initialAspectRatio = '1:1',
-  initialZoom = 1,
-}: StepCropProps) => {
-  const [aspectRatio, setAspectRatio] =
-    useState<AspectRatioType>(initialAspectRatio)
+export const StepCrop = ({ files, onBack, onNext, initialAspectRatio = '1:1', initialZoom = 1 }: StepCropProps) => {
+  const [aspectRatio, setAspectRatio] = useState<AspectRatioType>(initialAspectRatio)
   const [zoom, setZoom] = useState(initialZoom)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
@@ -79,12 +72,7 @@ export const StepCrop = ({
       <div className={s.cropContainer}>
         {files.length > 1 && (
           <div className={s.navigationControls}>
-            <button
-              onClick={handlePrevImage}
-              disabled={currentImageIndex === 0}
-              className={s.navButton}
-              type="button"
-            >
+            <button onClick={handlePrevImage} disabled={currentImageIndex === 0} className={s.navButton} type="button">
               &lt;
             </button>
             <button
@@ -99,10 +87,7 @@ export const StepCrop = ({
         )}
         <div className={`${s.imageWrapper} ${getAspectRatioClass()}`}>
           {imagePreviews[currentImageIndex] && (
-            <div
-              className={s.imageContainer}
-              style={{ transform: `scale(${zoom})` }}
-            >
+            <div className={s.imageContainer} style={{ transform: `scale(${zoom})` }}>
               <Image
                 src={imagePreviews[currentImageIndex]}
                 alt={`Preview ${currentImageIndex + 1}`}
@@ -169,20 +154,10 @@ export const StepCrop = ({
       </div>
 
       <div className={s.buttons}>
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className={s.button}
-          fullWidth
-        >
+        <Button onClick={onBack} variant="outline" className={s.button} fullWidth>
           Back
         </Button>
-        <Button
-          onClick={handleNext}
-          variant="primary"
-          className={s.button}
-          fullWidth
-        >
+        <Button onClick={handleNext} variant="primary" className={s.button} fullWidth>
           Next
         </Button>
       </div>

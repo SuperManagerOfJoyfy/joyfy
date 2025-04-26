@@ -16,14 +16,7 @@ type StepDescriptionProps = {
   onPublish: (files: File[], description: string) => void
 }
 
-export const StepDescription = ({
-  files,
-  aspectRatio,
-  zoom,
-  filter,
-  onBack,
-  onPublish,
-}: StepDescriptionProps) => {
+export const StepDescription = ({ files, aspectRatio, zoom, filter, onBack, onPublish }: StepDescriptionProps) => {
   const [description, setDescription] = useState('')
   const { handlePublishPost, isLoading, error } = useCreatePost()
 
@@ -59,9 +52,7 @@ export const StepDescription = ({
               rows={6}
             />
             <div className={s.charCount}>
-              <Typography variant="caption">
-                {description.length}/500
-              </Typography>
+              <Typography variant="caption">{description.length}/500</Typography>
             </div>
           </div>
 
@@ -72,20 +63,10 @@ export const StepDescription = ({
           )}
 
           <div className={s.buttons}>
-            <Button
-              onClick={onBack}
-              variant="outline"
-              fullWidth
-              disabled={isLoading}
-            >
+            <Button onClick={onBack} variant="outline" fullWidth disabled={isLoading}>
               Back
             </Button>
-            <Button
-              onClick={handlePublishClick}
-              variant="primary"
-              fullWidth
-              disabled={isLoading}
-            >
+            <Button onClick={handlePublishClick} variant="primary" fullWidth disabled={isLoading}>
               {isLoading ? 'Publishing...' : 'Publish'}
             </Button>
           </div>

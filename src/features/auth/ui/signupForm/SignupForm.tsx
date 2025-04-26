@@ -36,10 +36,7 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
         Sign Up
       </Typography>
 
-      <SocialLinks
-        isDisabled={disableAll}
-        onStartLoading={() => setIsSocialLoading(true)}
-      />
+      <SocialLinks isDisabled={disableAll} onStartLoading={() => setIsSocialLoading(true)} />
 
       <Form
         btnText="Sign Up"

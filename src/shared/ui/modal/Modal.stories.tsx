@@ -76,15 +76,8 @@ export const EmailSent: Story = {
 
     return (
       <>
-        <Button onClick={() => handleOpenChange(true)}>
-          Show Email Sent Modal
-        </Button>
-        <Modal
-          {...args}
-          open={internalOpen}
-          onOpenChange={handleOpenChange}
-          title="Email sent"
-        >
+        <Button onClick={() => handleOpenChange(true)}>Show Email Sent Modal</Button>
+        <Modal {...args} open={internalOpen} onOpenChange={handleOpenChange} title="Email sent">
           <div style={{ padding: '30px 0 12px' }}>
             <Typography variant="body1" style={{ marginBottom: '18px' }}>
               We have sent a link to confirm your email to epam@epam.com
@@ -119,9 +112,7 @@ export const CustomSized: Story = {
 
     return (
       <>
-        <Button onClick={() => handleOpenChange(true)}>
-          Open Custom Size Modal
-        </Button>
+        <Button onClick={() => handleOpenChange(true)}>Open Custom Size Modal</Button>
         <Modal {...args} open={internalOpen} onOpenChange={handleOpenChange}>
           <div
             style={{
@@ -131,9 +122,7 @@ export const CustomSized: Story = {
               height: '400px',
             }}
           >
-            <Typography variant="body1">
-              This is a custom sized modal with different dimensions.
-            </Typography>
+            <Typography variant="body1">This is a custom sized modal with different dimensions.</Typography>
             <div
               style={{
                 marginTop: 'auto',
@@ -170,15 +159,8 @@ export const CustomOpacity: Story = {
 
     return (
       <>
-        <Button onClick={() => handleOpenChange(true)}>
-          Open Opacity Overlay
-        </Button>
-        <Modal
-          {...args}
-          open={internalOpen}
-          onOpenChange={handleOpenChange}
-          overlayOpacity={1}
-        >
+        <Button onClick={() => handleOpenChange(true)}>Open Opacity Overlay</Button>
+        <Modal {...args} open={internalOpen} onOpenChange={handleOpenChange} overlayOpacity={1}>
           <div
             style={{
               padding: '20px 0',
@@ -187,9 +169,7 @@ export const CustomOpacity: Story = {
               height: '400px',
             }}
           >
-            <Typography variant="body1">
-              This modal has an overlay with 100% opacity.
-            </Typography>
+            <Typography variant="body1">This modal has an overlay with 100% opacity.</Typography>
             <div
               style={{
                 marginTop: 'auto',

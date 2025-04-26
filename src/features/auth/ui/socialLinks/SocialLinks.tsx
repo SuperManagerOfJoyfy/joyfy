@@ -6,8 +6,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { useCallback } from 'react'
 import s from './socialLinks.module.scss'
 
-const apiBaseUrl =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'https://joyfy.online/api/v1'
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://joyfy.online/api/v1'
 
 const frontendUrl =
   typeof window !== 'undefined' && window.location.hostname === 'localhost'
@@ -19,10 +18,7 @@ type SocialLinksProps = {
   onStartLoading: () => void
 }
 
-export const SocialLinks = ({
-  isDisabled,
-  onStartLoading,
-}: SocialLinksProps) => {
+export const SocialLinks = ({ isDisabled, onStartLoading }: SocialLinksProps) => {
   const handleGithubLogin = useCallback(() => {
     if (isDisabled) return
 
@@ -37,7 +33,7 @@ export const SocialLinks = ({
   const handleGoogleLogin = useCallback(() => {
     if (isDisabled) return
 
-    onStartLoading() 
+    onStartLoading()
 
     const redirectUrl = `${frontendUrl}/auth/google`
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUrl)}&response_type=code&scope=email%20profile&prompt=select_account`

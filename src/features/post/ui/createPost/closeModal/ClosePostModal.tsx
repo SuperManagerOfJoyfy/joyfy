@@ -10,17 +10,11 @@ type ClosePostModalProps = {
   onConfirm: (saveDraft: boolean) => void
 }
 
-export const ClosePostModal = ({
-  open,
-  onClose,
-  onConfirm,
-}: ClosePostModalProps) => {
+export const ClosePostModal = ({ open, onClose, onConfirm }: ClosePostModalProps) => {
   return (
     <Modal open={open} onOpenChange={onClose} title="Close">
       <div className={s.container}>
-        <Typography>
-          Do you really want to close the creation of a publication?
-        </Typography>
+        <Typography>Do you really want to close the creation of a publication?</Typography>
         <Typography>If you close everything will be deleted</Typography>
         <div className={s.buttonContainer}>
           <Button

@@ -25,19 +25,11 @@ export const useSignupFields = (disableAll: boolean) => {
       label: (
         <span className={s.label}>
           I agree to the{' '}
-          <Link
-            href={PATH.AUTH.TERMS_OF_SERVICE}
-            target="_blank"
-            className={disableAll ? s.disabledLink : ''}
-          >
+          <Link href={PATH.AUTH.TERMS_OF_SERVICE} target="_blank" className={disableAll ? s.disabledLink : ''}>
             Terms of Service{' '}
           </Link>
           and{' '}
-          <Link
-            href={PATH.AUTH.PRIVACY_POLICY}
-            target="_blank"
-            className={disableAll ? s.disabledLink : ''}
-          >
+          <Link href={PATH.AUTH.PRIVACY_POLICY} target="_blank" className={disableAll ? s.disabledLink : ''}>
             Privacy Policy
           </Link>
         </span>

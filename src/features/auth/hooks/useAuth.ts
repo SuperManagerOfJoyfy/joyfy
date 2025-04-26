@@ -23,11 +23,11 @@ export const useAuth = () => {
   }, [isLoading])
 
   return {
-		user,
-		isLoading,
-		isError,
-		isSuccess,
-		isAppInitialized,
-		isAuthenticated: !!user
-	}
+    user,
+    isLoading,
+    isError,
+    isSuccess,
+    isAppInitialized,
+    isAuthenticated: !!user,
+  }
 }

@@ -47,9 +47,7 @@ export const Recaptcha = ({ onVerify, siteKey }: Props) => {
         onExpired={handleRecaptchaExpired}
         theme="dark"
       />
-      {isVerified && (
-        <div>{isVerified ? 'Проверка пройдена' : 'Проверка не пройдена'}</div>
-      )}
+      {isVerified && <div>{isVerified ? 'Проверка пройдена' : 'Проверка не пройдена'}</div>}
       {error && <div>{error}</div>}
       {expired && <div>{expired ? 'Срок действия истек' : ''}</div>}
     </div>

@@ -32,11 +32,7 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
 
   const additionalContent = (
     <div className={s.content}>
-      <Link
-        href="forgot password"
-        aria-disabled={isSocialLoading || isLoading}
-        className={s.forgot}
-      >
+      <Link href="forgot password" aria-disabled={isSocialLoading || isLoading} className={s.forgot}>
         Forgot Password
       </Link>
     </div>
@@ -47,10 +43,7 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
       <Typography variant="h1">Sign In</Typography>
 
       <div className={s.socialLinksWrap}>
-        <SocialLinks
-          isDisabled={isSocialLoading || isLoading}
-          onStartLoading={() => setIsSocialLoading(true)}
-        />
+        <SocialLinks isDisabled={isSocialLoading || isLoading} onStartLoading={() => setIsSocialLoading(true)} />
       </div>
 
       <Form
@@ -66,11 +59,7 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
         Don't have an account?
       </Typography>
 
-      <Link
-        href={PATH.AUTH.REGISTRATION}
-        aria-disabled={isSocialLoading || isLoading}
-        className={s.signUp}
-      >
+      <Link href={PATH.AUTH.REGISTRATION} aria-disabled={isSocialLoading || isLoading} className={s.signUp}>
         Sign Up
       </Link>
     </Card>
