@@ -4,6 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import s from './UserProfile.module.scss'
 import { Typography } from '@/shared/ui'
+import defaultAvatar from '../../../../../public/default-avatar.png'
 
 type Avatar = {
   url: string
@@ -35,7 +36,7 @@ type StatItem = {
 
 const StatItem = ({ value, label }: StatItem) => (
   <div className={s.statItem}>
-    <Typography variant={'h2'} >{value}</Typography>
+    <Typography variant={'h2'}>{value}</Typography>
     <Typography variant={'body1'}>{label}</Typography>
   </div>
 )
@@ -48,7 +49,6 @@ export const UserProfile = ({
   userMetadata,
   hasPaymentSubscription,
 }: UserProfileType) => {
-
   const profileAvatar: Avatar = avatars?.[0]
 
   const isAvatarValid = (profileAvatar: Avatar): boolean => {
@@ -60,24 +60,33 @@ export const UserProfile = ({
     )
   }
 
-  const avatarUrl = isAvatarValid(profileAvatar)
-    ? profileAvatar.url
-    : '/logo/default-avatar.png'
-
+  console.log('LOGGER: ' + isAvatarValid(profileAvatar))
   return (
     <div className={s.profileContainer} key={id}>
       <div className={s.profileImageContainer}>
-        <Image
-          className={s.profileImage}
-          src={avatarUrl}
-          width={profileAvatar?.width || 150}
-          height={profileAvatar?.height || 150}
-          alt={`${userName}'s avatar`}
-        />
+        <div className={s.profileImageWrapper}>
+          {isAvatarValid(profileAvatar) ? (
+            <Image
+              src={profileAvatar.url}
+              width={profileAvatar.width}
+              height={profileAvatar.height}
+              alt={`${userName}'s avatar`}
+            />
+          ) : (
+            <Image
+              src={defaultAvatar}
+              width={204}
+              height={204}
+              alt="default avatar"
+            />
+          )}
+        </div>
       </div>
 
       <div className={s.profileInfo}>
-        <Typography variant={'large'} fontWeight={'medium'}> {userName}</Typography>
+        <Typography variant={'large'} fontWeight={'medium'}>
+          {userName}
+        </Typography>
 
         <div className={s.profileStats}>
           <StatItem value={userMetadata.following} label="Following" />
@@ -85,16 +94,15 @@ export const UserProfile = ({
           <StatItem value={userMetadata.publications} label="Publications" />
         </div>
 
-        <p className={s.profileBio}>
+        <Typography className={s.profileBio}>
           {aboutMe ||
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut' +
               ' labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco '}
-        </p>
+        </Typography>
 
         {/*{hasPaymentSubscription && (*/}
         {/*  <p className={s.subscriptionBadge}>✔ Подписка активна</p>*/}
         {/*)}*/}
-
       </div>
     </div>
   )
