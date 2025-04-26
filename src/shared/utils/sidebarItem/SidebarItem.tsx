@@ -84,6 +84,7 @@ export const createSidebarItems = (
       title: 'Create',
       path: PATH.USER.CREATE,
       icon: <FiPlusCircle />,
+      onClick: handlers.onCreatePost, 
       activeIcon: <FaPlusCircle />,
     },
     {

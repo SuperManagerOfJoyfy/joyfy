@@ -7,9 +7,9 @@ import { LogoutModal } from '@/features/auth/ui'
 import { Header } from '@/shared/ui/header/Header'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
-import { useGetMeQuery} from '@/features/auth/api/authApi'
 import s from '../styles/layout.module.scss'
 import { useLogout } from '@/features/auth/hooks/useLogout'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -17,11 +17,8 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    isError: isUserError,
-  } = useGetMeQuery(undefined, { skip: false })
+
+  const { user, isAppInitialized } = useAuth()
   const { logoutUser } = useLogout()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -45,10 +42,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   const showLoader = pendingPath && pathname !== pendingPath
 
-  if (isUserLoading) {
+  if (!isAppInitialized) {
     return (
       <div className={s.layoutWrapper}>
-        <Loader fullScreen/>
+        <Loader fullScreen />
       </div>
     )
   }
@@ -69,7 +66,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             <LogoutModal
               open={isModalOpen}
               onOpenLogoutModalHandler={onOpenLogoutModalHandler}
-              onLogout={logoutUser}
+							onLogout={logoutUser}
             />
           </div>
         )}
