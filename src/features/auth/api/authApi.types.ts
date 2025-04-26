@@ -1,8 +1,8 @@
 export type MeResponse = {
   userId: string
-  username: string
+  userName: string
   email: string
-  deviceId: string
+  isBlocked: boolean
 }
 
 export type LoginRequest = {
@@ -11,35 +11,36 @@ export type LoginRequest = {
 }
 
 export type LoginResponse = {
-  success: boolean
-  message: string
+  accessToken: string
 }
 
 export type RegisterRequest = {
-  username: string
+  userName: string
   email: string
   password: string
-  passwordConfirmation: string
-  agreeToTerms: boolean
+  passwordConfirmation?: string
+  agreeToTerms?: boolean
+  baseUrl: string
 }
 
 export type ConfirmEmailRequest = {
-  code: string
+  confirmationCode: string
 }
 
 export type EmailInputDto = {
   email: string
+  baseUrl?: string
 }
 
 export type RecoverPasswordRequest = {
   email: string
   recaptcha: string
+  baseUrl: string
 }
 
 export type NewPasswordRequest = {
   recoveryCode: string
   newPassword: string
-  recaptcha: string
 }
 
 export type RefreshTokenResponse = {
@@ -52,5 +53,19 @@ export type SignUpArgs = {
   password: string
   confirmEmail: string
   agreeToTerms: boolean
+}
+
+export type GoogleLoginRequest = {
+  redirectUrl: string
+  code: string
+}
+
+export interface GithubLoginRequest {
+  redirectUrl: string
+}
+
+export type OAuthLoginResponse = {
+  accessToken: string
+  email: string
 }
 
