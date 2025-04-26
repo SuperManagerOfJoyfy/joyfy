@@ -9,6 +9,7 @@ import {
   NewPasswordRequest,
   RefreshTokenResponse,
   LoginResponse,
+  GoogleLoginRequest,
 } from './authApi.types'
 
 export const authApi = joyfyApi.injectEndpoints({
@@ -33,7 +34,6 @@ export const authApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
-    
 
     confirmEmail: builder.mutation<void, ConfirmEmailRequest>({
       query: (body) => ({
@@ -90,6 +90,17 @@ export const authApi = joyfyApi.injectEndpoints({
         method: 'POST',
       }),
     }),
+
+    googleLogin: builder.mutation<LoginResponse, GoogleLoginRequest>({
+      query: (body) => ({
+        url: '/auth/google/login',
+        method: 'POST',
+        body: {
+          code: body.code,
+          redirectUrl: body.redirectUrl,
+        },
+      }),
+    }),
   }),
 })
 
@@ -104,4 +115,5 @@ export const {
   useNewPasswordMutation,
   useRefreshTokenMutation,
   useLazyGetMeQuery,
+  useGoogleLoginMutation,
 } = authApi

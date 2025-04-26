@@ -2,10 +2,10 @@
 
 import { ReactNode, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { PATH } from '@/shared/config/routes'
 import s from './authGuard.module.scss'
+import { useAuth } from '../../hooks/useAuth'
 
 type AuthGuardProps = {
   children: ReactNode
@@ -18,7 +18,7 @@ export const AuthGuard = ({
   requireAuth = false,
   redirectPath = requireAuth ? PATH.AUTH.LOGIN : PATH.ROOT,
 }: AuthGuardProps) => {
-  const { data: user, isLoading } = useGetMeQuery(undefined, { skip: false })
+  const { user, isLoading } = useAuth()
   const router = useRouter()
 
   const shouldRedirect = useMemo(() => {

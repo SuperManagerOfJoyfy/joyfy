@@ -118,6 +118,7 @@ export const baseQueryWithReauth: BaseQueryFn<
               extraOptions
             )
             LocalStorage.removeToken()
+            localStorage.removeItem('userEmail')
           }
         }
       } finally {
