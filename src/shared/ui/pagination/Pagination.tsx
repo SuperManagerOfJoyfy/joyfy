@@ -100,10 +100,7 @@ export const Pagination = ({
         ))}
 
         <button
-          className={clsx(
-            s.button,
-            (currentPage === totalPages || totalPages === 0) && s.arrowDisabled
-          )}
+          className={clsx(s.button, (currentPage === totalPages || totalPages === 0) && s.arrowDisabled)}
           disabled={currentPage === totalPages || totalPages === 0}
           onClick={() => onPageChange(currentPage + 1)}
           type={'button'}

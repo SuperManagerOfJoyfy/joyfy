@@ -1,18 +1,12 @@
 'use client'
 
-import {
-  ReactDatePickerCustomHeaderProps,
-  registerLocale,
-} from 'react-datepicker'
+import { ReactDatePickerCustomHeaderProps, registerLocale } from 'react-datepicker'
 import * as RDP from 'react-datepicker'
 import React, { ComponentProps, forwardRef, useEffect, useState } from 'react'
 import s from './DatePicker.module.scss'
 import { Label } from '@/shared/ui/label/Label'
 import { LuCalendarDays } from 'react-icons/lu'
-import {
-  MdOutlineKeyboardArrowLeft,
-  MdOutlineKeyboardArrowRight,
-} from 'react-icons/md'
+import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import clsx from 'clsx'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -31,9 +25,7 @@ type DatePickerProps = {
 }
 registerLocale('ru', ru)
 
-const RDPC = (((RDP.default as any).default as any) ||
-  (RDP.default as any) ||
-  (RDP as any)) as typeof RDP.default
+const RDPC = (((RDP.default as any).default as any) || (RDP.default as any) || (RDP as any)) as typeof RDP.default
 
 export const DatePicker = ({
   startDate: propStartDate,
@@ -57,9 +49,7 @@ export const DatePicker = ({
   const isRange = propEndDate !== undefined
   const showError = !!errorMessage && errorMessage.length > 0
 
-  const handleDateChange = (
-    dates: [Date | null, Date | null] | Date | null
-  ) => {
+  const handleDateChange = (dates: [Date | null, Date | null] | Date | null) => {
     if (Array.isArray(dates)) {
       const [start, end] = dates
       setStartDate(start)
@@ -76,12 +66,7 @@ export const DatePicker = ({
     root: clsx(s.root, className),
     calendar: s.calendar,
     errorText: s.errorText,
-    input: clsx(
-      textFieldStyles.input,
-      s.input,
-      showError && s.error,
-      isRange && s.range
-    ),
+    input: clsx(textFieldStyles.input, s.input, showError && s.error, isRange && s.range),
     day: () => s.day,
     popper: s.popper,
   }
@@ -94,13 +79,7 @@ export const DatePicker = ({
           calendarClassName={classNames.calendar}
           className={classNames.input}
           onChange={handleDateChange}
-          customInput={
-            <CustomInput
-              showError={showError}
-              disabled={disabled}
-              label={label}
-            />
-          }
+          customInput={<CustomInput showError={showError} disabled={disabled} label={label} />}
           renderCustomHeader={customHeader}
           startDate={startDate}
           endDate={endDate}
@@ -121,13 +100,7 @@ export const DatePicker = ({
           calendarClassName={classNames.calendar}
           className={classNames.input}
           onChange={handleDateChange}
-          customInput={
-            <CustomInput
-              showError={showError}
-              disabled={disabled}
-              label={label}
-            />
-          }
+          customInput={<CustomInput showError={showError} disabled={disabled} label={label} />}
           renderCustomHeader={customHeader}
           startDate={startDate}
           selected={startDate}
@@ -172,40 +145,24 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
   }
 )
 
-const customHeader = ({
-  date,
-  decreaseMonth,
-  increaseMonth,
-}: ReactDatePickerCustomHeaderProps) => {
+const customHeader = ({ date, decreaseMonth, increaseMonth }: ReactDatePickerCustomHeaderProps) => {
   const classNames = {
     button: s.button,
     buttonBox: s.buttonBox,
     header: s.header,
   }
 
-  const headerText = capitalizeFirstLetter(
-    format(date, 'LLLL y', { locale: ru })
-  )
+  const headerText = capitalizeFirstLetter(format(date, 'LLLL y', { locale: ru }))
 
   return (
     <div className={classNames.header}>
       <div>{headerText}</div>
       <div className={classNames.buttonBox}>
-        <button
-          className={classNames.button}
-          onClick={decreaseMonth}
-          type={'button'}
-          aria-label=" previous month"
-        >
+        <button className={classNames.button} onClick={decreaseMonth} type={'button'} aria-label=" previous month">
           <MdOutlineKeyboardArrowLeft />
         </button>
 
-        <button
-          className={classNames.button}
-          onClick={increaseMonth}
-          type={'button'}
-          aria-label="Next month"
-        >
+        <button className={classNames.button} onClick={increaseMonth} type={'button'} aria-label="Next month">
           <MdOutlineKeyboardArrowRight />
         </button>
       </div>
@@ -213,8 +170,7 @@ const customHeader = ({
   )
 }
 
-const formatWeekDay = (day: string) =>
-  capitalizeFirstLetter(day.substring(0, 1))
+const formatWeekDay = (day: string) => capitalizeFirstLetter(day.substring(0, 1))
 const capitalizeFirstLetter = (text: string) => {
   return text[0].toUpperCase() + text.slice(1)
 }

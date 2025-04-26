@@ -1,8 +1,8 @@
-import { useDispatch } from "react-redux"
-import { authApi, useLogoutMutation } from "../api/authApi"
-import { useCallback } from "react"
-import { AUTH_MESSAGES } from "@/shared/config/messages"
-import { toast } from "react-toastify"
+import { useDispatch } from 'react-redux'
+import { authApi, useLogoutMutation } from '../api/authApi'
+import { useCallback } from 'react'
+import { AUTH_MESSAGES } from '@/shared/config/messages'
+import { toast } from 'react-toastify'
 
 export const useLogout = () => {
   const [logout, { isLoading }] = useLogoutMutation()

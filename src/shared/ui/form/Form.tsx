@@ -54,13 +54,7 @@ export const Form = <T extends FieldValues>({
       <form onSubmit={handleSubmit(handleFormSubmit)} className={s.form}>
         {fields.map(({ name, label, type }) =>
           type === 'checkbox' ? (
-            <ControlledCheckbox
-              key={name}
-              control={control}
-              name={name}
-              label={label}
-              disabled={disabled}
-            />
+            <ControlledCheckbox key={name} control={control} name={name} label={label} disabled={disabled} />
           ) : (
             <ControlledTextField
               key={name}
@@ -73,9 +67,7 @@ export const Form = <T extends FieldValues>({
           )
         )}
 
-        {additionalContent && (
-          <div className={s.additionalContent}>{additionalContent}</div>
-        )}
+        {additionalContent && <div className={s.additionalContent}>{additionalContent}</div>}
 
         <Button type="submit" fullWidth disabled={disabled || !allFieldsFilled}>
           {btnText}

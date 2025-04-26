@@ -40,12 +40,7 @@ const addContent = (
   </div>
 )
 
-const FormWrapper = <T extends FieldValues>({
-  btnText,
-  fields,
-  schema,
-  additionalContent,
-}: FormProps<T>) => {
+const FormWrapper = <T extends FieldValues>({ btnText, fields, schema, additionalContent }: FormProps<T>) => {
   const { handleSubmit } = useForm({
     resolver: zodResolver(schema),
   })

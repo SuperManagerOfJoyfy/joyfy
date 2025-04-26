@@ -6,11 +6,7 @@ import { FiCamera, FiPlus, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { IoClose } from 'react-icons/io5'
 import { Button, Typography } from '@/shared/ui'
 import Image from 'next/image'
-import {
-  ACCEPTED_TYPES,
-  MAX_FILE_SIZE_MB,
-  MAX_IMAGES,
-} from '@/features/post/utils/constats'
+import { ACCEPTED_TYPES, MAX_FILE_SIZE_MB, MAX_IMAGES } from '@/features/post/utils/constats'
 
 import s from './StepUpload.module.scss'
 
@@ -20,11 +16,7 @@ type StepUploadProps = {
   hasDraft?: boolean
 }
 
-export const StepUpload = ({
-  onClose,
-  onNext,
-  hasDraft = false,
-}: StepUploadProps) => {
+export const StepUpload = ({ onClose, onNext, hasDraft = false }: StepUploadProps) => {
   const [error, setError] = useState<string | null>(null)
   const [previews, setPreviews] = useState<string[]>([])
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
@@ -156,17 +148,12 @@ export const StepUpload = ({
     <div className={s.container}>
       {selectedFiles.length === 0 ? (
         <>
-          <div
-            {...getRootProps()}
-            className={`${s.dropzone} ${isDragActive ? s.dragging : ''}`}
-          >
+          <div {...getRootProps()} className={`${s.dropzone} ${isDragActive ? s.dragging : ''}`}>
             <input {...getInputProps()} aria-label="Upload photo" />
             <div className={s.placeholder}>
               <FiCamera size={48} className={s.icon} />
               <Typography variant="body2" className={s.dropText}>
-                {isDragActive
-                  ? 'Drop the image here'
-                  : 'Drag and drop your image here or click to browse'}
+                {isDragActive ? 'Drop the image here' : 'Drag and drop your image here or click to browse'}
               </Typography>
             </div>
           </div>
@@ -178,22 +165,12 @@ export const StepUpload = ({
           )}
 
           <div className={s.buttons}>
-            <Button
-              onClick={openFileDialog}
-              variant="primary"
-              fullWidth
-              className={s.button}
-            >
+            <Button onClick={openFileDialog} variant="primary" fullWidth className={s.button}>
               Select from Computer
             </Button>
 
             {hasDraft && (
-              <Button
-                onClick={openDraft}
-                variant="outline"
-                fullWidth
-                className={s.button}
-              >
+              <Button onClick={openDraft} variant="outline" fullWidth className={s.button}>
                 Open Draft
               </Button>
             )}

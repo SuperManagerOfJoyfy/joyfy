@@ -1,8 +1,4 @@
-import {
-  GetAllPostsResponse,
-  UploadImageResponse,
-  CreatePostRequest,
-} from '@/features/post/api/postsApi.types'
+import { GetAllPostsResponse, UploadImageResponse, CreatePostRequest } from '@/features/post/api/postsApi.types'
 import { joyfyApi } from '@/shared/api/joyfyApi'
 import { PostItem } from '../types/types'
 
@@ -40,9 +36,5 @@ export const postsApi = joyfyApi.injectEndpoints({
   }),
 })
 
-export const {
-  useGetAllPostsQuery,
-  useUploadImageMutation,
-  useDeleteUploadedImageMutation,
-  useCreatePostMutation,
-} = postsApi
+export const { useGetAllPostsQuery, useUploadImageMutation, useDeleteUploadedImageMutation, useCreatePostMutation } =
+  postsApi

@@ -37,13 +37,8 @@ const usePaginationState = (totalItems: number, defaultItemsPerPage = 10) => {
 
 export const Default = {
   render: () => {
-    const {
-      currentPage,
-      itemsPerPage,
-      totalPages,
-      handlePageChange,
-      handleItemsPerPageChange,
-    } = usePaginationState(100)
+    const { currentPage, itemsPerPage, totalPages, handlePageChange, handleItemsPerPageChange } =
+      usePaginationState(100)
 
     return (
       <Pagination

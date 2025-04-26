@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Modal } from '@/shared/ui/modal'
-import {
-  AspectRatioType,
-  DraftData,
-  FilterType,
-  PostCreationStep,
-  PublishData,
-} from '@/features/post/types/types'
+import { AspectRatioType, DraftData, FilterType, PostCreationStep, PublishData } from '@/features/post/types/types'
 import { StepUpload } from '../stepUpload'
 import { StepCrop } from '../stepCrop/StepCrop'
 import { StepFilters } from '../stepFilters/StepFilters'
@@ -23,11 +17,7 @@ type CreatePostModalProps = {
   onPublish: (formData: PublishData) => void
 }
 
-export const CreatePostModal = ({
-  open,
-  onClose,
-  onPublish,
-}: CreatePostModalProps) => {
+export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalProps) => {
   const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [aspectRatio, setAspectRatio] = useState<AspectRatioType>('1:1')
@@ -66,11 +56,7 @@ export const CreatePostModal = ({
     setCurrentStep('crop')
   }
 
-  const handleCropComplete = (
-    files: File[],
-    ratio: AspectRatioType,
-    zoomLevel: number
-  ) => {
+  const handleCropComplete = (files: File[], ratio: AspectRatioType, zoomLevel: number) => {
     setSelectedFiles(files)
     setAspectRatio(ratio)
     setZoom(zoomLevel)
@@ -137,18 +123,9 @@ export const CreatePostModal = ({
 
   return (
     <>
-      <Modal
-        open={open}
-        onOpenChange={handleCloseButtonClick}
-        title={getModalTitle()}
-        size={getModalSize()}
-      >
+      <Modal open={open} onOpenChange={handleCloseButtonClick} title={getModalTitle()} size={getModalSize()}>
         {currentStep === 'upload' && (
-          <StepUpload
-            onClose={handleCloseButtonClick}
-            onNext={handleFilesSelected}
-            hasDraft={hasDraft}
-          />
+          <StepUpload onClose={handleCloseButtonClick} onNext={handleFilesSelected} hasDraft={hasDraft} />
         )}
         {currentStep === 'crop' && (
           <StepCrop

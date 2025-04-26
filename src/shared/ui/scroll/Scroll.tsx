@@ -8,9 +8,7 @@ type Props = React.ComponentPropsWithoutRef<typeof ScrollArea.Root> & {
 export const Scroll = ({ children }: Props) => {
   return (
     <ScrollArea.Root className={s.root}>
-      <ScrollArea.Viewport className={s.viewport}>
-        {children}
-      </ScrollArea.Viewport>
+      <ScrollArea.Viewport className={s.viewport}>{children}</ScrollArea.Viewport>
       <ScrollArea.Scrollbar className={s.scrollbar} orientation="vertical">
         <ScrollArea.Thumb className={s.thumb} />
       </ScrollArea.Scrollbar>
