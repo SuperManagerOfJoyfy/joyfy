@@ -1,16 +1,17 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
 import {
-  MeResponse,
-  LoginRequest,
-  RegisterRequest,
   ConfirmEmailRequest,
   EmailInputDto,
-  RecoverPasswordRequest,
-  NewPasswordRequest,
-  RefreshTokenResponse,
-  LoginResponse,
   GoogleLoginRequest,
+  LoginRequest,
+  LoginResponse,
+  MeResponse,
+  NewPasswordRequest,
+  RecoverPasswordRequest,
+  RefreshTokenResponse,
+  RegisterRequest,
 } from './authApi.types'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 export const authApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -44,6 +45,19 @@ export const authApi = joyfyApi.injectEndpoints({
     }),
 
     login: builder.mutation<LoginResponse, LoginRequest>({
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+
+          if (!data) {
+            return
+          }
+
+          LocalStorage.setToken(data.accessToken)
+        } catch (error) {
+          console.error('Login failed:', error)
+        }
+      },
       query: (body) => ({
         url: '/auth/login',
         method: 'POST',
