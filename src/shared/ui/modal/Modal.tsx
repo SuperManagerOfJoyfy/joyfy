@@ -24,16 +24,41 @@ type Props = {
   className?: string
   style?: CSSProperties
   overlayOpacity?: number
+  preventClose?: boolean
 } & Omit<ComponentPropsWithoutRef<typeof DialogPrimitive.Root>, 'onOpenChange' | 'open'>
 
 export const Modal = forwardRef<ComponentRef<'div'>, Props>(
-  ({ children, title, size = 'sm', className, style, onOpenChange, open, overlayOpacity, ...props }, ref) => {
+  (
+    {
+      children,
+      title,
+      size = 'sm',
+      className,
+      style,
+      onOpenChange,
+      open,
+      overlayOpacity,
+      preventClose = false,
+      ...props
+    },
+    ref
+  ) => {
     const contentClasses = clsx(s.content, s[`size${size}`], className)
 
     const overlayAnimation = getOverlayAnimation(overlayOpacity)
 
+    const handleOpenChange = (newOpen: boolean) => {
+      if (!newOpen && preventClose) {
+        return
+      }
+
+      if (onOpenChange) {
+        onOpenChange(newOpen)
+      }
+    }
+
     return (
-      <DialogPrimitive.Root {...props} onOpenChange={onOpenChange} open={open} modal={true}>
+      <DialogPrimitive.Root {...props} onOpenChange={handleOpenChange} open={open} modal={true}>
         <DialogPrimitive.Portal forceMount>
           <AnimatePresence mode="wait">
             {open && (
