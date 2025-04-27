@@ -1,9 +1,5 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query'
-import type {
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/query'
+import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
 import { PATH } from '../config/routes'
 import { handleErrors } from '@/shared/utils/handleErrors/handleErrors'
@@ -13,11 +9,11 @@ const mutex = new Mutex()
 let lastRefreshResult: boolean | null = null
 let lastRefreshAttempt = 0
 
-export const baseQuery: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
+export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
   const result = await fetchBaseQuery({
     baseUrl: `https://joyfy.online/api/v1`,
     credentials: 'include',
@@ -32,25 +28,18 @@ export const baseQuery: BaseQueryFn<
   return result
 }
 
-export const baseQueryWithReauth: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
+export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
   await mutex.waitForUnlock()
 
   const isAuthMeRequest = typeof args !== 'string' && args.url === '/auth/me'
-  const isRefreshEndpoint =
-    typeof args !== 'string' &&
-    args.url === '/auth/update-tokens' &&
-    args.method === 'POST'
-  const isLoginEndpoint =
-    typeof args !== 'string' &&
-    args.url === '/auth/login' &&
-    args.method === 'POST'
+  const isRefreshEndpoint = typeof args !== 'string' && args.url === '/auth/update-tokens' && args.method === 'POST'
+  const isLoginEndpoint = typeof args !== 'string' && args.url === '/auth/login' && args.method === 'POST'
 
-  const currentPath =
-    typeof window !== 'undefined' ? window.location.pathname : ''
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : ''
 
   const isPublicPage = [
     PATH.ROOT,
@@ -77,10 +66,7 @@ export const baseQueryWithReauth: BaseQueryFn<
     const currentTime = Date.now()
     const refreshCooldown = 3000
 
-    if (
-      lastRefreshResult === false &&
-      currentTime - lastRefreshAttempt < refreshCooldown
-    ) {
+    if (lastRefreshResult === false && currentTime - lastRefreshAttempt < refreshCooldown) {
       console.log('Skipping refresh - recent failure')
       return result
     }
@@ -94,11 +80,7 @@ export const baseQueryWithReauth: BaseQueryFn<
 
         console.log('Attempting to refresh token')
 
-        const refreshResult = await baseQuery(
-          { url: '/auth/update-tokens', method: 'POST' },
-          api,
-          extraOptions
-        )
+        const refreshResult = await baseQuery({ url: '/auth/update-tokens', method: 'POST' }, api, extraOptions)
 
         if (!refreshResult.error) {
           console.log('Token refresh successful')
@@ -112,12 +94,9 @@ export const baseQueryWithReauth: BaseQueryFn<
           console.log('Token refresh failed:', refreshResult.error)
           lastRefreshResult = false
           if (!(isAuthMeRequest && isPublicPage)) {
-            await baseQuery(
-              { url: '/auth/logout', method: 'POST' },
-              api,
-              extraOptions
-            )
+            await baseQuery({ url: '/auth/logout', method: 'POST' }, api, extraOptions)
             LocalStorage.removeToken()
+            localStorage.removeItem('userEmail')
           }
         }
       } finally {

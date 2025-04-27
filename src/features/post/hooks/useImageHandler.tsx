@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { ACCEPTED_TYPES, MAX_FILE_SIZE_MB, MAX_IMAGES } from '../utils/constats'
 
-
 export const useImageHandling = (initialFiles: File[] = []) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>(initialFiles)
   const [imagePreviews, setImagePreviews] = useState<string[]>([])

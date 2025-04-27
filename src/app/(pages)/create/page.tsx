@@ -44,11 +44,7 @@ export default function CreatePostPage() {
     <AuthGuard requireAuth>
       {isLoading && <Loader message="Publish..." />}
       {error && <div className="text-red-500">{error}</div>}
-      <CreatePostModal
-        open={isModalOpen}
-        onClose={handleClose}
-        onPublish={handlePublish}
-      />
+      <CreatePostModal open={isModalOpen} onClose={handleClose} onPublish={handlePublish} />
     </AuthGuard>
   )
 }

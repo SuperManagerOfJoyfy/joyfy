@@ -15,12 +15,7 @@ export const Default = {
     const [value, setValue] = useState('')
 
     return (
-      <TextArea
-        label="Text Area"
-        placeholder="Text-area"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
+      <TextArea label="Text Area" placeholder="Text-area" value={value} onChange={(e) => setValue(e.target.value)} />
     )
   },
 }

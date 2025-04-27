@@ -4,7 +4,7 @@
   .label {
     color: var(--color-light-900);
 
-    &[aria-disabled="true"] {
+    &[aria-disabled='true'] {
       color: var(--color-dark-100);
     }
   }
@@ -33,7 +33,7 @@
       }
     }
 
-    &:has(.textArea[data-value="true"]) {
+    &:has(.textArea[data-value='true']) {
       border: 1px solid var(--color-light-100);
     }
 

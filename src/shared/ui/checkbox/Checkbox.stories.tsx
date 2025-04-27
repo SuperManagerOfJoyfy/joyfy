@@ -24,13 +24,7 @@ export const Default: Story = {
       setIsChecked(args.checked ?? false)
     }, [args.checked])
 
-    return (
-      <Checkbox
-        {...args}
-        checked={isChecked}
-        onCheckedChange={(checked) => setIsChecked(!!checked)}
-      />
-    )
+    return <Checkbox {...args} checked={isChecked} onCheckedChange={(checked) => setIsChecked(!!checked)} />
   },
   args: {
     label: 'Check-box',
@@ -40,8 +34,8 @@ export const Default: Story = {
 }
 
 export const WithError: Story = {
-	args: {
-		label: 'Check-box',
-		errorMessage: 'You need to agree to Terms & Conditions'
-	},
+  args: {
+    label: 'Check-box',
+    errorMessage: 'You need to agree to Terms & Conditions',
+  },
 }

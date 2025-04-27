@@ -5,7 +5,6 @@ import { Button, Card, Typography } from '@/shared/ui'
 import { Loader } from '@/shared/ui/loader/Loader'
 
 export default function HomePage() {
-
   return (
     <div>
       <Card>

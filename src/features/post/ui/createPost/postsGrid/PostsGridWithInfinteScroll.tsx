@@ -8,12 +8,10 @@ import { useSelector } from 'react-redux'
 
 export const PostsGridWithInfinteScroll = () => {
   const { user } = useAuth()
-  const { data, isLoading } = useGetAllPostsQuery(
-    user ? { userName: user.userName } : skipToken
-  )
+  const { data, isLoading } = useGetAllPostsQuery(user ? { userName: user.userName } : skipToken)
 
   const posts = data?.items
-	if (isLoading) return <Loader />
+  if (isLoading) return <Loader />
   if (!posts || posts.length === 0) return <div>No posts yet...</div>
 
   return (

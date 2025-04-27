@@ -4,11 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Button } from '@/shared/ui'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-import {
-  AspectRatioType,
-  FILTERS,
-  FilterType,
-} from '@/features/post/types/types'
+import { AspectRatioType, FILTERS, FilterType } from '@/features/post/types/types'
 
 import s from './StepFilters.module.css'
 
@@ -29,8 +25,7 @@ export const StepFilters = ({
   onNext,
   initialFilter = 'Normal',
 }: StepFiltersProps) => {
-  const [selectedFilter, setSelectedFilter] =
-    useState<FilterType>(initialFilter)
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>(initialFilter)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
 
@@ -81,12 +76,7 @@ export const StepFilters = ({
       <div className={s.previewContainer}>
         {files.length > 1 && (
           <div className={s.navigationControls}>
-            <button
-              onClick={handlePrevImage}
-              disabled={currentImageIndex === 0}
-              className={s.navButton}
-              type="button"
-            >
+            <button onClick={handlePrevImage} disabled={currentImageIndex === 0} className={s.navButton} type="button">
               <FiChevronLeft size={20} />
             </button>
             <button
@@ -102,10 +92,7 @@ export const StepFilters = ({
 
         <div className={`${s.imageWrapper} ${getAspectRatioClass()}`}>
           {imagePreviews[currentImageIndex] && (
-            <div
-              className={s.imageContainer}
-              style={{ transform: `scale(${zoom})` }}
-            >
+            <div className={s.imageContainer} style={{ transform: `scale(${zoom})` }}>
               <Image
                 src={imagePreviews[currentImageIndex]}
                 alt={`Preview ${currentImageIndex + 1}`}
@@ -163,20 +150,10 @@ export const StepFilters = ({
       </div>
 
       <div className={s.buttons}>
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className={s.button}
-          fullWidth
-        >
+        <Button onClick={onBack} variant="outline" className={s.button} fullWidth>
           Back
         </Button>
-        <Button
-          onClick={handleNext}
-          variant="primary"
-          className={s.button}
-          fullWidth
-        >
+        <Button onClick={handleNext} variant="primary" className={s.button} fullWidth>
           Next
         </Button>
       </div>

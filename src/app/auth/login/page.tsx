@@ -13,11 +13,7 @@ const Page = () => {
   const router = useRouter()
   const [isRedirecting, setIsRedirecting] = useState(false)
 
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    isError: isUserError,
-  } = useGetMeQuery()
+  const { data: user, isLoading: isUserLoading, isError: isUserError } = useGetMeQuery()
 
   async function handleLogin(data: LoginFormValues) {
     try {
@@ -31,11 +27,11 @@ const Page = () => {
     }
   }
 
-  if (isRedirecting || isUserLoading) return <Loader /> 
+  if (isRedirecting || isUserLoading) return <Loader />
 
   if (user) {
-    router.push(PATH.ROOT) 
-    return <Loader /> 
+    router.push(PATH.ROOT)
+    return <Loader />
   }
 
   return (
