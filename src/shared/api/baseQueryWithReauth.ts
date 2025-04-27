@@ -15,7 +15,7 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
   extraOptions
 ) => {
   const result = await fetchBaseQuery({
-    baseUrl: `https://joyfy.online/api/v1`,
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = LocalStorage.getToken()

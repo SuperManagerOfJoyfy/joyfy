@@ -28,10 +28,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   const sidebarItems = useMemo(
     () =>
-      createSidebarItems('user', {
+      createSidebarItems('user', user?.userId, {
         onOpenLogoutModalHandler,
       }),
-    [onOpenLogoutModalHandler]
+    [onOpenLogoutModalHandler, user?.userId]
   )
 
   useEffect(() => {

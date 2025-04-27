@@ -36,7 +36,11 @@ type SidebarActionHandlers = {
   onCreatePost?: () => void
 }
 
-export const createSidebarItems = (role: 'user' | 'admin', handlers: SidebarActionHandlers = {}): SidebarItem[] => {
+export const createSidebarItems = (
+  role: 'user' | 'admin',
+  userId?: string,
+  handlers: SidebarActionHandlers = {}
+): SidebarItem[] => {
   const adminItems: SidebarItem[] = [
     {
       id: 'users',
@@ -87,7 +91,7 @@ export const createSidebarItems = (role: 'user' | 'admin', handlers: SidebarActi
     {
       id: 'profile',
       title: 'My Profile',
-      path: PATH.USER.PROFILE,
+      path: userId ? `${PATH.USER.PROFILE}/${userId}` : PATH.USER.PROFILE,
       icon: <FiUser />,
       activeIcon: <FaUser />,
     },
