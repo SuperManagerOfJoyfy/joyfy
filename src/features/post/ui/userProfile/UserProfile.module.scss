@@ -3,13 +3,14 @@
 }
 
 .profileImageContainer {
-  margin-right: 60px;
+  margin-right: 38px;
+  margin-bottom: 48px;
 }
 
 .profileImageWrapper {
   border-radius: 50%;
   overflow: hidden;
-  background-color:var(--color-light-100);
+  background-color: var(--color-light-100);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,14 +33,20 @@
   text-align: center;
 }
 
-.profileBio {
-  max-width: 700px !important;
-  line-height: 1.5;
-  margin-bottom: 10px;
+.profileInfo {
+  width: 730px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.subscriptionBadge {
-  color: var(--color-light-100);
-  font-weight: bold;
-  margin-top: 10px;
+.userBlock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileBio {
+  line-height: 1.5;
+  margin-bottom: 10px;
 }

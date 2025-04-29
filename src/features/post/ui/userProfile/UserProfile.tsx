@@ -3,8 +3,10 @@
 import React from 'react'
 import Image from 'next/image'
 import s from './UserProfile.module.scss'
-import { Typography } from '@/shared/ui'
+import { Button, Typography } from '@/shared/ui'
 import defaultAvatar from '../../../../../public/default-avatar.png'
+import { useAuth } from '@/features/auth/hooks/useAuth'
+import verifiedBudget from '../../../../../public/verifiedBudget.svg'
 
 type Avatar = {
   url: string
@@ -20,7 +22,7 @@ type MetaData = {
   publications: number
 }
 
-export type UserProfileType = {
+export type UserProfileProps = {
   id: number
   userName: string
   aboutMe: string | null
@@ -29,40 +31,35 @@ export type UserProfileType = {
   hasPaymentSubscription: boolean
 }
 
-type StatItem = {
+type StatItemProps = {
   value: number
   label: string
 }
 
-const StatItem = ({ value, label }: StatItem) => (
+const StatItem = ({ value, label }: StatItemProps) => (
   <div className={s.statItem}>
     <Typography variant={'h2'}>{value}</Typography>
     <Typography variant={'body1'}>{label}</Typography>
   </div>
 )
 
-export const UserProfile = ({
-  id,
-  userName,
-  aboutMe,
-  avatars,
-  userMetadata,
-  hasPaymentSubscription,
-}: UserProfileType) => {
-  const profileAvatar: Avatar = avatars?.[0]
+export const UserProfile = ({ userName, aboutMe, avatars, userMetadata, hasPaymentSubscription }: UserProfileProps) => {
+  const { isAuthenticated } = useAuth()
+
+  const profileAvatar: Avatar | undefined = avatars?.[0]
 
   const isAvatarValid = (profileAvatar: Avatar): boolean => {
     if (!profileAvatar) return false
-    return (
-      Boolean(profileAvatar.url?.trim()) &&
-      profileAvatar.width > 0 &&
-      profileAvatar.height > 0
-    )
+    return Boolean(profileAvatar.url?.trim()) && profileAvatar.width > 0 && profileAvatar.height > 0
   }
 
-  console.log('LOGGER: ' + isAvatarValid(profileAvatar))
+  const bioText =
+    aboutMe ||
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore' +
+      ' magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco'
+
   return (
-    <div className={s.profileContainer} key={id}>
+    <div className={s.profileContainer}>
       <div className={s.profileImageContainer}>
         <div className={s.profileImageWrapper}>
           {isAvatarValid(profileAvatar) ? (
@@ -73,36 +70,29 @@ export const UserProfile = ({
               alt={`${userName}'s avatar`}
             />
           ) : (
-            <Image
-              src={defaultAvatar}
-              width={204}
-              height={204}
-              alt="default avatar"
-            />
+            <Image src={defaultAvatar} width={204} height={204} alt="default avatar" priority />
           )}
         </div>
       </div>
 
-      <div className={s.profileInfo}>
-        <Typography variant={'large'} fontWeight={'medium'}>
-          {userName}
-        </Typography>
-
+      <div>
+        <div className={s.profileInfo}>
+          <div className={s.userBlock}>
+            <Typography variant="large" fontWeight="medium">
+              {userName}
+            </Typography>
+            {hasPaymentSubscription && (
+              <Image src={verifiedBudget} width={24} height={24} alt="verifiedIcon" priority />
+            )}
+          </div>
+          {isAuthenticated && <Button variant={'secondary'}>Profile Settings</Button>}
+        </div>
         <div className={s.profileStats}>
           <StatItem value={userMetadata.following} label="Following" />
           <StatItem value={userMetadata.followers} label="Followers" />
           <StatItem value={userMetadata.publications} label="Publications" />
         </div>
-
-        <Typography className={s.profileBio}>
-          {aboutMe ||
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut' +
-              ' labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco '}
-        </Typography>
-
-        {/*{hasPaymentSubscription && (*/}
-        {/*  <p className={s.subscriptionBadge}>✔ Подписка активна</p>*/}
-        {/*)}*/}
+        <Typography className={s.profileBio}>{bioText}</Typography>
       </div>
     </div>
   )
