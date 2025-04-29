@@ -38,6 +38,7 @@ type SidebarActionHandlers = {
 
 export const createSidebarItems = (
   role: 'user' | 'admin',
+  userId?: string,
   handlers: SidebarActionHandlers = {}
 ): SidebarItem[] => {
   const adminItems: SidebarItem[] = [
@@ -84,12 +85,13 @@ export const createSidebarItems = (
       title: 'Create',
       path: PATH.USER.CREATE,
       icon: <FiPlusCircle />,
+      onClick: handlers.onCreatePost,
       activeIcon: <FaPlusCircle />,
     },
     {
       id: 'profile',
       title: 'My Profile',
-      path: PATH.USER.PROFILE,
+      path: userId ? `${PATH.USER.PROFILE}/${userId}` : PATH.USER.PROFILE,
       icon: <FiUser />,
       activeIcon: <FaUser />,
     },

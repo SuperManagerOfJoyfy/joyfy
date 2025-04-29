@@ -11,13 +11,7 @@ export default function NotFound() {
     <div className={s.container}>
       <svg width="0" height="0" className={s.svg}>
         <defs>
-          <linearGradient
-            id="notFoundGradient"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="0%"
-          >
+          <linearGradient id="notFoundGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#8a2be2" />
             <stop offset="100%" stopColor="#3b82f6" />
           </linearGradient>

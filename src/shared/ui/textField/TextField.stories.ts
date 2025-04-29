@@ -1,12 +1,12 @@
-import { TextField } from './TextField';
-import type { Meta, StoryObj } from '@storybook/react';
-import { action } from "@storybook/addon-actions";
+import { TextField } from './TextField'
+import type { Meta, StoryObj } from '@storybook/react'
+import { action } from '@storybook/addon-actions'
 
 const meta: Meta<typeof TextField> = {
-	title: 'Components/TextField',
-	component: TextField,
-	tags: ["autodocs"],
-	argTypes: {
+  title: 'Components/TextField',
+  component: TextField,
+  tags: ['autodocs'],
+  argTypes: {
     search: {
       control: 'boolean',
       description: 'Enable search icon on the left side',
@@ -37,47 +37,46 @@ const meta: Meta<typeof TextField> = {
       description: 'Type of the input field (text or password)',
     },
   },
-};
+}
 
-export default meta;
-type Story = StoryObj<typeof TextField>;
+export default meta
+type Story = StoryObj<typeof TextField>
 
 export const Default: Story = {
   args: {
-		label: "Email",
-		placeholder: 'Enter your text',
-		onEnter: action('Enter!'),
-		onKeyDown: action('Key Pressed'),
-		onShowPasswordClick: action('Toggle password')
+    label: 'Email',
+    placeholder: 'Enter your text',
+    onEnter: action('Enter!'),
+    onKeyDown: action('Key Pressed'),
+    onShowPasswordClick: action('Toggle password'),
   },
-};
-
+}
 
 export const Invalid: Story = {
   args: {
-		...Default.args,
-		errorMessage: 'Error text'
-	}
-};
+    ...Default.args,
+    errorMessage: 'Error text',
+  },
+}
 
 export const Disabled: Story = {
   args: {
-		...Default.args,
-		disabled: true
-	}
-};
+    ...Default.args,
+    disabled: true,
+  },
+}
 
 export const Search: Story = {
   args: {
-		placeholder: 'input search',
-		search: true
-	}
-};
+    placeholder: 'input search',
+    search: true,
+  },
+}
 
 export const Password: Story = {
   args: {
-		label: "Password",
-		placeholder: 'Enter your password',
-		type: 'password'
-	}
-};
+    label: 'Password',
+    placeholder: 'Enter your password',
+    type: 'password',
+  },
+}

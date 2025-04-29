@@ -18,13 +18,5 @@ export const ControlledTextField = <TFieldValues extends FieldValues>({
     fieldState: { error },
   } = useController({ control, name })
 
-  return (
-    <TextField
-      {...rest}
-      {...field}
-      value={field.value ?? ''}
-      errorMessage={error?.message}
-      id={name}
-    />
-  )
+  return <TextField {...rest} {...field} value={field.value ?? ''} errorMessage={error?.message} id={name} />
 }

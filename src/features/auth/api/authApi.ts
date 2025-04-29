@@ -1,15 +1,17 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
 import {
-  MeResponse,
-  LoginRequest,
-  RegisterRequest,
   ConfirmEmailRequest,
   EmailInputDto,
-  RecoverPasswordRequest,
-  NewPasswordRequest,
-  RefreshTokenResponse,
+  GoogleLoginRequest,
+  LoginRequest,
   LoginResponse,
+  MeResponse,
+  NewPasswordRequest,
+  RecoverPasswordRequest,
+  RefreshTokenResponse,
+  RegisterRequest,
 } from './authApi.types'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 export const authApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -33,7 +35,6 @@ export const authApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
-    
 
     confirmEmail: builder.mutation<void, ConfirmEmailRequest>({
       query: (body) => ({
@@ -44,6 +45,19 @@ export const authApi = joyfyApi.injectEndpoints({
     }),
 
     login: builder.mutation<LoginResponse, LoginRequest>({
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+
+          if (!data) {
+            return
+          }
+
+          LocalStorage.setToken(data.accessToken)
+        } catch (error) {
+          console.error('Login failed:', error)
+        }
+      },
       query: (body) => ({
         url: '/auth/login',
         method: 'POST',
@@ -84,26 +98,21 @@ export const authApi = joyfyApi.injectEndpoints({
       }),
     }),
 
-    logoutAllSessions: builder.mutation<void, void>({
-      query: () => ({
-        url: '/auth/devices',
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['User'],
-    }),
-
-    logoutDevice: builder.mutation<void, string>({
-      query: (deviceId) => ({
-        url: `/auth/devices/${deviceId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['User', 'Auth'],
-    }),
-
     refreshToken: builder.mutation<RefreshTokenResponse, void>({
       query: () => ({
         url: '/auth/update-tokens',
         method: 'POST',
+      }),
+    }),
+
+    googleLogin: builder.mutation<LoginResponse, GoogleLoginRequest>({
+      query: (body) => ({
+        url: '/auth/google/login',
+        method: 'POST',
+        body: {
+          code: body.code,
+          redirectUrl: body.redirectUrl,
+        },
       }),
     }),
   }),
@@ -118,9 +127,7 @@ export const {
   useResendEmailConfirmationMutation,
   useRecoverPasswordMutation,
   useNewPasswordMutation,
-  // useLogoutAllSessionsMutation,
-  // useLogoutDeviceMutation,
-  // useClearAllDataMutation,
   useRefreshTokenMutation,
   useLazyGetMeQuery,
+  useGoogleLoginMutation,
 } = authApi

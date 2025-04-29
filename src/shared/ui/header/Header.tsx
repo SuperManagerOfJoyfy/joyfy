@@ -6,12 +6,12 @@ import Image, { StaticImageData } from 'next/image'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import { Button, SelectBox, SelectItem } from '@/shared/ui'
 import { PATH } from '@/shared/config/routes'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 import Letters from '../../../../public/logo/letters.png'
 import Logo from '../../../../public/logo/logo.png'
 import flagUnitedKingdom from '@/shared/ui/header/assets/flagUnitedKingdom.png'
 import flagRussia from '@/shared/ui/header/assets/flagRussia.png'
 import s from './Header.module.scss'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -30,12 +30,7 @@ const AuthActions = () => (
     <Button as={Link} href={PATH.AUTH.LOGIN} size="small" variant="text">
       Log in
     </Button>
-    <Button
-      as={Link}
-      href={PATH.AUTH.REGISTRATION}
-      size="small"
-      variant="primary"
-    >
+    <Button as={Link} href={PATH.AUTH.REGISTRATION} size="small" variant="primary">
       Sign up
     </Button>
   </div>
@@ -43,7 +38,7 @@ const AuthActions = () => (
 
 export const Header = () => {
   const [notificationCount] = useState(3)
-  const { data: user, isLoading } = useGetMeQuery(undefined, { skip: false })
+  const { user, isLoading } = useAuth()
   const [showButtons, setShowButtons] = useState(true)
 
   useEffect(() => {
@@ -56,17 +51,15 @@ export const Header = () => {
     <header className={s.header}>
       <div className={s.container}>
         <Link href={PATH.ROOT} className={s.logo}>
-          <Image src={Logo} alt="logo" width={45} height={45} />
-          <Image src={Letters} alt="logo" height={30} />
+          <Image src={Logo} alt="logo" width={40} height={40} />
+          <Image src={Letters} alt="logo" height={20} />
         </Link>
         <div className={s.actions}>
           <div className={s.notificationContainer}>
             {user && (
               <div className={s.notifications}>
                 <IoNotificationsOutline />
-                {notificationCount !== 0 && (
-                  <span className={s.number}>{notificationCount}</span>
-                )}
+                {notificationCount !== 0 && <span className={s.number}>{notificationCount}</span>}
               </div>
             )}
           </div>
@@ -80,9 +73,7 @@ export const Header = () => {
             </SelectItem>
           </SelectBox>
 
-          <div className={s.authActions}>
-            {showButtons && !user && <AuthActions />}
-          </div>
+          <div className={s.authActions}>{showButtons && !user && <AuthActions />}</div>
         </div>
       </div>
     </header>

@@ -15,93 +15,48 @@
 }
 
 .large {
-  @include typography(
-                  var(--font-size-xxl),
-                  var(--line-height-l),
-                  var(--font-weight-semibold)
-  );
+  @include typography(var(--font-size-xxl), var(--line-height-l), var(--font-weight-semibold));
 }
 
 .h1 {
-  @include typography(
-                  var(--font-size-xl),
-                  var(--line-height-l),
-                  var(--font-weight-bold)
-  );
+  @include typography(var(--font-size-xl), var(--line-height-l), var(--font-weight-bold));
 }
 
 .h2 {
-  @include typography(
-                  var(--font-size-l),
-                  var(--line-height-m),
-                  var(--font-weight-bold)
-  );
+  @include typography(var(--font-size-l), var(--line-height-m), var(--font-weight-bold));
 }
 
 .h3 {
-  @include typography(
-                  var(--font-size-m),
-                  var(--line-height-m),
-                  var(--font-weight-semibold)
-  );
+  @include typography(var(--font-size-m), var(--line-height-m), var(--font-weight-semibold));
 }
 
 .body1 {
-  @include typography(
-                  var(--font-size-m),
-                  var(--line-height-m),
-                  var(--font-weight-regular)
-  );
+  @include typography(var(--font-size-m), var(--line-height-m), var(--font-weight-regular));
 }
 
 .subtitle1 {
-  @include typography(
-                  var(--font-size-m),
-                  var(--line-height-m),
-                  var(--font-weight-bold)
-  );
+  @include typography(var(--font-size-m), var(--line-height-m), var(--font-weight-bold));
 }
 
 .body2 {
-  @include typography(
-                  var(--font-size-s),
-                  var(--line-height-m),
-                  var(--font-weight-regular)
-  );
+  @include typography(var(--font-size-s), var(--line-height-m), var(--font-weight-regular));
 }
 
 .subtitle2 {
-  @include typography(
-                  var(--font-size-s),
-                  var(--line-height-m),
-                  var(--font-weight-bold)
-  );
+  @include typography(var(--font-size-s), var(--line-height-m), var(--font-weight-bold));
 }
 
 .caption {
-  @include typography(
-                  var(--font-size-xs),
-                  var(--line-height-s),
-                  var(--font-weight-regular)
-  );
+  @include typography(var(--font-size-xs), var(--line-height-s), var(--font-weight-regular));
 }
 
 .caption2 {
-  @include typography(
-                  var(--font-size-xs),
-                  var(--line-height-s),
-                  var(--font-weight-semibold)
-  );
+  @include typography(var(--font-size-xs), var(--line-height-s), var(--font-weight-semibold));
 }
 
 .link1,
 .link1:visited {
-  @include typography(
-                  var(--font-size-s),
-                  var(--line-height-m),
-                  var(--font-weight-regular),
-                  var(--color-accent-500)
-  );
+  @include typography(var(--font-size-s), var(--line-height-m), var(--font-weight-regular), var(--color-accent-500));
   cursor: pointer;
   text-decoration: underline;
   text-decoration-skip-ink: none;
@@ -109,12 +64,7 @@
 
 .link2,
 .link2:visited {
-  @include typography(
-                  var(--font-size-xs),
-                  var(--line-height-s),
-                  var(--font-weight-regular),
-                  var(--color-accent-500)
-  );
+  @include typography(var(--font-size-xs), var(--line-height-s), var(--font-weight-regular), var(--color-accent-500));
   cursor: pointer;
   text-decoration: underline;
   text-decoration-skip-ink: none;

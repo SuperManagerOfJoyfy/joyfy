@@ -7,7 +7,7 @@ import s from './checkBox.module.scss'
 export type CheckboxProps = {
   label?: ReactNode
   checked?: boolean
-	errorMessage?: string
+  errorMessage?: string
   onCheckedChange?: (checked: boolean) => void
 } & ComponentProps<typeof CheckboxRadix.Root>
 
@@ -17,11 +17,11 @@ export const Checkbox = ({
   checked,
   onCheckedChange,
   disabled,
-	errorMessage,
+  errorMessage,
   ...rest
 }: CheckboxProps) => {
   const id = useId()
-	const showError = !!errorMessage && errorMessage.length > 0
+  const showError = !!errorMessage && errorMessage.length > 0
 
   return (
     <div className={clsx(s.main, className)} aria-disabled={disabled}>
@@ -43,7 +43,7 @@ export const Checkbox = ({
           {label}
         </label>
       )}
-			{showError && <p className={s.error}>{errorMessage}</p>}
+      {showError && <p className={s.error}>{errorMessage}</p>}
     </div>
   )
 }

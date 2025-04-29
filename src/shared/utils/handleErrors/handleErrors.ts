@@ -1,16 +1,8 @@
-import {
-  BaseQueryApi,
-  FetchBaseQueryError,
-  QueryReturnValue,
-} from '@reduxjs/toolkit/query/react'
+import { BaseQueryApi, FetchBaseQueryError, QueryReturnValue } from '@reduxjs/toolkit/query/react'
 import { toast } from 'react-toastify'
 
 const extractMessage = (data: any, fallback: string): string => {
-  if (
-    data?.messages &&
-    Array.isArray(data.messages) &&
-    data.messages[0]?.message
-  ) {
+  if (data?.messages && Array.isArray(data.messages) && data.messages[0]?.message) {
     return data.messages[0].message
   }
   if (typeof data?.messages === 'string') {
@@ -19,10 +11,7 @@ const extractMessage = (data: any, fallback: string): string => {
   return fallback
 }
 
-export const handleErrors = (
-  api: BaseQueryApi,
-  result: QueryReturnValue<unknown, FetchBaseQueryError>
-) => {
+export const handleErrors = (api: BaseQueryApi, result: QueryReturnValue<unknown, FetchBaseQueryError>) => {
   let error = 'Some error occurred'
 
   if (result.error) {
@@ -43,18 +32,12 @@ export const handleErrors = (
 
       case 403:
         error = 'Forbidden Error. No access rights'
-        break
 
       case 404:
         error = 'page not found (404)'
-        break
 
       case 429:
-        error = extractMessage(
-          result.error.data,
-          'More than 5 attempts from one IP-address during 10 seconds'
-        )
-        break
+        error = extractMessage(result.error.data, 'More than 5 attempts from one IP-address during 10 seconds')
 
       case 500:
         error = 'Internal server error'

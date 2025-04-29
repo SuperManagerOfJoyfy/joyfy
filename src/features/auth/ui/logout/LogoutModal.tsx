@@ -13,12 +13,7 @@ type Props = {
   onOpenLogoutModalHandler: (value: boolean) => void
   onLogout: () => Promise<'success' | 'unauthorized' | 'error'>
 }
-export const LogoutModal = ({
-  onLogout,
-  open,
-  onOpenLogoutModalHandler,
-  email,
-}: Props) => {
+export const LogoutModal = ({ onLogout, open, onOpenLogoutModalHandler, email }: Props) => {
   const router = useRouter()
 
   const onLogoutButtonClickHandler = async () => {
@@ -33,22 +28,14 @@ export const LogoutModal = ({
   }
 
   return (
-    <Modal
-      open={open}
-      title="Log Out"
-      onOpenChange={() => onOpenLogoutModalHandler(false)}
-    >
+    <Modal open={open} title="Log Out" onOpenChange={() => onOpenLogoutModalHandler(false)}>
       <div className={s.modal}>
         <Typography variant="body1" className={s.typography}>
           Do you really want to log out of your account?
           {email}
         </Typography>
         <div className={s.buttons}>
-          <Button
-            variant="secondary"
-            className={s.button}
-            onClick={onLogoutButtonClickHandler}
-          >
+          <Button variant="secondary" className={s.button} onClick={onLogoutButtonClickHandler}>
             Yes
           </Button>
           <Button

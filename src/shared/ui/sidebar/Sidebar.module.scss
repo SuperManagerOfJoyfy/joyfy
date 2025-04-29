@@ -1,5 +1,5 @@
 .sidebar {
-  min-width: 220px;
+  width: 100%;
   height: 100%;
   background-color: transparent;
   color: var(--color-light-100);
@@ -32,7 +32,6 @@
 .sidebarItem {
   width: 100%;
   margin-bottom: 24px;
-  padding-left: 60px;
 
   &:last-child {
     margin-bottom: 0;
