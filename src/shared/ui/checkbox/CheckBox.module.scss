@@ -103,11 +103,11 @@
       }
     }
   }
-	.error {
-		font-size: var(--font-size-s);
-		color: var(--color-danger-500);
-		position: absolute;
-		bottom: 0;
-		bottom: -1.5rem;
-	}
+  .error {
+    font-size: var(--font-size-s);
+    color: var(--color-danger-500);
+    position: absolute;
+    bottom: 0;
+    bottom: -1.5rem;
+  }
 }

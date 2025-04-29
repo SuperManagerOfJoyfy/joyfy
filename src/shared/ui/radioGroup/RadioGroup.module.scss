@@ -56,7 +56,7 @@
   background-color: transparent;
 
   &::before {
-    content: "";
+    content: '';
     display: block;
     width: 16px;
     height: 16px;
@@ -67,7 +67,7 @@
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     border-radius: 50%;
     transition: 200ms background-color;
@@ -76,13 +76,13 @@
     background-color: var(--color-light-100);
   }
 
-  [data-state="unchecked"] & {
+  [data-state='unchecked'] & {
     &::before {
       border-color: var(--color-light-100);
     }
   }
 
-  [data-state="checked"] & {
+  [data-state='checked'] & {
     &::before {
       border-color: var(--color-light-100);
     }

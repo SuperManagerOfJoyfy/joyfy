@@ -42,8 +42,9 @@
     }
   }
 
-  .signUp, .forgot {
-    &[aria-disabled="true"] {
+  .signUp,
+  .forgot {
+    &[aria-disabled='true'] {
       color: var(--color-dark-100);
       pointer-events: none;
     }

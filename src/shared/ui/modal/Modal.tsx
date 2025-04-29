@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  ComponentPropsWithoutRef,
-  ReactNode,
-  CSSProperties,
-  ComponentRef,
-  forwardRef,
-} from 'react'
+import { ComponentPropsWithoutRef, ReactNode, CSSProperties, ComponentRef, forwardRef } from 'react'
 import { IoClose } from 'react-icons/io5'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
@@ -30,10 +24,8 @@ type Props = {
   className?: string
   style?: CSSProperties
   overlayOpacity?: number
-} & Omit<
-  ComponentPropsWithoutRef<typeof DialogPrimitive.Root>,
-  'onOpenChange' | 'open'
->
+  preventClose?: boolean
+} & Omit<ComponentPropsWithoutRef<typeof DialogPrimitive.Root>, 'onOpenChange' | 'open'>
 
 export const Modal = forwardRef<ComponentRef<'div'>, Props>(
   (
@@ -46,6 +38,7 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
       onOpenChange,
       open,
       overlayOpacity,
+      preventClose = false,
       ...props
     },
     ref
@@ -54,13 +47,18 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
 
     const overlayAnimation = getOverlayAnimation(overlayOpacity)
 
+    const handleOpenChange = (newOpen: boolean) => {
+      if (!newOpen && preventClose) {
+        return
+      }
+
+      if (onOpenChange) {
+        onOpenChange(newOpen)
+      }
+    }
+
     return (
-      <DialogPrimitive.Root
-        {...props}
-        onOpenChange={onOpenChange}
-        open={open}
-        modal={true}
-      >
+      <DialogPrimitive.Root {...props} onOpenChange={handleOpenChange} open={open} modal={true}>
         <DialogPrimitive.Portal forceMount>
           <AnimatePresence mode="wait">
             {open && (
@@ -71,11 +69,7 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
 
                 <div className={s.modal} ref={ref}>
                   <DialogPrimitive.Content asChild forceMount>
-                    <motion.div
-                      {...windowAnimation}
-                      className={contentClasses}
-                      style={style}
-                    >
+                    <motion.div {...windowAnimation} className={contentClasses} style={style}>
                       <Card className={s.card}>
                         <header className={s.header}>
                           <DialogPrimitive.Title asChild>
@@ -87,10 +81,7 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
                               <VisuallyHidden>Modal dialog</VisuallyHidden>
                             )}
                           </DialogPrimitive.Title>
-                          <DialogPrimitive.Close
-                            className={s.closeButton}
-                            aria-label="Close"
-                          >
+                          <DialogPrimitive.Close className={s.closeButton} aria-label="Close">
                             <IoClose size={24} />
                           </DialogPrimitive.Close>
                         </header>

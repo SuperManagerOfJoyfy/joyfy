@@ -1,9 +1,9 @@
-.container{
-    padding: 24px 0 12px ;
+.container {
+  padding: 24px 0 12px;
 }
 
-.buttonContainer{
-    margin-top: 18px;
-    display: flex;
-    justify-content: space-between;
+.buttonContainer {
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
 }

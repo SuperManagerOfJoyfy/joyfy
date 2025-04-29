@@ -28,10 +28,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   const sidebarItems = useMemo(
     () =>
-      createSidebarItems('user', {
+      createSidebarItems('user', user?.userId, {
         onOpenLogoutModalHandler,
       }),
-    [onOpenLogoutModalHandler]
+    [onOpenLogoutModalHandler, user?.userId]
   )
 
   useEffect(() => {
@@ -63,11 +63,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 if (item.path) setPendingPath(item.path)
               }}
             />
-            <LogoutModal
-              open={isModalOpen}
-              onOpenLogoutModalHandler={onOpenLogoutModalHandler}
-							onLogout={logoutUser}
-            />
+            <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} onLogout={logoutUser} />
           </div>
         )}
 

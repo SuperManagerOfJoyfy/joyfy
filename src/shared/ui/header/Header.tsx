@@ -30,12 +30,7 @@ const AuthActions = () => (
     <Button as={Link} href={PATH.AUTH.LOGIN} size="small" variant="text">
       Log in
     </Button>
-    <Button
-      as={Link}
-      href={PATH.AUTH.REGISTRATION}
-      size="small"
-      variant="primary"
-    >
+    <Button as={Link} href={PATH.AUTH.REGISTRATION} size="small" variant="primary">
       Sign up
     </Button>
   </div>
@@ -64,9 +59,7 @@ export const Header = () => {
             {user && (
               <div className={s.notifications}>
                 <IoNotificationsOutline />
-                {notificationCount !== 0 && (
-                  <span className={s.number}>{notificationCount}</span>
-                )}
+                {notificationCount !== 0 && <span className={s.number}>{notificationCount}</span>}
               </div>
             )}
           </div>
@@ -80,9 +73,7 @@ export const Header = () => {
             </SelectItem>
           </SelectBox>
 
-          <div className={s.authActions}>
-            {showButtons && !user && <AuthActions />}
-          </div>
+          <div className={s.authActions}>{showButtons && !user && <AuthActions />}</div>
         </div>
       </div>
     </header>

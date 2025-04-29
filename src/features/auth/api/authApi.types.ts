@@ -68,4 +68,3 @@ export type OAuthLoginResponse = {
   accessToken: string
   email: string
 }
-

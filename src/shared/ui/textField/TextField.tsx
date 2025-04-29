@@ -1,13 +1,6 @@
 'use client'
 
-import React, {
-  ComponentProps,
-  KeyboardEvent,
-  MouseEvent,
-  ReactNode,
-  useId,
-  useState,
-} from 'react'
+import React, { ComponentProps, KeyboardEvent, MouseEvent, ReactNode, useId, useState } from 'react'
 import s from './TextField.module.scss'
 import { Label } from '@/shared/ui/label/Label'
 import { FiSearch } from 'react-icons/fi'
@@ -68,7 +61,7 @@ export const TextField = ({
     onKeyDown?.(e)
   }
 
-	const togglePasswordHandler = () => {
+  const togglePasswordHandler = () => {
     setShowPassword((prev) => !prev)
     onShowPasswordClick?.()
   }
@@ -89,10 +82,7 @@ export const TextField = ({
         />
 
         {isPassword && (
-          <button type='button' tabIndex={-1}
-            onClick={togglePasswordHandler}
-            className={classNames.endIconButton}
-          >
+          <button type="button" tabIndex={-1} onClick={togglePasswordHandler} className={classNames.endIconButton}>
             {showPassword ? <FiEye /> : <FiEyeOff />}
           </button>
         )}

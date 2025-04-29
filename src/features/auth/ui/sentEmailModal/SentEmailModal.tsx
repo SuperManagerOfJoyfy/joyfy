@@ -7,7 +7,7 @@ type Props = {
   email: string
 }
 
- export const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
+export const SentEmailModal = ({ open, email, onOpenChange, ...rest }: Props) => {
   const [internalOpen, setInternalOpen] = useState(open)
 
   useEffect(() => {
@@ -21,13 +21,7 @@ type Props = {
 
   return (
     <>
-      <Modal
-        {...rest}
-        open={internalOpen}
-        onOpenChange={handleOpenChange}
-        title="Email sent"
-        overlayOpacity={1}
-      >
+      <Modal {...rest} open={internalOpen} onOpenChange={handleOpenChange} title="Email sent" overlayOpacity={1}>
         <div style={{ padding: '30px 0 12px' }}>
           <Typography variant="body1" style={{ marginBottom: '18px' }}>
             We have sent a link to confirm your email to {email}

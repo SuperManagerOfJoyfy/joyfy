@@ -30,8 +30,7 @@ const meta = {
     },
     fullWidth: {
       control: 'boolean',
-      description:
-        'Whether the button should take up the full width of its container',
+      description: 'Whether the button should take up the full width of its container',
     },
     startIcon: {
       control: { type: 'object' },
@@ -141,9 +140,7 @@ export const WithPngImage: Story = {
     variant: 'primary',
     size: 'small',
     children: 'English',
-    startIcon: (
-      <Image src={flagUnitedKingdom} alt="UK flag" width={20} height={20} />
-    ),
+    startIcon: <Image src={flagUnitedKingdom} alt="UK flag" width={20} height={20} />,
   },
 }
 

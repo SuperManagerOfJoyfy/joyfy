@@ -39,8 +39,7 @@ export const GithubOAuthSuccess = () => {
         await triggerGetMe().unwrap()
         router.push(PATH.ROOT)
       } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'GitHub authentication failed'
+        const errorMessage = err instanceof Error ? err.message : 'GitHub authentication failed'
         router.push(PATH.AUTH.LOGIN)
       } finally {
         setIsLoading(false)

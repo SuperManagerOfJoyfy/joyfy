@@ -14,13 +14,7 @@ type Props = {
   hasNextPage?: boolean
 }
 
-export const PostsGrid = ({
-  onPostClick,
-  posts,
-  loadMorePosts,
-  isFetching,
-  hasNextPage,
-}: Props) => {
+export const PostsGrid = ({ onPostClick, posts, loadMorePosts, isFetching, hasNextPage }: Props) => {
   useEffect(() => {
     const handleScroll = () => {
       if (isFetching || !hasNextPage) return
@@ -42,12 +36,7 @@ export const PostsGrid = ({
       <div className={s.gridContainer}>
         {posts?.map((post) => (
           <div className={s.gridItem} onClick={onPostClick} key={post.id}>
-            <Image
-              src={post.images[0].url}
-              alt="post image"
-              width={235}
-              height={228}
-            />
+            <Image src={post.images[0].url} alt="post image" width={235} height={228} />
           </div>
         ))}
       </div>

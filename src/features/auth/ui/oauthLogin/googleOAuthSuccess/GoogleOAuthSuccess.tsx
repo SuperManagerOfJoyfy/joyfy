@@ -3,10 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { PATH } from '@/shared/config/routes'
-import {
-  useGoogleLoginMutation,
-  useLazyGetMeQuery,
-} from '@/features/auth/api/authApi'
+import { useGoogleLoginMutation, useLazyGetMeQuery } from '@/features/auth/api/authApi'
 import { toast } from 'react-toastify'
 import LocalStorage from '@/shared/utils/localStorage/localStorage'
 import { Loader } from '@/shared/ui/loader/Loader'
@@ -29,9 +26,7 @@ export const GoogleOAuthSuccess = () => {
         }
 
         if (!code) {
-          throw new Error(
-            'Missing code parameter in Google authentication response'
-          )
+          throw new Error('Missing code parameter in Google authentication response')
         }
 
         const redirectUrl = `${window.location.origin}/auth/google`
@@ -51,10 +46,7 @@ export const GoogleOAuthSuccess = () => {
           throw new Error('Invalid response from server')
         }
       } catch (err) {
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : 'Authentication processing failed'
+        const errorMessage = err instanceof Error ? err.message : 'Authentication processing failed'
         toast.error(errorMessage)
         router.push(PATH.AUTH.LOGIN)
       } finally {

@@ -1,6 +1,5 @@
-import { joyfyApi } from "@/shared/api/joyfyApi";
+import { joyfyApi } from '@/shared/api/joyfyApi'
 
 export const profileApi = joyfyApi.injectEndpoints({
-	endpoints: (builder) => ({
-	}),
+  endpoints: (builder) => ({}),
 })

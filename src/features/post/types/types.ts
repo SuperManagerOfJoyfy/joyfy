@@ -20,47 +20,52 @@ export type AspectRatioType = (typeof ASPECT_RATIOS)[number]
 
 export type PostCreationStep = 'upload' | 'crop' | 'filter' | 'description'
 
-export type PublishData = {
-  files: File[]
-  description: string
-  aspectRatio?: AspectRatioType
-  filter?: FilterType
-  zoom?: number
-}
-
-export type DraftData = {
+export type ImageSettings = {
   aspectRatio: AspectRatioType
   filter: FilterType
   zoom: number
+}
+
+export type PublishData = {
+  files: File[]
+  description: string
+  imageSettings: ImageSettings[]
+}
+
+export type DraftData = {
+  step?: PostCreationStep
   timestamp: number
+  currentImageIndex?: number
+  imageSettings?: ImageSettings[]
+  description?: string
 }
 
 type Image = {
-	url: string
-	width: number
-	height: number
-	fileSize: number
-	createdAt: string
-	uploadId: string
+  url: string
+  width: number
+  height: number
+  fileSize: number
+  createdAt: string
+  uploadId: string
 }
 
 type Owner = {
-	firstName: string
-	lastName: string
+  firstName: string
+  lastName: string
 }
 
 export type PostItem = {
-	id: number
-	userName: string
-	description: string
-	location: string
-	images: Image[]
-	createdAt: string
-	updatedAt: string
-	ownerId: number
-	avatarOwner: string
-	owner: Owner
-	likesCount: number
-	isLiked: boolean
-	avatarWhoLikes: boolean
+  id: number
+  userName: string
+  description: string
+  location: string
+  images: Image[]
+  createdAt: string
+  updatedAt: string
+  ownerId: number
+  avatarOwner: string
+  owner: Owner
+  likesCount: number
+  isLiked: boolean
+  avatarWhoLikes: boolean
 }

@@ -7,8 +7,7 @@ export const store = configureStore({
     [joyfyApi.reducerPath]: joyfyApi.reducer,
   },
 
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(joyfyApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(joyfyApi.middleware),
 })
 
 setupListeners(store.dispatch)
