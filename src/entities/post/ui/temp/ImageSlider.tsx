@@ -162,5 +162,3 @@ export const ImageSlider = ({
     </div>
   )
 }
-
-export default ImageSlider

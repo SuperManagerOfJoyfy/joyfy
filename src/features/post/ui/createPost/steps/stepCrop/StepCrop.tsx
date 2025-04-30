@@ -1,84 +1,65 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Typography } from '@/shared/ui'
-import { ImageSettings } from '@/features/post/types/types'
 import Image from 'next/image'
+import { Button, Typography } from '@/shared/ui'
+import { AspectRatioType } from '@/features/post/types/types'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
+import type { Swiper as SwiperType } from 'swiper'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
-import s from './StepDescription.module.css'
+import s from './StepCrop.module.scss'
 
-type StepDescriptionProps = {
+type StepCropProps = {
   files: File[]
   imagePreviews: string[]
   currentImageIndex: number
   onImageIndexChange: (index: number) => void
   onPrevImage: () => void
   onNextImage: () => void
-  imageSettings: ImageSettings[]
-  initialDescription: string
-  onDescriptionChange: (text: string) => void
   onBack: () => void
-  onPublish: () => void
-  isPublishing?: boolean
-  error?: string | null
+  onNext: () => void
+  initialAspectRatio: AspectRatioType
+  initialZoom: number
+  onAspectRatioChange: (ratio: AspectRatioType) => void
+  onZoomChange: (zoom: number) => void
 }
 
-export const StepDescription = ({
+export const StepCrop = ({
   files,
   imagePreviews,
   currentImageIndex,
   onImageIndexChange,
   onPrevImage,
   onNextImage,
-  imageSettings,
-  initialDescription,
-  onDescriptionChange,
   onBack,
-  onPublish,
-  isPublishing = false,
-  error: externalError = null,
-}: StepDescriptionProps) => {
-  const [description, setDescription] = useState(initialDescription)
-  const [internalError, setInternalError] = useState<string | null>(null)
+  onNext,
+  initialAspectRatio,
+  initialZoom,
+  onAspectRatioChange,
+  onZoomChange,
+}: StepCropProps) => {
+  const [aspectRatio, setAspectRatio] = useState<AspectRatioType>(initialAspectRatio)
+  const [zoom, setZoom] = useState(initialZoom)
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null)
 
-  const error = externalError || internalError
-
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const text = e.target.value
-    setDescription(text)
-    onDescriptionChange(text)
+  const handleZoomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newZoom = parseFloat(e.target.value)
+    setZoom(newZoom)
+    onZoomChange(newZoom)
   }
 
-  const handlePublishClick = async () => {
-    try {
-      setInternalError(null)
-      await onPublish()
-    } catch (err) {
-      console.error('Failed to publish post:', err)
-      setInternalError('Failed to publish post. Please try again.')
-    }
+  const handleAspectRatioChange = (ratio: AspectRatioType) => {
+    setAspectRatio(ratio)
+    onAspectRatioChange(ratio)
   }
-
-  const getCurrentImageSettings = () => {
-    return (
-      imageSettings[currentImageIndex] || {
-        aspectRatio: '1:1',
-        filter: 'Normal',
-        zoom: 1,
-      }
-    )
-  }
-
-  const currentSettings = getCurrentImageSettings()
 
   const getAspectRatioClass = () => {
-    switch (currentSettings.aspectRatio) {
+    switch (aspectRatio) {
       case '1:1':
         return s.square
       case '4:5':
@@ -90,72 +71,100 @@ export const StepDescription = ({
     }
   }
 
-  const isDescriptionEmpty = description.trim().length === 0
+  const handleSlideChange = (swiper: SwiperType) => {
+    onImageIndexChange(swiper.activeIndex)
+  }
 
   return (
     <div className={s.container}>
-      <div className={s.content}>
-        {files.length > 0 && (
+      <div className={s.cropContainer}>
+        <div className={`${s.swiperWrapper} ${getAspectRatioClass()}`}>
           <Swiper
             modules={[Navigation, Pagination]}
-            navigation
-            pagination={{ clickable: true }}
+            onSwiper={setSwiperInstance}
             initialSlide={currentImageIndex}
-            onSlideChange={(swiper) => onImageIndexChange(swiper.activeIndex)}
+            onSlideChange={handleSlideChange}
             className={s.swiper}
+            navigation={true}
+            pagination={{
+              clickable: true,
+              type: 'bullets',
+            }}
           >
-            {imagePreviews.map((preview, index) => (
+            {imagePreviews.map((src, index) => (
               <SwiperSlide key={`slide-${index}`}>
-                <div className={s.imagePreview}>
+                <div
+                  className={s.imageContainer}
+                  style={{
+                    transform: `scale(${zoom})`,
+                    width: '100%',
+                    height: '100%',
+                  }}
+                >
                   <Image
-                    src={preview}
+                    src={src}
                     alt={`Preview ${index + 1}`}
-                    width={500}
-                    height={500}
-                    className={`${s.preview} ${s[imageSettings[index]?.filter.toLowerCase() || 'normal']}`}
+                    width={493}
+                    height={503}
+                    className={s.preview}
+                    style={{ objectFit: 'cover' }}
                   />
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
-        )}
+        </div>
+      </div>
 
-        <div className={s.formContainer}>
-          <div className={s.descriptionContainer}>
-            <Typography variant="caption">Description</Typography>
-            <textarea
-              className={s.textarea}
-              placeholder="Add a description..."
-              value={description}
-              onChange={handleDescriptionChange}
-              maxLength={500}
-              rows={6}
-            />
-            <div className={s.charCount}>
-              <Typography variant="caption">{description.length}/500</Typography>
-            </div>
-          </div>
-
-          {error && (
-            <Typography variant="body2" className={s.error}>
-              {error}
-            </Typography>
-          )}
-
-          <div className={s.buttons}>
-            <Button onClick={onBack} variant="outline" fullWidth disabled={isPublishing}>
-              Back
-            </Button>
-            <Button
-              onClick={handlePublishClick}
-              variant="primary"
-              fullWidth
-              disabled={isPublishing || isDescriptionEmpty}
+      <div className={s.controls}>
+        <div className={s.aspectRatioControls}>
+          <Typography variant="caption">Aspect Ratio</Typography>
+          <div className={s.aspectRatioButtons}>
+            <button
+              className={`${s.aspectRatioButton} ${aspectRatio === '1:1' ? s.active : ''}`}
+              onClick={() => handleAspectRatioChange('1:1')}
+              type="button"
             >
-              {isPublishing ? 'Publishing...' : 'Publish'}
-            </Button>
+              1:1
+            </button>
+            <button
+              className={`${s.aspectRatioButton} ${aspectRatio === '4:5' ? s.active : ''}`}
+              onClick={() => handleAspectRatioChange('4:5')}
+              type="button"
+            >
+              4:5
+            </button>
+            <button
+              className={`${s.aspectRatioButton} ${aspectRatio === '16:9' ? s.active : ''}`}
+              onClick={() => handleAspectRatioChange('16:9')}
+              type="button"
+            >
+              16:9
+            </button>
           </div>
         </div>
+
+        <div className={s.zoomControl}>
+          <Typography variant="caption">Zoom</Typography>
+          <input
+            type="range"
+            min="1"
+            max="3"
+            step="0.1"
+            value={zoom}
+            onChange={handleZoomChange}
+            className={s.zoomSlider}
+          />
+        </div>
+      </div>
+
+      <div className={s.buttons}>
+        <Button onClick={onBack} variant="outline" className={s.button} fullWidth>
+          Back
+        </Button>
+        <Button onClick={onNext} variant="primary" className={s.button} fullWidth>
+          Next
+        </Button>
       </div>
     </div>
   )
