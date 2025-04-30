@@ -63,7 +63,7 @@ export const authApi = joyfyApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['User', 'Auth'],
+      invalidatesTags: ['User', 'Auth']
     }),
 
     logout: builder.mutation<void, void>({
