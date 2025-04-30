@@ -11,13 +11,12 @@ export const useLogout = () => {
   const logoutUser = useCallback(async () => {
     try {
       await logout().unwrap()
+      localStorage.removeItem('accessToken')
       dispatch(authApi.util.resetApiState())
+      toast.success(AUTH_MESSAGES.LOGOUT_SUCCESS)
       return 'success'
     } catch (error: any) {
-      const status = error?.status
-      if (status === 401) return 'unauthorized'
-
-      console.error('[Logout error]:', error)
+      toast.error(AUTH_MESSAGES.LOGOUT_ERROR)
       return 'error'
     }
   }, [logout, dispatch])
