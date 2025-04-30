@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
+
 import { ImageSlider } from './ImageSlider'
 
 const meta: Meta<typeof ImageSlider> = {
-  title: 'features/post//ImageSlider',
+  title: 'features/post/ImageSlider',
   component: ImageSlider,
   parameters: {
     layout: 'centered',

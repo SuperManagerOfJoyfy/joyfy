@@ -11,7 +11,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
-import styles from './ImageSlider.module.css'
+import s from './ImageSlider.module.scss'
 
 type Props = {
   images: {
@@ -63,9 +63,9 @@ export const ImageSlider = ({
 
   if (images.length === 1) {
     return (
-      <div className={`${styles.container} ${styles[aspectRatio]} ${className}`}>
-        <div className={styles.singleImage}>
-          <Image src={images[0].src} alt={images[0].alt} fill className={styles.image} />
+      <div className={`${s.container} ${s[aspectRatio]} ${className}`}>
+        <div className={s.singleImage}>
+          <Image src={images[0].src} alt={images[0].alt} fill className={s.image} />
         </div>
       </div>
     )
@@ -89,7 +89,7 @@ export const ImageSlider = ({
   }, [swiperRef.current])
 
   return (
-    <div className={`${styles.container} ${styles[aspectRatio]} ${className}`}>
+    <div className={`${s.container} ${s[aspectRatio]} ${className}`}>
       <Swiper
         modules={[Navigation, Pagination]}
         onSwiper={(swiper) => {
@@ -105,17 +105,17 @@ export const ImageSlider = ({
             ? {
                 clickable: true,
                 type: 'bullets',
-                bulletActiveClass: `${styles.bulletActive}`,
-                bulletClass: `${styles.bullet}`,
+                bulletActiveClass: `${s.bulletActive}`,
+                bulletClass: `${s.bullet}`,
               }
             : false
         }
-        className={styles.swiper}
+        className={s.swiper}
       >
         {images.map((image, index) => (
           <SwiperSlide key={`slide-${index}`}>
-            <div className={styles.slideContent}>
-              <Image src={image.src} alt={image.alt} fill className={styles.image} />
+            <div className={s.slideContent}>
+              <Image src={image.src} alt={image.alt} fill className={s.image} />
             </div>
           </SwiperSlide>
         ))}
@@ -125,7 +125,7 @@ export const ImageSlider = ({
         <>
           <button
             type="button"
-            className={`${styles.navButton} ${styles.prevButton} ${isBeginning ? styles.disabled : ''} ${buttonClassName}`}
+            className={`${s.navButton} ${s.prevButton} ${isBeginning ? s.disabled : ''} ${buttonClassName}`}
             aria-label="Previous image"
             style={buttonStyle}
             onClick={() => {
@@ -138,7 +138,7 @@ export const ImageSlider = ({
           </button>
           <button
             type="button"
-            className={`${styles.navButton} ${styles.nextButton} ${isEnd ? styles.disabled : ''} ${buttonClassName}`}
+            className={`${s.navButton} ${s.nextButton} ${isEnd ? s.disabled : ''} ${buttonClassName}`}
             aria-label="Next image"
             style={buttonStyle}
             onClick={() => {
@@ -153,7 +153,7 @@ export const ImageSlider = ({
       )}
 
       {showCounter && (
-        <div className={styles.counter}>
+        <div className={s.counter}>
           {activeIndex + 1} / {images.length}
         </div>
       )}
