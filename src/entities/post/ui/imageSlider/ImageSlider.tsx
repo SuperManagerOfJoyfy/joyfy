@@ -52,6 +52,13 @@ export const ImageSlider = ({
   const [isEnd, setIsEnd] = useState(false)
   const swiperRef = useRef<SwiperType | null>(null)
 
+  useEffect(() => {
+    if (swiperRef.current) {
+      setIsBeginning(swiperRef.current.isBeginning)
+      setIsEnd(swiperRef.current.isEnd)
+    }
+  }, [swiperRef.current])
+
   const buttonStyle = {
     ...(buttonRadius !== undefined && { '--button-radius': `${buttonRadius}px` }),
     ...(buttonBackgroundColor && { '--button-bg-color': buttonBackgroundColor }),
@@ -80,13 +87,6 @@ export const ImageSlider = ({
       onSlideChange(newIndex)
     }
   }
-
-  useEffect(() => {
-    if (swiperRef.current) {
-      setIsBeginning(swiperRef.current.isBeginning)
-      setIsEnd(swiperRef.current.isEnd)
-    }
-  }, [swiperRef.current])
 
   return (
     <div className={`${s.container} ${s[aspectRatio]} ${className}`}>

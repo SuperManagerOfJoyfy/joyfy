@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AspectRatioType, FilterType } from '@/features/post/types/types'
+import { AspectRatioType, FilterType, ImageSettings } from '@/features/post/types/types'
 import { useCreatePostMutation, useUploadImageMutation } from '../api/postsApi'
 
 export const useCreatePost = () => {
@@ -11,25 +11,22 @@ export const useCreatePost = () => {
   const handlePublishPost = async (
     files: File[],
     description: string,
-    aspectRatio?: AspectRatioType,
-    filter?: FilterType
+    imageSettings?: Record<number, ImageSettings>
   ) => {
     try {
       setIsLoading(true)
       setError(null)
 
-      const uploadedImages = []
-
-      for (const file of files) {
+      const uploadPromises = files.map(async (file) => {
         const formData = new FormData()
         formData.append('file', file)
-
         const response = await uploadImage(formData).unwrap()
 
-        if (response.images && response.images.length > 0) {
-          uploadedImages.push(...response.images)
-        }
-      }
+        return response.images || []
+      })
+      const uploadResults = await Promise.all(uploadPromises)
+
+      const uploadedImages = uploadResults.flat()
 
       if (uploadedImages.length === 0) {
         throw new Error('Failed to upload images')
@@ -37,8 +34,10 @@ export const useCreatePost = () => {
 
       const createPostData = {
         description,
-        childrenMetadata: uploadedImages.map((img) => ({
+        childrenMetadata: uploadedImages.map((img, index) => ({
           uploadId: img.uploadId,
+          aspectRatio: imageSettings?.[index]?.aspectRatio,
+          filter: imageSettings?.[index]?.filter,
         })),
       }
 

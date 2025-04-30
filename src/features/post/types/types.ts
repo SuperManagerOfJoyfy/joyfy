@@ -36,7 +36,6 @@ export type DraftData = {
   step?: PostCreationStep
   timestamp: number
   currentImageIndex?: number
-  imageSettings?: ImageSettings[]
   description?: string
 }
 

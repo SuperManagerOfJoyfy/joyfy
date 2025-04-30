@@ -1,16 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { Button, Typography } from '@/shared/ui'
 import { AspectRatioType } from '@/features/post/types/types'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
-import type { Swiper as SwiperType } from 'swiper'
-
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
+import { ImageSlider } from '@/entities/post/ui/imageSlider'
 
 import s from './StepCrop.module.scss'
 
@@ -45,7 +38,6 @@ export const StepCrop = ({
 }: StepCropProps) => {
   const [aspectRatio, setAspectRatio] = useState<AspectRatioType>(initialAspectRatio)
   const [zoom, setZoom] = useState(initialZoom)
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null)
 
   const handleZoomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newZoom = parseFloat(e.target.value)
@@ -71,48 +63,35 @@ export const StepCrop = ({
     }
   }
 
-  const handleSlideChange = (swiper: SwiperType) => {
-    onImageIndexChange(swiper.activeIndex)
+  const handleSlideChange = (index: number) => {
+    onImageIndexChange(index)
   }
+
+  const previewImages = imagePreviews.map((src, index) => ({
+    src,
+    alt: `Preview ${index + 1}`,
+  }))
 
   return (
     <div className={s.container}>
       <div className={s.cropContainer}>
-        <div className={`${s.swiperWrapper} ${getAspectRatioClass()}`}>
-          <Swiper
-            modules={[Navigation, Pagination]}
-            onSwiper={setSwiperInstance}
-            initialSlide={currentImageIndex}
-            onSlideChange={handleSlideChange}
-            className={s.swiper}
-            navigation={true}
-            pagination={{
-              clickable: true,
-              type: 'bullets',
+        <div className={`${s.sliderWrapper} ${getAspectRatioClass()}`}>
+          <div
+            className={s.imageContainer}
+            style={{
+              transform: `scale(${zoom})`,
+              width: '100%',
+              height: '100%',
             }}
           >
-            {imagePreviews.map((src, index) => (
-              <SwiperSlide key={`slide-${index}`}>
-                <div
-                  className={s.imageContainer}
-                  style={{
-                    transform: `scale(${zoom})`,
-                    width: '100%',
-                    height: '100%',
-                  }}
-                >
-                  <Image
-                    src={src}
-                    alt={`Preview ${index + 1}`}
-                    width={493}
-                    height={503}
-                    className={s.preview}
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+            <ImageSlider
+              images={previewImages}
+              aspectRatio={aspectRatio === '1:1' ? 'square' : aspectRatio === '4:5' ? 'tall' : 'wide'}
+              initialSlide={currentImageIndex}
+              onSlideChange={handleSlideChange}
+              showControls={true}
+            />
+          </div>
         </div>
       </div>
 
@@ -156,15 +135,6 @@ export const StepCrop = ({
             className={s.zoomSlider}
           />
         </div>
-      </div>
-
-      <div className={s.buttons}>
-        <Button onClick={onBack} variant="outline" className={s.button} fullWidth>
-          Back
-        </Button>
-        <Button onClick={onNext} variant="primary" className={s.button} fullWidth>
-          Next
-        </Button>
       </div>
     </div>
   )

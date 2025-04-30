@@ -1,17 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { Button, Typography } from '@/shared/ui'
+import { ChangeEvent, useState } from 'react'
+import { Typography } from '@/shared/ui'
 import { ImageSettings } from '@/features/post/types/types'
-import Image from 'next/image'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
-
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 
 import s from './StepDescription.module.css'
+import { ImageSlider } from '@/entities/post/ui/imageSlider'
 
 type StepDescriptionProps = {
   files: File[]
@@ -49,7 +43,7 @@ export const StepDescription = ({
 
   const error = externalError || internalError
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value
     setDescription(text)
     onDescriptionChange(text)
@@ -90,34 +84,35 @@ export const StepDescription = ({
     }
   }
 
+  const previewImagesWithFilters = imagePreviews.map((preview, index) => ({
+    src: preview,
+    alt: `Preview ${index + 1}`,
+    className: `${s.preview} ${s[imageSettings[index]?.filter.toLowerCase() || 'normal']}`,
+  }))
+
   const isDescriptionEmpty = description.trim().length === 0
 
   return (
     <div className={s.container}>
       <div className={s.content}>
         {files.length > 0 && (
-          <Swiper
-            modules={[Navigation, Pagination]}
-            navigation
-            pagination={{ clickable: true }}
-            initialSlide={currentImageIndex}
-            onSlideChange={(swiper) => onImageIndexChange(swiper.activeIndex)}
-            className={s.swiper}
-          >
-            {imagePreviews.map((preview, index) => (
-              <SwiperSlide key={`slide-${index}`}>
-                <div className={s.imagePreview}>
-                  <Image
-                    src={preview}
-                    alt={`Preview ${index + 1}`}
-                    width={500}
-                    height={500}
-                    className={`${s.preview} ${s[imageSettings[index]?.filter.toLowerCase() || 'normal']}`}
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <div className={s.imagePreview}>
+            <ImageSlider
+              images={previewImagesWithFilters}
+              aspectRatio={
+                currentSettings.aspectRatio === '1:1'
+                  ? 'square'
+                  : currentSettings.aspectRatio === '4:5'
+                    ? 'tall'
+                    : 'wide'
+              }
+              initialSlide={currentImageIndex}
+              onSlideChange={onImageIndexChange}
+              showControls={true}
+              showPagination={true}
+              className={s.swiper}
+            />
+          </div>
         )}
 
         <div className={s.formContainer}>
@@ -141,20 +136,6 @@ export const StepDescription = ({
               {error}
             </Typography>
           )}
-
-          <div className={s.buttons}>
-            <Button onClick={onBack} variant="outline" fullWidth disabled={isPublishing}>
-              Back
-            </Button>
-            <Button
-              onClick={handlePublishClick}
-              variant="primary"
-              fullWidth
-              disabled={isPublishing || isDescriptionEmpty}
-            >
-              {isPublishing ? 'Publishing...' : 'Publish'}
-            </Button>
-          </div>
         </div>
       </div>
     </div>

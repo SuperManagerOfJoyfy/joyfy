@@ -28,25 +28,14 @@ export const usePostDraft = () => {
     return !!localStorage.getItem(DRAFT_KEY)
   }
 
-  const saveCompleteDraft = (
-    step: DraftData['step'],
-    currentImageIndex: number,
-    imageSettings: ImageSettings[],
-    description?: string
-  ) => {
+  const saveCompleteDraft = (step: DraftData['step'], currentImageIndex: number, description?: string) => {
     const draft: DraftData = {
       step,
       timestamp: Date.now(),
       currentImageIndex,
-      imageSettings,
       description,
     }
     saveDraft(draft)
-  }
-
-  const loadImageSettingsFromDraft = (): ImageSettings[] | null => {
-    const draft = loadDraft()
-    return draft?.imageSettings || null
   }
 
   return {
@@ -55,6 +44,5 @@ export const usePostDraft = () => {
     clearDraft,
     hasDraft,
     saveCompleteDraft,
-    loadImageSettingsFromDraft,
   }
 }

@@ -1,8 +1,7 @@
+import { AspectRatioType, FilterType, ImageSettings } from '@/features/post/types/types'
+import { ACCEPTED_TYPES, MAX_FILE_SIZE_MB, MAX_IMAGES } from '@/features/post/utils/constats'
 import { useState, useEffect, useCallback } from 'react'
-import { ACCEPTED_TYPES, MAX_FILE_SIZE_MB, MAX_IMAGES } from '../utils/constats'
-import { AspectRatioType, FilterType, ImageSettings } from '../types/types'
 
-const IMAGE_PREVIEWS_KEY = 'post_image_previews'
 const IMAGE_SETTINGS_KEY = 'post_image_settings'
 const CURRENT_IMAGE_INDEX_KEY = 'post_current_image_index'
 
@@ -15,21 +14,15 @@ export const useImageHandling = (initialFiles: File[] = []) => {
 
   useEffect(() => {
     try {
-      const savedSettings = localStorage.getItem(IMAGE_SETTINGS_KEY)
+      const savedSettings = sessionStorage.getItem(IMAGE_SETTINGS_KEY)
       if (savedSettings) {
         const parsedSettings = JSON.parse(savedSettings)
         setImageSettings(parsedSettings)
       }
 
-      const savedCurrentIndex = localStorage.getItem(CURRENT_IMAGE_INDEX_KEY)
+      const savedCurrentIndex = sessionStorage.getItem(CURRENT_IMAGE_INDEX_KEY)
       if (savedCurrentIndex) {
         setCurrentImageIndex(parseInt(savedCurrentIndex, 10))
-      }
-
-      const savedPreviews = sessionStorage.getItem(IMAGE_PREVIEWS_KEY)
-      if (savedPreviews) {
-        const parsedPreviews = JSON.parse(savedPreviews)
-        setImagePreviews(parsedPreviews)
       }
     } catch (err) {
       console.error('Failed to load saved image data:', err)
@@ -38,19 +31,15 @@ export const useImageHandling = (initialFiles: File[] = []) => {
 
   useEffect(() => {
     if (imageSettings.length > 0) {
-      localStorage.setItem(IMAGE_SETTINGS_KEY, JSON.stringify(imageSettings))
+      sessionStorage.setItem(IMAGE_SETTINGS_KEY, JSON.stringify(imageSettings))
+    } else {
+      sessionStorage.removeItem(IMAGE_SETTINGS_KEY)
     }
   }, [imageSettings])
 
   useEffect(() => {
-    localStorage.setItem(CURRENT_IMAGE_INDEX_KEY, currentImageIndex.toString())
+    sessionStorage.setItem(CURRENT_IMAGE_INDEX_KEY, currentImageIndex.toString())
   }, [currentImageIndex])
-
-  useEffect(() => {
-    if (imagePreviews.length > 0) {
-      sessionStorage.setItem(IMAGE_PREVIEWS_KEY, JSON.stringify(imagePreviews))
-    }
-  }, [imagePreviews])
 
   useEffect(() => {
     imagePreviews.forEach((preview) => {
@@ -144,33 +133,18 @@ export const useImageHandling = (initialFiles: File[] = []) => {
       setImagePreviews((prev) => {
         const newPreviews = [...prev]
         newPreviews.splice(index, 1)
-
-        if (newPreviews.length > 0) {
-          sessionStorage.setItem(IMAGE_PREVIEWS_KEY, JSON.stringify(newPreviews))
-        } else {
-          sessionStorage.removeItem(IMAGE_PREVIEWS_KEY)
-        }
-
         return newPreviews
       })
 
       setImageSettings((prev) => {
         const newSettings = [...prev]
         newSettings.splice(index, 1)
-
-        if (newSettings.length > 0) {
-          localStorage.setItem(IMAGE_SETTINGS_KEY, JSON.stringify(newSettings))
-        } else {
-          localStorage.removeItem(IMAGE_SETTINGS_KEY)
-        }
-
         return newSettings
       })
 
       if (index <= currentImageIndex && currentImageIndex > 0) {
         const newIndex = currentImageIndex - 1
         setCurrentImageIndex(newIndex)
-        localStorage.setItem(CURRENT_IMAGE_INDEX_KEY, newIndex.toString())
       }
     },
     [currentImageIndex, imagePreviews]
@@ -180,7 +154,6 @@ export const useImageHandling = (initialFiles: File[] = []) => {
     if (currentImageIndex > 0) {
       const newIndex = currentImageIndex - 1
       setCurrentImageIndex(newIndex)
-      localStorage.setItem(CURRENT_IMAGE_INDEX_KEY, newIndex.toString())
     }
   }, [currentImageIndex])
 
@@ -188,7 +161,6 @@ export const useImageHandling = (initialFiles: File[] = []) => {
     if (currentImageIndex < selectedFiles.length - 1) {
       const newIndex = currentImageIndex + 1
       setCurrentImageIndex(newIndex)
-      localStorage.setItem(CURRENT_IMAGE_INDEX_KEY, newIndex.toString())
     }
   }, [currentImageIndex, selectedFiles.length])
 
@@ -197,7 +169,6 @@ export const useImageHandling = (initialFiles: File[] = []) => {
       const newSettings = [...prev]
       if (newSettings[index]) {
         newSettings[index] = { ...newSettings[index], ...setting }
-        localStorage.setItem(IMAGE_SETTINGS_KEY, JSON.stringify(newSettings))
       }
       return newSettings
     })
@@ -223,28 +194,9 @@ export const useImageHandling = (initialFiles: File[] = []) => {
     setCurrentImageIndex(0)
     setError(null)
 
-    localStorage.removeItem(IMAGE_SETTINGS_KEY)
-    localStorage.removeItem(CURRENT_IMAGE_INDEX_KEY)
-    sessionStorage.removeItem(IMAGE_PREVIEWS_KEY)
+    sessionStorage.removeItem(IMAGE_SETTINGS_KEY)
+    sessionStorage.removeItem(CURRENT_IMAGE_INDEX_KEY)
   }, [imagePreviews])
-
-  const loadFilesFromBlobUrls = useCallback(async (blobUrls: string[]) => {
-    try {
-      const files: File[] = []
-      for (const url of blobUrls) {
-        const response = await fetch(url)
-        const blob = await response.blob()
-        const filename = url.split('/').pop() || 'image.jpg'
-        const file = new File([blob], filename, { type: blob.type })
-        files.push(file)
-      }
-      setSelectedFiles(files)
-      return files
-    } catch (err) {
-      console.error('Failed to load files from blob URLs:', err)
-      return []
-    }
-  }, [])
 
   return {
     selectedFiles,
@@ -263,7 +215,6 @@ export const useImageHandling = (initialFiles: File[] = []) => {
     updateImageSetting,
     updateCurrentImageSetting,
     clearAllData,
-    loadFilesFromBlobUrls,
     getCurrentImageSettings: () =>
       imageSettings[currentImageIndex] || {
         aspectRatio: '1:1',

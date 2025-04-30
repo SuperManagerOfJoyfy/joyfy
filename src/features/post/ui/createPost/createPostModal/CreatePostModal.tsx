@@ -1,17 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactNode, ReactElement } from 'react'
 import { Modal } from '@/shared/ui/modal'
 import { PostCreationStep, PublishData } from '@/features/post/types/types'
 import { StepCrop } from '../steps/stepCrop/StepCrop'
 import { StepDescription } from '../steps/stepDescription/StepDescription'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
-import { usePostDraft } from '@/features/post/hooks/usePostDraft'
 import { StepFilters } from '../steps/stepFilters/StepFilters'
 import { StepUpload } from '../steps/stepUpload'
 import { useImageHandling } from '@/features/post/hooks/useImageHandler'
 import ReactDOM from 'react-dom'
 import { toast } from 'react-toastify'
+import { Button } from '@/shared/ui'
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 type CreatePostModalProps = {
   open: boolean
@@ -41,25 +42,22 @@ export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalPro
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
 
-  const { saveCompleteDraft, loadDraft, clearDraft, hasDraft } = usePostDraft()
-
-  // Load draft when modal opens
-  useEffect(() => {
-    if (open) {
-      const draft = loadDraft()
-      if (draft) {
-        if (draft.step) {
-          setCurrentStep(draft.step)
-        }
-        if (draft.description) {
-          setDescription(draft.description)
-        }
-        if (typeof draft.currentImageIndex === 'number') {
-          setCurrentImageIndex(draft.currentImageIndex)
-        }
-      }
-    }
-  }, [open, loadDraft, setCurrentImageIndex])
+  // useEffect(() => {
+  //   if (open) {
+  //     const draft = loadDraft()
+  //     if (draft) {
+  //       if (draft.step) {
+  //         setCurrentStep(draft.step)
+  //       }
+  //       if (draft.description) {
+  //         setDescription(draft.description)
+  //       }
+  //       if (typeof draft.currentImageIndex === 'number') {
+  //         setCurrentImageIndex(draft.currentImageIndex)
+  //       }
+  //     }
+  //   }
+  // }, [open, loadDraft, setCurrentImageIndex])
 
   const handleMainModalOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
@@ -68,7 +66,7 @@ export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalPro
   }
 
   const handleCloseButtonClick = () => {
-    const hasContent = selectedFiles.length > 0 || description.trim() !== '' || hasDraft()
+    const hasContent = selectedFiles.length > 0 || description.trim() !== ''
 
     if (hasContent) {
       setIsCloseModalOpen(true)
@@ -81,23 +79,19 @@ export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalPro
     const validFiles = processFiles(files)
     if (validFiles.length > 0) {
       setCurrentStep('crop')
-      saveCompleteDraft('crop', currentImageIndex, imageSettings)
     }
   }
 
   const handleCropComplete = () => {
     setCurrentStep('filter')
-    saveCompleteDraft('filter', currentImageIndex, imageSettings)
   }
 
   const handleFilterComplete = () => {
     setCurrentStep('description')
-    saveCompleteDraft('description', currentImageIndex, imageSettings, description)
   }
 
   const handleDescriptionChange = (text: string) => {
     setDescription(text)
-    saveCompleteDraft(currentStep, currentImageIndex, imageSettings, text)
   }
 
   const handlePublish = async () => {
@@ -111,8 +105,8 @@ export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalPro
         imageSettings,
       })
 
-      clearDraft()
       clearAllData()
+      onClose()
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to publish post')
       setError(err instanceof Error ? err.message : 'Failed to publish post')
@@ -123,16 +117,13 @@ export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalPro
 
   const handleBack = (step: PostCreationStep) => {
     setCurrentStep(step)
-    saveCompleteDraft(step, currentImageIndex, imageSettings, description)
   }
 
   const handleConfirmClose = (saveDraft: boolean) => {
     if (!saveDraft) {
-      clearDraft()
       clearAllData()
       toast.info('Draft discarded')
     } else {
-      saveCompleteDraft(currentStep, currentImageIndex, imageSettings, description)
       toast.info('Draft saved')
     }
     setIsCloseModalOpen(false)
@@ -160,19 +151,88 @@ export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalPro
     return 'md'
   }
 
-  const currentSettings = getCurrentImageSettings()
+  const renderLeftButton = (): ReactElement | null => {
+    // Don't show any left button on the initial upload step (with or without files)
+    if (currentStep === 'upload') {
+      return null
+    }
+
+    const handleBackClick = () => {
+      // Navigate to previous step
+      switch (currentStep) {
+        case 'crop':
+          handleBack('upload')
+          break
+        case 'filter':
+          handleBack('crop')
+          break
+        case 'description':
+          handleBack('filter')
+          break
+      }
+    }
+
+    return (
+      <Button variant="text" onClick={handleBackClick} className="button-back">
+        <FiChevronLeft size={20} />
+        Back
+      </Button>
+    )
+  }
+
+  const renderRightButton = (): ReactElement | null => {
+    // For the upload step, we show a close (X) button regardless of whether files are selected
+    if (currentStep === 'upload') {
+      return (
+        <Button variant="icon" onClick={handleCloseButtonClick} aria-label="Close">
+          ✕
+        </Button>
+      )
+    }
+
+    // For other steps (crop, filter, description)
+    const handleNextClick = () => {
+      switch (currentStep) {
+        case 'crop':
+          handleCropComplete()
+          break
+        case 'filter':
+          handleFilterComplete()
+          break
+        case 'description':
+          handlePublish()
+          break
+      }
+    }
+
+    const getButtonText = () => {
+      if (currentStep === 'description') {
+        return isPublishing ? 'Publishing...' : 'Publish'
+      }
+      return 'Next'
+    }
+
+    const isDisabled = currentStep === 'description' && (isPublishing || description.trim().length === 0)
+
+    return (
+      <Button variant="text" onClick={handleNextClick} disabled={isDisabled} className="button-next">
+        {getButtonText()}
+      </Button>
+    )
+  }
 
   return (
     <>
-      <Modal open={open} onOpenChange={handleMainModalOpenChange} title={getModalTitle()} size={getModalSize()}>
+      <Modal
+        open={open}
+        onOpenChange={handleMainModalOpenChange}
+        title={getModalTitle()}
+        size={getModalSize()}
+        leftButton={renderLeftButton()}
+        rightButton={renderRightButton()}
+      >
         {currentStep === 'upload' && (
-          <StepUpload
-            onClose={handleCloseButtonClick}
-            onNext={handleFilesSelected}
-            hasDraft={hasDraft()}
-            error={error}
-            setError={setError}
-          />
+          <StepUpload onClose={handleCloseButtonClick} onNext={handleFilesSelected} error={error} setError={setError} />
         )}
 
         {currentStep === 'crop' && (
@@ -185,8 +245,8 @@ export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalPro
             onNextImage={handleNextImage}
             onBack={() => handleBack('upload')}
             onNext={handleCropComplete}
-            initialAspectRatio={currentSettings.aspectRatio}
-            initialZoom={currentSettings.zoom}
+            initialAspectRatio={getCurrentImageSettings().aspectRatio}
+            initialZoom={getCurrentImageSettings().zoom}
             onAspectRatioChange={(ratio) => updateCurrentImageSetting({ aspectRatio: ratio })}
             onZoomChange={(zoom) => updateCurrentImageSetting({ zoom })}
           />
@@ -200,9 +260,9 @@ export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalPro
             onImageIndexChange={setCurrentImageIndex}
             onPrevImage={handlePrevImage}
             onNextImage={handleNextImage}
-            aspectRatio={currentSettings.aspectRatio}
-            zoom={currentSettings.zoom}
-            initialFilter={currentSettings.filter}
+            aspectRatio={getCurrentImageSettings().aspectRatio}
+            zoom={getCurrentImageSettings().zoom}
+            initialFilter={getCurrentImageSettings().filter}
             onBack={() => handleBack('crop')}
             onNext={handleFilterComplete}
             onFilterChange={(filter) => updateCurrentImageSetting({ filter })}

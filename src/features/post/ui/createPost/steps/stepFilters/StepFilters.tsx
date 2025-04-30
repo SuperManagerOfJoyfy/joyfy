@@ -4,13 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/shared/ui'
 import { AspectRatioType, FILTERS, FilterType } from '@/features/post/types/types'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
-import type { Swiper as SwiperType } from 'swiper'
-
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
+import { ImageSlider } from '@/entities/post/ui/imageSlider'
 
 import s from './StepFilters.module.css'
 
@@ -44,7 +38,6 @@ export const StepFilters = ({
   onFilterChange,
 }: StepFiltersProps) => {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>(initialFilter)
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null)
 
   const handleFilterSelect = (filter: FilterType) => {
     setSelectedFilter(filter)
@@ -64,50 +57,27 @@ export const StepFilters = ({
     }
   }
 
-  const handleSlideChange = (swiper: SwiperType) => {
-    onImageIndexChange(swiper.activeIndex)
-  }
+  const previewImages = imagePreviews.map((src, index) => ({
+    src,
+    alt: `Preview ${index + 1}`,
+  }))
+
+  const sliderClassName = `${s.slider} ${s[selectedFilter.toLowerCase()]}`
 
   return (
     <div className={s.root}>
-      <div className={s.buttons}>
-        <Button onClick={onBack} variant="outline" className={s.button} fullWidth>
-          Back
-        </Button>
-        <Button onClick={onNext} variant="primary" className={s.button} fullWidth>
-          Next
-        </Button>
-      </div>
-
       <div className={s.container}>
         <div className={s.previewContainer}>
-          <div className={`${s.imageWrapper} ${getAspectRatioClass()}`}>
-            <Swiper
-              modules={[Navigation, Pagination]}
-              onSwiper={setSwiperInstance}
+          <div className={`${s.imageWrapper} ${getAspectRatioClass()}`} style={{ transform: `scale(${zoom})` }}>
+            <ImageSlider
+              images={previewImages}
+              aspectRatio={aspectRatio === '1:1' ? 'square' : aspectRatio === '4:5' ? 'tall' : 'wide'}
               initialSlide={currentImageIndex}
-              onSlideChange={handleSlideChange}
-              className={s.swiper}
-              navigation={true}
-              pagination={{
-                clickable: true,
-                type: 'bullets',
-              }}
-            >
-              {imagePreviews.map((src, index) => (
-                <SwiperSlide key={`slide-${index}`}>
-                  <div className={s.imageContainer} style={{ transform: `scale(${zoom})` }}>
-                    <Image
-                      src={src}
-                      alt={`Preview ${index + 1}`}
-                      width={500}
-                      height={500}
-                      className={`${s.preview} ${s[selectedFilter.toLowerCase()]}`}
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+              onSlideChange={onImageIndexChange}
+              showControls={true}
+              showPagination={true}
+              showCounter={true}
+            />
           </div>
         </div>
 
