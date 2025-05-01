@@ -1,0 +1,67 @@
+import type { Meta, StoryObj } from '@storybook/react'
+
+import { ImageSlider } from './ImageSlider'
+
+const meta: Meta<typeof ImageSlider> = {
+  title: 'features/post/ImageSlider',
+  component: ImageSlider,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    aspectRatio: {
+      control: { type: 'radio' },
+      options: ['square', 'wide', 'tall'],
+    },
+    showControls: {
+      control: 'boolean',
+    },
+    showPagination: {
+      control: 'boolean',
+    },
+    showCounter: {
+      control: 'boolean',
+    },
+  },
+}
+
+export default meta
+type Story = StoryObj<typeof ImageSlider>
+
+const sampleImages = [
+  {
+    src: 'https://picsum.photos/id/1018/1000/600',
+    alt: 'Mountain landscape',
+  },
+  {
+    src: 'https://picsum.photos/id/1015/1000/600',
+    alt: 'River in mountains',
+  },
+  {
+    src: 'https://picsum.photos/id/1016/1000/600',
+    alt: 'Foggy mountains',
+  },
+  {
+    src: 'https://picsum.photos/id/1019/1000/600',
+    alt: 'Nature landscape',
+  },
+]
+
+export const Default: Story = {
+  args: {
+    images: sampleImages.map((img) => ({
+      ...img,
+      src: `${img.src}?w=400`,
+    })),
+    aspectRatio: 'square',
+    showControls: true,
+    showPagination: true,
+    showCounter: true,
+  },
+  render: () => (
+    <div style={{ display: 'flex', overflow: 'hidden', maxWidth: '400px' }}>
+      <ImageSlider images={sampleImages} />
+    </div>
+  ),
+}
