@@ -3,11 +3,11 @@ import s from './Avatar.module.scss'
 
 type Props = {
   avatar?: string | null
-  variant?: 'userProfile' | 'userCard'
+  size?: 'small' | 'medium' | 'large'
 }
 
-export const Avatar = ({ avatar, variant = 'userProfile' }: Props) => {
-  const src = avatar?.trim() ? avatar : '/default-avatar.png'
+export const Avatar = ({ avatar, size = 'medium' }: Props) => {
+  const src = avatar ? avatar : '/default-avatar.png'
 
-  return <Image src={src} alt="user avatar" data-variant={variant} className={s.avatar} height={204} width={204} />
+  return <Image src={src} alt="user avatar" data-type={size} className={s.avatar} height={204} width={204} />
 }
