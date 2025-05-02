@@ -1,0 +1,100 @@
+.container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.slideContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+.singleImage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.square {
+  aspect-ratio: 1/1;
+}
+
+.wide {
+  aspect-ratio: 16/9;
+}
+
+.tall {
+  aspect-ratio: 4/5;
+}
+
+.navButton:hover:not(.disabled) {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.navButton {
+  --button-radius: 0%;
+  --button-bg-color: rgba(0, 0, 0, 0.3);
+
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: var(--button-bg-color);
+  border: none;
+  border-radius: var(--button-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.navButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.navButton.disabled:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.prevButton {
+  left: 16px;
+}
+
+.nextButton {
+  right: 16px;
+}
+
+.bullet {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-light-100);
+  margin: 0 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bulletActive {
+  background-color: var(--color-accent-500);
+  width: 6px;
+  height: 6px;
+}

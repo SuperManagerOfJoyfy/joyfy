@@ -1,0 +1,52 @@
+.profileContainer {
+  display: flex;
+}
+
+.profileImageContainer {
+  margin-right: 38px;
+  margin-bottom: 48px;
+}
+
+.profileImageWrapper {
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-light-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileImageWrapper img {
+  object-fit: cover;
+}
+
+.profileStats {
+  display: flex;
+  justify-content: space-between;
+  max-width: 360px;
+  gap: 40px;
+  margin-top: 20px;
+  margin-bottom: 23px;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.profileInfo {
+  width: 730px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userBlock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileBio {
+  line-height: 1.5;
+  margin-bottom: 10px;
+}

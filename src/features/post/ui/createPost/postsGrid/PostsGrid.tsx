@@ -36,7 +36,7 @@ export const PostsGrid = ({ onPostClick, posts, loadMorePosts, isFetching, hasNe
       <div className={s.gridContainer}>
         {posts?.map((post) => (
           <div className={s.gridItem} onClick={onPostClick} key={post.id}>
-            <Image src={post.images[0].url} alt="post image" width={235} height={228} />
+            <Image src={post.images[0].url} alt="post image" width={235} height={228} priority />
           </div>
         ))}
       </div>
