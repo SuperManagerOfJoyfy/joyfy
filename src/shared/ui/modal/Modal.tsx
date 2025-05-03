@@ -1,17 +1,16 @@
 'use client'
 
-import { ComponentPropsWithoutRef, ReactNode, CSSProperties, ComponentRef, forwardRef } from 'react'
-import { IoClose } from 'react-icons/io5'
+import { ComponentPropsWithoutRef, ComponentRef, CSSProperties, forwardRef, ReactElement, ReactNode } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-
+import { IoClose } from 'react-icons/io5'
 import clsx from 'clsx'
-import { motion, AnimatePresence, MotionProps } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
-import { Card } from '../card'
-import s from './Modal.module.scss'
-import { Typography } from '../typography'
 import { getOverlayAnimation, windowAnimation } from './ModalAnimations'
+import { Card } from '../card'
+import { Typography } from '../typography'
+import s from './Modal.module.scss'
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'auto'
 
@@ -25,6 +24,8 @@ type Props = {
   style?: CSSProperties
   overlayOpacity?: number
   preventClose?: boolean
+  leftButton?: ReactElement | null
+  rightButton?: ReactElement | null
 } & Omit<ComponentPropsWithoutRef<typeof DialogPrimitive.Root>, 'onOpenChange' | 'open'>
 
 export const Modal = forwardRef<ComponentRef<'div'>, Props>(
@@ -39,26 +40,24 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
       open,
       overlayOpacity,
       preventClose = false,
+      leftButton = null,
+      rightButton = null,
       ...props
     },
     ref
   ) => {
     const contentClasses = clsx(s.content, s[`size${size}`], className)
-
     const overlayAnimation = getOverlayAnimation(overlayOpacity)
 
     const handleOpenChange = (newOpen: boolean) => {
-      if (!newOpen && preventClose) {
-        return
-      }
-
-      if (onOpenChange) {
-        onOpenChange(newOpen)
-      }
+      if (!newOpen && preventClose) return
+      onOpenChange?.(newOpen)
     }
 
+    const shouldCenterTitle = !!leftButton
+
     return (
-      <DialogPrimitive.Root {...props} onOpenChange={handleOpenChange} open={open} modal={true}>
+      <DialogPrimitive.Root {...props} onOpenChange={handleOpenChange} open={open} modal>
         <DialogPrimitive.Portal forceMount>
           <AnimatePresence mode="wait">
             {open && (
@@ -72,19 +71,27 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
                     <motion.div {...windowAnimation} className={contentClasses} style={style}>
                       <Card className={s.card}>
                         <header className={s.header}>
+                          {leftButton && <div className={s.leftButton}>{leftButton}</div>}
+
                           <DialogPrimitive.Title asChild>
                             {title ? (
-                              <Typography variant="h1" className={s.title}>
+                              <Typography variant="h1" className={clsx(s.title, shouldCenterTitle && s.centered)}>
                                 {title}
                               </Typography>
                             ) : (
                               <VisuallyHidden>Modal dialog</VisuallyHidden>
                             )}
                           </DialogPrimitive.Title>
-                          <DialogPrimitive.Close className={s.closeButton} aria-label="Close">
-                            <IoClose size={24} />
-                          </DialogPrimitive.Close>
+
+                          {rightButton ? (
+                            <div className={s.rightButton}>{rightButton}</div>
+                          ) : (
+                            <DialogPrimitive.Close className={s.closeButton} aria-label="Close">
+                              <IoClose size={24} />
+                            </DialogPrimitive.Close>
+                          )}
                         </header>
+
                         {children}
                       </Card>
                     </motion.div>
