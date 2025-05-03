@@ -1,17 +1,18 @@
 'use client'
 
+import clsx from 'clsx'
 import s from './Loader.module.scss'
 
 type LoaderProps = {
   message?: string
   fullScreen?: boolean
+  reduced?: boolean
 }
 
-export const Loader = ({ message = 'Loading...', fullScreen = true }: LoaderProps) => {
+export const Loader = ({ message = '', fullScreen = true, reduced = false }: LoaderProps) => {
   return (
     <div className={fullScreen ? s.fullscreen : s.inline} role="status" aria-busy="true">
-      {/* <div className={s.spinner} /> */}
-      <div className={s.loaderWrapper}>
+      <div className={clsx(s.loaderWrapper, reduced && s.reduced)}>
         <svg className={s.loaderSvg} viewBox="0 0 50 50">
           <defs>
             <linearGradient id="loaderGradient" x1="0%" y1="0%" x2="100%" y2="0%">

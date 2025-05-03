@@ -9,42 +9,20 @@ import { Loader } from '@/shared/ui/loader/Loader'
 type Props = {
   posts: PostItem[]
   onPostClick?: () => void
-  loadMorePosts?: () => void
-  isFetching?: boolean
-  hasNextPage?: boolean
+  isLoading: boolean
 }
 
-export const PostsGrid = ({ onPostClick, posts, loadMorePosts, isFetching, hasNextPage }: Props) => {
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isFetching || !hasNextPage) return
-
-      const { scrollTop, scrollHeight, clientHeight } = document.documentElement
-      if (scrollTop + clientHeight >= scrollHeight - 100) {
-        loadMorePosts?.()
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [loadMorePosts, hasNextPage, isFetching])
+export const PostsGrid = ({ onPostClick, posts, isLoading }: Props) => {
+  if (isLoading) return <Loader />
+  if (!posts || posts.length === 0) return <div className={s.noPostsMsg}>There are no posts yet</div>
 
   return (
-    <div>
-      <div className={s.gridContainer}>
-        {posts?.map((post) => (
-          <div className={s.gridItem} onClick={onPostClick} key={post.id}>
-            <Image src={post.images[0].url} alt="post image" width={235} height={228} priority />
-          </div>
-        ))}
-      </div>
-      {isFetching && (
-        <div className={s.loaderContainer}>
-          <Loader />
+    <div className={s.gridContainer}>
+      {posts?.map((post) => (
+        <div className={s.gridItem} onClick={onPostClick} key={post.id}>
+          <Image src={post.images[0].url} alt="post image" width={235} height={228} priority />
         </div>
-      )}
+      ))}
     </div>
   )
 }

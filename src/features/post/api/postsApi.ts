@@ -1,15 +1,44 @@
-import { GetAllPostsResponse, UploadImageResponse, CreatePostRequest } from '@/features/post/api/postsApi.types'
+import {
+  GetAllPostsResponse,
+  UploadImageResponse,
+  CreatePostRequest,
+  PostsQueryParams,
+} from '@/features/post/api/postsApi.types'
 import { joyfyApi } from '@/shared/api/joyfyApi'
 import { PostItem } from '../types/types'
 
 export const postsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllPosts: builder.query<GetAllPostsResponse, { userName: string }>({
-      query: ({ userName }) => ({
-        url: `/posts/${userName}`,
-        method: 'GET',
-      }),
-      providesTags: ['Posts'],
+    getAllPosts: builder.infiniteQuery<GetAllPostsResponse, PostsQueryParams, number>({
+      query: ({ queryArg, pageParam }) => {
+        const { userName, pageSize, sortBy, sortDirection } = queryArg
+        return {
+          url: `/posts/${userName}`,
+          method: 'GET',
+          params: {
+            pageSize,
+            sortBy,
+            sortDirection,
+            pageNumber: pageParam,
+          },
+        }
+      },
+      infiniteQueryOptions: {
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages, lastPageParam) => {
+          if (lastPageParam >= lastPage.pagesCount) {
+            return undefined
+          }
+          return lastPageParam + 1
+        },
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.pages.flatMap((page) => page.items.map(({ id }) => ({ type: 'Posts' as const, id }))),
+              { type: 'Posts' as const, id: 'LIST' },
+            ]
+          : [{ type: 'Posts' as const, id: 'LIST' }],
     }),
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
       query: (formData) => ({
@@ -36,5 +65,9 @@ export const postsApi = joyfyApi.injectEndpoints({
   }),
 })
 
-export const { useGetAllPostsQuery, useUploadImageMutation, useDeleteUploadedImageMutation, useCreatePostMutation } =
-  postsApi
+export const {
+  useGetAllPostsInfiniteQuery,
+  useUploadImageMutation,
+  useDeleteUploadedImageMutation,
+  useCreatePostMutation,
+} = postsApi
