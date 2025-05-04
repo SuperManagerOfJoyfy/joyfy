@@ -18,6 +18,7 @@ type Props = {
     src: string
     alt: string
   }[]
+  aspectRatio?: 'square' | 'wide' | 'tall'
   className?: string
   onSlideChange?: (index: number) => void
   initialSlide?: number
@@ -33,6 +34,7 @@ type Props = {
 
 export const ImageSlider = ({
   images,
+  aspectRatio = 'square',
   className = '',
   onSlideChange,
   initialSlide = 0,
@@ -50,24 +52,6 @@ export const ImageSlider = ({
   const [isEnd, setIsEnd] = useState(false)
   const swiperRef = useRef<SwiperType | null>(null)
 
-  useEffect(() => {
-    if (swiperRef.current) {
-      if (initialSlide >= 0 && initialSlide < images.length) {
-        swiperRef.current.slideTo(initialSlide, 0, false)
-        setActiveIndex(initialSlide)
-      }
-      setIsBeginning(swiperRef.current.isBeginning)
-      setIsEnd(swiperRef.current.isEnd)
-    }
-  }, [initialSlide, images.length])
-
-  useEffect(() => {
-    if (swiperRef.current) {
-      setIsBeginning(swiperRef.current.isBeginning)
-      setIsEnd(swiperRef.current.isEnd)
-    }
-  }, [swiperRef.current])
-
   const buttonStyle = {
     ...(buttonRadius !== undefined && { '--button-radius': `${buttonRadius}px` }),
     ...(buttonBackgroundColor && { '--button-bg-color': buttonBackgroundColor }),
@@ -79,7 +63,7 @@ export const ImageSlider = ({
 
   if (images.length === 1) {
     return (
-      <div className={`${s.container} ${className}`}>
+      <div className={`${s.container} ${s[aspectRatio]} ${className}`}>
         <div className={s.singleImage}>
           <Image src={images[0].src} alt={images[0].alt} fill className={s.image} />
         </div>
@@ -97,17 +81,21 @@ export const ImageSlider = ({
     }
   }
 
+  useEffect(() => {
+    if (swiperRef.current) {
+      setIsBeginning(swiperRef.current.isBeginning)
+      setIsEnd(swiperRef.current.isEnd)
+    }
+  }, [swiperRef.current])
+
   return (
-    <div className={`${s.container} ${className}`}>
+    <div className={`${s.container} ${s[aspectRatio]} ${className}`}>
       <Swiper
         modules={[Navigation, Pagination]}
         onSwiper={(swiper) => {
           swiperRef.current = swiper
           setIsBeginning(swiper.isBeginning)
           setIsEnd(swiper.isEnd)
-          if (initialSlide >= 0 && initialSlide < images.length) {
-            swiper.slideTo(initialSlide, 0, false)
-          }
         }}
         initialSlide={initialSlide}
         onSlideChange={handleSlideChange}
@@ -123,12 +111,9 @@ export const ImageSlider = ({
             : false
         }
         className={s.swiper}
-        observer={true}
-        observeParents={true}
-        resizeObserver={true}
       >
         {images.map((image, index) => (
-          <SwiperSlide key={`slide-${index}-${image.src}`}>
+          <SwiperSlide key={`slide-${index}`}>
             <div className={s.slideContent}>
               <Image src={image.src} alt={image.alt} fill className={s.image} />
             </div>

@@ -1,39 +1,76 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Modal } from '@/shared/ui/modal'
+import { PostCreationStep, PublishData } from '@/features/post/types/types'
+import { StepCrop } from '../steps/stepCrop/StepCrop'
+import { StepDescription } from '../steps/stepDescription/StepDescription'
+import { ClosePostModal } from '../closeModal/ClosePostModal'
+import { usePostDraft } from '@/features/post/hooks/usePostDraft'
+import { StepFilters } from '../steps/stepFilters/StepFilters'
+import { StepUpload } from '../steps/stepUpload'
+import { useImageHandling } from '@/features/post/hooks/useImageHandler'
 import ReactDOM from 'react-dom'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
-
-import { Modal } from '@/shared/ui/modal'
-import { PostCreationStep } from '@/features/post/types/types'
-import { PostContextProvider, usePostContext } from '../providers/PostContext'
-import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
-import { ClosePostModal } from '../closeModal/ClosePostModal'
-import { getCardPadding, getModalSize, getModalTitle } from '../utils/modalStepUtils'
-import { LeftButton, RightButton } from '../navigationButtons/NavigationButtons'
-import { useAuth } from '@/features/auth/hooks/useAuth'
 
 type CreatePostModalProps = {
   open: boolean
   onClose: () => void
+  onPublish: (formData: PublishData) => void
 }
 
-const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
-  const { addImage, images, publishPost } = usePostContext()
-  const router = useRouter()
-  const { user } = useAuth()
+export const CreatePostModal = ({ open, onClose, onPublish }: CreatePostModalProps) => {
+  const {
+    selectedFiles,
+    imagePreviews,
+    currentImageIndex,
+    setCurrentImageIndex,
+    error,
+    setError,
+    processFiles,
+    handlePrevImage,
+    handleNextImage,
+    imageSettings,
+    updateCurrentImageSetting,
+    getCurrentImageSettings,
+    clearAllData,
+  } = useImageHandling()
 
   const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
+  const [description, setDescription] = useState('')
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
 
+  const { saveCompleteDraft, loadDraft, clearDraft, hasDraft } = usePostDraft()
+
+  // Load draft when modal opens
+  useEffect(() => {
+    if (open) {
+      const draft = loadDraft()
+      if (draft) {
+        if (draft.step) {
+          setCurrentStep(draft.step)
+        }
+        if (draft.description) {
+          setDescription(draft.description)
+        }
+        if (typeof draft.currentImageIndex === 'number') {
+          setCurrentImageIndex(draft.currentImageIndex)
+        }
+      }
+    }
+  }, [open, loadDraft, setCurrentImageIndex])
+
   const handleMainModalOpenChange = (newOpen: boolean) => {
-    if (!newOpen) handleCloseButtonClick()
+    if (!newOpen) {
+      handleCloseButtonClick()
+    }
   }
 
   const handleCloseButtonClick = () => {
-    if (images.length > 0) {
+    const hasContent = selectedFiles.length > 0 || description.trim() !== '' || hasDraft()
+
+    if (hasContent) {
       setIsCloseModalOpen(true)
     } else {
       onClose()
@@ -41,90 +78,158 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
   }
 
   const handleFilesSelected = (files: File[]) => {
-    addImage(files)
-    setCurrentStep('crop')
-  }
-
-  const handleBack = (step: PostCreationStep): PostCreationStep => {
-    switch (step) {
-      case 'filter':
-        return 'crop'
-      case 'description':
-        return 'filter'
-      default:
-        return 'upload'
+    const validFiles = processFiles(files)
+    if (validFiles.length > 0) {
+      setCurrentStep('crop')
+      saveCompleteDraft('crop', currentImageIndex, imageSettings)
     }
   }
 
-  const handleNextClick = async () => {
-    switch (currentStep) {
-      case 'crop':
-        setCurrentStep('filter')
-        break
-      case 'filter':
-        setCurrentStep('description')
-        break
-      case 'description':
-        setIsPublishing(true)
-        try {
-          await publishPost()
-          toast.success('Post successfully published!')
-          router.push(`/profile/${user?.userId || ''}`)
-        } finally {
-          setIsPublishing(false)
-          onClose()
-        }
-        break
+  const handleCropComplete = () => {
+    setCurrentStep('filter')
+    saveCompleteDraft('filter', currentImageIndex, imageSettings)
+  }
+
+  const handleFilterComplete = () => {
+    setCurrentStep('description')
+    saveCompleteDraft('description', currentImageIndex, imageSettings, description)
+  }
+
+  const handleDescriptionChange = (text: string) => {
+    setDescription(text)
+    saveCompleteDraft(currentStep, currentImageIndex, imageSettings, text)
+  }
+
+  const handlePublish = async () => {
+    try {
+      setIsPublishing(true)
+      setError(null)
+
+      await onPublish({
+        files: selectedFiles,
+        description,
+        imageSettings,
+      })
+
+      clearDraft()
+      clearAllData()
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to publish post')
+      setError(err instanceof Error ? err.message : 'Failed to publish post')
+    } finally {
+      setIsPublishing(false)
     }
+  }
+
+  const handleBack = (step: PostCreationStep) => {
+    setCurrentStep(step)
+    saveCompleteDraft(step, currentImageIndex, imageSettings, description)
   }
 
   const handleConfirmClose = (saveDraft: boolean) => {
-    setIsCloseModalOpen(false)
-
-    if (saveDraft) {
-      toast.info('Draft saved')
-      onClose()
-      router.push('/')
-    } else {
+    if (!saveDraft) {
+      clearDraft()
+      clearAllData()
       toast.info('Draft discarded')
+    } else {
+      saveCompleteDraft(currentStep, currentImageIndex, imageSettings, description)
+      toast.info('Draft saved')
+    }
+    setIsCloseModalOpen(false)
+    onClose()
+  }
+
+  const getModalTitle = () => {
+    switch (currentStep) {
+      case 'upload':
+        return 'Add Photo'
+      case 'crop':
+        return 'Cropping'
+      case 'filter':
+        return 'Filters'
+      case 'description':
+        return 'Publication'
+      default:
+        return 'Add Photo'
     }
   }
 
-  const isButtonDisabled = currentStep === 'description' && isPublishing
+  const getModalSize = () => {
+    if (currentStep === 'filter') return 'lg'
+    if (currentStep === 'description') return 'lg'
+    return 'md'
+  }
+
+  const currentSettings = getCurrentImageSettings()
 
   return (
     <>
-      <Modal
-        open={open}
-        onOpenChange={handleMainModalOpenChange}
-        title={getModalTitle(currentStep)}
-        size={getModalSize(currentStep)}
-        cardPadding={getCardPadding(currentStep)}
-        leftButton={
-          <LeftButton
-            currentStep={currentStep}
-            onBack={() => setCurrentStep(handleBack(currentStep))}
-            disabled={isButtonDisabled}
-          />
-        }
-        rightButton={
-          <RightButton
-            currentStep={currentStep}
+      <Modal open={open} onOpenChange={handleMainModalOpenChange} title={getModalTitle()} size={getModalSize()}>
+        {currentStep === 'upload' && (
+          <StepUpload
             onClose={handleCloseButtonClick}
-            onNext={handleNextClick}
-            isCreating={isPublishing}
-            isUploading={isPublishing}
-            disabled={isButtonDisabled}
+            onNext={handleFilesSelected}
+            hasDraft={hasDraft()}
+            error={error}
+            setError={setError}
           />
-        }
-      >
-        {currentStep === 'upload' && <StepUpload onNext={handleFilesSelected} />}
-        {currentStep === 'crop' && <StepCrop onNavigateBack={() => setCurrentStep('upload')} />}
-        {currentStep === 'filter' && <StepFilters />}
-        {currentStep === 'description' && <StepDescription disabled={isPublishing} />}
+        )}
+
+        {currentStep === 'crop' && (
+          <StepCrop
+            files={selectedFiles}
+            imagePreviews={imagePreviews}
+            currentImageIndex={currentImageIndex}
+            onImageIndexChange={setCurrentImageIndex}
+            onPrevImage={handlePrevImage}
+            onNextImage={handleNextImage}
+            onBack={() => handleBack('upload')}
+            onNext={handleCropComplete}
+            initialAspectRatio={currentSettings.aspectRatio}
+            initialZoom={currentSettings.zoom}
+            onAspectRatioChange={(ratio) => updateCurrentImageSetting({ aspectRatio: ratio })}
+            onZoomChange={(zoom) => updateCurrentImageSetting({ zoom })}
+          />
+        )}
+
+        {currentStep === 'filter' && (
+          <StepFilters
+            files={selectedFiles}
+            imagePreviews={imagePreviews}
+            currentImageIndex={currentImageIndex}
+            onImageIndexChange={setCurrentImageIndex}
+            onPrevImage={handlePrevImage}
+            onNextImage={handleNextImage}
+            aspectRatio={currentSettings.aspectRatio}
+            zoom={currentSettings.zoom}
+            initialFilter={currentSettings.filter}
+            onBack={() => handleBack('crop')}
+            onNext={handleFilterComplete}
+            onFilterChange={(filter) => updateCurrentImageSetting({ filter })}
+          />
+        )}
+
+        {currentStep === 'description' && (
+          <StepDescription
+            files={selectedFiles}
+            imagePreviews={imagePreviews}
+            currentImageIndex={currentImageIndex}
+            onImageIndexChange={setCurrentImageIndex}
+            onPrevImage={handlePrevImage}
+            onNextImage={handleNextImage}
+            imageSettings={imageSettings}
+            initialDescription={description}
+            onDescriptionChange={handleDescriptionChange}
+            onBack={() => handleBack('filter')}
+            onPublish={handlePublish}
+            isPublishing={isPublishing}
+            error={error}
+          />
+        )}
       </Modal>
 
-      {isCloseModalOpen &&
+      {currentStep &&
+        isCloseModalOpen &&
         ReactDOM.createPortal(
           <ClosePostModal
             open={isCloseModalOpen}
@@ -134,13 +239,5 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
           document.body
         )}
     </>
-  )
-}
-
-export const CreatePostModal = (props: CreatePostModalProps) => {
-  return (
-    <PostContextProvider>
-      <PostModalContent {...props} />
-    </PostContextProvider>
   )
 }

@@ -2,158 +2,179 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  position: relative;
-}
-
-.header {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 10;
+  gap: 20px;
 }
 
 .cropContainer {
-  width: 100%;
-  height: 80vh;
-  max-height: 600px;
   position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  background-color: #000;
+  width: 100%;
+  max-width: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
-.imageSlider {
+.square {
+  aspect-ratio: 1/1;
+}
+
+.portrait {
+  aspect-ratio: 4/5;
+}
+
+.landscape {
+  aspect-ratio: 16/9;
+}
+
+.imageContainer {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
-.controlsWrapper {
+.preview {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.navigationControls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 10;
+  padding: 0 10px;
+}
+
+.navButton {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
+}
+
+.navButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.paginationDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+.paginationDot.active {
+  background-color: #0095f6;
 }
 
 .controls {
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  background-color: transparent;
-  border-radius: 8px;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px;
 }
 
-.controlContainer {
-  display: flex;
-  gap: 36px;
-}
-
-.controlItem {
-  position: relative;
+.aspectRatioControls {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 8px;
 }
 
-.controlButton {
+.aspectRatioButtons {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 8px;
+}
+
+.aspectRatioButton {
+  padding: 8px 16px;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
   background: none;
-  border: none;
-  color: var(--color-light-100);
   cursor: pointer;
-  padding: 0;
-  transition: all 0.2s ease;
 }
 
-.iconSquare {
-  width: 36px;
-  height: 36px;
-  background: var(--color-dark-500);
-  opacity: 0.8;
-  border-radius: 2px;
+.aspectRatioButton.active {
+  background-color: #0095f6;
+  color: white;
+  border-color: #0095f6;
+}
+
+.zoomControl {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.iconSquare svg {
-  transition: fill 0.3s ease;
-  stroke: var(--color-light-100);
-}
-
-.iconSquare:hover svg {
-  stroke: var(--color-accent-500);
-}
-
-.iconSquare:active svg {
-  stroke: var(--color-accent-500);
-}
-
-.expandedControl {
-  position: absolute;
-  bottom: 50px;
-  left: 11px;
-  background: var(--color-dark-500);
-  opacity: 0.8;
-  padding: 12px;
-  max-width: 200px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(10px);
-  transition: all 0.2s ease;
-
-  &.show {
-    opacity: 0.8;
-    background: var(--color-dark-500);
-    pointer-events: auto;
-  }
+  flex-direction: column;
+  gap: 8px;
 }
 
 .zoomSlider {
   width: 100%;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  border-radius: 2px;
-  width: 100px;
-  height: 2px;
-  background: var(--color-light-100);
-  outline: none;
-
-  &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--color-light-100);
-    cursor: pointer;
-    border: 2px solid var(--color-accent-500);
-  }
-
-  &::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--color-light-100);
-    cursor: pointer;
-    border: 2px solid var(--color-accent-500);
-  }
 }
 
-.aspectRatioOptions {
+.buttons {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 0 16px 16px;
 }
 
-.controlButton.active .iconSquare svg {
-  stroke: var(--color-accent-500);
+.button {
+  flex: 1;
+}
+
+.swiperWrapper {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.swiper {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  :global(.swiper-wrapper) {
+    align-items: center;
+  }
+  
+  :global(.swiper-slide) {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
