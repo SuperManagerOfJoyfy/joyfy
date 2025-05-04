@@ -2,7 +2,7 @@
 
 import { Button, Modal, Typography } from '@/shared/ui'
 
-import s from './ClosePostModal.module.css'
+import s from './ClosePostModal.module.scss'
 
 type ClosePostModalProps = {
   open: boolean

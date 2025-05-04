@@ -41,12 +41,11 @@ export const postsApi = joyfyApi.injectEndpoints({
           : [{ type: 'Posts' as const, id: 'LIST' }],
     }),
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
-      query: (formData) => ({
+      query: (formData: FormData) => ({
         url: '/posts/image',
         method: 'POST',
         body: formData,
       }),
-      //   providesTags: ['Posts'],
     }),
     deleteUploadedImage: builder.mutation<void, string>({
       query: (uploadId) => ({
