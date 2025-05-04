@@ -1,60 +1,23 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
-import { Button } from '@/shared/ui'
-import { AspectRatioType, FILTERS, FilterType } from '@/features/post/types/types'
+
+import { FilterType, IMAGE_FILTERS, IMAGE_FILTERS_LIST } from '@/features/post/types/types'
 import { ImageSlider } from '@/entities/post/ui/imageSlider'
+import { usePostContext } from '../../providers/PostContext'
 
-import s from './StepFilters.module.css'
+import s from './StepFilters.module.scss'
 
-type StepFiltersProps = {
-  files: File[]
-  imagePreviews: string[]
-  currentImageIndex: number
-  onImageIndexChange: (index: number) => void
-  onPrevImage: () => void
-  onNextImage: () => void
-  aspectRatio: AspectRatioType
-  zoom: number
-  onBack: () => void
-  onNext: () => void
-  initialFilter: FilterType
-  onFilterChange: (filter: FilterType) => void
-}
-
-export const StepFilters = ({
-  files,
-  imagePreviews,
-  currentImageIndex,
-  onImageIndexChange,
-  onPrevImage,
-  onNextImage,
-  aspectRatio,
-  zoom,
-  onBack,
-  onNext,
-  initialFilter,
-  onFilterChange,
-}: StepFiltersProps) => {
-  const [selectedFilter, setSelectedFilter] = useState<FilterType>(initialFilter)
+export const StepFilters = () => {
+  const { images, imagePreviews, imagesEditData, setImageEditData, setCurrentImageIndex, currentImageIdx } =
+    usePostContext()
 
   const handleFilterSelect = (filter: FilterType) => {
-    setSelectedFilter(filter)
-    onFilterChange(filter)
+    setImageEditData({ imageFilter: filter })
   }
 
-  const getAspectRatioClass = () => {
-    switch (aspectRatio) {
-      case '1:1':
-        return s.square
-      case '4:5':
-        return s.portrait
-      case '16:9':
-        return s.landscape
-      default:
-        return s.square
-    }
+  const handleSlideChange = (index: number) => {
+    setCurrentImageIndex(index)
   }
 
   const previewImages = imagePreviews.map((src, index) => ({
@@ -62,46 +25,46 @@ export const StepFilters = ({
     alt: `Preview ${index + 1}`,
   }))
 
-  const sliderClassName = `${s.slider} ${s[selectedFilter.toLowerCase()]}`
+  const currentFilter = imagesEditData[currentImageIdx]?.imageFilter || 'Normal'
 
   return (
     <div className={s.root}>
       <div className={s.container}>
         <div className={s.previewContainer}>
-          <div className={`${s.imageWrapper} ${getAspectRatioClass()}`} style={{ transform: `scale(${zoom})` }}>
-            <ImageSlider
-              images={previewImages}
-              aspectRatio={aspectRatio === '1:1' ? 'square' : aspectRatio === '4:5' ? 'tall' : 'wide'}
-              initialSlide={currentImageIndex}
-              onSlideChange={onImageIndexChange}
-              showControls={true}
-              showPagination={true}
-              showCounter={true}
-            />
-          </div>
+          <ImageSlider
+            images={previewImages}
+            initialSlide={currentImageIdx}
+            onSlideChange={handleSlideChange}
+            showControls={imagePreviews.length > 1}
+            showPagination={imagePreviews.length > 1}
+            className={s.imageSlider}
+          />
         </div>
 
         <div className={s.filtersContainer}>
           <div className={s.filtersGrid}>
-            {FILTERS.map((filter) => (
+            {IMAGE_FILTERS_LIST.map((filter) => (
               <div
                 key={filter}
-                className={`${s.filterItem} ${selectedFilter === filter ? s.active : ''}`}
+                className={`${s.filterItem} ${currentFilter === filter ? s.active : ''}`}
                 onClick={() => handleFilterSelect(filter)}
                 role="button"
                 tabIndex={0}
                 aria-label={`${filter} filter`}
-                aria-selected={selectedFilter === filter}
+                aria-selected={currentFilter === filter}
               >
-                {imagePreviews[currentImageIndex] && (
+                {images[currentImageIdx].src && filter && (
                   <div className={s.filterPreview}>
-                    <Image
-                      src={imagePreviews[currentImageIndex]}
-                      alt={filter}
-                      width={80}
-                      height={80}
-                      className={`${s[filter.toLowerCase()]}`}
-                    />
+                    <div className={s.filterImageWrapper}>
+                      <Image
+                        src={images[currentImageIdx].src}
+                        alt={filter}
+                        width={80}
+                        height={80}
+                        className={s.previewThumbnail}
+                        style={{ filter: IMAGE_FILTERS[filter] }}
+                      />
+                    </div>
                   </div>
                 )}
                 <span className={s.filterName}>{filter}</span>

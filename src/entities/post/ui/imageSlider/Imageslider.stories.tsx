@@ -10,10 +10,6 @@ const meta: Meta<typeof ImageSlider> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    aspectRatio: {
-      control: { type: 'radio' },
-      options: ['square', 'wide', 'tall'],
-    },
     showControls: {
       control: 'boolean',
     },
@@ -54,7 +50,6 @@ export const Default: Story = {
       ...img,
       src: `${img.src}?w=400`,
     })),
-    aspectRatio: 'square',
     showControls: true,
     showPagination: true,
     showCounter: true,
