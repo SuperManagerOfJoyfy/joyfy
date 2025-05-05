@@ -63,7 +63,7 @@ export const authApi = joyfyApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['User', 'Auth']
+      invalidatesTags: ['User', 'Auth'],
     }),
 
     logout: builder.mutation<void, void>({
@@ -71,7 +71,16 @@ export const authApi = joyfyApi.injectEndpoints({
         url: '/auth/logout',
         method: 'POST',
       }),
-      invalidatesTags: ['User'],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          localStorage.removeItem('accessToken')
+          dispatch(authApi.util.resetApiState())
+        } catch (error) {
+          console.error('Logout failed:', error)
+        }
+      },
+      invalidatesTags: ['User', 'Auth'],
     }),
 
     resendEmailConfirmation: builder.mutation<void, EmailInputDto>({

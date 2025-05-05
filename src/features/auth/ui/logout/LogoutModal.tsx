@@ -6,23 +6,26 @@ import s from './logoutModal.module.scss'
 import { PATH } from '@/shared/config/routes'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { useLogoutMutation } from '@/features/auth/api/authApi'
+import { AUTH_MESSAGES } from '@/shared/config/messages'
 
 type Props = {
   email?: string
   open: boolean
   onOpenLogoutModalHandler: (value: boolean) => void
-  onLogout: () => Promise<'success' | 'unauthorized' | 'error'>
 }
-export const LogoutModal = ({ onLogout, open, onOpenLogoutModalHandler, email }: Props) => {
+export const LogoutModal = ({ open, onOpenLogoutModalHandler, email }: Props) => {
   const router = useRouter()
+  const [logout] = useLogoutMutation()
 
   const onLogoutButtonClickHandler = async () => {
-    const result = await onLogout()
-    if (result === 'success') {
+    try {
+      await logout().unwrap()
       router.push(PATH.AUTH.LOGIN)
-      onOpenLogoutModalHandler(false)
-    }else if (result === 'unauthorized') {
-      toast.error(result)
+      toast.success(AUTH_MESSAGES.LOGOUT_SUCCESS)
+    } catch (error: any) {
+      toast.error(AUTH_MESSAGES.LOGOUT_ERROR)
+    } finally {
       onOpenLogoutModalHandler(false)
     }
   }
