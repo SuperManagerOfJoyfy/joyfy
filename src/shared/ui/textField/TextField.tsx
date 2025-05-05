@@ -48,7 +48,7 @@ export const TextField = ({
   const classNames = {
     root: clsx(s.box, className),
     inputContainer: s.inputContainer,
-    input: clsx(s.input, showError && s.error),
+    input: clsx(s.input, showError && s.error, className),
     startIcon: s.startIcon,
     endIconButton: s.endIconButton,
     errorText: s.errorText,
