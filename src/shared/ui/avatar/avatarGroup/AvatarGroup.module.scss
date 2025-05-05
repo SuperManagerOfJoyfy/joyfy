@@ -1,0 +1,17 @@
+.avatarGroup {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.avatarWrapper {
+  margin-right: -10px;
+  padding-top: 8px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
