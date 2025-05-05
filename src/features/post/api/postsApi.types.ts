@@ -2,9 +2,18 @@ import { PostItem } from '@/features/post/types/types'
 
 export type GetAllPostsResponse = {
   pageSize: number
+  page: number
+  pagesCount: number
   totalCount: number
-  notReadCount: number
   items: PostItem[]
+}
+
+export type PostsQueryParams = {
+  userName: string
+  pageSize?: number
+  pageNumber?: number
+  sortBy?: string
+  sortDirection?: string
 }
 
 export type CreatePostRequest = {
