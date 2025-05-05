@@ -6,10 +6,36 @@ import 'react-toastify/dist/ReactToastify.css'
 
 const meta: Meta<typeof ImageUpload> = {
   title: 'entities/ImageUpload',
-  tags: ['autodocs'],
   component: ImageUpload,
   parameters: {
     layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    maxFileSize: {
+      control: 'number',
+      description: 'Maximum file size in MB',
+      defaultValue: 5,
+    },
+    maxImages: {
+      control: 'number',
+      description: 'Maximum number of images that can be uploaded',
+      defaultValue: 10,
+    },
+    acceptedTypes: {
+      control: 'object',
+      description: 'Array of accepted MIME types',
+    },
+    validateCurrentCount: {
+      control: 'number',
+      description: 'Current count of images to validate against maxImages',
+      defaultValue: 0,
+    },
+    noClick: {
+      control: 'boolean',
+      description: 'Whether to disable click to open file dialog',
+      defaultValue: false,
+    },
   },
 }
 
