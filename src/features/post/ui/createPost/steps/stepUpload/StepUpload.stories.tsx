@@ -2,7 +2,7 @@ import { StepUpload } from './StepUpload'
 import type { Meta } from '@storybook/react'
 
 const meta = {
-  title: 'features/post/StepUpload',
+  title: 'features/StepUpload',
   component: StepUpload,
   tags: ['autodocs'],
 } satisfies Meta<typeof StepUpload>

@@ -6,8 +6,6 @@ import { toast } from 'react-toastify'
 import { ACCEPTED_TYPES, MAX_FILE_SIZE_MB, MAX_IMAGES } from '@/features/post/utils/constats'
 import { FullImageUpload } from './fullImageUpload/FullImageUpload'
 
-import s from './StepUpload.module.scss'
-
 type StepUploadProps = {
   onNext: (files: File[]) => void
   customPlaceholder?: string
@@ -20,7 +18,7 @@ export const StepUpload = ({ onNext, customPlaceholder, customDragPlaceholder }:
   }, [])
 
   return (
-    <div className={s.container}>
+    <div>
       <FullImageUpload
         onFilesSelected={onNext}
         showDraftButton={true}
