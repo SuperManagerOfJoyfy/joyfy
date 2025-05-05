@@ -1,5 +1,5 @@
 import { UserProfile, UserProfileProps } from '@/features/post/ui/userProfile'
-import { PostsGridWithInfinteScroll } from '@/features/post/ui/createPost/postsGrid/PostsGridWithInfinteScroll'
+import { PostsGridWithInfinteScroll } from '@/features/post/ui/postsGridWithInfiniteScroll/PostsGridWithInfinteScroll'
 import React from 'react'
 
 type PageProps = {
