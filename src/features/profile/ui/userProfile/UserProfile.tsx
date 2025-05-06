@@ -75,9 +75,9 @@ export const UserProfile = ({ userName, aboutMe, avatars, userMetadata, hasPayme
         </div>
       </div>
 
-      <div>
-        <div className={s.profileInfo}>
-          <div className={s.userBlock}>
+      <div className={s.profileInfoContainer}>
+        <div className={s.profileHeader}>
+          <div className={s.profileNameBudget}>
             <Typography variant="large" fontWeight="medium">
               {userName}
             </Typography>

@@ -9,8 +9,9 @@ import { useCallback, useEffect, useRef } from 'react'
 
 export const PostsGridWithInfinteScroll = () => {
   const { user } = useAuth()
+  const token = localStorage.getItem('accessToken') // skipToken ниже не срабатывает ибо user не null при логауте
   const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetAllPostsInfiniteQuery(
-    user ? { userName: user.userName, pageSize: 8 } : skipToken
+    token && user ? { userName: user.userName, pageSize: 8 } : skipToken
   )
 
   const posts = data?.pages.flatMap((page) => page.items) || []

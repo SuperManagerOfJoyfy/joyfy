@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
-
 import { ImageSlider } from './ImageSlider'
 
 const meta: Meta<typeof ImageSlider> = {
-  title: 'features/post/ImageSlider',
+  title: 'entities/ImageSlider',
   component: ImageSlider,
   parameters: {
     layout: 'centered',
@@ -45,18 +44,15 @@ const sampleImages = [
 ]
 
 export const Default: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', overflow: 'hidden', width: '400px', height: '400px' }}>
+      <ImageSlider {...args} />
+    </div>
+  ),
   args: {
-    images: sampleImages.map((img) => ({
-      ...img,
-      src: `${img.src}?w=400`,
-    })),
+    images: sampleImages,
     showControls: true,
     showPagination: true,
     showCounter: true,
   },
-  render: () => (
-    <div style={{ display: 'flex', overflow: 'hidden', maxWidth: '400px' }}>
-      <ImageSlider images={sampleImages} />
-    </div>
-  ),
 }
