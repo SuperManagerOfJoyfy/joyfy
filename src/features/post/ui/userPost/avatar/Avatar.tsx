@@ -4,6 +4,7 @@ import s from './Avatar.module.scss'
 type Props = {
   avatar?: string | null
   size?: 'small' | 'medium' | 'large'
+  variant: string
 }
 
 export const Avatar = ({ avatar, size = 'medium' }: Props) => {
