@@ -20,10 +20,6 @@ export const authApi = joyfyApi.injectEndpoints({
         url: '/auth/me',
         method: 'GET',
       }),
-      transformResponse: (response: MeResponse) => {
-        console.log('🔍 getMe raw response:', response)
-        return response
-      },
       providesTags: ['User'],
     }),
 
@@ -45,15 +41,21 @@ export const authApi = joyfyApi.injectEndpoints({
     }),
 
     login: builder.mutation<LoginResponse, LoginRequest>({
-      async onQueryStarted(_, { queryFulfilled }) {
+      // This is the handler that gets triggered when the login mutation is started.
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
+          // Wait for the login query to complete and get the response data
           const { data } = await queryFulfilled
 
-          if (!data) {
-            return
-          }
+          if (!data) return
 
           LocalStorage.setToken(data.accessToken)
+
+          // Invalidate any cached data related to the 'User' tag to trigger a refetch
+          dispatch(authApi.util.invalidateTags(['User']))
+
+          // Dispatch the `getMe` endpoint to fetch user information after login
+          dispatch(authApi.endpoints.getMe.initiate())
         } catch (error) {
           console.error('Login failed:', error)
         }
@@ -63,7 +65,6 @@ export const authApi = joyfyApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['User', 'Auth'],
     }),
 
     logout: builder.mutation<void, void>({
