@@ -8,8 +8,8 @@ import { Header } from '@/shared/ui/header/Header'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 import s from '../styles/layout.module.scss'
-import { useLogout } from '@/features/auth/hooks/useLogout'
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -18,11 +18,11 @@ type MainLayoutProps = {
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
 
-  const { user, isAppInitialized } = useAuth()
-  const { logoutUser } = useLogout()
+  const { data: user, isLoading } = useGetMeQuery()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
+  const [isAppInitialized, setIsAppInitialized] = useState(false)
 
   const onOpenLogoutModalHandler = (value = true) => setIsModalOpen(value)
 
@@ -34,13 +34,20 @@ export default function MainLayout({ children }: MainLayoutProps) {
     [onOpenLogoutModalHandler, user?.userId]
   )
 
+  const showLoader = pendingPath && pathname !== pendingPath
+  const isUserToken = LocalStorage.getToken()
+
   useEffect(() => {
     if (pathname === pendingPath) {
       setPendingPath(null)
     }
   }, [pathname, pendingPath])
 
-  const showLoader = pendingPath && pathname !== pendingPath
+  useEffect(() => {
+    if (!isLoading) {
+      setIsAppInitialized(true)
+    }
+  }, [isLoading])
 
   if (!isAppInitialized) {
     return (
@@ -54,7 +61,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <div className={s.layoutWrapper}>
       <Header />
       <div className={s.containerLayout}>
-        {user && (
+        {isUserToken && (
           <div className={s.sidebarContainer}>
             <Sidebar
               items={sidebarItems}
@@ -63,7 +70,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 if (item.path) setPendingPath(item.path)
               }}
             />
-            <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} onLogout={logoutUser} />
+            <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} />
           </div>
         )}
 

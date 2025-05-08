@@ -1,8 +1,6 @@
 'use client'
 
-import { Button, Card, Typography } from '@/shared/ui'
-// import { useClear } from '@/features/auth/hooks/useClear'
-import { Loader } from '@/shared/ui/loader/Loader'
+import { Card, Typography } from '@/shared/ui'
 
 export default function HomePage() {
   return (

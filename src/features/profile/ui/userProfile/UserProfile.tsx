@@ -5,8 +5,8 @@ import Image from 'next/image'
 import s from './UserProfile.module.scss'
 import { Button, Typography } from '@/shared/ui'
 import defaultAvatar from '../../../../../public/default-avatar.png'
-import { useAuth } from '@/features/auth/hooks/useAuth'
 import verifiedBudget from '../../../../../public/verifiedBudget.svg'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 type Avatar = {
   url: string
@@ -44,7 +44,7 @@ const StatItem = ({ value, label }: StatItemProps) => (
 )
 
 export const UserProfile = ({ userName, aboutMe, avatars, userMetadata, hasPaymentSubscription }: UserProfileProps) => {
-  const { isAuthenticated } = useAuth()
+  const { data: user } = useGetMeQuery()
 
   const profileAvatar: Avatar | undefined = avatars?.[0]
 
@@ -75,9 +75,9 @@ export const UserProfile = ({ userName, aboutMe, avatars, userMetadata, hasPayme
         </div>
       </div>
 
-      <div>
-        <div className={s.profileInfo}>
-          <div className={s.userBlock}>
+      <div className={s.profileInfoContainer}>
+        <div className={s.profileHeader}>
+          <div className={s.profileNameBudget}>
             <Typography variant="large" fontWeight="medium">
               {userName}
             </Typography>
@@ -85,7 +85,7 @@ export const UserProfile = ({ userName, aboutMe, avatars, userMetadata, hasPayme
               <Image src={verifiedBudget} width={24} height={24} alt="verifiedIcon" priority />
             )}
           </div>
-          {isAuthenticated && <Button variant={'secondary'}>Profile Settings</Button>}
+          {user && <Button variant={'secondary'}>Profile Settings</Button>}
         </div>
         <div className={s.profileStats}>
           <StatItem value={userMetadata.following} label="Following" />

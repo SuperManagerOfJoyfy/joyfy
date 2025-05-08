@@ -31,18 +31,6 @@
   height: 100%;
 }
 
-.square {
-  aspect-ratio: 1/1;
-}
-
-.wide {
-  aspect-ratio: 16/9;
-}
-
-.tall {
-  aspect-ratio: 4/5;
-}
-
 .navButton:hover:not(.disabled) {
   background-color: rgba(0, 0, 0, 0.5);
 }
@@ -97,4 +85,15 @@
   background-color: var(--color-accent-500);
   width: 6px;
   height: 6px;
+}
+
+.counter {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: var(--color-light-100);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
 }

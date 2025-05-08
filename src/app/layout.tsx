@@ -5,6 +5,7 @@ import MainLayout from './MainLayout'
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/globals.css'
 import { ToastSnackbar } from '@/shared/ui/toastSnackbar/ToastSnackbar'
+import { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>) {
   return (
     <html lang="en">

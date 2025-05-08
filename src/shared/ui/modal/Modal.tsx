@@ -2,7 +2,6 @@
 
 import { ComponentPropsWithoutRef, ComponentRef, CSSProperties, forwardRef, ReactElement, ReactNode } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { IoClose } from 'react-icons/io5'
 import clsx from 'clsx'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -13,6 +12,7 @@ import { Typography } from '../typography'
 import s from './Modal.module.scss'
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'auto'
+type CardPaddingStyle = 'default' | 'top-only' | 'none'
 
 type Props = {
   children?: ReactNode
@@ -26,6 +26,7 @@ type Props = {
   preventClose?: boolean
   leftButton?: ReactElement | null
   rightButton?: ReactElement | null
+  cardPadding?: CardPaddingStyle
 } & Omit<ComponentPropsWithoutRef<typeof DialogPrimitive.Root>, 'onOpenChange' | 'open'>
 
 export const Modal = forwardRef<ComponentRef<'div'>, Props>(
@@ -42,18 +43,13 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
       preventClose = false,
       leftButton = null,
       rightButton = null,
+      cardPadding = 'default',
       ...props
     },
     ref
   ) => {
     const contentClasses = clsx(s.content, s[`size${size}`], className)
     const overlayAnimation = getOverlayAnimation(overlayOpacity)
-
-    const handleOpenChange = (newOpen: boolean) => {
-      if (!newOpen && preventClose) return
-      onOpenChange?.(newOpen)
-    }
-
     const shouldCenterTitle = !!leftButton
 
     return (
@@ -65,11 +61,10 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
                 <DialogPrimitive.Overlay asChild>
                   <motion.div {...overlayAnimation} className={s.overlay} />
                 </DialogPrimitive.Overlay>
-
                 <div className={s.modal} ref={ref}>
                   <DialogPrimitive.Content asChild forceMount>
                     <motion.div {...windowAnimation} className={contentClasses} style={style}>
-                      <Card className={s.card}>
+                      <Card className={clsx(s.card, s[`padding-${cardPadding}`])}>
                         <header className={s.header}>
                           {leftButton && <div className={s.leftButton}>{leftButton}</div>}
 
@@ -79,7 +74,9 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
                                 {title}
                               </Typography>
                             ) : (
-                              <VisuallyHidden>Modal dialog</VisuallyHidden>
+                              <DialogPrimitive.Close className={s.closeButton} aria-label="Close">
+                                <IoClose size={24} />
+                              </DialogPrimitive.Close>
                             )}
                           </DialogPrimitive.Title>
 
@@ -103,6 +100,11 @@ export const Modal = forwardRef<ComponentRef<'div'>, Props>(
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>
     )
+
+    function handleOpenChange(newOpen: boolean) {
+      if (!newOpen && preventClose) return
+      onOpenChange?.(newOpen)
+    }
   }
 )
 

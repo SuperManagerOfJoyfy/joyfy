@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { PATH } from '@/shared/config/routes'
 import s from './authGuard.module.scss'
-import { useAuth } from '../../hooks/useAuth'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 type AuthGuardProps = {
   children: ReactNode
@@ -18,7 +18,7 @@ export const AuthGuard = ({
   requireAuth = false,
   redirectPath = requireAuth ? PATH.AUTH.LOGIN : PATH.ROOT,
 }: AuthGuardProps) => {
-  const { user, isLoading } = useAuth()
+  const { data: user, isLoading } = useGetMeQuery()
   const router = useRouter()
 
   const shouldRedirect = useMemo(() => {

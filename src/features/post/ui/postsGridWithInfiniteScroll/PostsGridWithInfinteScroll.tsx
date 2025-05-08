@@ -1,16 +1,17 @@
 'use client'
 
-import { useAuth } from '@/features/auth/hooks/useAuth'
 import { useGetAllPostsInfiniteQuery } from '@/features/post/api/postsApi'
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useCallback, useEffect, useRef } from 'react'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 export const PostsGridWithInfinteScroll = () => {
-  const { user } = useAuth()
+  const { data: user } = useGetMeQuery()
+  const token = localStorage.getItem('accessToken') // skipToken ниже не срабатывает ибо user не null при логауте
   const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetAllPostsInfiniteQuery(
-    user ? { userName: user.userName, pageSize: 8 } : skipToken
+    token && user ? { userName: user.userName, pageSize: 8 } : skipToken
   )
 
   const posts = data?.pages.flatMap((page) => page.items) || []
