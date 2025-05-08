@@ -1,0 +1,40 @@
+.layoutWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100%;
+}
+
+.containerLayout {
+  display: flex;
+  flex: 1;
+  max-width: 1280px;
+  width: 100%;
+  padding: 0 60px;
+  margin: 0px auto;
+  position: relative;
+}
+
+.sidebarContainer {
+  position: sticky;
+  max-width: 160px;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  overflow: auto;
+  top: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 36px 0 0 24px;
+}
+
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
+  height: 100%;
+  width: 100%;
+}

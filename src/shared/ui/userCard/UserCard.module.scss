@@ -1,0 +1,14 @@
+.userInfo {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.userName {
+  color: var(--color-light-100);
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    color: var(--color-accent-500);
+  }
+}

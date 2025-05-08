@@ -1,0 +1,21 @@
+:root {
+  /* animations */
+  --transition-duration: 0.2s;
+  --transition-timing-function: linear;
+  --transition: var(--transition-duration) var(--transition-timing-function);
+
+  /* dimentions */
+  --header-height: 60px;
+
+  /* toastify */
+  --toastify-color-dark: var(--color-dark-500);
+  --toastify-font-family: var(--font-family-primary);
+  --toastify-color-progress-success: var(--toastify-progressbar-success);
+  --toastify-color-progress-error: var(--toastify-progressbar-error);
+  --toastify-color-progress-warning: var(--toastify-progressbar-warning);
+  --toastify-color-progress-info: var(--toastify-progressbar-info);
+  --toastify-icon-color-info: var(--color-accent-300);
+  --toastify-icon-color-success: var(--color-success-700);
+  --toastify-icon-color-warning: var(--color-warning-300);
+  --toastify-icon-color-error: var(--toastify-icon-error);
+}

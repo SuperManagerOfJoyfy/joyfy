@@ -1,0 +1,17 @@
+.avatar {
+  border-radius: 50%;
+
+  &[data-size='small'] {
+    height: 24px;
+    width: 24px;
+  }
+
+  &[data-size='medium'] {
+    height: 36px;
+    width: 36px;
+  }
+  &[data-size='large'] {
+    height: 204px;
+    width: 204px;
+  }
+}
