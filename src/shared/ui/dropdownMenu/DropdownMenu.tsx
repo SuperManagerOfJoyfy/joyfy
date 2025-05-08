@@ -12,18 +12,16 @@ type DropdownMenuProps = {
 } & ComponentPropsWithoutRef<typeof RadixDropdownMenu.Root>
 
 export const DropdownMenu = forwardRef<ComponentRef<typeof RadixDropdownMenu.Trigger>, DropdownMenuProps>(
-  ({ align = 'end', children, sideOffset = 8, trigger, ...rest }, ref) => {
+  ({ align = 'end', children, sideOffset = 8, trigger, modal = false, ...rest }, ref) => {
     return (
-      <RadixDropdownMenu.Root {...rest}>
+      <RadixDropdownMenu.Root modal={modal} {...rest}>
         <RadixDropdownMenu.Trigger className={s.trigger} asChild={typeof trigger !== 'string'} ref={ref}>
           {trigger}
         </RadixDropdownMenu.Trigger>
 
-        <RadixDropdownMenu.Portal>
-          <RadixDropdownMenu.Content align={align} className={s.content} sideOffset={sideOffset}>
-            {children}
-          </RadixDropdownMenu.Content>
-        </RadixDropdownMenu.Portal>
+        <RadixDropdownMenu.Content align={align} className={s.content} sideOffset={sideOffset}>
+          {children}
+        </RadixDropdownMenu.Content>
       </RadixDropdownMenu.Root>
     )
   }
