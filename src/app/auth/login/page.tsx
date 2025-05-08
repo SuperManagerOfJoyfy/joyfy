@@ -1,28 +1,23 @@
 'use client'
 
 import { Login } from '@/features/auth/ui'
-import { useLoginMutation } from '@/features/auth/api/authApi'
+import { useGetMeQuery, useLoginMutation } from '@/features/auth/api/authApi'
 import { LoginFormValues } from '@/features/auth/ui/login'
 import { useRouter } from 'next/navigation'
 import { PATH } from '@/shared/config/routes'
 import { useState } from 'react'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { useAuth } from '@/features/auth/hooks/useAuth'
 
 const Page = () => {
   const [login, { isLoading }] = useLoginMutation()
   const router = useRouter()
   const [isRedirecting, setIsRedirecting] = useState(false)
 
-  const { user, isLoading: isUserLoading } = useAuth()
+  const { data: user, isLoading: isUserLoading } = useGetMeQuery()
 
   async function handleLogin(data: LoginFormValues) {
     try {
-      await login(data)
-        .unwrap()
-        .then((response) =>
-          localStorage.setItem('accessToken', response.accessToken)
-        )
+      await login(data).unwrap()
 
       setIsRedirecting(true)
 

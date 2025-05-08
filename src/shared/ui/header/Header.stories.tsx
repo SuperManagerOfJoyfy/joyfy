@@ -13,10 +13,10 @@ type Story = StoryObj<typeof Header>
 // Состояние без авторизации (показаны кнопки Log in и Sign up)
 
 export const Unauthenticated: Story = {
-  render: () => <Header isAuthenticated={false} />,
+  render: () => <Header />,
 }
 
 // Состояние после авторизации (показан колокольчик)
 export const Authenticated: Story = {
-  render: () => <Header isAuthenticated={true} />,
+  render: () => <Header />,
 }

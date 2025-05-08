@@ -20,33 +20,36 @@
   object-fit: cover;
 }
 
-.profileStats {
-  display: flex;
-  justify-content: space-between;
-  max-width: 360px;
-  gap: 40px;
-  margin-top: 20px;
-  margin-bottom: 23px;
+.profileInfoContainer {
+  width: 100%;
 }
 
 .statItem {
   text-align: center;
 }
 
-.profileInfo {
-  width: 730px !important;
+.profileHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.userBlock {
+.profileNameBudget {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .profileBio {
   line-height: 1.5;
   margin-bottom: 10px;
+}
+
+.profileStats {
+  display: flex;
+  justify-content: space-between;
+  max-width: 395px;
+  gap: 40px;
+  margin-top: 20px;
+  margin-bottom: 23px;
 }
