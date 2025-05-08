@@ -1,6 +1,8 @@
 .container {
   position: relative;
-  width: 100%;
+  //width: 100%;
+  min-height: 400px;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -11,10 +13,8 @@
 
 .slideContent {
   position: relative;
-  aspect-ratio: 1/1;
-  height: 400px;
-  width: 100%;
-  // height: 100%;
+  // width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,9 +23,8 @@
 .image {
   object-fit: cover;
   object-position: center;
-  height: 400px;
   width: 100%;
-  // height: 100%;
+  height: 100%;
 }
 
 .singleImage {

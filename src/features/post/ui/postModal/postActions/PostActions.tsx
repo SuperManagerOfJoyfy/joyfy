@@ -24,14 +24,14 @@ export const PostActions = ({ postId, likesCount, date }: Props) => {
         <FaRegBookmark type="button" className={s.icon} />
       </div>
 
-      {/* {likesCount > 0 && ( */}
-      <div className={s.postActions__likes}>
-        <AvatarGroup avatars={avatars} />
-        <Typography as="span" variant="body2">
-          {likesCount} <strong>"Like"</strong>
-        </Typography>
-      </div>
-      {/* )} */}
+      {likesCount > 0 && (
+        <div className={s.postActions__likes}>
+          <AvatarGroup avatars={avatars} />
+          <Typography as="span" variant="body2">
+            {likesCount} <strong>"Like"</strong>
+          </Typography>
+        </div>
+      )}
 
       <DateStamp date={date} className={s.postActions__date} />
 

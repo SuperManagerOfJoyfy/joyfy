@@ -1,6 +1,8 @@
 .content {
   background-color: var(--color-dark-500);
   padding: 12px;
+  z-index: 5000;
+  // overflow: visible;
 }
 
 .trigger {
