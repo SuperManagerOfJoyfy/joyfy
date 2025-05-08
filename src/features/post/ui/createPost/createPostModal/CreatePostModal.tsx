@@ -12,7 +12,7 @@ import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
 import { getCardPadding, getModalSize, getModalTitle } from '../utils/modalStepUtils'
 import { LeftButton, RightButton } from '../navigationButtons/NavigationButtons'
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 type CreatePostModalProps = {
   open: boolean
@@ -22,7 +22,7 @@ type CreatePostModalProps = {
 const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
   const { addImage, images, publishPost } = usePostContext()
   const router = useRouter()
-  const { user } = useAuth()
+  const { data: user } = useGetMeQuery()
 
   const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)

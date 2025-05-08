@@ -11,7 +11,7 @@ import Logo from '../../../../public/logo/logo.png'
 import flagUnitedKingdom from '@/shared/ui/header/assets/flagUnitedKingdom.png'
 import flagRussia from '@/shared/ui/header/assets/flagRussia.png'
 import s from './Header.module.scss'
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -38,7 +38,7 @@ const AuthActions = () => (
 
 export const Header = () => {
   const [notificationCount] = useState(3)
-  const { user, isLoading } = useAuth()
+  const { data: user, isLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
 
   useEffect(() => {
