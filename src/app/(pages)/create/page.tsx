@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation'
 
 import { CreatePostModal } from '@/features/post/ui/createPost/createPostModal'
 import { AuthGuard } from '@/features/auth/ui'
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 export default function CreatePostPage() {
   const [isModalOpen, setIsModalOpen] = useState(true)
   const router = useRouter()
-  const { user } = useAuth()
+  const { data: user } = useGetMeQuery()
   const userId = user?.userId
 
   const handleClose = useCallback(() => {

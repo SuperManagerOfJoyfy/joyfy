@@ -11,6 +11,6 @@ export default meta
 
 export const Default = {
   render: () => {
-    return <Login onSubmit={console.log} />
+    return <Login onSubmit={console.log} isLoading={true} />
   },
 }

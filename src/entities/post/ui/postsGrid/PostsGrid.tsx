@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useEffect } from 'react'
 import s from './PostsGrid.module.scss'
 import Image from 'next/image'
 import { PostItem } from '@/features/post/types/types'
