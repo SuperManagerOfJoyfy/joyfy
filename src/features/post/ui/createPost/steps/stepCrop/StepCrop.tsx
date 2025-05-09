@@ -1,17 +1,18 @@
 'use client'
 
-import { FiTrash2, FiZoomIn } from 'react-icons/fi'
-import { TbAspectRatio } from 'react-icons/tb'
+import { FiTrash2, FiZoomIn, FiPlus } from 'react-icons/fi'
+import { TbAspectRatio, TbSquare, TbRectangleVertical, TbRectangle } from 'react-icons/tb'
 import { ChangeEvent, useState, useEffect } from 'react'
 
 import { AspectRatioType } from '@/features/post/types/types'
-import { ImageSlider } from '@/entities/post/ui/imageSlider'
+import { ImageSlider } from '@/shared/ui/imageSlider'
 import { usePostContext } from '../../providers/PostContext'
 import { Button } from '@/shared/ui'
 import { useImageValidation } from '@/features/post/hooks/useImageValidation'
 import { ImageUploadButton } from './imageUploadButton/ImageUploadButton'
 
 import s from './StepCrop.module.scss'
+import clsx from 'clsx'
 
 type StepCropProps = {
   onNavigateBack?: () => void
@@ -129,7 +130,8 @@ export const StepCrop = ({ onNavigateBack }: StepCropProps) => {
             <div className={s.controlContainer}>
               <div className={s.controlItem}>
                 <Button
-                  variant="icon"
+                  variant="text"
+                  customStyles={true}
                   className={`${s.controlButton} ${showAspectRatioOptions ? s.active : ''}`}
                   onClick={toggleAspectRatioOptions}
                   type="button"
@@ -139,36 +141,61 @@ export const StepCrop = ({ onNavigateBack }: StepCropProps) => {
                   </div>
                 </Button>
                 <div className={`${s.expandedControl} ${showAspectRatioOptions ? s.show : ''}`}>
-                  <div className={s.aspectRatioOptions}>
-                    <div className={s.aspectRatioTitle}>
-                      <Button
-                        variant="outline"
-                        className={`${s.aspectRatioOption} ${imagesEditData[currentImageIdx]?.aspectRatio === 'original' ? s.active : ''}`}
-                        onClick={() => resetToOriginal(currentImageIdx)}
-                      >
-                        <TbAspectRatio size={28} />
-                      </Button>
-                    </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <Button
-                      variant="outline"
-                      className={`${s.aspectRatioOption} ${imagesEditData[currentImageIdx]?.aspectRatio === '1:1' ? s.active : ''}`}
+                      variant="text"
+                      customStyles={true}
+                      className={clsx(s.aspectRatioOption, {
+                        [s.active]: imagesEditData[currentImageIdx]?.aspectRatio === 'original',
+                      })}
+                      onClick={() => resetToOriginal(currentImageIdx)}
+                    >
+                      <div className={s.buttonSelect}>
+                        <span className={s.label}>Оригинал</span>
+                        <TbAspectRatio size={20} className={s.icon} />
+                      </div>
+                    </Button>
+
+                    <Button
+                      variant="text"
+                      customStyles={true}
+                      className={clsx(s.aspectRatioOption, {
+                        [s.active]: imagesEditData[currentImageIdx]?.aspectRatio === '1:1',
+                      })}
                       onClick={() => handleAspectRatioChange('1:1')}
                     >
-                      1:1
+                      <div className={s.buttonSelect}>
+                        <span className={s.label}>1:1</span>
+                        <TbSquare size={20} className={s.icon} />
+                      </div>
                     </Button>
+
                     <Button
-                      variant="outline"
-                      className={`${s.aspectRatioOption} ${imagesEditData[currentImageIdx]?.aspectRatio === '4:5' ? s.active : ''}`}
+                      variant="text"
+                      customStyles={true}
+                      className={clsx(s.aspectRatioOption, {
+                        [s.active]: imagesEditData[currentImageIdx]?.aspectRatio === '4:5',
+                      })}
                       onClick={() => handleAspectRatioChange('4:5')}
                     >
-                      4:5
+                      <div className={s.buttonSelect}>
+                        <span className={s.label}>4:5</span>
+                        <TbRectangleVertical size={20} className={s.icon} />
+                      </div>
                     </Button>
+
                     <Button
-                      variant="outline"
-                      className={`${s.aspectRatioOption} ${imagesEditData[currentImageIdx]?.aspectRatio === '16:9' ? s.active : ''}`}
+                      variant="text"
+                      customStyles={true}
+                      className={clsx(s.aspectRatioOption, {
+                        [s.active]: imagesEditData[currentImageIdx]?.aspectRatio === '16:9',
+                      })}
                       onClick={() => handleAspectRatioChange('16:9')}
                     >
-                      16:9
+                      <div className={s.buttonSelect}>
+                        <span className={s.label}>16:9</span>
+                        <TbRectangle size={20} className={s.icon} />
+                      </div>
                     </Button>
                   </div>
                 </div>

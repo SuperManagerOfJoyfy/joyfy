@@ -38,7 +38,7 @@ type SidebarActionHandlers = {
 
 export const createSidebarItems = (
   role: 'user' | 'admin',
-  userId?: string,
+  userId?: number,
   handlers: SidebarActionHandlers = {}
 ): SidebarItem[] => {
   const adminItems: SidebarItem[] = [
@@ -83,10 +83,12 @@ export const createSidebarItems = (
     {
       id: 'create',
       title: 'Create',
-      path: PATH.USER.CREATE,
+      path: handlers.onCreatePost ? undefined : PATH.USER.CREATE,
       icon: <FiPlusCircle />,
       onClick: handlers.onCreatePost,
       activeIcon: <FaPlusCircle />,
+      className: 'customItem',
+      isActive: (currentPath) => !!currentPath?.includes('action=create'),
     },
     {
       id: 'profile',
@@ -131,7 +133,7 @@ export const createSidebarItems = (
       icon: <FiLogOut />,
       activeIcon: <FaSignOutAlt />,
       onClick: handlers.onOpenLogoutModalHandler,
-      className: 'logoutItem',
+      className: 'customItem',
     },
   ]
 

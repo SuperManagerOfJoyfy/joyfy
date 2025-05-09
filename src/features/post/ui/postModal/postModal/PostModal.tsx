@@ -3,7 +3,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { HiDotsHorizontal } from 'react-icons/hi'
 
 import { DropdownMenu, Modal, Scroll, Separator, UserCard } from '@/shared/ui'
-import { ImageSlider } from '@/entities/post/ui/imageSlider'
+import { ImageSlider } from '@/shared/ui/imageSlider'
 import { PostActions, PostItem } from '@/features/post/ui/postModal'
 import { usePostDropdownMenuActions } from '@/features/post/ui/postModal/postDropdownMenuItems'
 import { PostDropdownMenuItems } from '@/features/post/ui/postModal/postDropdownMenuItems'

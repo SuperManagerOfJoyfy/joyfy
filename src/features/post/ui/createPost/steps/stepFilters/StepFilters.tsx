@@ -3,7 +3,7 @@
 import Image from 'next/image'
 
 import { FilterType, IMAGE_FILTERS, IMAGE_FILTERS_LIST } from '@/features/post/types/types'
-import { ImageSlider } from '@/entities/post/ui/imageSlider'
+import { ImageSlider } from '@/shared/ui/imageSlider'
 import { usePostContext } from '../../providers/PostContext'
 
 import s from './StepFilters.module.scss'

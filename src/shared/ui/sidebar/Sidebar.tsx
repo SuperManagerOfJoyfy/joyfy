@@ -16,6 +16,7 @@ export type SidebarItem = {
   className?: string
   style?: CSSProperties
   onClick?: () => void
+  isActive?: (currentPath?: string) => boolean
 }
 
 type Props = {
@@ -56,7 +57,7 @@ export const Sidebar = memo(({ items, activePath, onItemClick, disabled = false,
   }
 
   const renderItem = (item: SidebarItem) => {
-    const isActive = determineActiveState(item.path, activePath)
+    const isActive = item.isActive ? item.isActive(activePath) : determineActiveState(item.path, activePath)
     const isItemDisabled = disabled || item.disabled
 
     const linkClassNames = clsx(

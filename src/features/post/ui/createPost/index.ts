@@ -1,1 +1,1 @@
-export * from './createPostModal'
+export * from './CreatePost'

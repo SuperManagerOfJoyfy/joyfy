@@ -13,16 +13,17 @@ import { ClosePostModal } from '../closeModal/ClosePostModal'
 import { getCardPadding, getModalSize, getModalTitle } from '../utils/modalStepUtils'
 import { LeftButton, RightButton } from '../navigationButtons/NavigationButtons'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { UserProfileProps } from '@/features/profile/ui/userProfile'
 
 type CreatePostModalProps = {
   open: boolean
   onClose: () => void
+  user: Pick<UserProfileProps, 'userName' | 'avatars' | 'id'>
 }
 
-const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
+const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
   const { addImage, images, publishPost } = usePostContext()
   const router = useRouter()
-  const { data: user } = useGetMeQuery()
 
   const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
@@ -69,7 +70,7 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
         try {
           await publishPost()
           toast.success('Post successfully published!')
-          router.push(`/profile/${user?.userId || ''}`)
+          router.push(`/profile/${user?.id || ''}`)
         } finally {
           setIsPublishing(false)
           onClose()
@@ -121,7 +122,7 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
         {currentStep === 'upload' && <StepUpload onNext={handleFilesSelected} />}
         {currentStep === 'crop' && <StepCrop onNavigateBack={() => setCurrentStep('upload')} />}
         {currentStep === 'filter' && <StepFilters />}
-        {currentStep === 'description' && <StepDescription disabled={isPublishing} />}
+        {currentStep === 'description' && <StepDescription disabled={isPublishing} user={user} />}
       </Modal>
 
       {isCloseModalOpen &&

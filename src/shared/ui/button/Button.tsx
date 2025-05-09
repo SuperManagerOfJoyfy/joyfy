@@ -10,7 +10,7 @@ const buttonSize = ['small', 'medium', 'large'] as const
 
 type ButtonSize = (typeof buttonSize)[number]
 
-export type ButtonProps<T extends ElementType = 'button'> = {
+type ButtonProps<T extends ElementType = 'button'> = {
   as?: T
   variant?: ButtonVariant
   size?: ButtonSize
@@ -18,6 +18,7 @@ export type ButtonProps<T extends ElementType = 'button'> = {
   startIcon?: ReactNode
   endIcon?: ReactNode
   className?: string
+  customStyles?: boolean
 } & ComponentPropsWithoutRef<T>
 
 export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) => {
@@ -30,10 +31,17 @@ export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) 
     endIcon,
     children,
     className,
+    customStyles = false,
     ...rest
   } = props
 
-  const classNames = clsx(s.button, s[variant], s[size], fullWidth && s.fullWidth, className)
+  const classNames = clsx(
+    s.button,
+    !customStyles && s[variant],
+    !customStyles && s[size],
+    fullWidth && s.fullWidth,
+    className
+  )
 
   return (
     <Component className={classNames} {...rest}>

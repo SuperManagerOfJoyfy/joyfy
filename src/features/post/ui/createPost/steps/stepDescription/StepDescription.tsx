@@ -1,18 +1,19 @@
 'use client'
 
 import { ChangeEvent } from 'react'
-
-import { TextArea, Typography } from '@/shared/ui'
-import { ImageSlider } from '@/entities/post/ui/imageSlider'
+import { ImageSlider } from '@/shared/ui/imageSlider'
 import { usePostContext } from '../../providers/PostContext'
 
 import s from './StepDescription.module.scss'
+import { UserProfileProps } from '@/features/profile/ui/userProfile'
+import { PostDescriptionForm } from '@/entities/post/ui'
 
 type StepDescriptionProps = {
   disabled?: boolean
+  user: Pick<UserProfileProps, 'userName' | 'avatars' | 'id'>
 }
 
-export const StepDescription = ({ disabled }: StepDescriptionProps) => {
+export const StepDescription = ({ disabled, user }: StepDescriptionProps) => {
   const { imagePreviews, description, setDescription, setCurrentImageIndex, currentImageIdx } = usePostContext()
 
   const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -41,22 +42,7 @@ export const StepDescription = ({ disabled }: StepDescriptionProps) => {
           />
         </div>
 
-        <div className={s.formContainer}>
-          <div className={s.descriptionContainer}>
-            <Typography variant="caption">Description</Typography>
-            <TextArea
-              placeholder="Add a description..."
-              value={description}
-              onChange={handleDescriptionChange}
-              maxLength={500}
-              rows={6}
-              disabled={disabled}
-            />
-            <div className={s.charCount}>
-              <Typography variant="caption">{description.length}/500</Typography>
-            </div>
-          </div>
-        </div>
+        <PostDescriptionForm user={user} value={description} onChange={handleDescriptionChange} disabled={disabled} />
       </div>
     </div>
   )

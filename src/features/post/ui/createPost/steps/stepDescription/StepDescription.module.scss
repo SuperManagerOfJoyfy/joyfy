@@ -31,23 +31,3 @@
   height: 100%;
   object-fit: contain;
 }
-
-.formContainer {
-  width: 100%;
-  max-width: 486px;
-  display: flex;
-  flex-direction: column;
-  padding: 0 16px;
-  height: 100%;
-}
-
-.descriptionContainer {
-  margin-bottom: 20px;
-}
-
-.charCount {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 4px;
-  color: var(--color-light-900);
-}

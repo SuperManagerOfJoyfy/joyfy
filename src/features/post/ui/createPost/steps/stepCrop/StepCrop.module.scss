@@ -63,6 +63,7 @@
   align-items: center;
   justify-content: center;
   background: none;
+  background-color: inherit;
   border: none;
   color: var(--color-light-100);
   cursor: pointer;
@@ -86,12 +87,16 @@
   transition: fill 0.3s ease;
   stroke: var(--color-light-100);
 }
-
-.iconSquare:hover svg {
-  stroke: var(--color-accent-500);
+.iconSquare svg {
+  stroke: var(--color-light-100);
+  transition: stroke 0.2s ease;
 }
 
-.iconSquare:active svg {
+.controlButton:not(.active):hover .iconSquare svg {
+  stroke: var(--color-light-100);
+}
+
+.controlButton.active .iconSquare svg {
   stroke: var(--color-accent-500);
 }
 
@@ -107,6 +112,8 @@
   pointer-events: none;
   transform: translateY(10px);
   transition: all 0.2s ease;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   &.show {
     opacity: 0.8;
@@ -147,11 +154,49 @@
   }
 }
 
-.aspectRatioOptions {
+.aspectRatioOption {
+  color: var(--color-light-900);
+  background-color: transparent;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+
+  svg {
+    flex-shrink: 0;
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  &:hover {
+    color: var(--color-light-100);
+  }
+
+  &.active {
+    color: var(--color-light-100);
+  }
+}
+
+.buttonSelect {
+  display: flex;
+  min-width: 130px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.controlButton .iconSquare svg {
+  stroke: var(--color-light-100);
+  transition: stroke 0.2s ease;
+}
+
+.controlButton:hover .iconSquare svg {
+  stroke: var(--color-accent-500);
+}
+
+.controlButton.active .iconSquare {
+  border: 1px solid var(--color-accent-500);
+  background: var(--color-dark-500);
 }
 
 .controlButton.active .iconSquare svg {
