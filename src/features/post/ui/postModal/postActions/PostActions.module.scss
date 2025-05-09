@@ -1,0 +1,56 @@
+.postActions {
+  display: flex;
+  flex-direction: column;
+
+  &__icons {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 24px 0 24px;
+    cursor: pointer;
+  }
+
+  &__leftIcons {
+    display: flex;
+    gap: 24px;
+  }
+
+  &__likes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 24px;
+    margin-top: 16px;
+    height: 24px;
+  }
+
+  &__date {
+    padding-left: 24px;
+  }
+
+  &__commentForm {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    padding: 4px 0 4px 12px;
+  }
+
+  .commentInput {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    font-size: var(--font-size-s);
+    line-height: 1.4;
+    border: none;
+
+    &::placeholder {
+      font-size: var(--font-size-s);
+    }
+
+    &:hover,
+    &:focus {
+      background-color: transparent;
+    }
+  }
+}

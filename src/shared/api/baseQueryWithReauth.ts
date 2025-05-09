@@ -1,20 +1,16 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/query'
-import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { BaseQueryFn, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
 import { PATH } from '../config/routes'
 import { handleErrors } from '@/shared/utils/handleErrors/handleErrors'
 import LocalStorage from '../utils/localStorage/localStorage'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 
 const mutex = new Mutex()
 let lastRefreshResult: boolean | null = null
 let lastRefreshAttempt = 0
 
-export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
-  args,
-  api,
-  extraOptions
-) => {
-  const result = await fetchBaseQuery({
+const createBaseQuery = () =>
+  fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     credentials: 'include',
     prepareHeaders: (headers) => {
@@ -24,8 +20,14 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
       }
       return headers
     },
-  })(args, api, extraOptions)
-  return result
+  })
+
+export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
+  return createBaseQuery()(args, api, extraOptions)
 }
 
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
