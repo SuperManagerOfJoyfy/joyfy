@@ -1,18 +1,26 @@
 'use client'
 
-import { useGetAllPostsInfiniteQuery } from '@/features/post/api/postsApi'
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { useGetAllPostsInfiniteQuery } from '@/features/post/api/postsApi'
+import { PostItem } from '@/features/post/types/types'
+import { PostModal } from '@/features/post/ui/postModal'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useCallback, useEffect, useRef } from 'react'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const PostsGridWithInfinteScroll = () => {
   const { data: user } = useGetMeQuery()
+  if (!user) return null
+  const userId = user.userId
+
   const token = localStorage.getItem('accessToken') // skipToken ниже не срабатывает ибо user не null при логауте
   const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetAllPostsInfiniteQuery(
     token && user ? { userName: user.userName, pageSize: 8 } : skipToken
   )
+  const [selectedPost, setSelectedPost] = useState<PostItem | null>(null)
+  const openModal = (post: PostItem) => setSelectedPost(post)
+  const closeModal = () => setSelectedPost(null)
 
   const posts = data?.pages.flatMap((page) => page.items) || []
   const loaderRef = useRef<HTMLDivElement>(null)
@@ -46,7 +54,8 @@ export const PostsGridWithInfinteScroll = () => {
 
   return (
     <div>
-      {<PostsGrid posts={posts} isLoading={isLoading} />}
+      {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openModal} />}
+      {selectedPost && <PostModal post={selectedPost} onClose={closeModal} open={!!selectedPost} userId={userId} />}
       {hasNextPage && (
         <div ref={loaderRef}>
           <Loader fullScreen={false} reduced />
