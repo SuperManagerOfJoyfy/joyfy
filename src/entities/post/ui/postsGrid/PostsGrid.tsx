@@ -1,13 +1,13 @@
 'use client'
 
-import s from './PostsGrid.module.scss'
-import Image from 'next/image'
 import { PostItem } from '@/features/post/types/types'
 import { Loader } from '@/shared/ui/loader/Loader'
+import Image from 'next/image'
+import s from './PostsGrid.module.scss'
 
 type Props = {
   posts: PostItem[]
-  onPostClick?: () => void
+  onPostClick: (post: PostItem) => void
   isLoading: boolean
 }
 
@@ -18,7 +18,7 @@ export const PostsGrid = ({ onPostClick, posts, isLoading }: Props) => {
   return (
     <div className={s.gridContainer}>
       {posts?.map((post) => (
-        <div className={s.gridItem} onClick={onPostClick} key={post.id}>
+        <div className={s.gridItem} onClick={() => onPostClick(post)} key={post.id}>
           <Image src={post.images[0].url} alt="post image" width={235} height={228} priority />
         </div>
       ))}
