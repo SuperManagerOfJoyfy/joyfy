@@ -23,7 +23,7 @@ export default async function Page({ params }: PageProps) {
         hasPaymentSubscription={userData.hasPaymentSubscription}
         id={userData.id}
       />
-      <PostsGridWithInfinteScroll />
+      <PostsGridWithInfinteScroll userName={userData.userName} />
     </div>
   )
 }

@@ -9,19 +9,20 @@ import { usePostDropdownMenuActions } from '@/features/post/ui/postModal/postDro
 import { PostDropdownMenuItems } from '@/features/post/ui/postModal/postDropdownMenuItems'
 import { PostItem as PostItemType } from '@/features/post/types/types'
 import s from './PostModal.module.scss'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 type Props = {
   post: PostItemType
-  userId: number
   open: boolean
   onClose: () => void
 }
 
-export const PostModal = ({ post, userId, open, onClose }: Props) => {
-  if (!post) return null
+export const PostModal = ({ post, open, onClose }: Props) => {
+  const { data: user } = useGetMeQuery()
+
   const { userName, ownerId, avatarOwner, description, likesCount, id: postId, createdAt, images } = post
 
-  const isOwnPost = ownerId === userId
+  const isOwnPost = ownerId === user?.userId
 
   // To add condition:
   const isFollowing = false
@@ -32,6 +33,7 @@ export const PostModal = ({ post, userId, open, onClose }: Props) => {
     isFollowing,
   })
 
+  if (!post) return null
   return (
     <Modal open={open} size="lg" cardPadding="none" className={s.modal} onOpenChange={onClose}>
       <VisuallyHidden>

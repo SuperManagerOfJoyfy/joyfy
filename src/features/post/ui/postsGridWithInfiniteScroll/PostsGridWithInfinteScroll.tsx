@@ -9,14 +9,10 @@ import { Loader } from '@/shared/ui/loader/Loader'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export const PostsGridWithInfinteScroll = () => {
-  const { data: user } = useGetMeQuery()
-  if (!user) return null
-  const userId = user.userId
-
+export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) => {
   const token = localStorage.getItem('accessToken') // skipToken ниже не срабатывает ибо user не null при логауте
   const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetAllPostsInfiniteQuery(
-    token && user ? { userName: user.userName, pageSize: 8 } : skipToken
+    token ? { userName, pageSize: 8 } : skipToken
   )
   const [selectedPost, setSelectedPost] = useState<PostItem | null>(null)
   const openModal = (post: PostItem) => setSelectedPost(post)
@@ -55,7 +51,7 @@ export const PostsGridWithInfinteScroll = () => {
   return (
     <div>
       {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openModal} />}
-      {selectedPost && <PostModal post={selectedPost} onClose={closeModal} open={!!selectedPost} userId={userId} />}
+      {selectedPost && <PostModal post={selectedPost} onClose={closeModal} open={!!selectedPost} />}
       {hasNextPage && (
         <div ref={loaderRef}>
           <Loader fullScreen={false} reduced />
