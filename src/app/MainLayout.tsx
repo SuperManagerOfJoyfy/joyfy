@@ -70,7 +70,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 if (item.path) setPendingPath(item.path)
               }}
             />
-            <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} />
+            <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} email={user?.email} />
           </div>
         )}
 
