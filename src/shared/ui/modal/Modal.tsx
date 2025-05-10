@@ -4,11 +4,11 @@ import { ComponentPropsWithoutRef, ComponentRef, CSSProperties, forwardRef, Reac
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { IoClose } from 'react-icons/io5'
 import clsx from 'clsx'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import { getOverlayAnimation, windowAnimation } from './ModalAnimations'
 import { Card } from '../card'
-import { Typography } from '../typography'
+import { Typography } from '@/shared/ui'
 import s from './Modal.module.scss'
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'auto'
