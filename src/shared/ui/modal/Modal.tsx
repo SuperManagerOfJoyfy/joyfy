@@ -9,7 +9,7 @@ import clsx from 'clsx'
 
 import { getOverlayAnimation, windowAnimation } from './ModalAnimations'
 import { Card } from '../card'
-import { Typography } from '../typography'
+import { Typography } from '@/shared/ui'
 import s from './Modal.module.scss'
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'auto'

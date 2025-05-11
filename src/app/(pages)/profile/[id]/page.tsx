@@ -24,9 +24,7 @@ export default async function Page({ params, searchParams }: PageProps) {
         hasPaymentSubscription={userData.hasPaymentSubscription}
         id={userData.id}
       />
-      <PostsGridWithInfinteScroll />
-
-      <CreatePost showCreateModal={action === 'create'} user={userData} />
+      <PostsGridWithInfinteScroll userName={userData.userName} />
     </div>
   )
 }
