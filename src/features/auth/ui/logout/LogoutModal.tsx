@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
 import s from './logoutModal.module.scss'
 import { PATH } from '@/shared/config/routes'

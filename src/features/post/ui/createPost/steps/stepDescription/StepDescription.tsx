@@ -1,12 +1,13 @@
 'use client'
 
 import { ChangeEvent } from 'react'
+
 import { ImageSlider } from '@/shared/ui/imageSlider'
+import { UserProfileProps } from '@/features/profile/ui/userProfile'
+import { PostDescriptionForm } from '@/entities/post/ui'
 import { usePostContext } from '../../providers/PostContext'
 
 import s from './StepDescription.module.scss'
-import { UserProfileProps } from '@/features/profile/ui/userProfile'
-import { PostDescriptionForm } from '@/entities/post/ui'
 
 type StepDescriptionProps = {
   disabled?: boolean

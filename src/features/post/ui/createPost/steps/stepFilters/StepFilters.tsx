@@ -53,7 +53,7 @@ export const StepFilters = () => {
                 aria-label={`${filter} filter`}
                 aria-selected={currentFilter === filter}
               >
-                {images[currentImageIdx].src && filter && (
+                {images[currentImageIdx]?.src && filter && (
                   <div className={s.filterPreview}>
                     <div className={s.filterImageWrapper}>
                       <Image

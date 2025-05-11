@@ -4,12 +4,12 @@ import { CreatePost } from '@/features/post/ui'
 
 type PageProps = {
   params: { id: string }
-  searchParams?: { postId?: string; action?: string }
+  searchParams?: { action?: string }
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
   const { id } = params
-  const { postId, action } = searchParams || {}
+  const { action } = searchParams || {}
 
   const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${id}`)
   const userData: UserProfileProps = await data.json()

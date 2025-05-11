@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 import { clsx } from 'clsx'
 import s from './Button.module.scss'
 
-const buttonVariant = ['primary', 'secondary', 'outline', 'text', 'link', 'icon'] as const
+const buttonVariant = ['primary', 'secondary', 'outline', 'text', 'link', 'icon', 'clean'] as const
 
 type ButtonVariant = (typeof buttonVariant)[number]
 
@@ -19,6 +19,7 @@ type ButtonProps<T extends ElementType = 'button'> = {
   endIcon?: ReactNode
   className?: string
   customStyles?: boolean
+  noPadding?: boolean
 } & ComponentPropsWithoutRef<T>
 
 export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) => {
@@ -32,6 +33,7 @@ export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) 
     children,
     className,
     customStyles = false,
+    noPadding = false,
     ...rest
   } = props
 
@@ -40,6 +42,7 @@ export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) 
     !customStyles && s[variant],
     !customStyles && s[size],
     fullWidth && s.fullWidth,
+    noPadding && s.noPadding,
     className
   )
 
