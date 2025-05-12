@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 import { clsx } from 'clsx'
 import s from './Button.module.scss'
 
-const buttonVariant = ['primary', 'secondary', 'outline', 'text', 'link', 'icon'] as const
+const buttonVariant = ['primary', 'secondary', 'outline', 'text', 'link', 'icon', 'clean'] as const
 
 type ButtonVariant = (typeof buttonVariant)[number]
 
@@ -10,7 +10,7 @@ const buttonSize = ['small', 'medium', 'large'] as const
 
 type ButtonSize = (typeof buttonSize)[number]
 
-export type ButtonProps<T extends ElementType = 'button'> = {
+type ButtonProps<T extends ElementType = 'button'> = {
   as?: T
   variant?: ButtonVariant
   size?: ButtonSize
@@ -18,6 +18,8 @@ export type ButtonProps<T extends ElementType = 'button'> = {
   startIcon?: ReactNode
   endIcon?: ReactNode
   className?: string
+  customStyles?: boolean
+  noPadding?: boolean
 } & ComponentPropsWithoutRef<T>
 
 export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) => {
@@ -30,10 +32,19 @@ export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) 
     endIcon,
     children,
     className,
+    customStyles = false,
+    noPadding = false,
     ...rest
   } = props
 
-  const classNames = clsx(s.button, s[variant], s[size], fullWidth && s.fullWidth, className)
+  const classNames = clsx(
+    s.button,
+    !customStyles && s[variant],
+    !customStyles && s[size],
+    fullWidth && s.fullWidth,
+    noPadding && s.noPadding,
+    className
+  )
 
   return (
     <Component className={classNames} {...rest}>

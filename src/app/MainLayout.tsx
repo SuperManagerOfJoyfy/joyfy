@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Sidebar } from '@/shared/ui/sidebar'
 import { LogoutModal } from '@/features/auth/ui'
 import { Header } from '@/shared/ui/header/Header'
@@ -17,6 +17,8 @@ type MainLayoutProps = {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
   const { data: user, isLoading } = useGetMeQuery()
 
@@ -30,10 +32,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
     () =>
       createSidebarItems('user', user?.userId, {
         onOpenLogoutModalHandler,
+        onCreatePost: () => {
+          if (user?.userId) {
+            router.push(`/profile/${user.userId}?action=create`)
+          }
+        },
       }),
-    [onOpenLogoutModalHandler, user?.userId]
+    [onOpenLogoutModalHandler, user?.userId, router]
   )
 
+  const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
   const showLoader = pendingPath && pathname !== pendingPath
   const isUserToken = LocalStorage.getToken()
 
@@ -65,7 +73,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           <div className={s.sidebarContainer}>
             <Sidebar
               items={sidebarItems}
-              activePath={pendingPath || pathname}
+              activePath={pendingPath || fullPath}
               onItemClick={(item) => {
                 if (item.path) setPendingPath(item.path)
               }}

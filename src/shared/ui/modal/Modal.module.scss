@@ -45,23 +45,50 @@
   }
 }
 
+.wrapper {
+  position: relative;
+
+  &.withHeader::before {
+    content: '';
+    position: absolute;
+    top: 62px;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background-color: var(--color-dark-100);
+    z-index: 0;
+  }
+}
+
 .modalContent {
   padding: 24px;
 }
-
 .card {
   background-color: var(--color-dark-300);
-  border: 1px solid var(--color-dark-100);
-  position: relative;
 }
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 12px;
   width: 100%;
-  border-bottom: 1px solid var(--color-dark-100);
+}
+
+.leftButton {
+  flex: 0 0 auto;
+  margin-left: 12px;
+}
+
+.leftButton:empty {
+  display: none;
+}
+
+.emptyTitle {
+  flex: 1;
+}
+
+.rightButton {
+  flex: 0 0 auto;
 }
 
 .closeButton {
@@ -73,7 +100,6 @@
   color: var(--color-light-100);
   opacity: 0.7;
   transition: opacity var(--transition);
-
   &:hover {
     opacity: 1;
   }
@@ -93,23 +119,32 @@
 .title {
   color: var(--color-light-100);
   margin: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.centered {
+  text-align: center;
 }
 
 .card {
   padding: 24px;
 }
-
 .padding-default {
-  padding: 24px;
+  padding: 12px 24px;
 }
-
 .padding-top-only {
-  padding-top: 24px;
+  padding-top: 12px;
   padding-right: 0;
   padding-bottom: 0;
   padding-left: 0;
 }
-
 .padding-none {
   padding: 0;
+}
+.noHeaderCloseButton {
+  position: absolute;
+  top: -25px;
+  right: -25px;
+  z-index: 1;
 }

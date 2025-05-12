@@ -1,16 +1,17 @@
 import { UserProfile, UserProfileProps } from '@/features/profile/ui/userProfile'
 import { PostsGridWithInfinteScroll } from '@/features/post/ui/postsGridWithInfiniteScroll/PostsGridWithInfinteScroll'
-import React from 'react'
+import { CreatePost } from '@/features/post/ui'
 
 type PageProps = {
-  params: Promise<{ id: string }>
+  params: { id: string }
+  searchParams?: { action?: string }
 }
 
-export default async function Page({ params }: PageProps) {
-  const resolvedParams = await params
+export default async function Page({ params, searchParams }: PageProps) {
+  const { id } = params
+  const { action } = searchParams || {}
 
-  const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${resolvedParams.id}`)
-
+  const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${id}`)
   const userData: UserProfileProps = await data.json()
 
   return (
@@ -24,6 +25,8 @@ export default async function Page({ params }: PageProps) {
         id={userData.id}
       />
       <PostsGridWithInfinteScroll userName={userData.userName} />
+
+      <CreatePost showCreateModal={action === 'create'} user={userData} />
     </div>
   )
 }

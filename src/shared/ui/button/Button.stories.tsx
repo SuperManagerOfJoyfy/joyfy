@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { MdLanguage } from 'react-icons/md'
 import Image from 'next/image'

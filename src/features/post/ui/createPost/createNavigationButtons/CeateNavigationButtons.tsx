@@ -21,22 +21,8 @@ type RightButtonProps = {
 export const LeftButton = ({ currentStep, onBack, disabled }: LeftButtonProps) => {
   if (currentStep === 'upload') return null
 
-  const handleBackClick = () => {
-    switch (currentStep) {
-      case 'crop':
-        onBack('upload')
-        break
-      case 'filter':
-        onBack('crop')
-        break
-      case 'description':
-        onBack('filter')
-        break
-    }
-  }
-
   return (
-    <Button variant="icon" onClick={handleBackClick} className="button-back" disabled={disabled}>
+    <Button variant="icon" onClick={() => onBack(currentStep)} className="button-back" disabled={disabled}>
       <FiChevronLeft size={20} />
     </Button>
   )
@@ -58,10 +44,8 @@ export const RightButton = ({ currentStep, isCreating, isUploading, onNext, onCl
     return 'Next'
   }
 
-  const isDisabled = currentStep === 'description' && isUploading
-
   return (
-    <Button variant="text" onClick={onNext} disabled={isDisabled} className="button-next">
+    <Button variant="text" onClick={onNext} disabled={disabled} className="button-next">
       {getButtonText()}
     </Button>
   )

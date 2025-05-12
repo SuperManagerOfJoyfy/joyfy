@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { PATH } from '@/shared/config/routes'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
