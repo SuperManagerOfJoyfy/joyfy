@@ -1,8 +1,8 @@
 import {
-  GetAllPostsResponse,
-  UploadImageResponse,
   CreatePostRequest,
+  GetAllPostsResponse,
   PostsQueryParams,
+  UploadImageResponse,
 } from '@/features/post/api/postsApi.types'
 import { joyfyApi } from '@/shared/api/joyfyApi'
 import { PostItem } from '../types/types'
@@ -40,6 +40,7 @@ export const postsApi = joyfyApi.injectEndpoints({
             ]
           : [{ type: 'Posts' as const, id: 'LIST' }],
     }),
+
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
       query: (formData: FormData) => ({
         url: '/posts/image',
@@ -47,17 +48,27 @@ export const postsApi = joyfyApi.injectEndpoints({
         body: formData,
       }),
     }),
+
     deleteUploadedImage: builder.mutation<void, string>({
       query: (uploadId) => ({
         url: `/posts/image/${uploadId}`,
         method: 'DELETE',
       }),
     }),
+
     createPost: builder.mutation<PostItem, CreatePostRequest>({
       query: (payload) => ({
         url: '/posts',
         method: 'POST',
         body: payload,
+      }),
+      invalidatesTags: ['Posts'],
+    }),
+
+    deletePost: builder.mutation<void, { postId: number }>({
+      query: ({ postId }) => ({
+        url: `posts/${postId}`,
+        method: 'DELETE',
       }),
       invalidatesTags: ['Posts'],
     }),
@@ -69,4 +80,5 @@ export const {
   useUploadImageMutation,
   useDeleteUploadedImageMutation,
   useCreatePostMutation,
+  useDeletePostMutation,
 } = postsApi
