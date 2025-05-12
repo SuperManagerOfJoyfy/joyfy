@@ -19,25 +19,6 @@ export type AspectRatioType = (typeof ASPECT_RATIOS)[number]
 
 export type PostCreationStep = 'upload' | 'crop' | 'filter' | 'description'
 
-export type ImageSettings = {
-  aspectRatio: AspectRatioType
-  filter: FilterType
-  zoom: number
-}
-
-export type PublishData = {
-  files: File[]
-  description: string
-  imageSettings: ImageSettings[]
-}
-
-export type DraftData = {
-  step?: PostCreationStep
-  timestamp: number
-  currentImageIndex?: number
-  description?: string
-}
-
 type Image = {
   url: string
   width: number

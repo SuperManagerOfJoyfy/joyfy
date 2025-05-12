@@ -51,7 +51,7 @@
   &.withHeader::before {
     content: '';
     position: absolute;
-    top: 74px;
+    top: 62px;
     left: 0;
     height: 1px;
     width: 100%;
@@ -76,6 +76,7 @@
 
 .leftButton {
   flex: 0 0 auto;
+  margin-left: 12px;
 }
 
 .leftButton:empty {
@@ -130,10 +131,10 @@
   padding: 24px;
 }
 .padding-default {
-  padding: 24px;
+  padding: 12px 24px;
 }
 .padding-top-only {
-  padding-top: 24px;
+  padding-top: 12px;
   padding-right: 0;
   padding-bottom: 0;
   padding-left: 0;

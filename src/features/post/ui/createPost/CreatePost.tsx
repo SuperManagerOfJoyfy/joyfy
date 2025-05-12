@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { CreatePostModal } from './createPostModal'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
+
 import { UserProfileProps } from '@/features/profile/ui/userProfile'
+import { CreatePostModal } from './createPostModal'
 
 type Props = {
   showCreateModal?: boolean

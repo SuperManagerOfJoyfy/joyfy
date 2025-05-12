@@ -9,7 +9,7 @@
 .content {
   display: flex;
   width: 100%;
-  height: 500px;
+  height: 512px;
 }
 
 .swiper {
@@ -24,6 +24,9 @@
   align-items: center;
   display: flex;
   overflow: hidden;
+  img {
+    object-fit: contain;
+  }
 }
 
 .preview {

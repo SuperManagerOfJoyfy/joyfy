@@ -8,7 +8,7 @@
 .container {
   display: flex;
   flex-direction: row;
-  height: calc(100% - 60px);
+  height: 512px;
   width: 100%;
 }
 
@@ -18,6 +18,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  img {
+    object-fit: contain;
+  }
 }
 
 .imageSlider {

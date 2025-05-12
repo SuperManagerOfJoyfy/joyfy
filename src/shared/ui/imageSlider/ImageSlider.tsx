@@ -38,7 +38,7 @@ export const ImageSlider = ({
   initialSlide = 0,
   showControls = true,
   showPagination = true,
-  showCounter = true,
+  showCounter = false,
   renderCustomControls,
   buttonSize = 24,
   buttonClassName = '',
