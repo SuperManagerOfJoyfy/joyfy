@@ -3,15 +3,15 @@ import { PostsGridWithInfinteScroll } from '@/features/post/ui/postsGridWithInfi
 import { CreatePost } from '@/features/post/ui'
 
 type PageProps = {
-  params: { id: string }
-  searchParams?: { action?: string }
+  params: Promise<{ id: string }>
+  searchParams?: Promise<{ action?: string }>
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
-  const { id } = params
-  const { action } = searchParams || {}
+  const resolvedParams = await params
+  const { action } = (await searchParams) || {}
 
-  const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${id}`)
+  const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${resolvedParams.id}`)
   const userData: UserProfileProps = await data.json()
 
   return (

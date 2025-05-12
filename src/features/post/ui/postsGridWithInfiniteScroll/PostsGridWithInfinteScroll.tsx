@@ -1,22 +1,50 @@
 'use client'
 
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { useGetAllPostsInfiniteQuery } from '@/features/post/api/postsApi'
 import { PostItem } from '@/features/post/types/types'
 import { PostModal } from '@/features/post/ui/postModal'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) => {
   const token = localStorage.getItem('accessToken') // skipToken ниже не срабатывает ибо user не null при логауте
   const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetAllPostsInfiniteQuery(
     token ? { userName, pageSize: 8 } : skipToken
   )
-  const [selectedPost, setSelectedPost] = useState<PostItem | null>(null)
-  const openModal = (post: PostItem) => setSelectedPost(post)
-  const closeModal = () => setSelectedPost(null)
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  //стейт из опен модал в место стейта с постом
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const openModalHandler = (post: PostItem) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.set('postId', post.id.toString())
+    router.push(`?${newParams.toString()}`, { scroll: false })
+
+    setIsModalOpen(true)
+  }
+
+  //useEffect который подписан на изменение урла и в случае если урл содержит кве параметр postId делать setIsModalOpen
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    const postId = params.get('postId')
+    if (postId) {
+      setIsModalOpen(true)
+    }
+  }, [searchParams])
+
+  const closeModalHandler = () => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.delete('postId')
+    router.push(`?${newParams.toString()}`, { scroll: false })
+
+    setIsModalOpen(false)
+  }
 
   const posts = data?.pages.flatMap((page) => page.items) || []
   const loaderRef = useRef<HTMLDivElement>(null)
@@ -48,10 +76,11 @@ export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) =
     }
   }, [handleObserver])
 
+  const postId = searchParams.get('postId')
   return (
     <div>
-      {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openModal} />}
-      {selectedPost && <PostModal post={selectedPost} onClose={closeModal} open={!!selectedPost} />}
+      {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openModalHandler} />}
+      {isModalOpen && postId && <PostModal onClose={closeModalHandler} open={isModalOpen} />}
       {hasNextPage && (
         <div ref={loaderRef}>
           <Loader fullScreen={false} reduced />

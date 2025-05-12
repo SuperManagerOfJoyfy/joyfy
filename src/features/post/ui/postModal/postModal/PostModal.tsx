@@ -6,28 +6,37 @@ import { DropdownMenu, Modal, Scroll, Separator, UserCard } from '@/shared/ui'
 import { ImageSlider } from '@/shared/ui/imageSlider'
 import { PostActions, PostItem } from '@/features/post/ui/postModal'
 import { PostDropdownMenuItems, usePostDropdownMenuActions } from '@/features/post/ui/postModal/postDropdownMenuItems'
-import { PostItem as PostItemType } from '@/features/post/types/types'
 import s from './PostModal.module.scss'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { ConfirmModal } from '@/shared/ui/confirmModal/ConfirmModal'
 import { useState } from 'react'
+import { useGetPostByIdQuery } from '@/features/post/api/postsApi'
+import { useSearchParams } from 'next/navigation'
 
 type Props = {
-  post: PostItemType
   open: boolean
   onClose: () => void
 }
 
-export const PostModal = ({ post, open, onClose }: Props) => {
+export const PostModal = ({ open, onClose }: Props) => {
   const [isOpen, setIsOpen] = useState(false) // For confirmation modal
   const { data: user } = useGetMeQuery()
 
-  const { userName, ownerId, avatarOwner, description, likesCount, id: postId, createdAt, images } = post
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams.toString())
+  const postIdParam = params.get('postId')
+  const postId = Number(postIdParam)
 
-  const isOwnPost = ownerId === user?.userId
+  const { data: post } = useGetPostByIdQuery({ postId })
+
+  if (!post) return null
+
+  const isOwnPost = post.ownerId === user?.userId
 
   // To add condition:
   const isFollowing = false
+
+  const { ownerId, userName, avatarOwner, description, createdAt, likesCount, images } = post
 
   const { handleEdit, handleDelete, handleFollowToggle, handleCopyLink } = usePostDropdownMenuActions({
     postId,
@@ -43,8 +52,6 @@ export const PostModal = ({ post, open, onClose }: Props) => {
       console.error(error)
     }
   }
-
-  if (!post) return null
 
   return (
     <>

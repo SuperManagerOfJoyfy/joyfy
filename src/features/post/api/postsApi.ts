@@ -72,6 +72,14 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Posts'],
     }),
+    getPostById: builder.query<PostItem, { postId: number }>({
+      query({ postId }) {
+        return {
+          url: `/posts/${postId}`,
+          method: 'GET',
+        }
+      },
+    }),
   }),
 })
 
@@ -81,4 +89,5 @@ export const {
   useDeleteUploadedImageMutation,
   useCreatePostMutation,
   useDeletePostMutation,
+  useGetPostByIdQuery,
 } = postsApi
