@@ -77,8 +77,14 @@ export const PostContextProvider = ({ children }: { children: ReactNode }) => {
 
       if (!displayCtx || !workCtx || !img || !imagesEditData[currentImageIdx]) return
 
+      let aspectRatioValue: number
       const currentAspectRatio = imagesEditData[currentImageIdx].aspectRatio
-      const aspectRatioValue = getAspectRatio(currentAspectRatio)
+
+      if (currentAspectRatio === 'original') {
+        aspectRatioValue = img.width / img.height
+      } else {
+        aspectRatioValue = getAspectRatio(currentAspectRatio)
+      }
 
       const iw = img.width
       const ih = img.height
@@ -99,11 +105,11 @@ export const PostContextProvider = ({ children }: { children: ReactNode }) => {
         }
       }
 
-      const baseW = 1000
+      const baseW = Math.max(1000, 1)
       const baseH = currentAspectRatio === 'original' ? baseW / imageRatio : baseW / aspectRatioValue
 
       workCanvas.width = baseW
-      workCanvas.height = baseH
+      workCanvas.height = Math.max(baseH, 1)
 
       workCtx.clearRect(0, 0, baseW, baseH)
       workCtx.filter = IMAGE_FILTERS[imagesEditData[currentImageIdx].imageFilter] || 'none'
@@ -121,7 +127,7 @@ export const PostContextProvider = ({ children }: { children: ReactNode }) => {
         return
       }
 
-      const previewW = 1000
+      const previewW = 500
       const previewH = currentAspectRatio === 'original' ? previewW / imageRatio : previewW / aspectRatioValue
 
       displayCanvas.width = Math.max(previewW, 1)
