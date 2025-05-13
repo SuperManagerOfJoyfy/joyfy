@@ -5,13 +5,14 @@ import { HiDotsHorizontal } from 'react-icons/hi'
 import { DropdownMenu, Modal, Scroll, Separator, UserCard } from '@/shared/ui'
 import { ImageSlider } from '@/shared/ui/imageSlider'
 import { PostActions, PostItem } from '@/features/post/ui/postModal'
-import { PostDropdownMenuItems, usePostDropdownMenuActions } from '@/features/post/ui/postModal/postDropdownMenuItems'
+import { PostDropdownMenuItems } from '@/features/post/ui/postModal/postDropdownMenuItems'
 import s from './PostModal.module.scss'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { ConfirmModal } from '@/shared/ui/confirmModal/ConfirmModal'
 import { useState } from 'react'
-import { useGetPostByIdQuery } from '@/features/post/api/postsApi'
+import { useDeletePostMutation, useGetPostByIdQuery } from '@/features/post/api/postsApi'
 import { useSearchParams } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 type Props = {
   open: boolean
@@ -20,37 +21,46 @@ type Props = {
 
 export const PostModal = ({ open, onClose }: Props) => {
   const [isOpen, setIsOpen] = useState(false) // For confirmation modal
+  const [deletePost] = useDeletePostMutation()
   const { data: user } = useGetMeQuery()
 
   const searchParams = useSearchParams()
-  const params = new URLSearchParams(searchParams.toString())
-  const postIdParam = params.get('postId')
+  const postIdParam = searchParams.get('postId')
   const postId = Number(postIdParam)
 
   const { data: post } = useGetPostByIdQuery({ postId })
 
   if (!post) return null
 
-  const isOwnPost = post.ownerId === user?.userId
-
-  // To add condition:
-  const isFollowing = false
-
   const { ownerId, userName, avatarOwner, description, createdAt, likesCount, images } = post
 
-  const { handleEdit, handleDelete, handleFollowToggle, handleCopyLink } = usePostDropdownMenuActions({
-    postId,
-    ownerId,
-    isFollowing,
-  })
+  const isOwnPost = post?.ownerId === user?.userId
+  const isFollowing = false
 
   async function handleDeletePost() {
     try {
-      await handleDelete()
+      await deletePost({ postId })
+      toast.success('Post deleted successfully.')
       onClose()
     } catch (error) {
-      console.error(error)
+      toast.error('Something went wrong')
     }
+  }
+
+  const handleEdit = () => {
+    console.log('edit')
+  }
+
+  const handleFollowToggle = () => {
+    if (isFollowing) {
+      console.log('Unfollow')
+    } else {
+      console.log('Follow')
+    }
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`)
   }
 
   return (

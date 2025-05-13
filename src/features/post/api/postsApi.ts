@@ -75,7 +75,7 @@ export const postsApi = joyfyApi.injectEndpoints({
     getPostById: builder.query<PostItem, { postId: number }>({
       query({ postId }) {
         return {
-          url: `/posts/${postId}`,
+          url: `/public-posts/${postId}`,
           method: 'GET',
         }
       },
