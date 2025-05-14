@@ -1,19 +1,21 @@
-import { useCallback } from 'react'
 import { useDeletePostMutation } from '@/features/post/api/postsApi'
+import { useCallback } from 'react'
 import { toast } from 'react-toastify'
 
 type Props = {
   postId: number
   ownerId: number
   isFollowing: boolean
+  setIsEditing: (isEditing: boolean) => void
 }
 
-export const usePostDropdownMenuActions = ({ postId, ownerId, isFollowing }: Props) => {
+export const usePostDropdownMenuActions = ({ postId, ownerId, isFollowing, setIsEditing }: Props) => {
   const [deletePost] = useDeletePostMutation()
 
   const handleEdit = useCallback(() => {
-    console.log('edit')
+    setIsEditing(true)
   }, [])
+
   const handleDelete = useCallback(async () => {
     try {
       await deletePost({ postId })
@@ -22,6 +24,7 @@ export const usePostDropdownMenuActions = ({ postId, ownerId, isFollowing }: Pro
       toast.error('Something went wrong')
     }
   }, [postId])
+
   const handleFollowToggle = useCallback(() => {
     if (isFollowing) {
       console.log('Unfollow')

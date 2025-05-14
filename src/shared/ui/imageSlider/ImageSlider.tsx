@@ -59,7 +59,7 @@ export const ImageSlider = ({
       setIsBeginning(swiperRef.current.isBeginning)
       setIsEnd(swiperRef.current.isEnd)
     }
-  }, [initialSlide, images.length])
+  }, [initialSlide, images?.length])
 
   useEffect(() => {
     if (swiperRef.current) {

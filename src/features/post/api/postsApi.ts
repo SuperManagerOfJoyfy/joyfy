@@ -8,6 +8,7 @@ import { joyfyApi } from '@/shared/api/joyfyApi'
 import { PostItem } from '../types/types'
 
 export const postsApi = joyfyApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getAllPosts: builder.infiniteQuery<GetAllPostsResponse, PostsQueryParams, number>({
       query: ({ queryArg, pageParam }) => {
@@ -41,6 +42,14 @@ export const postsApi = joyfyApi.injectEndpoints({
           : [{ type: 'Posts' as const, id: 'LIST' }],
     }),
 
+    getPostById: builder.query<PostItem, number>({
+      query: (postId) => ({
+        url: `posts/id/${postId}`,
+        method: 'GET',
+      }),
+      providesTags: (result, error, postId) => [{ type: 'Post', id: postId }],
+    }),
+
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
       query: (formData: FormData) => ({
         url: '/posts/image',
@@ -72,13 +81,22 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Posts'],
     }),
+
+    editPost: builder.mutation<PostItem, { postId: number; description: string }>({
+      query: ({ postId, description }) => {
+        return { url: `posts/${postId}`, method: 'PUT', body: { description } }
+      },
+      invalidatesTags: (result, error, { postId }) => [{ type: 'Post', id: postId }],
+    }),
   }),
 })
 
 export const {
   useGetAllPostsInfiniteQuery,
+  useGetPostByIdQuery,
   useUploadImageMutation,
   useDeleteUploadedImageMutation,
   useCreatePostMutation,
   useDeletePostMutation,
+  useEditPostMutation,
 } = postsApi
