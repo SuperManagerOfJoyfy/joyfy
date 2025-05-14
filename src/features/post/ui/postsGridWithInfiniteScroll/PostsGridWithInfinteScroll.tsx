@@ -16,19 +16,8 @@ export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) =
   )
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  //стейт из опен модал в место стейта с постом
   const router = useRouter()
   const searchParams = useSearchParams()
-
-  const openModalHandler = (post: PostItem) => {
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.set('postId', post.id.toString())
-    router.push(`?${newParams.toString()}`, { scroll: false })
-
-    setIsModalOpen(true)
-  }
-
-  //useEffect который подписан на изменение урла и в случае если урл содержит кве параметр postId делать setIsModalOpen
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString())
@@ -37,6 +26,14 @@ export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) =
       setIsModalOpen(true)
     }
   }, [searchParams])
+
+  const openModalHandler = (post: PostItem) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.set('postId', post.id.toString())
+    router.push(`?${newParams.toString()}`, { scroll: false })
+
+    setIsModalOpen(true)
+  }
 
   const closeModalHandler = () => {
     const newParams = new URLSearchParams(searchParams.toString())
