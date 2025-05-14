@@ -34,19 +34,20 @@
     flex-shrink: 0;
     overflow: hidden;
     padding: 4px 0 4px 12px;
+    justify-content: space-between;
   }
 
   .commentInput {
-    width: 100%;
+    width: 340px;
     border: none;
     background-color: transparent;
     font-size: var(--font-size-s);
     line-height: 1.4;
     border: none;
 
-    &::placeholder {
-      font-size: var(--font-size-s);
-    }
+    // &::placeholder {
+    //   font-size: var(--font-size-s);
+    // }
 
     &:hover,
     &:focus {

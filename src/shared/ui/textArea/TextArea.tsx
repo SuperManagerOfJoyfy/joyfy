@@ -12,13 +12,18 @@ export const TextArea = ({ label, error, className, ...props }: Props) => {
   const id = useId()
 
   return (
-    <div className={clsx(s.textAreaContainer, className)}>
+    <div className={clsx(s.textAreaContainer)}>
       <label className={s.label} htmlFor={id} aria-disabled={props.disabled}>
         {label}
       </label>
 
-      <div className={clsx(s.wrapper, error && s.error, className)}>
-        <textarea className={clsx(s.textArea, className)} data-value={props.value && 'true'} id={id} {...props} />
+      <div className={clsx(s.wrapper, error && s.error)}>
+        <textarea
+          className={clsx(s.textArea, error && s.error, className)}
+          data-value={props.value && 'true'}
+          id={id}
+          {...props}
+        />
       </div>
 
       <span className={s.errorText}>{error}</span>

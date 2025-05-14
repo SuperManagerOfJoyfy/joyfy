@@ -74,6 +74,14 @@
   width: 100%;
 }
 
+.customHeader {
+  display: flex;
+  align-items: center;
+  height: var(--header-height);
+  padding: 0 24px 0 24px;
+  border-bottom: none;
+}
+
 .leftButton {
   flex: 0 0 auto;
   margin-left: 12px;
