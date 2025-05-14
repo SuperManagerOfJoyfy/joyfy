@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useRef, useEffect } from 'react'
+import { createContext, useContext, useState, ReactNode, useRef, useEffect } from 'react'
 
 import { useCreatePostMutation, useUploadImageMutation } from '@/features/post/api/postsApi'
 import { ASPECT_RATIOS, AspectRatioType, FilterType, IMAGE_FILTERS } from '@/features/post/types/types'
@@ -207,6 +207,8 @@ export const PostContextProvider = ({ children }: { children: ReactNode }) => {
     setImages([])
     setImagesEditData([])
     setImagesPreview([])
+    setDescription('')
+    setCurrentImageIdx(0)
     imagesBlob.current = {}
     originalImages.current = {}
   }

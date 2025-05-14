@@ -1,7 +1,6 @@
 'use client'
 
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { useGetAllPostsInfiniteQuery } from '@/features/post/api/postsApi'
 import { PostItem } from '@/features/post/types/types'
 import { PostModal } from '@/features/post/ui/postModal'
@@ -14,9 +13,10 @@ export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) =
   const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetAllPostsInfiniteQuery(
     token ? { userName, pageSize: 8 } : skipToken
   )
-  const [selectedPost, setSelectedPost] = useState<PostItem | null>(null)
-  const openModal = (post: PostItem) => setSelectedPost(post)
-  const closeModal = () => setSelectedPost(null)
+
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
+  const openModal = (post: PostItem) => setSelectedPostId(post.id)
+  const closeModal = () => setSelectedPostId(null)
 
   const posts = data?.pages.flatMap((page) => page.items) || []
   const loaderRef = useRef<HTMLDivElement>(null)
@@ -51,7 +51,7 @@ export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) =
   return (
     <div>
       {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openModal} />}
-      {selectedPost && <PostModal post={selectedPost} onClose={closeModal} open={!!selectedPost} />}
+      {selectedPostId && <PostModal postId={selectedPostId} onClose={closeModal} open={!!selectedPostId} />}
       {hasNextPage && (
         <div ref={loaderRef}>
           <Loader fullScreen={false} reduced />

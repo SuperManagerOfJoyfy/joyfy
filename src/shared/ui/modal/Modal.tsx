@@ -1,10 +1,11 @@
 'use client'
 
 import { ComponentPropsWithoutRef, ComponentRef, CSSProperties, forwardRef, ReactElement, ReactNode } from 'react'
-import * as DialogPrimitive from '@radix-ui/react-dialog'
+import * as Dialog from '@radix-ui/react-dialog'
 import { IoClose } from 'react-icons/io5'
-import clsx from 'clsx'
 import { motion, AnimatePresence } from 'framer-motion'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import clsx from 'clsx'
 
 import { getOverlayAnimation, windowAnimation } from './ModalAnimations'
 import { Card } from '../card'
@@ -27,7 +28,9 @@ type ModalProps = {
   leftButton?: ReactElement | null
   rightButton?: ReactElement | null
   cardPadding?: CardPadding
-} & Omit<ComponentPropsWithoutRef<typeof DialogPrimitive.Root>, 'open' | 'onOpenChange'>
+  centerTitle?: boolean
+  header?: 'default' | 'custom'
+} & Omit<ComponentPropsWithoutRef<typeof Dialog.Root>, 'open' | 'onOpenChange'>
 
 export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>((props, ref) => {
   const {
@@ -40,74 +43,92 @@ export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>((props, ref) =>
     style,
     overlayOpacity,
     preventClose = false,
-    leftButton = null,
-    rightButton = null,
+    leftButton,
+    rightButton,
     cardPadding = 'default',
+    centerTitle,
+    header = 'default',
     ...rest
   } = props
-
-  const contentClass = clsx(s.content, s[`size${size}`], className)
-  const overlayAnimation = getOverlayAnimation(overlayOpacity)
-  const shouldCenterTitle = Boolean(leftButton)
-  const shouldShowHeader = Boolean(title || leftButton || rightButton)
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen && preventClose) return
     onOpenChange?.(newOpen)
   }
 
+  const hasTitle = Boolean(title)
+  const hasLeft = Boolean(leftButton)
+  const hasRight = Boolean(rightButton)
+  const hasHeader = hasTitle || hasLeft || hasRight
+
+  const wrapperClass = clsx(s.wrapper, hasHeader && s.withHeader)
+  const contentClass = clsx(s.content, s[`size${size}`], className)
+  const cardClass = clsx(s.card, s[`padding-${cardPadding}`])
+
+  const titleClass = clsx(s.title, centerTitle && s.centered)
+  const headerClass = clsx(header === 'custom' ? s.customHeader : s.header)
+
   return (
-    <DialogPrimitive.Root {...rest} open={open} onOpenChange={handleOpenChange} modal>
-      <DialogPrimitive.Portal forceMount>
+    <Dialog.Root {...rest} open={open} onOpenChange={handleOpenChange} modal>
+      <Dialog.Portal forceMount>
         <AnimatePresence mode="wait">
           {open && (
             <>
-              <DialogPrimitive.Overlay asChild>
-                <motion.div {...overlayAnimation} className={s.overlay} />
-              </DialogPrimitive.Overlay>
+              <Dialog.Overlay asChild>
+                <motion.div {...getOverlayAnimation(overlayOpacity)} className={s.overlay} />
+              </Dialog.Overlay>
 
               <div className={s.modal} ref={ref}>
-                <DialogPrimitive.Content asChild forceMount>
+                <Dialog.Content asChild forceMount>
                   <motion.div {...windowAnimation} className={contentClass} style={style}>
-                    <Card className={clsx(s.card, s[`padding-${cardPadding}`])}>
-                      {shouldShowHeader ? (
-                        <header className={s.header}>
-                          {leftButton && <div className={s.leftButton}>{leftButton}</div>}
+                    <div className={wrapperClass}>
+                      <Card className={cardClass}>
+                        {hasHeader ? (
+                          <header className={headerClass}>
+                            {hasLeft && <div className={s.leftButton}>{leftButton}</div>}
 
-                          {title && (
-                            <DialogPrimitive.Title asChild>
-                              <Typography variant="h1" className={clsx(s.title, shouldCenterTitle && s.centered)}>
-                                {title}
-                              </Typography>
-                            </DialogPrimitive.Title>
-                          )}
+                            <Dialog.Title asChild>
+                              {hasTitle ? (
+                                <Typography variant="h1" className={titleClass}>
+                                  {title}
+                                </Typography>
+                              ) : (
+                                <VisuallyHidden>Modal</VisuallyHidden>
+                              )}
+                            </Dialog.Title>
 
-                          <div className={s.rightButton}>
-                            {rightButton || (
-                              <DialogPrimitive.Close className={s.closeButton} aria-label="Close">
+                            <div className={s.rightButton}>
+                              {rightButton || (
+                                <Dialog.Close className={s.closeButton} aria-label="Close">
+                                  <IoClose size={24} />
+                                </Dialog.Close>
+                              )}
+                            </div>
+                          </header>
+                        ) : (
+                          <>
+                            <Dialog.Title asChild>
+                              <VisuallyHidden>Modal</VisuallyHidden>
+                            </Dialog.Title>
+                            <div className={s.noHeaderCloseButton}>
+                              <Dialog.Close className={s.closeButton} aria-label="Close">
                                 <IoClose size={24} />
-                              </DialogPrimitive.Close>
-                            )}
-                          </div>
-                        </header>
-                      ) : (
-                        <div className={s.noHeaderCloseButton}>
-                          <DialogPrimitive.Close className={s.closeButton} aria-label="Close">
-                            <IoClose size={24} />
-                          </DialogPrimitive.Close>
-                        </div>
-                      )}
+                              </Dialog.Close>
+                            </div>
+                          </>
+                        )}
 
-                      {children}
-                    </Card>
+                        {children}
+                      </Card>
+                    </div>
                   </motion.div>
-                </DialogPrimitive.Content>
+                </Dialog.Content>
               </div>
             </>
           )}
         </AnimatePresence>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 })
 

@@ -10,15 +10,6 @@
   flex: 1;
 }
 
-.contentHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 18px 0 24px;
-  height: var(--header-height);
-  flex-shrink: 0;
-}
-
 .imageWrapper {
   flex: 1;
   position: relative;
@@ -30,10 +21,4 @@
   flex: 1;
   width: 50%;
   flex-direction: column;
-}
-
-.scrollArea {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
 }

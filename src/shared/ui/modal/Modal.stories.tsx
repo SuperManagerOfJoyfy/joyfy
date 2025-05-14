@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react'
 
 import { Modal } from './Modal'
 import { Button } from '../button'
-import { Typography } from '../typography'
+import { Typography } from '@/shared/ui'
 
 const meta = {
   component: Modal,
@@ -177,6 +177,41 @@ export const CustomOpacity: Story = {
                 justifyContent: 'flex-end',
               }}
             >
+              <Button onClick={() => handleOpenChange(false)}>Close</Button>
+            </div>
+          </div>
+        </Modal>
+      </>
+    )
+  },
+}
+
+export const NoHeader: Story = {
+  args: {
+    open: false,
+    size: 'sm',
+  },
+  render: (args) => {
+    const [internalOpen, setInternalOpen] = useState(args.open)
+
+    useEffect(() => {
+      setInternalOpen(args.open)
+    }, [args.open])
+
+    const handleOpenChange = (isOpen: boolean) => {
+      setInternalOpen(isOpen)
+      args.onOpenChange?.(isOpen)
+    }
+
+    return (
+      <>
+        <Button onClick={() => handleOpenChange(true)}>Open Modal Without Header</Button>
+        <Modal {...args} open={internalOpen} onOpenChange={handleOpenChange}>
+          <div style={{ paddingTop: '40px', paddingBottom: '24px' }}>
+            <Typography variant="body1" style={{ marginBottom: '16px' }}>
+              This modal has no title or header, just content and a close button in the corner.
+            </Typography>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button onClick={() => handleOpenChange(false)}>Close</Button>
             </div>
           </div>

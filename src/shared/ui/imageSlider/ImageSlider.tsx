@@ -38,7 +38,7 @@ export const ImageSlider = ({
   initialSlide = 0,
   showControls = true,
   showPagination = true,
-  showCounter = true,
+  showCounter = false,
   renderCustomControls,
   buttonSize = 24,
   buttonClassName = '',
@@ -59,7 +59,7 @@ export const ImageSlider = ({
       setIsBeginning(swiperRef.current.isBeginning)
       setIsEnd(swiperRef.current.isEnd)
     }
-  }, [initialSlide, images.length])
+  }, [initialSlide, images?.length])
 
   useEffect(() => {
     if (swiperRef.current) {
