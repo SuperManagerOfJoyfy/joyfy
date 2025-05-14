@@ -303,6 +303,10 @@
   padding: 0;
 }
 
+.addPhotoImgContainerBtn:hover {
+  background: var(--color-dark-300);
+}
+
 .addPhotoImgContainerBtn svg {
   stroke: var(--color-light-100);
 }

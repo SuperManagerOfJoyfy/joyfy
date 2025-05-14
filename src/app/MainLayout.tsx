@@ -2,14 +2,17 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import { Sidebar } from '@/shared/ui/sidebar'
 import { LogoutModal } from '@/features/auth/ui'
 import { Header } from '@/shared/ui/header/Header'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
-import s from '../styles/layout.module.scss'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import LocalStorage from '@/shared/utils/localStorage/localStorage'
+import { CreatePostModalWrapper } from '@/features/post/ui/createPost/CreatePostModalWrapper'
+
+import s from '../styles/layout.module.scss'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -33,12 +36,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
       createSidebarItems('user', user?.userId, {
         onOpenLogoutModalHandler,
         onCreatePost: () => {
-          if (user?.userId) {
-            router.push(`/profile/${user.userId}?action=create`)
-          }
+          const current = new URLSearchParams(searchParams.toString())
+          current.set('action', 'create')
+          router.push(`${pathname}?${current.toString()}`)
         },
       }),
-    [onOpenLogoutModalHandler, user?.userId, router]
+    [onOpenLogoutModalHandler, user?.userId, pathname, router, searchParams]
   )
 
   const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
@@ -88,7 +91,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
               <Loader message="Loading..." />
             </div>
           ) : (
-            children
+            <>
+              {children}
+              <CreatePostModalWrapper />
+            </>
           )}
         </main>
       </div>

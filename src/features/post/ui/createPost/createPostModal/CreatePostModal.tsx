@@ -17,7 +17,7 @@ import { LeftButton, RightButton } from '../createNavigationButtons/CeateNavigat
 
 type CreatePostModalProps = {
   open: boolean
-  onClose: () => void
+  onClose: (navigateBack?: boolean) => void
   user: Pick<UserProfileProps, 'userName' | 'avatars' | 'id'>
 }
 
@@ -73,10 +73,10 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
         try {
           await publishPost()
           toast.success('Post successfully published!')
+          onClose(false)
           router.push(`/profile/${user?.id || ''}`)
         } finally {
           setIsPublishing(false)
-          onClose()
         }
         break
     }
@@ -87,7 +87,6 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
 
     if (saveDraft) {
       toast.info('Draft saved')
-      onClose()
       router.push('/')
     } else {
       toast.info('Draft discarded')

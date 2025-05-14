@@ -40,6 +40,7 @@ export const StepCropAddPhoto = ({
                     variant="icon"
                     noPadding={true}
                     className={s.addPhotoImgContainerBtn}
+                    customStyles={true}
                     onClick={() => onRemoveImage(idx)}
                   >
                     <FiX size={12} />
