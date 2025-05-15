@@ -74,7 +74,7 @@ export const PostsGridWithInfiniteScroll = ({
   }, [handleObserver])
 
   return (
-    <div>
+    <>
       {<PostsGrid posts={data?.items || []} isLoading={isLoading} onPostClick={openModal} />}
       {selectedPostId && <PostModal postId={selectedPostId} onClose={closeModal} open={!!selectedPostId} />}
       {hasMore && (
@@ -82,6 +82,6 @@ export const PostsGridWithInfiniteScroll = ({
           <Loader fullScreen={false} reduced />
         </div>
       )}
-    </div>
+    </>
   )
 }

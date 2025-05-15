@@ -26,9 +26,13 @@ export const postsApi = joyfyApi.injectEndpoints({
           return newItems
         }
         return {
-          ...newItems,
-          items: [...currentCache.items, ...newItems.items],
+          items: [
+            ...currentCache.items,
+            ...newItems.items.filter((post) => currentCache.items.every((p) => p.id !== post.id)),
+          ],
           totalCount: newItems.totalCount,
+          pageSize: newItems.pageSize,
+          totalUsers: newItems.totalUsers,
         }
       },
       forceRefetch: ({ currentArg, previousArg }) => {
