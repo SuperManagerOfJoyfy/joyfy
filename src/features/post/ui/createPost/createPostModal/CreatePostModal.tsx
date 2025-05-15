@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 
 import { Modal } from '@/shared/ui/modal'
 import { PostCreationStep } from '@/features/post/types/types'
-import { UserProfileProps } from '@/features/profile/ui/userProfile'
+import { UserProfile } from '@/features/profile/api/profileApi.types'
 
 import { PostContextProvider, usePostContext } from '../providers/PostContext'
 import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
@@ -18,7 +18,7 @@ import { LeftButton, RightButton } from '../createNavigationButtons/CeateNavigat
 type CreatePostModalProps = {
   open: boolean
   onClose: (navigateBack?: boolean) => void
-  user: Pick<UserProfileProps, 'userName' | 'avatars' | 'id'>
+  user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
 }
 
 const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {

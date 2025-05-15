@@ -1,11 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
-
-import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { UserProfileProps } from '@/features/profile/ui/userProfile'
+import { useGetUserProfileQuery } from '@/features/profile/api/profileApi'
 import { CreatePost } from './CreatePost'
+import { useEffect } from 'react'
 
 export const CreatePostModalWrapper = () => {
   const searchParams = useSearchParams()
@@ -14,8 +12,7 @@ export const CreatePostModalWrapper = () => {
   const action = searchParams.get('action')
   const postId = searchParams.get('postId')
 
-  const { data: me } = useGetMeQuery()
-  const [userData, setUserData] = useState<UserProfileProps | null>(null)
+  const { data: userData } = useGetUserProfileQuery()
 
   useEffect(() => {
     if (postId && action === 'create') {
@@ -24,18 +21,6 @@ export const CreatePostModalWrapper = () => {
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     }
   }, [action, postId, pathname, router, searchParams])
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (action === 'create' && me?.userId) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${me.userId}`)
-        const json = await res.json()
-        setUserData(json)
-      }
-    }
-
-    fetchUserData()
-  }, [action, me?.userId])
 
   if (action !== 'create' || !userData) return null
 
