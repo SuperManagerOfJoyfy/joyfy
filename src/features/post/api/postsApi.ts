@@ -5,7 +5,7 @@ import {
   UploadImageResponse,
 } from '@/features/post/api/postsApi.types'
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { PostItem } from '../types/types'
+import { Post } from '../types/types'
 
 export const postsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -56,7 +56,7 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
     }),
 
-    createPost: builder.mutation<PostItem, CreatePostRequest>({
+    createPost: builder.mutation<Post, CreatePostRequest>({
       query: (payload) => ({
         url: '/posts',
         method: 'POST',
@@ -72,7 +72,7 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Posts'],
     }),
-    getPostById: builder.query<PostItem, { postId: number }>({
+    getPostById: builder.query<Post, { postId: number }>({
       query({ postId }) {
         return {
           url: `/public-posts/${postId}`,

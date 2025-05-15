@@ -1,13 +1,13 @@
 'use client'
 
-import { PostItem } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/types'
 import { Loader } from '@/shared/ui/loader/Loader'
 import Image from 'next/image'
 import s from './PostsGrid.module.scss'
 
 type Props = {
-  posts: PostItem[]
-  onPostClick: (post: PostItem) => void
+  posts: Post[]
+  onPostClick: (post: Post) => void
   isLoading: boolean
 }
 

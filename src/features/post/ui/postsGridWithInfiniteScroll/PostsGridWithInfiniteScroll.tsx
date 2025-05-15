@@ -2,45 +2,28 @@
 
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
 import { useGetAllPostsInfiniteQuery } from '@/features/post/api/postsApi'
-import { PostItem } from '@/features/post/types/types'
-import { PostModal } from '@/features/post/ui/postModal'
+import { Post } from '@/features/post/types/types'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) => {
+export const PostsGridWithInfiniteScroll = ({ userName }: { userName: string }) => {
   const token = localStorage.getItem('accessToken') // skipToken ниже не срабатывает ибо user не null при логауте
   const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetAllPostsInfiniteQuery(
     token ? { userName, pageSize: 8 } : skipToken
   )
-
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString())
-    const postId = params.get('postId')
-    if (postId) {
-      setIsModalOpen(true)
-    }
-  }, [searchParams])
+  const postId = searchParams.get('postId')
 
-  const openModalHandler = (post: PostItem) => {
+  console.log(postId)
+
+  const openModalHandler = (post: Post) => {
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.set('postId', post.id.toString())
     router.push(`?${newParams.toString()}`, { scroll: false })
-
-    setIsModalOpen(true)
-  }
-
-  const closeModalHandler = () => {
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.delete('postId')
-    router.push(`?${newParams.toString()}`, { scroll: false })
-
-    setIsModalOpen(false)
   }
 
   const posts = data?.pages.flatMap((page) => page.items) || []
@@ -73,11 +56,9 @@ export const PostsGridWithInfinteScroll = ({ userName }: { userName: string }) =
     }
   }, [handleObserver])
 
-  const postId = searchParams.get('postId')
   return (
     <div>
       {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openModalHandler} />}
-      {isModalOpen && postId && <PostModal onClose={closeModalHandler} open={isModalOpen} />}
       {hasNextPage && (
         <div ref={loaderRef}>
           <Loader fullScreen={false} reduced />

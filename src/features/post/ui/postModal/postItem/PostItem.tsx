@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { FaRegHeart } from 'react-icons/fa'
 import { Avatar, Button, Typography } from '@/shared/ui'
-import { PostItem as PostItemType } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/types'
 import { formatSmartDate } from '@/shared/utils/dateFunctions'
 
 import s from './PostItem.module.scss'
 
 type Props = {
-  item: PostItemType
+  item: Post
   isComment?: boolean
   onReplyClick?: () => void
 }
