@@ -1,6 +1,6 @@
 import { ComponentProps, useId } from 'react'
 import clsx from 'clsx'
-import styles from './textArea.module.scss'
+import s from './textArea.module.scss'
 
 type TextAreaProps = {
   label?: string
@@ -13,16 +13,16 @@ export const TextArea = (props: TextAreaProps) => {
   const id = useId()
 
   return (
-    <div className={clsx(styles.textAreaContainer, className)}>
-      <label className={styles.label} htmlFor={id} aria-disabled={rest.disabled}>
+    <div className={clsx(s.textAreaContainer, className)}>
+      <label className={s.label} htmlFor={id} aria-disabled={rest.disabled}>
         {label}
       </label>
 
-      <div className={clsx(styles.wrapper, error && styles.error)}>
-        <textarea className={styles.textArea} data-value={rest.value && 'true'} id={id} {...rest} />
+      <div className={clsx(s.wrapper, error && s.error)}>
+        <textarea className={s.textArea} data-value={rest.value && 'true'} id={id} {...rest} />
       </div>
 
-      <span className={styles.errorText}>{error}</span>
+      <span className={s.errorText}>{error}</span>
     </div>
   )
 }
