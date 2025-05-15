@@ -1,6 +1,6 @@
 import {
   CreatePostRequest,
-  GetAllPostsResponse,
+  GetPostsResponse,
   PostsQueryParams,
   UploadImageResponse,
 } from '@/features/post/api/postsApi.types'
@@ -10,36 +10,31 @@ import { PostItem } from '../types/types'
 export const postsApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getAllPosts: builder.infiniteQuery<GetAllPostsResponse, PostsQueryParams, number>({
-      query: ({ queryArg, pageParam }) => {
-        const { userName, pageSize, sortBy, sortDirection } = queryArg
+    getPosts: builder.query<GetPostsResponse, PostsQueryParams>({
+      query: ({ userId, endCursorPostId, pageSize = 8, ...params }) => ({
+        url: endCursorPostId ? `public-posts/user/${userId}/${endCursorPostId}` : `public-posts/user/${userId}`,
+        method: 'GET',
+        params: {
+          pageSize,
+          ...params,
+        },
+      }),
+      serializeQueryArgs: ({ queryArgs }) => queryArgs.userId,
+
+      merge: (currentCache, newItems, { arg }) => {
+        if (!arg.endCursorPostId) {
+          return newItems
+        }
         return {
-          url: `/posts/${userName}`,
-          method: 'GET',
-          params: {
-            pageSize,
-            sortBy,
-            sortDirection,
-            pageNumber: pageParam,
-          },
+          ...newItems,
+          items: [...currentCache.items, ...newItems.items],
+          totalCount: newItems.totalCount,
         }
       },
-      infiniteQueryOptions: {
-        initialPageParam: 1,
-        getNextPageParam: (lastPage, allPages, lastPageParam) => {
-          if (lastPageParam >= lastPage.pagesCount) {
-            return undefined
-          }
-          return lastPageParam + 1
-        },
+      forceRefetch: ({ currentArg, previousArg }) => {
+        return currentArg?.endCursorPostId !== previousArg?.endCursorPostId
       },
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.pages.flatMap((page) => page.items.map(({ id }) => ({ type: 'Posts' as const, id }))),
-              { type: 'Posts' as const, id: 'LIST' },
-            ]
-          : [{ type: 'Posts' as const, id: 'LIST' }],
+      providesTags: ['Posts'],
     }),
 
     getPostById: builder.query<PostItem, number>({
@@ -92,7 +87,7 @@ export const postsApi = joyfyApi.injectEndpoints({
 })
 
 export const {
-  useGetAllPostsInfiniteQuery,
+  useGetPostsQuery,
   useGetPostByIdQuery,
   useUploadImageMutation,
   useDeleteUploadedImageMutation,
