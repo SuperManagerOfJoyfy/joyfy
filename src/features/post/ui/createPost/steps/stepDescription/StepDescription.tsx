@@ -3,15 +3,15 @@
 import { ChangeEvent } from 'react'
 
 import { ImageSlider } from '@/shared/ui/imageSlider'
-import { UserProfileProps } from '@/features/profile/ui/userProfile'
 import { PostDescriptionForm } from '@/entities/post/ui'
 import { usePostContext } from '../../providers/PostContext'
+import { UserProfile } from '@/features/profile/api/profileApi.types'
 
 import s from './StepDescription.module.scss'
 
 type StepDescriptionProps = {
   disabled?: boolean
-  user: Pick<UserProfileProps, 'userName' | 'avatars' | 'id'>
+  user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
 }
 
 export const StepDescription = ({ disabled, user }: StepDescriptionProps) => {

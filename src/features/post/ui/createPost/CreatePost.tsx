@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { UserProfileProps } from '@/features/profile/ui/userProfile'
+import { UserProfile } from '@/features/profile/api/profileApi.types'
 import { CreatePostModal } from './createPostModal'
 
 type Props = {
   showCreateModal?: boolean
   onClose: (navigateBack?: boolean) => void
-  user: Pick<UserProfileProps, 'userName' | 'avatars' | 'id'>
+  user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
 }
 
 export const CreatePost = ({ showCreateModal, user }: Props) => {
