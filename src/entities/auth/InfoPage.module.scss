@@ -1,0 +1,32 @@
+.infoContainer {
+  text-align: justify;
+  padding: 10px 10px 50px 10px;
+  font-size: var(--font-size-s);
+  max-width: 960px;
+  margin: 0px auto;
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+
+.point {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-m);
+  margin-top: 12px;
+}
+
+.footer {
+  margin-top: 12px;
+}
+
+.backButton {
+  color: var(--color-light-100);
+  font-weight: var(--font-weight-regular) !important;
+  margin-bottom: 20px;
+}
+
+.listItem {
+  margin-bottom: 8px;
+  text-indent: 12px;
+}
