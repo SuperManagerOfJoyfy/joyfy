@@ -1,5 +1,6 @@
 import { UserProfile, UserProfileProps } from '@/features/profile/ui/userProfile'
-import { PostsGridWithInfinteScroll } from '@/features/post/ui/postsGridWithInfiniteScroll/PostsGridWithInfinteScroll'
+import { GetPostsResponse } from '@/features/post/api/postsApi.types'
+import { PostsGridWithInfiniteScroll } from '@/features/post/ui/postsGridWithInfiniteScroll/PostsGridWithInfiniteScroll'
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -11,6 +12,8 @@ export default async function Page({ params }: PageProps) {
   const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${resolvedParams.id}`)
 
   const userData: UserProfileProps = await data.json()
+  const postsData = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/user/${userData.id}?pageSize=8`)
+  const posts: GetPostsResponse = await postsData.json()
 
   return (
     <div>
@@ -22,7 +25,7 @@ export default async function Page({ params }: PageProps) {
         hasPaymentSubscription={userData.hasPaymentSubscription}
         id={userData.id}
       />
-      <PostsGridWithInfinteScroll userName={userData.userName} />
+      <PostsGridWithInfiniteScroll userId={userData.id} initialPosts={posts} />
     </div>
   )
 }
