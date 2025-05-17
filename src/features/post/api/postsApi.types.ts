@@ -1,10 +1,10 @@
-import { PostItem } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/types'
 
 export type GetPostsResponse = {
   totalCount: number
   pageSize: number
   totalUsers: number
-  items: PostItem[]
+  items: Post[]
 }
 
 export type PostsQueryParams = {

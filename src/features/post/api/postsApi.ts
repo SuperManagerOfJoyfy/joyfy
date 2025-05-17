@@ -5,7 +5,7 @@ import {
   UploadImageResponse,
 } from '@/features/post/api/postsApi.types'
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { PostItem } from '../types/types'
+import { Post } from '../types/types'
 
 export const postsApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
@@ -41,14 +41,13 @@ export const postsApi = joyfyApi.injectEndpoints({
       providesTags: ['Posts'],
     }),
 
-    getPostById: builder.query<PostItem, number>({
+    getPostById: builder.query<Post, number>({
       query: (postId) => ({
         url: `posts/id/${postId}`,
         method: 'GET',
       }),
       providesTags: (result, error, postId) => [{ type: 'Post', id: postId }],
     }),
-
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
       query: (formData: FormData) => ({
         url: '/posts/image',
@@ -64,13 +63,13 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
     }),
 
-    createPost: builder.mutation<PostItem, CreatePostRequest>({
+    createPost: builder.mutation<Post, CreatePostRequest>({
       query: (payload) => ({
         url: '/posts',
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['Posts'],
+      invalidatesTags: ['Posts', 'Profile'],
     }),
 
     deletePost: builder.mutation<void, { postId: number }>({
@@ -78,10 +77,10 @@ export const postsApi = joyfyApi.injectEndpoints({
         url: `posts/${postId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Posts'],
+      invalidatesTags: ['Posts', 'Profile'],
     }),
 
-    editPost: builder.mutation<PostItem, { postId: number; description: string }>({
+    editPost: builder.mutation<Post, { postId: number; description: string }>({
       query: ({ postId, description }) => {
         return { url: `posts/${postId}`, method: 'PUT', body: { description } }
       },

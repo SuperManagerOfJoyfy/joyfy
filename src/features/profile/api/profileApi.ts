@@ -1,5 +1,5 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { UserProfile } from './profileApi.types'
+import { PublicUserProfile, UserProfile } from './profileApi.types'
 
 export const profileApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,8 +10,15 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       providesTags: ['Profile'],
     }),
+    getPublicUserProfile: builder.query<PublicUserProfile, string>({
+      query: (profileId) => ({
+        url: `public-user/profile/${profileId}`,
+        method: 'GET',
+      }),
+      providesTags: (result, error, profileId) => [{ type: 'Profile', id: profileId }],
+    }),
   }),
   overrideExisting: true,
 })
 
-export const { useGetUserProfileQuery, useLazyGetUserProfileQuery } = profileApi
+export const { useGetUserProfileQuery, useLazyGetUserProfileQuery, useGetPublicUserProfileQuery } = profileApi
