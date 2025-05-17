@@ -69,7 +69,7 @@ export const postsApi = joyfyApi.injectEndpoints({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['Posts'],
+      invalidatesTags: ['Posts', 'Profile'],
     }),
 
     deletePost: builder.mutation<void, { postId: number }>({
@@ -77,7 +77,7 @@ export const postsApi = joyfyApi.injectEndpoints({
         url: `posts/${postId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Posts'],
+      invalidatesTags: ['Posts', 'Profile'],
     }),
 
     editPost: builder.mutation<Post, { postId: number; description: string }>({

@@ -1,4 +1,4 @@
-import { PostItem as PostItemType } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/types'
 import { PostDropdownMenuItems } from '@/features/post/ui/postModal/postDropdownMenuItems'
 import { DropdownMenu, Scroll, Separator, UserCard } from '@/shared/ui'
 import { HiDotsHorizontal } from 'react-icons/hi'
@@ -7,7 +7,7 @@ import { PostItem } from '../postItem'
 import s from './PostContent.module.scss'
 
 type Props = {
-  post: PostItemType
+  post: Post
   isOwnPost: boolean
   isFollowing: boolean
   onEdit: () => void
