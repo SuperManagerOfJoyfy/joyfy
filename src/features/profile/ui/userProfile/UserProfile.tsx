@@ -50,10 +50,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
     return Boolean(profileAvatar.url?.trim()) && profileAvatar.width > 0 && profileAvatar.height > 0
   }
 
-  const bioText =
-    aboutMe ||
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore' +
-      ' magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco'
+  const bioText = aboutMe || ''
 
   return (
     <div className={s.profileContainer}>
