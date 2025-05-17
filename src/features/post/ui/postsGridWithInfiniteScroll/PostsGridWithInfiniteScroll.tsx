@@ -1,18 +1,37 @@
 'use client'
 
+import { useAppDispatch } from '@/app/store/store'
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
-import { useGetAllPostsInfiniteQuery } from '@/features/post/api/postsApi'
+import { postsApi, useGetPostsQuery } from '@/features/post/api/postsApi'
+import { GetPostsResponse } from '@/features/post/api/postsApi.types'
 import { Post } from '@/features/post/types/types'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { skipToken } from '@reduxjs/toolkit/query'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export const PostsGridWithInfiniteScroll = ({ userName }: { userName: string }) => {
-  const token = localStorage.getItem('accessToken') // skipToken ниже не срабатывает ибо user не null при логауте
-  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useGetAllPostsInfiniteQuery(
-    token ? { userName, pageSize: 8 } : skipToken
-  )
+export const PostsGridWithInfiniteScroll = ({
+  initialPosts,
+  userId,
+}: {
+  initialPosts: GetPostsResponse
+  userId: number
+}) => {
+  const [endCursorPostId, setEndCursorPostId] = useState<number | undefined>(undefined)
+  const dispatch = useAppDispatch()
+  const loaderRef = useRef<HTMLDivElement>(null)
+
+  /** Гидратация кэша с initialPosts */
+  useEffect(() => {
+    if (initialPosts.items.length > 0) {
+      dispatch(postsApi.util.upsertQueryData('getPosts', { userId }, initialPosts))
+    }
+  }, [dispatch, initialPosts, userId])
+
+  const { data, isFetching, isLoading } = useGetPostsQuery({
+    userId,
+    endCursorPostId,
+  })
+
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -26,17 +45,25 @@ export const PostsGridWithInfiniteScroll = ({ userName }: { userName: string }) 
     router.push(`?${newParams.toString()}`, { scroll: false })
   }
 
-  const posts = data?.pages.flatMap((page) => page.items) || []
-  const loaderRef = useRef<HTMLDivElement>(null)
+  const hasMore = data ? data.items.length < data.totalCount : false
+
+  const fetchMore = useCallback(() => {
+    if (!hasMore || isFetching) return
+
+    const lastPostId = data?.items.at(-1)?.id
+    if (lastPostId) {
+      setEndCursorPostId(lastPostId)
+    }
+  }, [data, isFetching, hasMore])
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries
-      if (entry.isIntersecting && !isFetching && hasNextPage) {
-        fetchNextPage()
+      if (entry.isIntersecting && !isFetching && hasMore) {
+        fetchMore()
       }
     },
-    [isFetching, hasNextPage]
+    [isFetching, hasMore, fetchMore]
   )
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
@@ -57,13 +84,13 @@ export const PostsGridWithInfiniteScroll = ({ userName }: { userName: string }) 
   }, [handleObserver])
 
   return (
-    <div>
-      {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openModalHandler} />}
-      {hasNextPage && (
+    <>
+      {<PostsGrid posts={data?.items || []} isLoading={isLoading} onPostClick={openModalHandler} />}
+      {hasMore && (
         <div ref={loaderRef}>
           <Loader fullScreen={false} reduced />
         </div>
       )}
-    </div>
+    </>
   )
 }

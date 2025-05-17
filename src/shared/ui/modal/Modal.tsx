@@ -29,6 +29,7 @@ type ModalProps = {
   rightButton?: ReactElement | null
   cardPadding?: CardPadding
   centerTitle?: boolean
+  header?: 'default' | 'custom'
 } & Omit<ComponentPropsWithoutRef<typeof Dialog.Root>, 'open' | 'onOpenChange'>
 
 export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>((props, ref) => {
@@ -46,6 +47,7 @@ export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>((props, ref) =>
     rightButton,
     cardPadding = 'default',
     centerTitle,
+    header = 'default',
     ...rest
   } = props
 
@@ -64,6 +66,7 @@ export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>((props, ref) =>
   const cardClass = clsx(s.card, s[`padding-${cardPadding}`])
 
   const titleClass = clsx(s.title, centerTitle && s.centered)
+  const headerClass = clsx(header === 'custom' ? s.customHeader : s.header)
 
   return (
     <Dialog.Root {...rest} open={open} onOpenChange={handleOpenChange} modal>
@@ -81,7 +84,7 @@ export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>((props, ref) =>
                     <div className={wrapperClass}>
                       <Card className={cardClass}>
                         {hasHeader ? (
-                          <header className={s.header}>
+                          <header className={headerClass}>
                             {hasLeft && <div className={s.leftButton}>{leftButton}</div>}
 
                             <Dialog.Title asChild>

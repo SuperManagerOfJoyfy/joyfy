@@ -1,6 +1,6 @@
 import {
   CreatePostRequest,
-  GetAllPostsResponse,
+  GetPostsResponse,
   PostsQueryParams,
   UploadImageResponse,
 } from '@/features/post/api/postsApi.types'
@@ -8,37 +8,53 @@ import { joyfyApi } from '@/shared/api/joyfyApi'
 import { Post } from '../types/types'
 
 export const postsApi = joyfyApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
-    getAllPosts: builder.infiniteQuery<GetAllPostsResponse, PostsQueryParams, number>({
-      query: ({ queryArg, pageParam }) => {
-        const { userName, pageSize, sortBy, sortDirection } = queryArg
+    getPosts: builder.query<GetPostsResponse, PostsQueryParams>({
+      query: ({ userId, endCursorPostId, pageSize = 8, ...params }) => ({
+        url: endCursorPostId ? `public-posts/user/${userId}/${endCursorPostId}` : `public-posts/user/${userId}`,
+        method: 'GET',
+        params: {
+          pageSize,
+          ...params,
+        },
+      }),
+      serializeQueryArgs: ({ queryArgs }) => queryArgs.userId,
+
+      merge: (currentCache, newItems, { arg }) => {
+        if (!arg.endCursorPostId) {
+          return newItems
+        }
         return {
-          url: `/posts/${userName}`,
-          method: 'GET',
-          params: {
-            pageSize,
-            sortBy,
-            sortDirection,
-            pageNumber: pageParam,
-          },
+          items: [
+            ...currentCache.items,
+            ...newItems.items.filter((post) => currentCache.items.every((p) => p.id !== post.id)),
+          ],
+          totalCount: newItems.totalCount,
+          pageSize: newItems.pageSize,
+          totalUsers: newItems.totalUsers,
         }
       },
-      infiniteQueryOptions: {
-        initialPageParam: 1,
-        getNextPageParam: (lastPage, allPages, lastPageParam) => {
-          if (lastPageParam >= lastPage.pagesCount) {
-            return undefined
-          }
-          return lastPageParam + 1
-        },
+      forceRefetch: ({ currentArg, previousArg }) => {
+        return currentArg?.endCursorPostId !== previousArg?.endCursorPostId
       },
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.pages.flatMap((page) => page.items.map(({ id }) => ({ type: 'Posts' as const, id }))),
-              { type: 'Posts' as const, id: 'LIST' },
-            ]
-          : [{ type: 'Posts' as const, id: 'LIST' }],
+      providesTags: ['Posts'],
+    }),
+
+    getPostById: builder.query<Post, number>({
+      query: (postId) => ({
+        url: `posts/id/${postId}`,
+        method: 'GET',
+      }),
+      providesTags: (result, error, postId) => [{ type: 'Post', id: postId }],
+    }),
+    getPublicPostById: builder.query<Post, { postId: number }>({
+      query({ postId }) {
+        return {
+          url: `/public-posts/${postId}`,
+          method: 'GET',
+        }
+      },
     }),
 
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
@@ -72,22 +88,23 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Posts'],
     }),
-    getPostById: builder.query<Post, { postId: number }>({
-      query({ postId }) {
-        return {
-          url: `/public-posts/${postId}`,
-          method: 'GET',
-        }
+
+    editPost: builder.mutation<Post, { postId: number; description: string }>({
+      query: ({ postId, description }) => {
+        return { url: `posts/${postId}`, method: 'PUT', body: { description } }
       },
+      invalidatesTags: (result, error, { postId }) => [{ type: 'Post', id: postId }],
     }),
   }),
 })
 
 export const {
-  useGetAllPostsInfiniteQuery,
+  useGetPostsQuery,
+  useGetPostByIdQuery,
   useUploadImageMutation,
   useDeleteUploadedImageMutation,
   useCreatePostMutation,
   useDeletePostMutation,
-  useGetPostByIdQuery,
+  useEditPostMutation,
+  useGetPublicPostByIdQuery,
 } = postsApi

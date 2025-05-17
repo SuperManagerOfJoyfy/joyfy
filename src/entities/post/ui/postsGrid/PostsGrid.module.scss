@@ -2,6 +2,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, 234px);
   gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .gridItem {

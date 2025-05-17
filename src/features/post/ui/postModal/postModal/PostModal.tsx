@@ -1,77 +1,90 @@
-'use client'
-
+import { useState } from 'react'
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import { HiDotsHorizontal } from 'react-icons/hi'
-import { DropdownMenu, Modal, Scroll, Separator, UserCard } from '@/shared/ui'
-import { ImageSlider } from '@/shared/ui/imageSlider'
-import { PostActions, PostItem } from '@/features/post/ui/postModal'
-import { PostDropdownMenuItems } from '@/features/post/ui/postModal/postDropdownMenuItems'
-import s from './PostModal.module.scss'
+
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { ConfirmModal } from '@/shared/ui/confirmModal/ConfirmModal'
-import { useState } from 'react'
-import { useDeletePostMutation } from '@/features/post/api/postsApi'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { toast } from 'react-toastify'
+import { useGetPostByIdQuery } from '@/features/post/api/postsApi'
+import { ConfirmModal, ImageSlider, Loader, Modal } from '@/shared/ui'
+import { EditPostForm, PostContent, usePostDropdownMenuActions } from '@/features/post/ui/postModal'
+
+import s from './PostModal.module.scss'
 import { Post } from '@/features/post/types/types'
 
 type Props = {
+  postId: number
+  open: boolean
+  onClose: () => void
   post: Post
 }
 
-export const PostModal = ({ post }: Props) => {
-  const { ownerId, userName, avatarOwner, description, createdAt, likesCount, images } = post
+type ConfirmAction = 'delete' | 'cancelEdit' | null
 
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
-  const [deletePost] = useDeletePostMutation()
+export const PostModal = ({ postId, open, onClose, post }: Props) => {
+  const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
+  const [isEditing, setIsEditing] = useState(false)
+
   const { data: user } = useGetMeQuery()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const postIdParam = searchParams.get('postId')
-  const postId = Number(postIdParam)
+  const { data: post, isLoading, refetch } = useGetPostByIdQuery(postId)
 
-  if (!post) return null
-
-  const isOwnPost = post?.ownerId === user?.userId
+  // To add condition:
   const isFollowing = false
 
-  const closeModalHandler = () => {
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.delete('postId')
-    router.push(`?${newParams.toString()}`)
-  }
+  const { handleEdit, handleDelete, handleFollowToggle, handleCopyLink } = usePostDropdownMenuActions({
+    postId: postId || 0,
+    ownerId: post?.ownerId ?? 0,
+    isFollowing,
+    setIsEditing,
+  })
+
+  if (!post || !user) return null
+
+  const { userName, ownerId, avatarOwner, description, likesCount, createdAt, images } = post
+
+  const isOwnPost = ownerId === user?.userId
 
   async function handleDeletePost() {
     try {
-      await deletePost({ postId })
-      toast.success('Post deleted successfully.')
+      await handleDelete()
+      onClose()
     } catch (error) {
-      toast.error('Something went wrong')
-    } finally {
-      closeModalHandler()
+      console.error(error)
     }
   }
 
-  const handleEdit = () => {
-    console.log('edit')
+  {
+    isLoading && <Loader />
   }
-
-  const handleFollowToggle = () => {
-    if (isFollowing) {
-      console.log('Unfollow')
-    } else {
-      console.log('Follow')
+  const handlePostSave = async () => {
+    if (post) {
+      await refetch()
+      setIsEditing(false)
     }
   }
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`)
+  const handleCloseModal = () => {
+    isEditing ? setConfirmAction('cancelEdit') : onClose()
+  }
+
+  const handleConfirmAction = async () => {
+    if (confirmAction === 'delete') {
+      await handleDeletePost()
+    } else if (confirmAction === 'cancelEdit') {
+      setIsEditing(false)
+    }
+    setConfirmAction(null)
   }
 
   return (
     <>
-      <Modal open={true} size="lg" cardPadding="none" className={s.modal} onOpenChange={closeModalHandler}>
+      <Modal
+        open={open}
+        size="lg"
+        cardPadding="none"
+        className={s.modal}
+        onOpenChange={handleCloseModal}
+        title={isEditing ? 'Edit Post' : undefined}
+        header="custom"
+      >
         <VisuallyHidden>
           <DialogTitle>User post</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
@@ -82,35 +95,39 @@ export const PostModal = ({ post }: Props) => {
           </div>
 
           <div className={s.contentWrapper}>
-            <div className={s.contentHeader}>
-              <UserCard user={{ id: ownerId, userName, avatar: avatarOwner }} />
-              <DropdownMenu trigger={<HiDotsHorizontal />}>
-                <PostDropdownMenuItems
-                  isOwnPost={isOwnPost}
-                  isFollowing={isFollowing}
-                  onEdit={handleEdit}
-                  onDelete={() => setIsConfirmationModalOpen(true)}
-                  onFollowToggle={handleFollowToggle}
-                  onCopyLink={handleCopyLink}
-                />
-              </DropdownMenu>
-            </div>
-            <Separator />
-            <Scroll className={s.scrollArea}>
-              <PostItem item={post} />
-            </Scroll>
-            <Separator />
-            <PostActions likesCount={likesCount} postId={postId} date={createdAt} />
+            {isEditing ? (
+              <EditPostForm
+                user={{ id: ownerId, userName, avatar: avatarOwner }}
+                defaultDescription={description}
+                postId={postId}
+                onCancel={() => setConfirmAction('cancelEdit')}
+                onSave={handlePostSave}
+              />
+            ) : (
+              <PostContent
+                post={post}
+                onEdit={handleEdit}
+                onDelete={() => setConfirmAction('delete')}
+                isOwnPost={isOwnPost}
+                isFollowing={isFollowing}
+                onFollowToggle={handleFollowToggle}
+                onCopyLink={handleCopyLink}
+              />
+            )}
           </div>
         </div>
       </Modal>
 
       <ConfirmModal
-        title={'Delete Post'}
-        description={'Are you sure you want to delete this post?'}
-        isOpen={isConfirmationModalOpen}
-        setIsOpen={setIsConfirmationModalOpen}
-        onConfirm={handleDeletePost}
+        title={confirmAction === 'delete' ? 'Delete Post' : 'Cancel Editing'}
+        description={
+          confirmAction === 'delete'
+            ? 'Are you sure you want to delete this post?'
+            : 'Are you sure you want to exit post editing? Your changes will not be saved.'
+        }
+        isOpen={!!confirmAction}
+        setIsOpen={() => setConfirmAction(null)}
+        onConfirm={handleConfirmAction}
       />
     </>
   )

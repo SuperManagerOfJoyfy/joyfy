@@ -2,12 +2,12 @@
 
 import { ChangeEvent } from 'react'
 import { Separator, TextArea, Typography, UserCard } from '@/shared/ui'
-import { UserProfileProps } from '@/features/profile/ui/userProfile'
+import { UserProfile } from '@/features/profile/api/profileApi.types'
 
 import s from './PostDescriptionForm.module.scss'
 
 type Props = {
-  user: Pick<UserProfileProps, 'userName' | 'avatars' | 'id'>
+  user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
   value: string
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
   disabled?: boolean

@@ -1,17 +1,16 @@
 import { Post } from '@/features/post/types/types'
 
-export type GetAllPostsResponse = {
-  pageSize: number
-  page: number
-  pagesCount: number
+export type GetPostsResponse = {
   totalCount: number
+  pageSize: number
+  totalUsers: number
   items: Post[]
 }
 
 export type PostsQueryParams = {
-  userName: string
+  userId: number
+  endCursorPostId?: number
   pageSize?: number
-  pageNumber?: number
   sortBy?: string
   sortDirection?: string
 }
