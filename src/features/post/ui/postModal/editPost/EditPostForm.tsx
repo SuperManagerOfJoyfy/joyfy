@@ -1,6 +1,8 @@
+'use client'
+
 import { useState } from 'react'
 import { useEditPostMutation } from '@/features/post/api/postsApi'
-import { PostItem } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/types'
 import { Button, Loader, TextArea, UserCard } from '@/shared/ui'
 import { User } from '@/shared/ui/userCard'
 import s from './EditPostForm.module.scss'
@@ -10,7 +12,7 @@ type Props = {
   defaultDescription: string
   postId: number
   onCancel: () => void
-  onSave: (updatedPost: PostItem) => void
+  onSave: (updatedPost: Post) => void
 }
 
 export const EditPostForm = ({ user, defaultDescription, postId, onCancel, onSave }: Props) => {

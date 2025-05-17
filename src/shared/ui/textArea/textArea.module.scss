@@ -3,62 +3,63 @@
 
   .label {
     color: var(--color-light-900);
-    font-size: var(--font-size-s);
 
     &[aria-disabled='true'] {
       color: var(--color-dark-100);
     }
   }
-}
 
-// .wrapper {
-//   background: var(--color-dark-500);
-//   border: 1px solid var(--color-dark-100);
-//   border-radius: 2px;
-//   transition: background 0.2s ease;
+  .wrapper {
+    width: 100%;
+    background: var(--color-dark-500);
+    border: 1px solid var(--color-dark-100);
+    border-radius: 2px;
 
-.textArea {
-  all: unset;
-  width: 100%;
-  padding: 6px 12px;
-  border: 1px solid var(--color-dark-100);
-  background: var(--color-dark-500);
-  border-radius: 2px;
+    transition: background 0.2s ease;
 
-  &::placeholder {
-    color: var(--color-light-900);
-    font-size: var(--font-size-s);
-  }
+    .textArea {
+      border: none;
+      outline: none;
+      background-color: transparent;
+      width: 100%;
 
-  &[disabled] {
-    &::placeholder {
-      color: var(--color-dark-100);
+      padding: 6px 12px;
+      resize: none;
+
+      &::placeholder {
+        color: var(--color-light-900);
+      }
+
+      &[disabled] {
+        &::placeholder {
+          color: var(--color-dark-100);
+        }
+      }
+    }
+
+    &:has(.textArea[data-value='true']) {
+      border: 1px solid var(--color-light-100);
+    }
+
+    &:focus-within {
+      border-color: var(--color-accent-500);
+    }
+
+    &.error {
+      border-color: var(--color-danger-500);
+    }
+
+    &:hover {
+      background: var(--color-dark-300);
+    }
+
+    &:has(.textArea[disabled]) {
+      background: var(--color-dark-500);
     }
   }
-  // }
 
-  &:has(.textArea[data-value='true']) {
-    border: 1px solid var(--color-light-100);
+  .errorText {
+    position: absolute;
+    color: var(--color-danger-500);
   }
-
-  &:focus-within {
-    border-color: var(--color-accent-500);
-  }
-
-  &.error {
-    border-color: var(--color-danger-500);
-  }
-
-  &:hover {
-    background: var(--color-dark-300);
-  }
-
-  &:has(.textArea[disabled]) {
-    background: var(--color-dark-500);
-  }
-}
-
-.errorText {
-  position: absolute;
-  color: var(--color-danger-500);
 }

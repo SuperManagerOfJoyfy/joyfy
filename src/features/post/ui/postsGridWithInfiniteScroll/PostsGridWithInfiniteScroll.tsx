@@ -4,10 +4,10 @@ import { useAppDispatch } from '@/app/store/store'
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
 import { postsApi, useGetPostsQuery } from '@/features/post/api/postsApi'
 import { GetPostsResponse } from '@/features/post/api/postsApi.types'
-import { PostItem } from '@/features/post/types/types'
-import { PostModal } from '@/features/post/ui/postModal'
+import { Post } from '@/features/post/types/types'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export const PostsGridWithInfiniteScroll = ({
   initialPosts,
@@ -17,9 +17,6 @@ export const PostsGridWithInfiniteScroll = ({
   userId: number
 }) => {
   const [endCursorPostId, setEndCursorPostId] = useState<number | undefined>(undefined)
-  const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
-  const openModal = (post: PostItem) => setSelectedPostId(post.id)
-  const closeModal = () => setSelectedPostId(null)
   const dispatch = useAppDispatch()
   const loaderRef = useRef<HTMLDivElement>(null)
 
@@ -34,6 +31,15 @@ export const PostsGridWithInfiniteScroll = ({
     userId,
     endCursorPostId,
   })
+
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const openModalHandler = (post: Post) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.set('postId', post.id.toString())
+    router.push(`?${newParams.toString()}`, { scroll: false })
+  }
 
   const hasMore = data ? data.items.length < data.totalCount : false
 
@@ -75,8 +81,7 @@ export const PostsGridWithInfiniteScroll = ({
 
   return (
     <>
-      {<PostsGrid posts={data?.items || []} isLoading={isLoading} onPostClick={openModal} />}
-      {selectedPostId && <PostModal postId={selectedPostId} onClose={closeModal} open={!!selectedPostId} />}
+      {<PostsGrid posts={data?.items || []} isLoading={isLoading} onPostClick={openModalHandler} />}
       {hasMore && (
         <div ref={loaderRef}>
           <Loader fullScreen={false} reduced />

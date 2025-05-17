@@ -1,28 +1,48 @@
-import { useState } from 'react'
+'use client'
+
+import { useEffect, useState } from 'react'
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { useGetPostByIdQuery } from '@/features/post/api/postsApi'
+import { postsApi, useGetPostByIdQuery } from '@/features/post/api/postsApi'
 import { ConfirmModal, ImageSlider, Loader, Modal } from '@/shared/ui'
 import { EditPostForm, PostContent, usePostDropdownMenuActions } from '@/features/post/ui/postModal'
-
 import s from './PostModal.module.scss'
+import { Post } from '@/features/post/types/types'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useAppDispatch } from '@/app/store/store'
 
 type Props = {
-  postId: number
-  open: boolean
-  onClose: () => void
+  initialPost: Post
 }
 
 type ConfirmAction = 'delete' | 'cancelEdit' | null
 
-export const PostModal = ({ postId, open, onClose }: Props) => {
+export const PostModal = ({ initialPost }: Props) => {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (initialPost) {
+      dispatch(postsApi.util.upsertQueryData('getPostById', initialPost.id, initialPost))
+    }
+  }, [dispatch, initialPost])
+
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
   const [isEditing, setIsEditing] = useState(false)
 
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const postIdParam = searchParams.get('postId')
+  const postId = Number(postIdParam)
+
   const { data: user } = useGetMeQuery()
   const { data: post, isLoading, refetch } = useGetPostByIdQuery(postId)
+
+  const closeModalHandler = () => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.delete('postId')
+    router.push(`?${newParams.toString()}`)
+  }
 
   // To add condition:
   const isFollowing = false
@@ -34,7 +54,7 @@ export const PostModal = ({ postId, open, onClose }: Props) => {
     setIsEditing,
   })
 
-  if (!post || !user) return null
+  if (!post) return null
 
   const { userName, ownerId, avatarOwner, description, likesCount, createdAt, images } = post
 
@@ -43,15 +63,15 @@ export const PostModal = ({ postId, open, onClose }: Props) => {
   async function handleDeletePost() {
     try {
       await handleDelete()
-      onClose()
     } catch (error) {
       console.error(error)
+    } finally {
+      closeModalHandler()
     }
   }
 
-  {
-    isLoading && <Loader />
-  }
+  if (isLoading) return <Loader />
+
   const handlePostSave = async () => {
     if (post) {
       await refetch()
@@ -60,7 +80,7 @@ export const PostModal = ({ postId, open, onClose }: Props) => {
   }
 
   const handleCloseModal = () => {
-    isEditing ? setConfirmAction('cancelEdit') : onClose()
+    isEditing ? setConfirmAction('cancelEdit') : closeModalHandler()
   }
 
   const handleConfirmAction = async () => {
@@ -75,7 +95,7 @@ export const PostModal = ({ postId, open, onClose }: Props) => {
   return (
     <>
       <Modal
-        open={open}
+        open={!!initialPost}
         size="lg"
         cardPadding="none"
         className={s.modal}

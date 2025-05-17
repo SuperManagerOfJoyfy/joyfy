@@ -33,7 +33,7 @@ type Owner = {
   lastName: string
 }
 
-export type PostItem = {
+export type Post = {
   id: number
   userName: string
   description: string

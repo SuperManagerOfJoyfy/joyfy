@@ -6,29 +6,11 @@ import { Button, Typography } from '@/shared/ui'
 import defaultAvatar from '../../../../../public/default-avatar.png'
 import verifiedBudget from '../../../../../public/verifiedBudget.svg'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-
-type Avatar = {
-  url: string
-  width: number
-  height: number
-  fileSize: number
-  createdAt: string
-}
-
-type MetaData = {
-  following: number
-  followers: number
-  publications: number
-}
-
-export type UserProfileProps = {
-  id: number
-  userName: string
-  aboutMe: string | null
-  avatars: Avatar[]
-  userMetadata: MetaData
-  hasPaymentSubscription: boolean
-}
+import { useAppDispatch } from '@/app/store/store'
+import { useEffect } from 'react'
+import { profileApi, useGetPublicUserProfileQuery } from '@/features/profile/api/profileApi'
+import { useParams } from 'next/navigation'
+import { Avatar, PublicUserProfile } from '@/features/profile/api/profileApi.types'
 
 type StatItemProps = {
   value: number
@@ -42,20 +24,33 @@ const StatItem = ({ value, label }: StatItemProps) => (
   </div>
 )
 
-export const UserProfile = ({ userName, aboutMe, avatars, userMetadata, hasPaymentSubscription }: UserProfileProps) => {
-  const { data: user } = useGetMeQuery()
+export const UserProfile = (userProfile: PublicUserProfile) => {
+  const dispatch = useAppDispatch()
 
-  const profileAvatar: Avatar | undefined = avatars?.[0]
+  useEffect(() => {
+    if (userProfile) {
+      dispatch(profileApi.util.upsertQueryData('getPublicUserProfile', id, userProfile))
+    }
+  }, [dispatch, userProfile])
+
+  const params = useParams()
+  const id = String(params?.id)
+
+  const { data: user } = useGetMeQuery()
+  const { data: profile } = useGetPublicUserProfileQuery(id)
+
+  if (!profile) return null
+
+  const { userName, aboutMe, avatars, userMetadata, hasPaymentSubscription } = profile
+
+  const profileAvatar: Avatar = avatars?.[0]
 
   const isAvatarValid = (profileAvatar: Avatar): boolean => {
     if (!profileAvatar) return false
     return Boolean(profileAvatar.url?.trim()) && profileAvatar.width > 0 && profileAvatar.height > 0
   }
 
-  const bioText =
-    aboutMe ||
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore' +
-      ' magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco'
+  const bioText = aboutMe || ''
 
   return (
     <div className={s.profileContainer}>
