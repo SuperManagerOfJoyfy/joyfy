@@ -38,8 +38,6 @@ export const PostModal = ({ initialPost }: Props) => {
   const { data: user } = useGetMeQuery()
   const { data: post, isLoading, refetch } = useGetPostByIdQuery(postId)
 
-  if (!initialPost) return null
-
   const closeModalHandler = () => {
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.delete('postId')
@@ -56,7 +54,7 @@ export const PostModal = ({ initialPost }: Props) => {
     setIsEditing,
   })
 
-  if (!post || !user) return null
+  if (!post) return null
 
   const { userName, ownerId, avatarOwner, description, likesCount, createdAt, images } = post
 
