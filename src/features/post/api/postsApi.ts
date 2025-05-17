@@ -48,15 +48,6 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
       providesTags: (result, error, postId) => [{ type: 'Post', id: postId }],
     }),
-    getPublicPostById: builder.query<Post, { postId: number }>({
-      query({ postId }) {
-        return {
-          url: `/public-posts/${postId}`,
-          method: 'GET',
-        }
-      },
-    }),
-
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
       query: (formData: FormData) => ({
         url: '/posts/image',
@@ -106,5 +97,4 @@ export const {
   useCreatePostMutation,
   useDeletePostMutation,
   useEditPostMutation,
-  useGetPublicPostByIdQuery,
 } = postsApi

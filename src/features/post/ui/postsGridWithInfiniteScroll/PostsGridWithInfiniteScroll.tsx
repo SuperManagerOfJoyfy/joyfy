@@ -35,10 +35,6 @@ export const PostsGridWithInfiniteScroll = ({
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const postId = searchParams.get('postId')
-
-  console.log(postId)
-
   const openModalHandler = (post: Post) => {
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.set('postId', post.id.toString())

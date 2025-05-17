@@ -33,7 +33,7 @@ export default async function Page({ params, searchParams }: PageProps) {
         id={userData.id}
       />
       <PostsGridWithInfiniteScroll userId={userData.id} initialPosts={posts} />
-      {!!postId && <PostModal post={post} />}
+      {!!postId && <PostModal initialPost={post} />}
     </div>
   )
 }
