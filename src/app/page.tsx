@@ -6,8 +6,8 @@ type Props = {
     code?: string
   }
 }
-export default function HomePage({ searchParams }: Props) {
-  const code = searchParams.code
+export default async function HomePage({ searchParams }: Props) {
+  const { code } = await searchParams
 
   if (code) {
     return <EmailConfirmation code={code} />
