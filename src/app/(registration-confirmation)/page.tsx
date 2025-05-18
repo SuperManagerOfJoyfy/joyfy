@@ -3,15 +3,12 @@ import { EmailVerification } from '@/features/auth/ui/emailVerification'
 import { Button } from '@/shared/ui'
 import React, { useEffect } from 'react'
 import infoImg from '@/features/auth/assets/images/EmailVerification/confirm.png'
-import { useSearchParams } from 'next/navigation'
 import { useConfirmEmailMutation } from '@/features/auth/api/authApi'
 import Link from 'next/link'
 import { PATH } from '@/shared/config/routes'
 import { Loader } from '@/shared/ui/loader/Loader'
 
-const EmailConfirmation = () => {
-  const searchParams = useSearchParams()
-  const code = searchParams.get('code')
+const EmailConfirmation = ({ code }: { code: string }) => {
   const [confirmEmail, { isLoading, isUninitialized }] = useConfirmEmailMutation()
 
   useEffect(() => {
