@@ -6,22 +6,13 @@
   height: 100%;
 }
 
-.descriptionWrapper {
-  padding: 24px;
-  max-width: 460px;
+.userCard {
+  margin-bottom: 24px;
 }
 
 .charCount {
   display: flex;
   justify-content: flex-end;
   color: var(--color-light-900);
-  margin-bottom: 20px;
-}
-
-.typographyContainer {
-  margin-top: 24px;
-}
-
-.font {
-  color: var(--color-light-900);
+  margin-top: 5px;
 }

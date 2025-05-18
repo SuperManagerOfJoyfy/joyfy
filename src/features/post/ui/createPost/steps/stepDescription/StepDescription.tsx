@@ -8,6 +8,7 @@ import { usePostContext } from '../../providers/PostContext'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
 
 import s from './StepDescription.module.scss'
+import { Separator } from '@radix-ui/react-dropdown-menu'
 
 type StepDescriptionProps = {
   disabled?: boolean
@@ -43,7 +44,13 @@ export const StepDescription = ({ disabled, user }: StepDescriptionProps) => {
           />
         </div>
 
-        <PostDescriptionForm user={user} value={description} onChange={handleDescriptionChange} disabled={disabled} />
+        <PostDescriptionForm
+          user={user}
+          value={description}
+          onChange={handleDescriptionChange}
+          disabled={disabled}
+          className={s.description}
+        />
       </div>
     </div>
   )
