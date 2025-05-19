@@ -10,7 +10,7 @@ import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import LocalStorage from '@/shared/utils/localStorage/localStorage'
-import { CreatePostModalWrapper } from '@/features/post/ui/createPost/CreatePostModalWrapper'
+import { CreatePost } from '@/features/post/ui'
 
 import s from '../styles/layout.module.scss'
 
@@ -38,7 +38,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         onCreatePost: () => {
           const current = new URLSearchParams(searchParams.toString())
           current.set('action', 'create')
-          router.push(`${pathname}?${current.toString()}`)
+          window.history.pushState(null, '', `?${current.toString()}`)
         },
       }),
     [onOpenLogoutModalHandler, user?.userId, pathname, router, searchParams]
@@ -93,7 +93,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           ) : (
             <>
               {children}
-              <CreatePostModalWrapper />
+              <CreatePost />
             </>
           )}
         </main>
