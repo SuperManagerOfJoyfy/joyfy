@@ -1,3 +1,4 @@
+import { PublicationDescription } from './publicationDescription/PublicationDescription'
 // Imports
 export { Avatar, AvatarGroup } from './avatar'
 
@@ -14,6 +15,7 @@ export { DropdownMenu, DropdownMenuItem } from './dropdownMenu'
 export { Form } from './form'
 export { Loader } from './loader'
 export { Modal } from './modal'
+export { PublicationDescription } from './publicationDescription'
 export { RadioGroup, RadioGroupItem, RadioGroupRoot } from './radioGroup'
 export { Recaptcha } from './reCaptcha'
 export { Scroll } from './scroll'
