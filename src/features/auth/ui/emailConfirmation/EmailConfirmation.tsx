@@ -7,8 +7,11 @@ import { useConfirmEmailMutation } from '@/features/auth/api/authApi'
 import Link from 'next/link'
 import { PATH } from '@/shared/config/routes'
 import { Loader } from '@/shared/ui/loader/Loader'
+import { useSearchParams } from 'next/navigation'
 
-const EmailConfirmation = ({ code }: { code: string }) => {
+const EmailConfirmation = () => {
+  const searchParams = useSearchParams()
+  const code = searchParams.get('code')
   const [confirmEmail, { isLoading, isUninitialized }] = useConfirmEmailMutation()
 
   useEffect(() => {
@@ -17,9 +20,12 @@ const EmailConfirmation = ({ code }: { code: string }) => {
     confirmEmail({ confirmationCode: code })
   }, [code])
 
+  if (!code) return null
+
   if (isUninitialized || isLoading) {
     return <Loader fullScreen />
   }
+
   return (
     <EmailVerification
       title="Congratulations!"
