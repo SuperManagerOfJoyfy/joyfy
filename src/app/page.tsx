@@ -1,19 +1,30 @@
 import { Card, Typography } from '@/shared/ui'
 import s from './page.module.scss'
+import { Post } from '@/features/post/types/types'
 
 export const revalidate = 60
 
 export default async function HomePage() {
   let count = 0
+  let posts: Post[] = []
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user`, {
-      next: { revalidate: 60 },
-    })
+    const [userRes, postsRes] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user`, {
+        next: { revalidate: 60 },
+      }),
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/all?pageSize=4`, {
+        next: { revalidate: 60 },
+      }),
+    ])
 
-    if (!res.ok) throw new Error('Failed to fetch user count')
-    const data = await res.json()
-    count = data.totalCount
+    if (!userRes.ok) throw new Error('Failed to fetch user count')
+    if (!postsRes.ok) throw new Error('Failed to fetch posts')
+
+    const [userData, postsData] = await Promise.all([userRes.json(), postsRes.json()])
+
+    count = userData.totalCount
+    posts = postsData.items ?? []
   } catch (error) {
     console.error(error)
   }
@@ -35,6 +46,12 @@ export default async function HomePage() {
           })}
         </div>
       </Card>
+
+      {posts.map((post) => (
+        <Typography key={post.id} variant="h1">
+          {post.userName}
+        </Typography>
+      ))}
     </div>
   )
 }
