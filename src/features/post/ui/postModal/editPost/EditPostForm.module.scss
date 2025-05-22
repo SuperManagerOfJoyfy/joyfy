@@ -5,11 +5,8 @@
   padding: 24px;
 }
 
-.charCounter {
-  display: flex;
-  justify-content: flex-end;
-  font-size: var(--font-size-xs);
-  color: var(--color-light-900);
+.userCard {
+  margin-bottom: 24px;
 }
 
 .actionButtons {
@@ -17,12 +14,4 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-}
-
-.editTextArea {
-  width: 412px;
-}
-
-.userCard {
-  margin-bottom: 48px;
 }
