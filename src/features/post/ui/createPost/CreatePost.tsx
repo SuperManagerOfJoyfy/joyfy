@@ -1,33 +1,50 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-import { UserProfile } from '@/features/profile/api/profileApi.types'
 import { CreatePostModal } from './createPostModal'
+import { useGetUserProfileQuery } from '@/features/profile/api/profileApi'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { PATH } from '@/shared/config/routes'
 
-type Props = {
-  showCreateModal?: boolean
-  onClose: (navigateBack?: boolean) => void
-  user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
+export enum ECreatePostCloseModal {
+  redirectToHome,
+  redirectToProfile,
+  default,
 }
 
-export const CreatePost = ({ showCreateModal, user }: Props) => {
-  const [open, setOpen] = useState(showCreateModal || false)
+export const CreatePost = () => {
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
   const router = useRouter()
 
-  const handleClose = (shouldNavigateBack = true) => {
-    setOpen(false)
-    if (shouldNavigateBack) {
-      router.back()
+  const action = searchParams.get('action')
+  const showCreateModal = action === 'create'
+
+  const { data: me, isLoading: isMeLoading } = useGetMeQuery()
+
+  const { data: userData, isLoading: isProfileLoading } = useGetUserProfileQuery(undefined, {
+    skip: !me,
+  })
+
+  if (isMeLoading || (me && isProfileLoading)) return null
+  if (!me || !showCreateModal || !userData) return null
+
+  const handleCloseModal = (createPostCloseModal?: ECreatePostCloseModal) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.delete('action')
+
+    switch (createPostCloseModal) {
+      case ECreatePostCloseModal.redirectToProfile:
+        router.replace(`${PATH.USER.PROFILE}/${userData.id}`)
+        break
+      case ECreatePostCloseModal.redirectToHome:
+        router.push(PATH.ROOT, { scroll: false })
+        break
+      default:
+        window.history.replaceState(null, '', pathname + newParams.toString())
     }
   }
 
-  useEffect(() => {
-    setOpen(showCreateModal || false)
-  }, [showCreateModal])
-
-  if (!showCreateModal) return null
-
-  return <CreatePostModal open={open} onClose={handleClose} user={user} />
+  return <CreatePostModal open={showCreateModal} onClose={handleCloseModal} user={userData} />
 }

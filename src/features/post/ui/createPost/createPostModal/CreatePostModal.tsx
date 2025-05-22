@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
 
 import { Modal } from '@/shared/ui/modal'
 import { PostCreationStep } from '@/features/post/types/types'
@@ -14,16 +13,16 @@ import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
 import { getCardPadding, getModalSize, getModalTitle } from '../utils/modalStepUtils'
 import { LeftButton, RightButton } from '../createNavigationButtons/CeateNavigationButtons'
+import { ECreatePostCloseModal } from '../CreatePost'
 
 type CreatePostModalProps = {
   open: boolean
-  onClose: (navigateBack?: boolean) => void
+  onClose: (createPostCloseModal?: ECreatePostCloseModal) => void
   user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
 }
 
 const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
   const { addImage, images, publishPost, clearAll, description } = usePostContext()
-  const router = useRouter()
 
   const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
@@ -37,7 +36,7 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
     if (images.length > 0) {
       setIsCloseModalOpen(true)
     } else {
-      onClose()
+      onClose(ECreatePostCloseModal.default)
     }
   }
 
@@ -72,9 +71,9 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
         setIsPublishing(true)
         try {
           await publishPost()
+
           toast.success('Post successfully published!')
-          onClose(false)
-          router.push(`/profile/${user?.id || ''}`)
+          onClose(ECreatePostCloseModal.redirectToProfile)
         } finally {
           setIsPublishing(false)
         }
@@ -83,13 +82,12 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
   }
 
   const handleConfirmClose = (saveDraft: boolean) => {
-    setIsCloseModalOpen(false)
-
     if (saveDraft) {
       toast.info('Draft saved')
-      router.push('/')
+      onClose(ECreatePostCloseModal.redirectToHome)
     } else {
       toast.info('Draft discarded')
+      onClose(ECreatePostCloseModal.default)
     }
   }
 

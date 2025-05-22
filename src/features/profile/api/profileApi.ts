@@ -17,8 +17,21 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       providesTags: (result, error, profileId) => [{ type: 'Profile', id: profileId }],
     }),
+    updateUserProfile: builder.mutation<void, Partial<UserProfile>>({
+      query: (profileData) => ({
+        url: '/users/profile',
+        method: 'PUT',
+        body: profileData,
+      }),
+      invalidatesTags: ['Profile'],
+    }),
   }),
   overrideExisting: true,
 })
 
-export const { useGetUserProfileQuery, useLazyGetUserProfileQuery, useGetPublicUserProfileQuery } = profileApi
+export const {
+  useGetUserProfileQuery,
+  useLazyGetUserProfileQuery,
+  useGetPublicUserProfileQuery,
+  useUpdateUserProfileMutation,
+} = profileApi

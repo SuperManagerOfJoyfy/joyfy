@@ -2,17 +2,17 @@
 
 import { ChangeEvent } from 'react'
 
+import { usePostContext } from '@/features/post/ui/createPost/providers'
 import { ImageSlider } from '@/shared/ui/imageSlider'
-import { PostDescriptionForm } from '@/entities/post/ui'
-import { usePostContext } from '../../providers/PostContext'
-import { UserProfile } from '@/features/profile/api/profileApi.types'
 
+import { PublicationDescription, UserCard } from '@/shared/ui'
+import { User } from '@/shared/ui/userCard'
 import s from './StepDescription.module.scss'
 import { Separator } from '@radix-ui/react-dropdown-menu'
 
 type StepDescriptionProps = {
   disabled?: boolean
-  user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
+  user: User
 }
 
 export const StepDescription = ({ disabled, user }: StepDescriptionProps) => {
@@ -43,14 +43,15 @@ export const StepDescription = ({ disabled, user }: StepDescriptionProps) => {
             className={s.swiper}
           />
         </div>
-
-        <PostDescriptionForm
-          user={user}
-          value={description}
-          onChange={handleDescriptionChange}
-          disabled={disabled}
-          className={s.description}
-        />
+        <div className={s.descriptionWrapper}>
+          <UserCard user={user} />
+          <PublicationDescription
+            value={description}
+            onChange={handleDescriptionChange}
+            disabled={disabled}
+            className={s.description}
+          />
+        </div>
       </div>
     </div>
   )

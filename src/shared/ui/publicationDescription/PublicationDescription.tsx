@@ -1,25 +1,18 @@
-'use client'
-
 import { ChangeEvent } from 'react'
-import { Separator, TextArea, Typography, UserCard } from '@/shared/ui'
-import { UserProfile } from '@/features/profile/api/profileApi.types'
-
-import s from './PostDescriptionForm.module.scss'
 import clsx from 'clsx'
+import { TextArea, Typography } from '@/shared/ui'
+import s from './PublicationDescription.module.scss'
 
 type Props = {
-  user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
   value: string
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
   disabled?: boolean
   className?: string
 }
 
-export const PostDescriptionForm = ({ user, value, onChange, disabled, className }: Props) => {
+export const PublicationDescription = ({ value, onChange, disabled, className }: Props) => {
   return (
-    <div className={clsx(s.formContainer, className)}>
-      <UserCard user={user} className={s.userCard} />
-
+    <div className={clsx(s.formContainer)}>
       <TextArea
         label="Add publication description"
         placeholder="Your caption goes here..."

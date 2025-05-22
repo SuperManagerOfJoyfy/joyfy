@@ -1,13 +1,8 @@
 .formContainer {
+  max-width: 480px;
   width: 100%;
-  max-width: 486px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-}
-
-.userCard {
-  margin-bottom: 24px;
 }
 
 .charCount {
