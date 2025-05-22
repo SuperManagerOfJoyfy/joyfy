@@ -3,6 +3,7 @@
 
   .label {
     color: var(--color-light-900);
+    font-size: var(--font-size-s);
 
     &[aria-disabled='true'] {
       color: var(--color-dark-100);
@@ -28,6 +29,7 @@
 
       &::placeholder {
         color: var(--color-light-900);
+        font-size: var(--font-size-s);
       }
 
       &[disabled] {
