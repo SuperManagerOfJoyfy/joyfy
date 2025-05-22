@@ -11,6 +11,8 @@ import { useEffect } from 'react'
 import { profileApi, useGetPublicUserProfileQuery } from '@/features/profile/api/profileApi'
 import { useParams } from 'next/navigation'
 import { Avatar, PublicUserProfile } from '@/features/profile/api/profileApi.types'
+import Link from 'next/link'
+import { PATH } from '@/shared/config/routes'
 
 type StatItemProps = {
   value: number
@@ -79,7 +81,11 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
               <Image src={verifiedBudget} width={24} height={24} alt="verifiedIcon" priority />
             )}
           </div>
-          {user && <Button variant={'secondary'}>Profile Settings</Button>}
+          {user && (
+            <Button as={Link} href={`${PATH.USER.SETTINGS}?part=info`} variant="secondary">
+              Profile Settings
+            </Button>
+          )}
         </div>
         <div className={s.profileStats}>
           <StatItem value={userMetadata.following} label="Following" />
