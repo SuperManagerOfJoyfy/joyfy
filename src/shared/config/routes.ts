@@ -16,6 +16,7 @@ export const PATH = {
     CREATE: '/create',
     STATISTICS: '/statistics',
     FAVORITES: '/favorites',
+    SETTINGS: '/settings',
   },
 
   ADMIN: {

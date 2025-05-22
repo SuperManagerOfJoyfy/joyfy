@@ -1,0 +1,18 @@
+.container {
+  width: 100%;
+  max-width: 972px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.tabsWrapper {
+  overflow: hidden;
+}
+
+.comingSoon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: var(--color-text-secondary);
+}

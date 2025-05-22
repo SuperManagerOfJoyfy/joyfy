@@ -12,11 +12,13 @@ type Props = {
   className?: string
   defaultValue?: string
   tabs: Tab[]
+  onValueChange?: (value: string) => void
+  value?: string
 }
 
-export function Tabs({ className, defaultValue, tabs }: Props) {
+export function Tabs({ className, defaultValue, tabs, onValueChange, value }: Props) {
   return (
-    <RadixTabs.Root className={s.root} defaultValue={defaultValue}>
+    <RadixTabs.Root className={s.root} defaultValue={defaultValue} value={value} onValueChange={onValueChange}>
       <RadixTabs.List className={s.tabList}>
         {tabs.map((tab) => (
           <RadixTabs.Trigger
