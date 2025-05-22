@@ -1,4 +1,3 @@
-import EmailConfirmation from '@/features/auth/ui/emailConfirmation/EmailConfirmation'
 import { Card, Typography } from '@/shared/ui'
 
 export default async function HomePage() {
@@ -11,7 +10,6 @@ export default async function HomePage() {
           </Typography>
         </Card>
       </div>
-      <EmailConfirmation />
     </>
   )
 }
