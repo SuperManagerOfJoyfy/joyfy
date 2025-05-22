@@ -38,7 +38,7 @@ export const PostActions = ({ postId, likesCount, date }: Props) => {
       <Separator />
 
       <div className={s.postActions__commentForm}>
-        <TextArea placeholder="Add a Comment..." className={s.commentInput} />
+        <TextArea placeholder="Add a Comment..." textAreaClassName={s.commentInput} />
         <Button variant="text">Publish</Button>
       </div>
     </div>
