@@ -18,13 +18,15 @@ export default async function HomePage() {
       }),
     ])
 
-    if (!userRes.ok) throw new Error('Failed to fetch user count')
-    if (!postsRes.ok) throw new Error('Failed to fetch posts')
-
-    const [userData, postsData] = await Promise.all([userRes.json(), postsRes.json()])
-
-    count = userData.totalCount
-    posts = postsData.items ?? []
+    if (!userRes.ok) {
+      console.error('Failed to fetch user count')
+    } else if (!postsRes.ok) {
+      console.error('Failed to fetch posts')
+    } else {
+      const [userData, postsData] = await Promise.all([userRes.json(), postsRes.json()])
+      count = userData.totalCount
+      posts = postsData.items ?? []
+    }
   } catch (error) {
     console.error(error)
   }
