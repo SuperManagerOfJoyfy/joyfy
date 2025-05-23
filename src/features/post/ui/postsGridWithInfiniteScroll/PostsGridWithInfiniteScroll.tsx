@@ -9,16 +9,22 @@ import { Loader } from '@/shared/ui/loader/Loader'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export const PostsGridWithInfiniteScroll = ({
-  initialPosts,
-  userId,
-}: {
+type Props = {
   initialPosts: GetPostsResponse
   userId: number
-}) => {
-  const [endCursorPostId, setEndCursorPostId] = useState<number | undefined>(undefined)
+}
+
+export const PostsGridWithInfiniteScroll = ({ initialPosts, userId }: Props) => {
   const dispatch = useAppDispatch()
   const loaderRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [endCursorPostId, setEndCursorPostId] = useState<number | undefined>(undefined)
+
+  const { data, isFetching, isLoading } = useGetPostsQuery({
+    userId,
+    endCursorPostId,
+  })
 
   /** Гидратация кэша с initialPosts */
   useEffect(() => {
@@ -26,20 +32,6 @@ export const PostsGridWithInfiniteScroll = ({
       dispatch(postsApi.util.upsertQueryData('getPosts', { userId }, initialPosts))
     }
   }, [dispatch, initialPosts, userId])
-
-  const { data, isFetching, isLoading } = useGetPostsQuery({
-    userId,
-    endCursorPostId,
-  })
-
-  const router = useRouter()
-  const searchParams = useSearchParams()
-
-  const openModalHandler = (post: Post) => {
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.set('postId', post.id.toString())
-    router.push(`?${newParams.toString()}`, { scroll: false })
-  }
 
   const hasMore = data ? data.items.length < data.totalCount : false
 
@@ -61,6 +53,7 @@ export const PostsGridWithInfiniteScroll = ({
     },
     [isFetching, hasMore, fetchMore]
   )
+
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
@@ -79,12 +72,18 @@ export const PostsGridWithInfiniteScroll = ({
     }
   }, [handleObserver])
 
+  const openPostModal = (post: Post) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.set('postId', post.id.toString())
+    router.push(`?${newParams.toString()}`, { scroll: false })
+  }
+
   return (
     <>
-      {<PostsGrid posts={data?.items || []} isLoading={isLoading} onPostClick={openModalHandler} />}
+      {<PostsGrid posts={data?.items || []} isLoading={isLoading} onPostClick={openPostModal} />}
       {hasMore && (
         <div ref={loaderRef}>
-          <Loader fullScreen={false} reduced />
+          <Loader reduced />
         </div>
       )}
     </>

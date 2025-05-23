@@ -1,7 +1,11 @@
 import { BaseQueryApi, FetchBaseQueryError, QueryReturnValue } from '@reduxjs/toolkit/query/react'
 import { toast } from 'react-toastify'
 
-const extractMessage = (data: any, fallback: string): string => {
+export const isFetchBaseQueryError = (error: unknown): error is FetchBaseQueryError => {
+  return typeof error === 'object' && error !== null && 'status' in error
+}
+
+export const extractMessage = (data: any, fallback: string): string => {
   if (data?.messages && Array.isArray(data.messages) && data.messages[0]?.message) {
     return data.messages[0].message
   }
