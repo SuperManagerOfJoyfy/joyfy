@@ -3,16 +3,16 @@
 import Image from 'next/image'
 import s from './UserProfile.module.scss'
 import { Button, Typography } from '@/shared/ui'
-import defaultAvatar from '../../../../../public/default-avatar.png'
 import verifiedBudget from '../../../../../public/verifiedBudget.svg'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { useAppDispatch } from '@/app/store/store'
 import { useEffect } from 'react'
 import { profileApi, useGetPublicUserProfileQuery } from '@/features/profile/api/profileApi'
 import { useParams } from 'next/navigation'
-import { Avatar, PublicUserProfile } from '@/features/profile/api/profileApi.types'
+import { PublicUserProfile } from '@/features/profile/api/profileApi.types'
 import Link from 'next/link'
 import { PATH } from '@/shared/config/routes'
+import { Avatar } from '@/shared/ui/avatar/Avatar'
 
 type StatItemProps = {
   value: number
@@ -45,12 +45,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
 
   const { userName, aboutMe, avatars, userMetadata, hasPaymentSubscription } = profile
 
-  const profileAvatar: Avatar = avatars?.[0]
-
-  const isAvatarValid = (profileAvatar: Avatar): boolean => {
-    if (!profileAvatar) return false
-    return Boolean(profileAvatar.url?.trim()) && profileAvatar.width > 0 && profileAvatar.height > 0
-  }
+  const profileAvatar = avatars?.[0]?.url ?? ''
 
   const bioText = aboutMe || ''
 
@@ -58,16 +53,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
     <div className={s.profileContainer}>
       <div className={s.profileImageContainer}>
         <div className={s.profileImageWrapper}>
-          {isAvatarValid(profileAvatar) ? (
-            <Image
-              src={profileAvatar.url}
-              width={profileAvatar.width}
-              height={profileAvatar.height}
-              alt={`${userName}'s avatar`}
-            />
-          ) : (
-            <Image src={defaultAvatar} width={204} height={204} alt="default avatar" priority />
-          )}
+          <Avatar name={userName} size={'large'} avatar={profileAvatar} />
         </div>
       </div>
 

@@ -7,8 +7,10 @@ import { useRouter } from 'next/navigation'
 import { PATH } from '@/shared/config/routes'
 import { useState } from 'react'
 import { Loader } from '@/shared/ui/loader/Loader'
+import { useGenerateColor } from '@/shared/ui/avatar/hooks/useGenerateColor'
 
 const Page = () => {
+  const { lightBackground, textColor } = useGenerateColor()
   const [login, { isLoading }] = useLoginMutation()
   const router = useRouter()
   const [isRedirecting, setIsRedirecting] = useState(false)
@@ -20,6 +22,9 @@ const Page = () => {
       await login(data).unwrap()
 
       setIsRedirecting(true)
+
+      localStorage.setItem('lightBackground', lightBackground)
+      localStorage.setItem('textColor', textColor)
 
       router.push(PATH.ROOT)
     } catch (error) {
