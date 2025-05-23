@@ -2,6 +2,7 @@ import { ComponentProps } from 'react'
 import * as AvatarRadix from '@radix-ui/react-avatar'
 import clsx from 'clsx'
 import s from './Avatar.module.scss'
+import { useGenerateColor } from '@/shared/ui/avatar/hooks/useGenerateColor'
 
 type Props = {
   avatar?: string
@@ -10,6 +11,8 @@ type Props = {
 } & ComponentProps<typeof AvatarRadix.Root>
 
 export const Avatar = ({ avatar, className, name, size = 'medium', ...rest }: Props) => {
+  const { lightBackground, textColor } = useGenerateColor()
+  
   // Create a fallback using the first letters of the name
   const fallback = name
     ?.split(' ')
@@ -17,8 +20,8 @@ export const Avatar = ({ avatar, className, name, size = 'medium', ...rest }: Pr
     .map((e) => e[0])
     .join('')
 
-  const lightBackground = localStorage.getItem('lightBackground') || '#92cdff'
-  const textColor = localStorage.getItem('textColor') || '#124dbf'
+  // const lightBackground = localStorage.getItem('lightBackground') || '#92cdff'
+  // const textColor = localStorage.getItem('textColor') || '#124dbf'
 
   return (
     <AvatarRadix.Root className={clsx(s.avatarRoot, className)} data-size={size} {...rest}>

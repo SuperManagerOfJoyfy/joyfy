@@ -25,9 +25,6 @@ export const LogoutModal = ({ open, onOpenLogoutModalHandler, email }: Props) =>
       toast.error(AUTH_MESSAGES.LOGOUT_ERROR)
     } finally {
       onOpenLogoutModalHandler(false)
-
-      localStorage.removeItem('lightBackground')
-      localStorage.removeItem('textColor')
     }
   }
 
