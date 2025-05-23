@@ -17,7 +17,7 @@ type Props = {
 export const PublicPosts = ({ count, posts }: Props) => {
   const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({})
 
-  const toggleExpand = (id: string) => {
+  const toggleExpand = (id: number) => {
     setExpandedPosts((prev) => ({
       ...prev,
       [id]: !prev[id],
@@ -46,13 +46,10 @@ export const PublicPosts = ({ count, posts }: Props) => {
         {posts.map((post) => {
           const isExpanded = expandedPosts[post.id] ?? false
 
-          const collapsedLength = 100
-          const expandedLength = 300
-          const isLong = post.description.length > (isExpanded ? expandedLength : collapsedLength)
-          const showButton = post.description.length > collapsedLength
+          const isLong = post.description.length > (isExpanded ? 240 : 100)
+          const showButton = post.description.length > 100
 
-          const visibleText =
-            post.description.slice(0, isExpanded ? expandedLength : collapsedLength) + (isLong ? '...' : '')
+          const visibleText = post.description.slice(0, isExpanded ? 240 : 100) + (isLong ? '...' : '')
 
           return (
             <div key={post.id} className={s.post}>
@@ -92,7 +89,7 @@ export const PublicPosts = ({ count, posts }: Props) => {
                   </Typography>
 
                   {showButton && (
-                    <Button variant="link" onClick={() => toggleExpand(String(post.id))} className={s.toggleBtn}>
+                    <Button variant="link" onClick={() => toggleExpand(post.id)} className={s.toggleBtn}>
                       <Typography as="span" variant="body2">
                         {isExpanded ? 'Hide' : 'Show more'}
                       </Typography>
