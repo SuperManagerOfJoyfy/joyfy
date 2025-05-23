@@ -44,15 +44,15 @@ export const PublicPosts = ({ count, posts }: Props) => {
 
       <div className={s.postsWrapper}>
         {posts.map((post) => {
-          const testText =
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor inipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor incd.mpor incd.mpor incd.mpo..Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor inipiscing elit, sed do eiusmod tempor incdipiscing elit, sed do eiusmod tempor incd.mpor incd.mpor incd.mpo.. 123123'
           const isExpanded = expandedPosts[post.id] ?? false
 
           const collapsedLength = 100
           const expandedLength = 300
-          const isLong = testText.length > (isExpanded ? expandedLength : collapsedLength)
+          const isLong = post.description.length > (isExpanded ? expandedLength : collapsedLength)
+          const showButton = post.description.length > collapsedLength
 
-          const visibleText = testText.slice(0, isExpanded ? expandedLength : collapsedLength) + (isLong ? '...' : '')
+          const visibleText =
+            post.description.slice(0, isExpanded ? expandedLength : collapsedLength) + (isLong ? '...' : '')
 
           return (
             <div key={post.id} className={s.post}>
@@ -91,7 +91,7 @@ export const PublicPosts = ({ count, posts }: Props) => {
                     {visibleText}
                   </Typography>
 
-                  {isLong && (
+                  {showButton && (
                     <Button variant="link" onClick={() => toggleExpand(String(post.id))} className={s.toggleBtn}>
                       <Typography as="span" variant="body2">
                         {isExpanded ? 'Hide' : 'Show more'}
