@@ -1,5 +1,4 @@
-import { Card, Typography } from '@/shared/ui'
-import s from './page.module.scss'
+import { PublicPosts } from '@/features/main/ui/publicPosts/PublicPosts'
 import { Post } from '@/features/post/types/types'
 
 export const revalidate = 60
@@ -31,34 +30,5 @@ export default async function HomePage() {
     console.error(error)
   }
 
-  return (
-    <div>
-      <Card className={s.card}>
-        <Typography as="h2" fontWeight="bold">
-          Registered users:
-        </Typography>
-
-        <div className={s.countUsersWrapper}>
-          {formatNumberToSixDigits(count).map((n, i) => {
-            return (
-              <Typography key={i} variant="h2" fontWeight="bold" className={s.number}>
-                {n}
-              </Typography>
-            )
-          })}
-        </div>
-      </Card>
-
-      {posts.map((post) => (
-        <Typography key={post.id} variant="h1">
-          {post.userName}
-        </Typography>
-      ))}
-    </div>
-  )
-}
-
-function formatNumberToSixDigits(num: number) {
-  const formatted = num.toString().padStart(6, '0')
-  return [...formatted]
+  return <PublicPosts count={count} posts={posts} />
 }
