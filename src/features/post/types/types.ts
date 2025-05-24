@@ -19,7 +19,7 @@ export type AspectRatioType = (typeof ASPECT_RATIOS)[number]
 
 export type PostCreationStep = 'upload' | 'crop' | 'filter' | 'description'
 
-type Image = {
+export type Image = {
   url: string
   width: number
   height: number
@@ -46,7 +46,7 @@ export type Post = {
   owner: Owner
   likesCount: number
   isLiked: boolean
-  avatarWhoLikes: boolean
+  avatarWhoLikes: boolean | string[]
 }
 
 export type LikeInfo = {

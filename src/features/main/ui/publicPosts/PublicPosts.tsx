@@ -1,13 +1,12 @@
 'use client'
 
-import { Button, Card, Typography } from '@/shared/ui'
-import Image from 'next/image'
-import avatar from '../../../../../public/default-avatar.png'
+import { Avatar, Button, Card, ImageSlider, Typography } from '@/shared/ui'
 import s from './publicPosts.module.scss'
 import { Post } from '@/features/post/types/types'
 import { formatNumberToSixDigits, timeAgo } from '@/features/main/utils'
 import { useState } from 'react'
 import clsx from 'clsx'
+import { PublicPostModal } from '../publicPostModal'
 
 type Props = {
   count: number
@@ -16,6 +15,8 @@ type Props = {
 
 export const PublicPosts = ({ count, posts }: Props) => {
   const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({})
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [post, setPost] = useState<Post | null>(null)
 
   const toggleExpand = (id: number) => {
     setExpandedPosts((prev) => ({
@@ -24,8 +25,14 @@ export const PublicPosts = ({ count, posts }: Props) => {
     }))
   }
 
+  const openModalHandler = (postData: Post) => {
+    setPost(postData)
+    setIsModalOpen(true)
+  }
+
   return (
     <>
+      <PublicPostModal open={isModalOpen} closeModal={() => setIsModalOpen(false)} post={post} />
       <Card className={s.card}>
         <Typography as="h2" fontWeight="bold">
           Registered users:
@@ -53,24 +60,18 @@ export const PublicPosts = ({ count, posts }: Props) => {
 
           return (
             <div key={post.id} className={s.post}>
-              <Image
-                src={post.images[0].url}
-                width={post.images[0].width}
-                height={post.images[0].height}
-                className={clsx(s.img, isExpanded && s.imgSmall)}
-                alt="post_img"
-                priority
-              />
+              <div onClick={() => openModalHandler(post)}>
+                <ImageSlider
+                  images={post.images.map(({ url }, index) => ({ src: url, alt: `Post image ${index + 1}` }))}
+                  className={clsx(s.img, isExpanded && s.imgSmall)}
+                  buttonClassName={s.arrow}
+                  showPagination={false}
+                />
+              </div>
 
               <div className={s.info}>
                 <div className={s.owner}>
-                  <Image
-                    src={post.avatarOwner ?? avatar}
-                    width={192}
-                    height={192}
-                    className={s.img}
-                    alt="avatarOwner"
-                  />
+                  <Avatar avatar={post.avatarOwner} name={post.userName} />
 
                   <Typography variant="h3" fontWeight="bold">
                     {post.userName}
