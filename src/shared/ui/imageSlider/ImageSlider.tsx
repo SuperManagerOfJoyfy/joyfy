@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, ReactNode, CSSProperties } from 'react'
+import { CSSProperties, ReactNode, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -143,7 +143,8 @@ export const ImageSlider = ({
             className={`${s.navButton} ${s.prevButton} ${isBeginning ? s.disabled : ''} ${buttonClassName}`}
             aria-label="Previous image"
             style={buttonStyle}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               if (!isBeginning && swiperRef.current) {
                 swiperRef.current.slidePrev()
               }
@@ -156,7 +157,8 @@ export const ImageSlider = ({
             className={`${s.navButton} ${s.nextButton} ${isEnd ? s.disabled : ''} ${buttonClassName}`}
             aria-label="Next image"
             style={buttonStyle}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               if (!isEnd && swiperRef.current) {
                 swiperRef.current.slideNext()
               }
