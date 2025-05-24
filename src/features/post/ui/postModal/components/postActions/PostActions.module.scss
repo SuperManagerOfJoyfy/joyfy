@@ -38,16 +38,11 @@
   }
 
   .commentInput {
-    width: 340px;
+    width: 350px;
     border: none;
     background-color: transparent;
     font-size: var(--font-size-s);
     line-height: 1.4;
-    border: none;
-
-    // &::placeholder {
-    //   font-size: var(--font-size-s);
-    // }
 
     &:hover,
     &:focus {

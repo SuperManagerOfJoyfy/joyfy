@@ -14,16 +14,16 @@ export const usePostDropdownMenuActions = ({ postId, ownerId, isFollowing, setIs
 
   const handleEdit = useCallback(() => {
     setIsEditing(true)
-  }, [])
+  }, [setIsEditing])
 
   const handleDelete = useCallback(async () => {
     try {
       await deletePost({ postId })
       toast.success('Post deleted successfully.')
     } catch (error) {
-      toast.error('Something went wrong')
+      toast.error('Post cannot be deleted')
     }
-  }, [postId])
+  }, [postId, deletePost])
 
   const handleFollowToggle = useCallback(() => {
     if (isFollowing) {
@@ -35,6 +35,7 @@ export const usePostDropdownMenuActions = ({ postId, ownerId, isFollowing, setIs
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`)
+    toast.success('Link copied to clipboard')
   }, [postId])
 
   return {

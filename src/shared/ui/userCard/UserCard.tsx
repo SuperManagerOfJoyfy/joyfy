@@ -6,7 +6,7 @@ import clsx from 'clsx'
 export type User = {
   id: number
   userName: string
-  avatar?: string | null
+  avatar?: string
 }
 
 type Props = {

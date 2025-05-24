@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import { useEditPostMutation } from '@/features/post/api/postsApi'
+import { useEffect, useState } from 'react'
 import { Post } from '@/features/post/types/types'
-import { Button, Loader, PublicationDescription } from '@/shared/ui'
 import { User, UserCard } from '@/shared/ui/userCard'
+import { Button, PublicationDescription } from '@/shared/ui'
+import { useEditPostHandler } from './useEditPostHandler'
 
 import s from './EditPostForm.module.scss'
 
@@ -14,22 +14,26 @@ type Props = {
   postId: number
   onCancelEdit: () => void
   onSaveEdit: (updatedPost: Post) => void
+  onFormChange: (hasChanges: boolean) => void
 }
 
-export const EditPostForm = ({ user, defaultDescription, postId, onCancelEdit, onSaveEdit }: Props) => {
+export const EditPostForm = ({ user, defaultDescription, postId, onCancelEdit, onSaveEdit, onFormChange }: Props) => {
   const [description, setDescription] = useState(defaultDescription)
-  const [editPost, { isLoading }] = useEditPostMutation()
+  const { handleEditPost, isLoading } = useEditPostHandler()
 
-  const handleSave = async () => {
-    try {
-      const updatedPost = await editPost({ postId, description }).unwrap()
-      onSaveEdit(updatedPost)
-    } catch (error) {}
+  useEffect(() => {
+    const hasChanges = description.trim() !== defaultDescription.trim()
+    onFormChange(hasChanges)
+  }, [description, defaultDescription, onFormChange])
+
+  const handleSave = () => {
+    handleEditPost({
+      postId,
+      description,
+      onSuccess: onSaveEdit,
+    })
   }
 
-  {
-    isLoading && <Loader reduced />
-  }
   return (
     <div className={s.editForm}>
       <UserCard user={user} className={s.userCard} />

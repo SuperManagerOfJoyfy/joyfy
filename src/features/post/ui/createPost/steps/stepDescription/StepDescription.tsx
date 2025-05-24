@@ -8,6 +8,7 @@ import { ImageSlider } from '@/shared/ui/imageSlider'
 import { PublicationDescription, UserCard } from '@/shared/ui'
 import { User } from '@/shared/ui/userCard'
 import s from './StepDescription.module.scss'
+import { Separator } from '@radix-ui/react-dropdown-menu'
 
 type StepDescriptionProps = {
   disabled?: boolean
