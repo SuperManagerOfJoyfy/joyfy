@@ -45,7 +45,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
 
   const { userName, aboutMe, avatars, userMetadata, hasPaymentSubscription } = profile
 
-  const profileAvatar = avatars?.[0]?.url ?? ''
+  const profileAvatar = avatars?.[0]?.url
 
   const bioText = aboutMe || ''
 
