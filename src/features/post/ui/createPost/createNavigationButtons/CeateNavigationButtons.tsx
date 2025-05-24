@@ -2,15 +2,16 @@ import { FiChevronLeft } from 'react-icons/fi'
 
 import { Button } from '@/shared/ui'
 import { PostCreationStep } from '@/features/post/types/types'
+import { FlowType, StepByFlow } from '@/features/post/ui/createPost/createPostModal'
 
-type LeftButtonProps = {
-  currentStep: PostCreationStep
-  onBack: (step: PostCreationStep) => void
+type LeftButtonProps<T extends FlowType> = {
+  currentStep: StepByFlow<T>
+  onBack: (step: StepByFlow<T>) => void
   disabled?: boolean
 }
 
-type RightButtonProps = {
-  currentStep: PostCreationStep
+type RightButtonProps<T extends FlowType> = {
+  currentStep: StepByFlow<T>
   isCreating: boolean
   isUploading: boolean
   onNext: () => void
@@ -18,7 +19,7 @@ type RightButtonProps = {
   disabled?: boolean
 }
 
-export const LeftButton = ({ currentStep, onBack, disabled }: LeftButtonProps) => {
+export const LeftButton = <T extends FlowType>({ currentStep, onBack, disabled }: LeftButtonProps<T>) => {
   if (currentStep === 'upload') return null
 
   return (
@@ -28,7 +29,14 @@ export const LeftButton = ({ currentStep, onBack, disabled }: LeftButtonProps) =
   )
 }
 
-export const RightButton = ({ currentStep, isCreating, isUploading, onNext, onClose, disabled }: RightButtonProps) => {
+export const RightButton = <T extends FlowType>({
+  currentStep,
+  isCreating,
+  isUploading,
+  onNext,
+  onClose,
+  disabled,
+}: RightButtonProps<T>) => {
   if (currentStep === 'upload') {
     return (
       <Button variant="icon" onClick={onClose} aria-label="Close" disabled={disabled}>

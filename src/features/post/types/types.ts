@@ -18,6 +18,7 @@ export type FilterType = keyof typeof IMAGE_FILTERS
 export type AspectRatioType = (typeof ASPECT_RATIOS)[number]
 
 export type PostCreationStep = 'upload' | 'crop' | 'filter' | 'description'
+export type AvatarCreationStep = 'upload' | 'position'
 
 type Image = {
   url: string

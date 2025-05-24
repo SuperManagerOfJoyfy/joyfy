@@ -1,5 +1,5 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { PublicUserProfile, UserProfile } from './profileApi.types'
+import { PublicUserProfile, UploadedAvatarResponse, UserProfile } from './profileApi.types'
 
 export const profileApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -25,6 +25,13 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Profile'],
     }),
+    uploadProfileAvatar: builder.mutation<UploadedAvatarResponse, FormData>({
+      query: (avatarData: FormData) => ({
+        method: 'POST',
+        url: 'users/profile/avatar',
+        body: avatarData,
+      }),
+    }),
   }),
   overrideExisting: true,
 })
@@ -34,4 +41,5 @@ export const {
   useLazyGetUserProfileQuery,
   useGetPublicUserProfileQuery,
   useUpdateUserProfileMutation,
+  useUploadProfileAvatarMutation,
 } = profileApi

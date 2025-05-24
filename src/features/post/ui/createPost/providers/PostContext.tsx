@@ -21,6 +21,7 @@ type PostContextType = {
   imagesBlob: Record<number, Blob>
   imagePreviews: string[]
   description: string
+  setImagesPreview: (image: string[]) => void
   setCurrentImageIndex: (idx: number) => void
   setDescription: (description: string) => void
   setImageEditData: (imageEditData: Partial<ImageEditData>) => void
@@ -249,6 +250,7 @@ export const PostContextProvider = ({ children }: { children: ReactNode }) => {
         imagesEditData,
         imagesBlob: imagesBlob.current,
         imagePreviews,
+        setImagesPreview,
         setDescription,
         addImage,
         getImage,
