@@ -22,7 +22,6 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const postsData = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/user/${userData.id}?pageSize=8`)
   const posts: GetPostsResponse = await postsData.json()
-  console.log(post)
 
   return (
     <div>

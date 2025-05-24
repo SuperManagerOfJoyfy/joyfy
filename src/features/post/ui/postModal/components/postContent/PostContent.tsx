@@ -1,9 +1,7 @@
-import { Post } from '@/features/post/types/types'
-import { PostDropdownMenuItems } from '@/features/post/ui/postModal/postDropdownMenuItems'
-import { DropdownMenu, Scroll, Separator, UserCard } from '@/shared/ui'
 import { HiDotsHorizontal } from 'react-icons/hi'
-import { PostActions } from '../postActions'
-import { PostItem } from '../postItem'
+import { PostDropdownMenuItems, PostActions, PostItem } from '@/features/post/ui/postModal'
+import { DropdownMenu, Scroll, Separator, UserCard } from '@/shared/ui'
+import { Post } from '@/features/post/types/types'
 import s from './PostContent.module.scss'
 
 type Props = {
