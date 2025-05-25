@@ -10,18 +10,14 @@ type Props = {
   size?: 'small' | 'medium' | 'large'
 } & ComponentProps<typeof AvatarRadix.Root>
 
-export const Avatar = ({ avatar, className, name, size = 'medium', ...rest }: Props) => {
-  const { lightBackground, textColor } = useGenerateColor()
+export const Avatar = ({ avatar, className, name = 'User', size = 'medium', ...rest }: Props) => {
+  const { lightBackground, textColor } = useGenerateColor(name)
 
-  // Create a fallback using the first letters of the name
   const fallback = name
     ?.split(' ')
     .slice(0, 2)
     .map((e) => e[0])
     .join('')
-
-  // const lightBackground = localStorage.getItem('lightBackground') || '#92cdff'
-  // const textColor = localStorage.getItem('textColor') || '#124dbf'
 
   return (
     <AvatarRadix.Root className={clsx(s.avatarRoot, className)} data-size={size} {...rest}>
