@@ -30,7 +30,7 @@
 
   &[data-size='small'] {
     height: 24px;
-    width: 24px;
+    min-width: 24px;
 
     .avatarFallback {
       font-size: 14px;
@@ -39,7 +39,7 @@
 
   &[data-size='medium'] {
     height: 36px;
-    width: 36px;
+    min-width: 36px;
 
     .avatarFallback {
       font-size: 18px;
@@ -48,7 +48,7 @@
 
   &[data-size='large'] {
     height: 204px;
-    width: 204px;
+    min-width: 204px;
 
     .avatarFallback {
       font-size: 90px;

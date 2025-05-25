@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react'
-import { AvatarType } from 'src/shared/ui/avatar/AvatarType'
+import { Avatar } from '@/shared/ui'
 
-const meta: Meta<typeof AvatarType> = {
+const meta: Meta<typeof Avatar> = {
   title: 'Components/Avatar',
-  component: AvatarType,
+  component: Avatar,
   parameters: {
     layout: 'centered',
   },
@@ -26,7 +26,7 @@ const meta: Meta<typeof AvatarType> = {
 }
 
 export default meta
-type Story = StoryObj<typeof AvatarType>
+type Story = StoryObj<typeof Avatar>
 
 export const Default: Story = {
   args: {

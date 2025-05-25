@@ -12,7 +12,7 @@ type Props = {
 export const PublicPostModal = ({ open, closeModal, post }: Props) => {
   if (!post) return null
 
-  const { userName, avatarOwner: avatar, images, id, likesCount, createdAt, avatarWhoLikes } = post
+  const { userName, avatarOwner: avatar, images, ownerId, likesCount, createdAt, avatarWhoLikes } = post
 
   const arrayOfAvatars = typeof avatarWhoLikes !== 'boolean' ? avatarWhoLikes : []
 
@@ -25,7 +25,7 @@ export const PublicPostModal = ({ open, closeModal, post }: Props) => {
 
         <div className={s.contentWrapper}>
           <div className={s.header}>
-            <UserCard user={{ id, userName, avatar }} />
+            <UserCard user={{ id: ownerId, userName, avatar }} />
           </div>
 
           <Separator />

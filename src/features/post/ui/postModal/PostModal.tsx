@@ -13,7 +13,7 @@ import { Post } from '@/features/post/types/types'
 import s from './PostModal.module.scss'
 
 type Props = {
-  initialPost: Post
+  initialPost: Post | null
 }
 
 type ConfirmAction = 'delete' | 'cancelEdit' | null
