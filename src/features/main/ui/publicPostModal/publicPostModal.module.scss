@@ -39,7 +39,8 @@
 		.footer {
 			display: flex;
 			flex-direction: column;
-			margin: 12px 24px 26px;
+			row-gap: 5px;
+			margin: 12px 24px;
 
 			.likes {
 				display: flex;

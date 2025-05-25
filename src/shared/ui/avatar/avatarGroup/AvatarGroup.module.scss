@@ -1,17 +1,16 @@
 .avatarGroup {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
+	display: flex;
+	align-items: center;
+	flex-direction: row;
 }
 
 .avatarWrapper {
-  margin-right: -10px;
-  padding-top: 8px;
-  border-radius: 50%;
-  overflow: hidden;
-  position: relative;
+	margin-right: -10px;
+	border-radius: 50%;
+	overflow: hidden;
+	position: relative;
 
-  &:last-child {
-    margin-right: 0;
-  }
+	&:last-child {
+		margin-right: 0;
+	}
 }
