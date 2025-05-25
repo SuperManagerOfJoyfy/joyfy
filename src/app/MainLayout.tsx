@@ -83,7 +83,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </div>
         )}
 
-        <main className={clsx(s.content, isUserToken && s.leftPadding)}>
+        <main className={clsx(s.content, !isLoading && user && s.leftPadding)}>
           {showLoader ? (
             <div className={s.loaderWrapper}>
               <Loader message="Loading..." />
