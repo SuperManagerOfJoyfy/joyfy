@@ -1,13 +1,13 @@
 'use client'
 
+import { useParams, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAppDispatch } from '@/app/store/store'
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
 import { postsApi, useGetPostsQuery } from '@/features/post/api/postsApi'
 import { GetPostsResponse } from '@/features/post/api/postsApi.types'
 import { Post } from '@/features/post/types/types'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 
 type Props = {
   initialPosts: GetPostsResponse
@@ -18,7 +18,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPosts, userId }: Props) => 
   const dispatch = useAppDispatch()
   const loaderRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-  const searchParams = useSearchParams()
+  const params = useParams()
   const [endCursorPostId, setEndCursorPostId] = useState<number | undefined>(undefined)
 
   const { data, isFetching, isLoading } = useGetPostsQuery({
@@ -73,9 +73,9 @@ export const PostsGridWithInfiniteScroll = ({ initialPosts, userId }: Props) => 
   }, [handleObserver])
 
   const openPostModal = (post: Post) => {
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.set('postId', post.id.toString())
-    router.push(`?${newParams.toString()}`, { scroll: false })
+    const profileId = params.id || userId
+
+    router.push(`/profile/${profileId}/post/${post.id}`, { scroll: false })
   }
 
   return (

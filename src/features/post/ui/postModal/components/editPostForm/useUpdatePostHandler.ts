@@ -1,4 +1,4 @@
-import { useEditPostMutation } from '@/features/post/api/postsApi'
+import { useUpdatePostMutation } from '@/features/post/api/postsApi'
 import { Post } from '@/features/post/types/types'
 import { extractMessage, isFetchBaseQueryError } from '@/shared/utils/handleErrors/handleErrors'
 import { toast } from 'react-toastify'
@@ -9,12 +9,12 @@ type Props = {
   onSuccess?: (updatedPost: Post) => void
 }
 
-export const useEditPostHandler = () => {
-  const [editPost, { isLoading }] = useEditPostMutation()
+export const useUpdatePostHandler = () => {
+  const [updatePost, { isLoading }] = useUpdatePostMutation()
 
-  const handleEditPost = async ({ postId, description, onSuccess }: Props) => {
+  const handleUpdatePost = async ({ postId, description, onSuccess }: Props) => {
     try {
-      const updatedPost = await editPost({ postId, description }).unwrap()
+      const updatedPost = await updatePost({ postId, description }).unwrap()
       onSuccess?.(updatedPost)
       toast.success('Post updated successfully!')
     } catch (error) {
@@ -28,5 +28,5 @@ export const useEditPostHandler = () => {
       }
     }
   }
-  return { handleEditPost, isLoading }
+  return { handleUpdatePost, isLoading }
 }

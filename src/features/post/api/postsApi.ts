@@ -91,7 +91,7 @@ export const postsApi = joyfyApi.injectEndpoints({
       },
     }),
 
-    editPost: builder.mutation<Post, { postId: number; description: string }>({
+    updatePost: builder.mutation<Post, { postId: number; description: string }>({
       query: ({ postId, description }) => {
         return { url: `posts/${postId}`, method: 'PUT', body: { description } }
       },
@@ -107,5 +107,5 @@ export const {
   useDeleteUploadedImageMutation,
   useCreatePostMutation,
   useDeletePostMutation,
-  useEditPostMutation,
+  useUpdatePostMutation,
 } = postsApi

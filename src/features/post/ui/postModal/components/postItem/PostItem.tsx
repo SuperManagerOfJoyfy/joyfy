@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { FaRegHeart } from 'react-icons/fa'
 import { Avatar, Button, Typography } from '@/shared/ui'
 import { Post } from '@/features/post/types/types'
+import { formatSmartDate } from '@/shared/utils/dateFunctions'
 
 import s from './PostItem.module.scss'
-import { timeAgo } from '@/features/main/utils'
 
 type Props = {
   item: Post
@@ -26,7 +26,7 @@ export const PostItem = ({ item, isComment = false, onReplyClick }: Props) => {
           {description}
         </Typography>
         <div className={s.meta}>
-          <span className={s.date}>{timeAgo(createdAt)}</span>
+          <span className={s.date}>{formatSmartDate(createdAt)}</span>
 
           {isComment && (
             <div className={s.iconWrapper}>
