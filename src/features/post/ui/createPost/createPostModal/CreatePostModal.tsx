@@ -136,7 +136,7 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
 
 export const CreatePostModal = (props: CreatePostModalProps) => {
   return (
-    <PostContextProvider>
+    <PostContextProvider userId={props.user.id}>
       <PostModalContent {...props} />
     </PostContextProvider>
   )

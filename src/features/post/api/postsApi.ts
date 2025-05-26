@@ -48,6 +48,7 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
       providesTags: (result, error, postId) => [{ type: 'Post', id: postId }],
     }),
+
     uploadImage: builder.mutation<UploadImageResponse, FormData>({
       query: (formData: FormData) => ({
         url: '/posts/image',
@@ -69,7 +70,23 @@ export const postsApi = joyfyApi.injectEndpoints({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['Posts', 'Profile'],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data: newPost } = await queryFulfilled
+          const userId = newPost.ownerId
+
+          dispatch(
+            postsApi.util.updateQueryData('getPosts', { userId }, (draft) => {
+              draft.items.unshift(newPost)
+              draft.totalCount += 1
+            })
+          )
+
+          dispatch(joyfyApi.util.invalidateTags(['Profile']))
+        } catch (error) {
+          console.error('Error during post creation:', error)
+        }
+      },
     }),
 
     deletePost: builder.mutation<void, { postId: number; userId: number }>({
