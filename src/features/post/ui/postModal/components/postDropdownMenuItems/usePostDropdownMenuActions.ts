@@ -3,13 +3,14 @@ import { useCallback } from 'react'
 import { toast } from 'react-toastify'
 
 type Props = {
+  userId: number
   postId: number
   ownerId: number
   isFollowing: boolean
   setIsEditing: (isEditing: boolean) => void
 }
 
-export const usePostDropdownMenuActions = ({ postId, ownerId, isFollowing, setIsEditing }: Props) => {
+export const usePostDropdownMenuActions = ({ userId, postId, ownerId, isFollowing, setIsEditing }: Props) => {
   const [deletePost] = useDeletePostMutation()
 
   const handleEdit = useCallback(() => {
@@ -18,7 +19,7 @@ export const usePostDropdownMenuActions = ({ postId, ownerId, isFollowing, setIs
 
   const handleDelete = useCallback(async () => {
     try {
-      await deletePost({ postId })
+      await deletePost({ postId, userId })
       toast.success('Post deleted successfully.')
     } catch (error) {
       toast.error('Post cannot be deleted')

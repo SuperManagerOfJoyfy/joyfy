@@ -14,11 +14,12 @@ import s from './PostModal.module.scss'
 
 type Props = {
   initialPost: Post
+  userId: number
 }
 
 type ConfirmAction = 'delete' | 'cancelEdit' | null
 
-export const PostModal = ({ initialPost }: Props) => {
+export const PostModal = ({ initialPost, userId }: Props) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -47,6 +48,7 @@ export const PostModal = ({ initialPost }: Props) => {
   const isFollowing = false
 
   const { handleEdit, handleDelete, handleFollowToggle, handleCopyLink } = usePostDropdownMenuActions({
+    userId,
     postId: postId || 0,
     ownerId: post?.ownerId ?? 0,
     isFollowing,
