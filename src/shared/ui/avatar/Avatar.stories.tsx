@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react'
-import { Avatar } from './Avatar'
+import { Avatar } from '@/shared/ui'
 
 const meta: Meta<typeof Avatar> = {
   title: 'Components/Avatar',
@@ -12,6 +12,10 @@ const meta: Meta<typeof Avatar> = {
     avatar: {
       control: 'text',
       description: 'URL of the avatar image',
+    },
+    name: {
+      control: 'text',
+      description: 'User`s name',
     },
     size: {
       control: { type: 'select' },
@@ -27,12 +31,14 @@ type Story = StoryObj<typeof Avatar>
 export const Default: Story = {
   args: {
     size: 'medium',
+    name: 'Eugene Kravchenko',
   },
 }
 
 export const Small: Story = {
   args: {
     avatar: 'https://i.pravatar.cc/300',
+    name: 'Eugene Kravchenko',
     size: 'small',
   },
 }
@@ -40,13 +46,15 @@ export const Small: Story = {
 export const Medium: Story = {
   args: {
     avatar: 'https://i.pravatar.cc/300',
+    name: 'Eugene Kravchenko',
     size: 'medium',
   },
 }
 
 export const Large: Story = {
   args: {
-    avatar: 'https://i.pravatar.cc/300',
+    // avatar: 'https://i.pravatar.cc/300',
+    name: 'Eugene Kravchenko',
     size: 'large',
   },
 }

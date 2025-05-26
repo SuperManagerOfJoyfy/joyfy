@@ -1,4 +1,4 @@
-export type Avatar = {
+export type AvatarType = {
   url: string
   width: number
   height: number
@@ -16,7 +16,7 @@ export type PublicUserProfile = {
   id: number
   userName: string
   aboutMe: string | null
-  avatars: Avatar[]
+  avatars: AvatarType[]
   userMetadata: MetaData
   hasPaymentSubscription: boolean
 }
@@ -31,6 +31,6 @@ export type UserProfile = {
   region: string
   dateOfBirth: string
   aboutMe: string
-  avatars: Avatar[]
+  avatars: AvatarType[]
   createdAt: string
 }

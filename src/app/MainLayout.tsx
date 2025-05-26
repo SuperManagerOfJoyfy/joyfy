@@ -2,17 +2,16 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-
-import { Sidebar } from '@/shared/ui/sidebar'
-import { LogoutModal } from '@/features/auth/ui'
 import { Header } from '@/shared/ui/header/Header'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import LocalStorage from '@/shared/utils/localStorage/localStorage'
 import { CreatePost } from '@/features/post/ui'
 
 import s from '../styles/layout.module.scss'
+import { clsx } from 'clsx'
+import { Sidebar } from '@/shared/ui'
+import { LogoutModal } from '@/features/auth/ui'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -46,7 +45,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
   const showLoader = pendingPath && pathname !== pendingPath
-  const isUserToken = LocalStorage.getToken()
 
   useEffect(() => {
     if (pathname === pendingPath) {
@@ -72,7 +70,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <div className={s.layoutWrapper}>
       <Header />
       <div className={s.containerLayout}>
-        {isUserToken && (
+        {!isLoading && user && (
           <div className={s.sidebarContainer}>
             <Sidebar
               items={sidebarItems}
@@ -85,7 +83,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </div>
         )}
 
-        <main className={s.content}>
+        <main className={clsx(s.content, !isLoading && user && s.leftPadding)}>
           {showLoader ? (
             <div className={s.loaderWrapper}>
               <Loader message="Loading..." />
