@@ -72,12 +72,23 @@ export const postsApi = joyfyApi.injectEndpoints({
       invalidatesTags: ['Posts', 'Profile'],
     }),
 
-    deletePost: builder.mutation<void, { postId: number }>({
+    deletePost: builder.mutation<void, { postId: number; userId: number }>({
       query: ({ postId }) => ({
         url: `posts/${postId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Posts', 'Profile'],
+      async onQueryStarted({ postId, userId }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          dispatch(
+            postsApi.util.updateQueryData('getPosts', { userId }, (draft) => {
+              draft.items = draft.items.filter((post) => post.id !== postId)
+            })
+          )
+        } catch (error) {
+          console.error('Error during deleting post:', error)
+        }
+      },
     }),
 
     editPost: builder.mutation<Post, { postId: number; description: string }>({
