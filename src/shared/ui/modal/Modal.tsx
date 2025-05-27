@@ -20,6 +20,7 @@ type ModalProps = {
   open: boolean
   onOpenChange?: (open: boolean) => void
   title?: string
+  description?: string
   size?: ModalSize
   className?: string
   style?: CSSProperties
@@ -38,6 +39,7 @@ export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>((props, ref) =>
     open,
     onOpenChange,
     title,
+    description,
     size = 'sm',
     className,
     style,
@@ -117,6 +119,16 @@ export const Modal = forwardRef<ComponentRef<'div'>, ModalProps>((props, ref) =>
                             </div>
                           </>
                         )}
+
+                        <Dialog.Description asChild>
+                          {description ? (
+                            <Typography variant="body1" className={s.description}>
+                              {description}
+                            </Typography>
+                          ) : (
+                            <VisuallyHidden>Modal content</VisuallyHidden>
+                          )}
+                        </Dialog.Description>
 
                         {children}
                       </Card>
