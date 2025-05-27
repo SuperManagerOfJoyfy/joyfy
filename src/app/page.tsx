@@ -9,12 +9,8 @@ export default async function HomePage() {
 
   try {
     const [userRes, postsRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user`, {
-        next: { revalidate: 60 },
-      }),
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/all?pageSize=4`, {
-        next: { revalidate: 60 },
-      }),
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user`),
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/all?pageSize=4`),
     ])
 
     if (!userRes.ok) console.error('Failed to fetch user count')

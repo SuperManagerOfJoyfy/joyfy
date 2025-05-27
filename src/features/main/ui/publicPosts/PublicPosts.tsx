@@ -7,6 +7,7 @@ import { formatNumberToSixDigits, timeAgo } from '@/features/main/utils'
 import { useState } from 'react'
 import clsx from 'clsx'
 import { PublicPostModal } from '../publicPostModal'
+import Link from 'next/link'
 
 type Props = {
   count: number
@@ -73,9 +74,11 @@ export const PublicPosts = ({ count, posts }: Props) => {
                 <div className={s.owner}>
                   <Avatar avatar={post.avatarOwner} name={post.userName} />
 
-                  <Typography variant="h3" fontWeight="bold">
-                    {post.userName}
-                  </Typography>
+                  <Link className={s.userName} href={`/profile/${post.ownerId}`}>
+                    <Typography variant="h3" fontWeight="bold">
+                      {post.userName}
+                    </Typography>
+                  </Link>
                 </div>
 
                 <div className={s.time}>
