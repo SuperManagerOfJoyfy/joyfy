@@ -2,6 +2,8 @@ import { FiChevronLeft } from 'react-icons/fi'
 
 import { Button } from '@/shared/ui'
 import { FlowType, StepByFlow } from '@/features/post/ui/createPost/createPostModal'
+import s from './CreateNavigation.module.scss'
+import clsx from 'clsx'
 
 type LeftButtonProps<T extends FlowType> = {
   currentStep: StepByFlow<T>
@@ -38,7 +40,13 @@ export const RightButton = <T extends FlowType>({
 }: RightButtonProps<T>) => {
   if (currentStep === 'upload' || currentStep === 'position') {
     return (
-      <Button variant="icon" onClick={onClose} aria-label="Close" disabled={disabled}>
+      <Button
+        variant="icon"
+        onClick={onClose}
+        aria-label="Close"
+        disabled={disabled}
+        className={clsx(currentStep === 'position' ? s.closeBtn : '')}
+      >
         ✕
       </Button>
     )
