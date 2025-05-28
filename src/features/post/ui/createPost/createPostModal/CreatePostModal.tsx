@@ -157,7 +157,7 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
 
 export const CreatePostModal = <T extends FlowType>(props: CreatePostModalProps<T>) => {
   return (
-    <PostContextProvider>
+    <PostContextProvider userId={props.user.id}>
       <PostModalContent {...props} />
     </PostContextProvider>
   )

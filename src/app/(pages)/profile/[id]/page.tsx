@@ -11,23 +11,24 @@ type PageProps = {
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
-  const resolvedParams = await params
+  const { id } = await params
   const { postId } = (await searchParams) || {}
 
-  const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${resolvedParams.id}`)
-  const userData: PublicUserProfile = await data.json()
+  const [userRes, postRes, postsRes] = await Promise.all([
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${id}`),
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/${postId}`),
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/user/${id}?pageSize=8`),
+  ])
 
-  const postData = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/${postId}`)
-  const post: Post = await postData.json()
-
-  const postsData = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/user/${userData.id}?pageSize=8`)
-  const posts: GetPostsResponse = await postsData.json()
+  const userData: PublicUserProfile = await userRes.json()
+  const post: Post = await postRes.json()
+  const posts: GetPostsResponse = await postsRes.json()
 
   return (
     <div>
       <UserProfile {...userData} />
       <PostsGridWithInfiniteScroll userId={userData.id} initialPosts={posts} />
-      {!!postId && <PostModal initialPost={post} />}
+      {!!postId && <PostModal userId={userData.id} initialPost={post} />}
     </div>
   )
 }

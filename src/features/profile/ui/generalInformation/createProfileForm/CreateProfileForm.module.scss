@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 24px;
+  margin-top: 24px;
+}
+.contentWrapper {
+  display: flex;
+}
+
+.photoArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+  gap: 24px;
+  width: 30%;
+  height: 100%;
+}
+
+.formArea {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  gap: 24px;
+}
+
+.selectGroup {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 24px;
+  span {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
+
+.select {
+  padding: 0 12px;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+.label {
+  font-size: var(--font-size-s);
+  color: var(--color-light-900);
+}
+.submitButton {
+  align-self: flex-end;
+}

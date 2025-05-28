@@ -1,3 +1,5 @@
+import { CreateProfileForm } from './createProfileForm'
+
 import { ProfilePhoto } from '@/features/profile/ui/profilePhoto/ui/ProfilePhoto'
 
 type GeneralInformationProps = {
@@ -6,8 +8,9 @@ type GeneralInformationProps = {
 
 export const GeneralInformation = ({ userId }: GeneralInformationProps) => {
   return (
-    <div style={{ padding: '24px' }}>
+    <div>
       <ProfilePhoto />
+      <CreateProfileForm />
     </div>
   )
 }

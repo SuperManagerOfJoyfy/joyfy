@@ -18,6 +18,7 @@ export type PostsQueryParams = {
 export type CreatePostRequest = {
   description: string
   childrenMetadata: { uploadId: string }[]
+  userId?: number
 }
 
 export type UploadImageResponse = {
