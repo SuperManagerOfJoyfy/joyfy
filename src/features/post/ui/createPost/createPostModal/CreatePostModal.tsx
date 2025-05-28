@@ -49,6 +49,8 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
 
   const handleCloseButtonClick = () => {
     if (images.length > 0) {
+      console.log(images)
+
       setIsCloseModalOpen(true)
     } else {
       onClose(ECreatePostCloseModal.default)
@@ -79,7 +81,7 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
   // }
 
   const handleBack = () => {
-    if (stepIndex === 0) {
+    if (stepIndex === 0 || flowType === 'avatar') {
       clearAll()
       setStepIndex(0)
     } else {
@@ -91,26 +93,14 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
     if (stepIndex < steps.length - 1) {
       setStepIndex((prev) => prev + 1)
     } else {
-      if (flowType === 'post') {
-        setIsPublishing(true)
-        try {
-          await publishPost()
-          toast.success('Post published!')
-          onClose(ECreatePostCloseModal.redirectToProfile)
-        } finally {
-          setIsPublishing(false)
-        }
-      }
-
-      if (flowType === 'avatar') {
-        setIsPublishing(true)
-        try {
-          // await uploadAvatar()
-          toast.success('Avatar updated!')
-          onClose(ECreatePostCloseModal.default)
-        } finally {
-          setIsPublishing(false)
-        }
+      // if (flowType === 'post') {
+      setIsPublishing(true)
+      try {
+        await publishPost()
+        toast.success('Post successfully published!')
+        onClose(ECreatePostCloseModal.redirectToProfile)
+      } finally {
+        setIsPublishing(false)
       }
     }
   }
@@ -138,6 +128,12 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
   // }
 
   const handleConfirmClose = (saveDraft: boolean) => {
+    if (flowType === 'avatar') {
+      setIsCloseModalOpen(false)
+      onClose()
+      clearAll()
+      return
+    }
     if (saveDraft) {
       toast.info('Draft saved')
       onClose(ECreatePostCloseModal.redirectToHome)
@@ -175,7 +171,7 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
         {currentStep === 'crop' && <StepCrop onNavigateBack={() => setStepIndex(steps.indexOf('upload'))} />}
         {currentStep === 'filter' && <StepFilters />}
         {currentStep === 'description' && <StepDescription disabled={isPublishing} user={user} />}
-        {currentStep === 'position' && <StepAvatarPosition />}
+        {currentStep === 'position' && <StepAvatarPosition onClose={() => onClose(ECreatePostCloseModal.default)} />}
       </Modal>
 
       {isCloseModalOpen &&
@@ -184,6 +180,7 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
             open={isCloseModalOpen}
             onClose={() => setIsCloseModalOpen(false)}
             onConfirm={handleConfirmClose}
+            variant={flowType}
           />,
           document.body
         )}

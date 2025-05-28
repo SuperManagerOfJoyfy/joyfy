@@ -8,10 +8,12 @@ export const ProfilePhoto = () => {
   const [openAddPhotoModal, setOpenAddPhotoModal] = useState(false)
   const { data: userData, isLoading: isProfileLoading } = useGetUserProfileQuery()
   if (!userData) return null
+  const userAvatar = userData.avatars[0].url
+  console.log(userData.avatars)
 
   return (
     <div className={s.profilePhotoWrapper}>
-      <Avatar size="large" />
+      <Avatar size="large" avatar={userAvatar} />
       <Button
         variant="outline"
         onClick={() => {
@@ -20,7 +22,12 @@ export const ProfilePhoto = () => {
       >
         Add a Profile Photo
       </Button>
-      <CreatePostModal flowType="avatar" open={openAddPhotoModal === true} onClose={() => {}} user={userData} />
+      <CreatePostModal
+        flowType="avatar"
+        open={openAddPhotoModal === true}
+        onClose={() => setOpenAddPhotoModal(false)}
+        user={userData}
+      />
     </div>
   )
 }

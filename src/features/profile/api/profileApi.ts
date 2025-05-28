@@ -31,6 +31,7 @@ export const profileApi = joyfyApi.injectEndpoints({
         url: 'users/profile/avatar',
         body: avatarData,
       }),
+      invalidatesTags: ['Profile'],
     }),
   }),
   overrideExisting: true,

@@ -37,7 +37,7 @@ export const RightButton = <T extends FlowType>({
   onClose,
   disabled,
 }: RightButtonProps<T>) => {
-  if (currentStep === 'upload') {
+  if (currentStep === 'upload' || currentStep === 'position') {
     return (
       <Button variant="icon" onClick={onClose} aria-label="Close" disabled={disabled}>
         ✕
