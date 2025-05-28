@@ -33,6 +33,13 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Profile'],
     }),
+    deleteProfileAvatar: builder.mutation<void, void>({
+      query: () => ({
+        method: 'DELETE',
+        url: 'users/profile/avatar',
+      }),
+      invalidatesTags: ['Profile'],
+    }),
   }),
   overrideExisting: true,
 })
@@ -43,4 +50,5 @@ export const {
   useGetPublicUserProfileQuery,
   useUpdateUserProfileMutation,
   useUploadProfileAvatarMutation,
+  useDeleteProfileAvatarMutation,
 } = profileApi

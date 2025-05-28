@@ -14,7 +14,7 @@ import { ClosePostModal } from '../closeModal/ClosePostModal'
 import { getCardPadding, getModalSize, getModalTitle } from '../utils/modalStepUtils'
 import { LeftButton, RightButton } from '../createNavigationButtons/CeateNavigationButtons'
 import { ECreatePostCloseModal } from '../CreatePost'
-import { StepAvatarPosition } from '@/features/profile/ui/profilePhoto/ui/StepAvatarPosition'
+import { StepAvatarPosition } from '@/features/profile/ui/profilePhoto/ui/stepAvatarPosition/StepAvatarPosition'
 
 export type FlowType = 'post' | 'avatar'
 
@@ -30,10 +30,9 @@ type CreatePostModalProps<T extends FlowType> = {
 const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }: CreatePostModalProps<T>) => {
   const { addImage, images, publishPost, clearAll, description } = usePostContext()
 
-  // const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
-  ///*
+
   const flowSteps: Record<FlowType, PostCreationStep[] | AvatarCreationStep[]> = {
     post: ['upload', 'crop', 'filter', 'description'] as PostCreationStep[],
     avatar: ['upload', 'position'] as AvatarCreationStep[],
@@ -59,26 +58,11 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
 
   const handleFilesSelected = (files: File[]) => {
     addImage(files)
-    // setCurrentStep('crop')
 
     if (stepIndex < steps.length - 1) {
       setStepIndex(stepIndex + 1)
     }
   }
-
-  // const handleBack = (step: PostCreationStep) => {
-  //   switch (step) {
-  //     case 'filter':
-  //       setCurrentStep('crop')
-  //       break
-  //     case 'description':
-  //       setCurrentStep('filter')
-  //       break
-  //     default:
-  //       clearAll()
-  //       setCurrentStep('upload')
-  //   }
-  // }
 
   const handleBack = () => {
     if (stepIndex === 0 || flowType === 'avatar') {
@@ -93,7 +77,6 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
     if (stepIndex < steps.length - 1) {
       setStepIndex((prev) => prev + 1)
     } else {
-      // if (flowType === 'post') {
       setIsPublishing(true)
       try {
         await publishPost()
@@ -105,31 +88,10 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
     }
   }
 
-  // const handleNextClick = async () => {
-  //   switch (currentStep) {
-  //     case 'crop':
-  //       setCurrentStep('filter')
-  //       break
-  //     case 'filter':
-  //       setCurrentStep('description')
-  //       break
-  //     case 'description':
-  //       setIsPublishing(true)
-  //       try {
-  //         await publishPost()
-
-  //         toast.success('Post successfully published!')
-  //         onClose(ECreatePostCloseModal.redirectToProfile)
-  //       } finally {
-  //         setIsPublishing(false)
-  //       }
-  //       break
-  //   }
-  // }
-
   const handleConfirmClose = (saveDraft: boolean) => {
     if (flowType === 'avatar') {
       setIsCloseModalOpen(false)
+      setStepIndex(0)
       onClose()
       clearAll()
       return
@@ -141,6 +103,11 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
       toast.info('Draft discarded')
       onClose(ECreatePostCloseModal.default)
     }
+  }
+
+  const onAvatarUpload = () => {
+    setStepIndex(0)
+    onClose(ECreatePostCloseModal.default)
   }
 
   const isButtonPrevDisabled = currentStep === 'description' && isPublishing
@@ -167,11 +134,11 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
           />
         }
       >
-        {currentStep === 'upload' && <StepUpload onNext={handleFilesSelected} />}
+        {currentStep === 'upload' && <StepUpload onNext={handleFilesSelected} flowType={flowType} />}
         {currentStep === 'crop' && <StepCrop onNavigateBack={() => setStepIndex(steps.indexOf('upload'))} />}
         {currentStep === 'filter' && <StepFilters />}
         {currentStep === 'description' && <StepDescription disabled={isPublishing} user={user} />}
-        {currentStep === 'position' && <StepAvatarPosition onClose={() => onClose(ECreatePostCloseModal.default)} />}
+        {currentStep === 'position' && <StepAvatarPosition onUpload={onAvatarUpload} />}
       </Modal>
 
       {isCloseModalOpen &&

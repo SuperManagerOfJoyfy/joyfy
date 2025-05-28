@@ -1,7 +1,6 @@
 import { FiChevronLeft } from 'react-icons/fi'
 
 import { Button } from '@/shared/ui'
-import { PostCreationStep } from '@/features/post/types/types'
 import { FlowType, StepByFlow } from '@/features/post/ui/createPost/createPostModal'
 
 type LeftButtonProps<T extends FlowType> = {

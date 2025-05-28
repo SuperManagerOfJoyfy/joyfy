@@ -1,26 +1,24 @@
-import { ImageItem, usePostContext } from '@/features/post/ui/createPost/providers'
+import { usePostContext } from '@/features/post/ui/createPost/providers'
 import Cropper, { Area } from 'react-easy-crop'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { getCroppedImg } from '@/features/profile/ui/profilePhoto/ui/getCroppedImg'
+import { getCroppedImg } from '@/features/profile/utils/getCroppedImg'
 import { useUploadProfileAvatarMutation } from '@/features/profile/api/profileApi'
-import s from './ProfilePhoto.module.scss'
+import s from './StepAvatarPosition.module.scss'
 import { Button } from '@/shared/ui/button'
 import { toast } from 'react-toastify'
 
-export const StepAvatarPosition = ({ onClose }: { onClose: () => void }) => {
+export const StepAvatarPosition = ({ onUpload }: { onUpload: () => void }) => {
   const { images, currentImageIdx, clearAll } = usePostContext()
   const imageSrc = images[currentImageIdx]?.src
 
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
-  const [uploadAvatar] = useUploadProfileAvatarMutation()
+  const [uploadAvatar, { isLoading }] = useUploadProfileAvatarMutation()
 
   const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
-    console.log('croppedAreaPixels13', croppedAreaPixels)
     setCroppedAreaPixels(croppedAreaPixels)
   }, [])
-  console.log('croppedAreaPixels', croppedAreaPixels)
 
   const handleUpload = async () => {
     if (!imageSrc || !croppedAreaPixels) return
@@ -31,8 +29,8 @@ export const StepAvatarPosition = ({ onClose }: { onClose: () => void }) => {
       formData.append('file', croppedBlob, 'avatar')
       await uploadAvatar(formData).unwrap()
       toast.success('Avatar uploaded successfully')
-      onClose()
       clearAll()
+      onUpload()
     } catch (e) {
       console.error('Upload failed:', e)
     }
@@ -57,7 +55,9 @@ export const StepAvatarPosition = ({ onClose }: { onClose: () => void }) => {
         />
       </div>
       <div className={s.controlsWrapper}>
-        <Button onClick={handleUpload}>Save</Button>
+        <Button onClick={handleUpload} disabled={isLoading}>
+          Save
+        </Button>
       </div>
     </div>
   )
