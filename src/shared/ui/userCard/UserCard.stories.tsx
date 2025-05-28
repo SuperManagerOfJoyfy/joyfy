@@ -24,7 +24,6 @@ export const Default: Story = {
     user: {
       id: 1,
       userName: 'johndoe',
-      avatar: null,
     },
   },
 }
