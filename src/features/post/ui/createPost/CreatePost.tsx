@@ -56,5 +56,5 @@ export const CreatePost = () => {
     }
   }
 
-  return <CreatePostModal open={showCreateModal} onClose={handleCloseModal} user={userData} />
+  return <CreatePostModal flowType="post" open={showCreateModal} onClose={handleCloseModal} user={userData} />
 }
