@@ -29,6 +29,7 @@ type Props = {
   buttonClassName?: string
   buttonRadius?: number
   buttonBackgroundColor?: string
+  sizes?: string
 }
 
 export const ImageSlider = ({
@@ -44,6 +45,7 @@ export const ImageSlider = ({
   buttonClassName = '',
   buttonRadius,
   buttonBackgroundColor,
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
 }: Props) => {
   const [activeIndex, setActiveIndex] = useState(initialSlide)
   const [isBeginning, setIsBeginning] = useState(true)
@@ -81,7 +83,7 @@ export const ImageSlider = ({
     return (
       <div className={`${s.container} ${className}`}>
         <div className={s.singleImage}>
-          <Image src={images[0].src} alt={images[0].alt} fill className={s.image} />
+          <Image src={images[0].src} alt={images[0].alt} fill className={s.image} sizes={sizes} />
         </div>
       </div>
     )
@@ -130,7 +132,7 @@ export const ImageSlider = ({
         {images.map((image, index) => (
           <SwiperSlide key={`slide-${index}-${image.src}`}>
             <div className={s.slideContent}>
-              <Image src={image.src} alt={image.alt} fill className={s.image} />
+              <Image src={image.src} alt={image.alt} fill className={s.image} sizes={sizes} />
             </div>
           </SwiperSlide>
         ))}

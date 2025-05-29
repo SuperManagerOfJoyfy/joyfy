@@ -63,6 +63,11 @@
 				align-items: center;
 				column-gap: 12px;
 
+				.userName {
+					color: var(--color-light-100);
+					text-decoration: none;
+				}
+
 				.img {
 					width: 36px;
 					height: 36px;
