@@ -1,0 +1,27 @@
+.cropModalContent {
+  width: 100%;
+  min-height: 480px;
+  padding-top: 28px;
+}
+
+.cropContainer {
+  width: 332px;
+  min-height: 340px;
+  background-color: #eeeeee;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin: auto;
+
+  .cropArea {
+    border: none !important;
+    box-shadow: 0 0 0 9999px rgba(23, 23, 23, 0.87) !important;
+  }
+}
+
+.controlsWrapper {
+  padding: 36px 24px;
+  text-align: end;
+}

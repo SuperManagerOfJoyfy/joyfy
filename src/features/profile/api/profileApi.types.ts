@@ -34,3 +34,7 @@ export type UserProfile = {
   avatars: AvatarType[]
   createdAt: string
 }
+
+export type UploadedAvatarResponse = {
+  avatars: AvatarType[]
+}

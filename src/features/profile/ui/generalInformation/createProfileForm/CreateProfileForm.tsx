@@ -1,15 +1,10 @@
-import { Avatar, Button, SelectBox, Separator, TextArea, TextField } from '@/shared/ui'
+import { Button, SelectBox, Separator, TextArea, TextField } from '@/shared/ui'
 import s from './CreateProfileForm.module.scss'
 
 export const CreateProfileForm = () => {
   return (
     <div className={s.container}>
       <div className={s.contentWrapper}>
-        <div className={s.photoArea}>
-          <Avatar size="large" />
-          <Button>Add a Profile Photo</Button>
-        </div>
-
         <form className={s.formArea} id="profileForm">
           <TextField label="Username" />
           <TextField label="First Name" />

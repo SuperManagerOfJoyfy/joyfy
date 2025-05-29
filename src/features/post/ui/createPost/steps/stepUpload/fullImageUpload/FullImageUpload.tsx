@@ -18,7 +18,6 @@ export type FullImageUploadProps = {
   className?: string
   dropzoneClassName?: string
   placeholderClassName?: string
-  iconClassName?: string
   textClassName?: string
   buttonsClassName?: string
   buttonClassName?: string
@@ -40,7 +39,6 @@ export const FullImageUpload = ({
   className,
   dropzoneClassName,
   placeholderClassName,
-  iconClassName,
   textClassName,
   buttonsClassName,
   buttonClassName,
@@ -68,10 +66,12 @@ export const FullImageUpload = ({
           >
             <input {...getInputProps()} aria-label="Upload photo" />
             <div className={`${s.placeholder} ${placeholderClassName || ''}`}>
-              <div className={`${s.icon} ${iconClassName || ''}`}>{uploadIcon}</div>
-              <Typography variant="body2" className={`${s.dropText} ${textClassName || ''}`}>
-                {isDragActive ? dragPlaceholder : placeholder}
-              </Typography>
+              {uploadIcon}
+              {placeholder && (
+                <Typography variant="body2" className={`${s.dropText} ${textClassName || ''}`}>
+                  {isDragActive ? dragPlaceholder : placeholder}
+                </Typography>
+              )}
             </div>
           </div>
 
