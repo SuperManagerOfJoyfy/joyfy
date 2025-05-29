@@ -1,16 +1,17 @@
 'use client'
 
+import React, { ComponentProps, forwardRef, useEffect, useState } from 'react'
 import { ReactDatePickerCustomHeaderProps, registerLocale } from 'react-datepicker'
 import * as RDP from 'react-datepicker'
-import React, { ComponentProps, forwardRef, useEffect, useState } from 'react'
-import s from './DatePicker.module.scss'
-import { Label } from '@/shared/ui/label/Label'
+import { format } from 'date-fns'
+import { enUS } from 'date-fns/locale'
+import { getYear } from 'date-fns'
+import clsx from 'clsx'
 import { LuCalendarDays } from 'react-icons/lu'
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md'
-import clsx from 'clsx'
-import { format } from 'date-fns'
-import { ru } from 'date-fns/locale'
+import { Label } from '@/shared/ui/label/Label'
 import textFieldStyles from '../textField/TextField.module.scss'
+import s from './DatePicker.module.scss'
 
 type DatePickerProps = {
   placeholder?: string
@@ -23,7 +24,7 @@ type DatePickerProps = {
   disabled?: boolean
   errorMessage?: string
 }
-registerLocale('ru', ru)
+registerLocale('enUs', enUS)
 
 const RDPC = (((RDP.default as any).default as any) || (RDP.default as any) || (RDP as any)) as typeof RDP.default
 
@@ -32,7 +33,7 @@ export const DatePicker = ({
   endDate: propEndDate,
   onSetStartDate,
   onSetEndDate,
-  placeholder = format(new Date(), 'dd/MM/yy', { locale: ru }),
+  placeholder = format(new Date(), 'dd.MM.yyyy', { locale: enUS }),
   className,
   errorMessage,
   label,
@@ -75,7 +76,7 @@ export const DatePicker = ({
     <div className={classNames.root}>
       {isRange ? (
         <RDPC
-          dateFormat={'dd/MM/yyyy'}
+          dateFormat={'dd.MM.yyyy'}
           calendarClassName={classNames.calendar}
           className={classNames.input}
           onChange={handleDateChange}
@@ -89,14 +90,16 @@ export const DatePicker = ({
           showPopperArrow={false}
           calendarStartDay={1}
           disabled={disabled}
-          locale={'ru'}
+          locale={'enUs'}
           formatWeekDay={formatWeekDay}
           popperClassName={classNames.popper}
+          popperPlacement="top-end"
           selectsRange
+          showYearDropdown
         />
       ) : (
         <RDPC
-          dateFormat={'dd/MM/yyyy'}
+          dateFormat={'dd.MM.yyyy'}
           calendarClassName={classNames.calendar}
           className={classNames.input}
           onChange={handleDateChange}
@@ -109,9 +112,11 @@ export const DatePicker = ({
           showPopperArrow={false}
           calendarStartDay={1}
           disabled={disabled}
-          locale={'ru'}
+          locale={'enUs'}
           formatWeekDay={formatWeekDay}
           popperClassName={classNames.popper}
+          popperPlacement="top-end"
+          showYearDropdown
         />
       )}
       {showError && <p className={classNames.errorText}>{errorMessage}</p>}
@@ -145,24 +150,36 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
   }
 )
 
-const customHeader = ({ date, decreaseMonth, increaseMonth }: ReactDatePickerCustomHeaderProps) => {
+const customHeader = ({ date, decreaseMonth, increaseMonth, changeYear }: ReactDatePickerCustomHeaderProps) => {
   const classNames = {
     button: s.button,
     buttonBox: s.buttonBox,
     header: s.header,
+    yearSelect: s.yearSelect,
   }
 
-  const headerText = capitalizeFirstLetter(format(date, 'LLLL y', { locale: ru }))
+  const currentYear = getYear(new Date())
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - i)
 
   return (
     <div className={classNames.header}>
-      <div>{headerText}</div>
+      <div className={classNames.header}>
+        {format(date, 'LLLL', { locale: enUS })}{' '}
+        <select className={classNames.yearSelect} value={getYear(date)} onChange={(e) => changeYear(+e.target.value)}>
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className={classNames.buttonBox}>
-        <button className={classNames.button} onClick={decreaseMonth} type={'button'} aria-label=" previous month">
+        <button className={classNames.button} onClick={decreaseMonth} type="button" aria-label="Previous month">
           <MdOutlineKeyboardArrowLeft />
         </button>
 
-        <button className={classNames.button} onClick={increaseMonth} type={'button'} aria-label="Next month">
+        <button className={classNames.button} onClick={increaseMonth} type="button" aria-label="Next month">
           <MdOutlineKeyboardArrowRight />
         </button>
       </div>
