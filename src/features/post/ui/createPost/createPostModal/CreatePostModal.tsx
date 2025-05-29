@@ -48,8 +48,6 @@ const PostModalContent = <T extends FlowType>({ open, onClose, user, flowType }:
 
   const handleCloseButtonClick = () => {
     if (images.length > 0) {
-      console.log(images)
-
       setIsCloseModalOpen(true)
     } else {
       onClose(ECreatePostCloseModal.default)

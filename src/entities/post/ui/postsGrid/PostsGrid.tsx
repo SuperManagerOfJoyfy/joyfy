@@ -6,7 +6,6 @@ import Image from 'next/image'
 import s from './PostsGrid.module.scss'
 
 import { FaComment } from 'react-icons/fa6'
-import { FcLike } from 'react-icons/fc'
 import { FaHeart } from 'react-icons/fa'
 
 type Props = {
