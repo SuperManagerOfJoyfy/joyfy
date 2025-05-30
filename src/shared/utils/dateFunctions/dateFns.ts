@@ -1,4 +1,4 @@
-import { format, formatDistanceToNow, parseISO, subDays } from 'date-fns'
+import { format, formatDistanceToNow, isValid, parse, parseISO, subDays } from 'date-fns'
 
 export const timeAgoFn = (date: string) => {
   return formatDistanceToNow(new Date(date), { addSuffix: true })
@@ -17,4 +17,29 @@ export const formatSmartDate = (dateString: string) => {
   }
 
   return formatDate(dateString)
+}
+
+export const parseDate = (dateString: string): Date | null => {
+  if (!dateString) return null
+  const parsed = parse(dateString, 'dd.MM.yyyy', new Date())
+  return isValid(parsed) ? parsed : null
+}
+
+export const formatDateOfBirth = (isoString: string | undefined): string => {
+  if (!isoString) return ''
+  const date = new Date(isoString)
+  return format(date, 'dd.MM.yyyy')
+}
+
+export const convertDateToString = (date: Date | null) => {
+  return date ? format(date, 'dd.MM.yyyy') : ''
+}
+
+export const convertToISOString = (dateString?: string): string | undefined => {
+  if (!dateString) return undefined
+
+  const parsedDate = parse(dateString, 'dd.MM.yyyy', new Date())
+  if (!isValid(parsedDate)) return undefined
+
+  return parsedDate.toISOString()
 }

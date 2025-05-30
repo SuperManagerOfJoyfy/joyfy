@@ -93,7 +93,7 @@ export const DatePicker = ({
           locale={'enUs'}
           formatWeekDay={formatWeekDay}
           popperClassName={classNames.popper}
-          popperPlacement="top-end"
+          popperPlacement="bottom-start"
           selectsRange
           showYearDropdown
         />
@@ -115,7 +115,7 @@ export const DatePicker = ({
           locale={'enUs'}
           formatWeekDay={formatWeekDay}
           popperClassName={classNames.popper}
-          popperPlacement="top-end"
+          popperPlacement="bottom-start"
           showYearDropdown
         />
       )}

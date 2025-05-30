@@ -6,7 +6,7 @@ export { Button } from './button'
 export { Card } from './card'
 export { Checkbox } from './checkbox'
 export { ConfirmModal } from './confirmModal'
-export { ControlledCheckbox, ControlledTextField } from './controlledComponents'
+export { ControlledCheckbox, ControlledTextField, ControlledDatePicker } from './controlledComponents'
 
 export { DatePicker } from './datePicker'
 export { DateStamp } from './dateStamp'

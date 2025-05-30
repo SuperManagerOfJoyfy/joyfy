@@ -198,6 +198,10 @@
   border: var(--color-dark-300);
 }
 
+.popper {
+  z-index: 10000;
+}
+
 .day {
   &:global(.react-datepicker__day--in-selecting-range) {
     background-color: var(--color-accent-900);
