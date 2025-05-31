@@ -28,7 +28,7 @@ import {
   FaUsers,
 } from 'react-icons/fa'
 
-import { SidebarItem } from '../../ui/sidebar'
+import { SidebarItem } from './Sidebar'
 import { PATH } from '@/shared/config/routes'
 
 type SidebarActionHandlers = {

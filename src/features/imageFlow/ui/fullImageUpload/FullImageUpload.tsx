@@ -26,6 +26,7 @@ export type FullImageUploadProps = {
   maxImages?: number
   acceptedTypes?: string[]
   validateCurrentCount?: number
+  largeBottomPadding?: boolean
 }
 
 export const FullImageUpload = ({
@@ -47,6 +48,7 @@ export const FullImageUpload = ({
   maxImages,
   acceptedTypes,
   validateCurrentCount,
+  largeBottomPadding = false,
 }: FullImageUploadProps) => {
   const uploadIcon = icon || <FiCamera size={48} />
 
@@ -59,7 +61,9 @@ export const FullImageUpload = ({
       validateCurrentCount={validateCurrentCount}
     >
       {({ getRootProps, getInputProps, open, isDragActive }) => (
-        <div className={`${s.container} ${className || ''}`}>
+        <div
+          className={`${s.container} ${largeBottomPadding ? s['container--large-bottom-padding'] : ''} ${className || ''}`}
+        >
           <div
             {...getRootProps()}
             className={`${s.dropzone} ${isDragActive ? s.dragging : ''} ${dropzoneClassName || ''}`}
