@@ -4,7 +4,7 @@ import { PATH } from '@/shared/config/routes'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useLogoutMutation } from '@/features/auth/api/authApi'
-import { AUTH_MESSAGES } from '@/shared/config/messages'
+import { MESSAGES } from '@/shared/config/messages'
 import { ConfirmModal } from '@/shared/ui/confirmModal/ConfirmModal'
 
 type Props = {
@@ -20,9 +20,9 @@ export const LogoutModal = ({ open, onOpenLogoutModalHandler, email }: Props) =>
     try {
       await logout().unwrap()
       router.push(PATH.AUTH.LOGIN)
-      toast.success(AUTH_MESSAGES.LOGOUT_SUCCESS)
+      toast.success(MESSAGES.AUTH.LOGOUT_SUCCESS)
     } catch (error: any) {
-      toast.error(AUTH_MESSAGES.LOGOUT_ERROR)
+      toast.error(MESSAGES.AUTH.LOGOUT_ERROR)
     } finally {
       onOpenLogoutModalHandler(false)
     }
