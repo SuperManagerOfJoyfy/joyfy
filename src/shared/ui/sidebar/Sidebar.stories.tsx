@@ -3,7 +3,7 @@ import { FiHome, FiPlusCircle, FiUser, FiMessageCircle, FiSearch, FiBarChart2, F
 
 import { Sidebar } from './Sidebar'
 
-import { createSidebarItems } from '@/shared/utils/sidebarItem/SidebarItem'
+import { createSidebarItems } from '@/shared/ui/sidebar/SidebarItem'
 
 const meta: Meta<typeof Sidebar> = {
   title: 'Components/Sidebar',
