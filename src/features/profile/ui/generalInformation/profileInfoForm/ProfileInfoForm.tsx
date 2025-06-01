@@ -94,7 +94,6 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
             <ControlledTextArea label="About Me" name="aboutMe" control={control} disabled={isSubmitting} />
           </form>
         </div>
-
         <div className={s.separator}>
           <Separator />
         </div>

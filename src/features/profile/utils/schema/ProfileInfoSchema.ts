@@ -30,7 +30,6 @@ export const ProfileInfoSchema = z.object({
 
   country: z.string().optional(),
   city: z.string().optional(),
-
   aboutMe: z
     .string()
     .transform((val) => (val.trim() === '' ? undefined : val))
