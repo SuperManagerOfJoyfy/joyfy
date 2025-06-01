@@ -43,11 +43,6 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
     <FormProvider {...methods}>
       <div className={s.container}>
         <div className={s.contentWrapper}>
-          <div className={s.photoArea}>
-            <Avatar size="large" />
-            <Button>Add a Profile Photo</Button>
-          </div>
-
           <form className={s.formArea} id="profileForm" onSubmit={formSubmitHandler}>
             <ControlledTextField label="Username" name="userName" control={control} disabled={isSubmitting} required />
             <ControlledTextField
