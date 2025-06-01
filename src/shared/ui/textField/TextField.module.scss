@@ -110,3 +110,12 @@
   width: 100%;
   bottom: -1.5rem;
 }
+
+.labelGroup {
+  display: flex;
+}
+
+.asteriks {
+  color: var(--color-danger-500);
+  margin-left: 2px;
+}
