@@ -1,16 +1,11 @@
-import { ProfilePhoto } from '@/features/profile/ui/profilePhoto/ui/ProfilePhoto'
-import { CreateProfileForm } from './createProfileForm'
-import s from './GeneralInformation.module.scss'
-
-type GeneralInformationProps = {
-  userId: number
-}
-;('use client')
+'use client'
 import { toast } from 'react-toastify'
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from '../../api/profileApi'
 import { ProfileInfo } from '../../utils/schema/ProfileInfoSchema'
 import { ProfileInfoForm } from './profileInfoForm'
 import { convertToISOString } from '@/shared/utils/dateFunctions'
+import { ProfilePhoto } from '../profilePhoto/ui/ProfilePhoto'
+import s from './GeneralInformation.module.scss'
 
 export const GeneralInformation = () => {
   const { data: userInfo } = useGetUserProfileQuery()
