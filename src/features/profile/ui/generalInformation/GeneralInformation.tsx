@@ -1,4 +1,11 @@
-'use client'
+import { ProfilePhoto } from '@/features/profile/ui/profilePhoto/ui/ProfilePhoto'
+import { CreateProfileForm } from './createProfileForm'
+import s from './GeneralInformation.module.scss'
+
+type GeneralInformationProps = {
+  userId: number
+}
+;('use client')
 import { toast } from 'react-toastify'
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from '../../api/profileApi'
 import { ProfileInfo } from '../../utils/schema/ProfileInfoSchema'
@@ -20,7 +27,8 @@ export const GeneralInformation = () => {
   }
 
   return (
-    <div>
+    <div className={s.generalContainer}>
+      <ProfilePhoto />
       <ProfileInfoForm userInfo={userInfo} onSubmit={onSubmitProfileInfoForm} isSubmitting={isLoading} />
     </div>
   )
