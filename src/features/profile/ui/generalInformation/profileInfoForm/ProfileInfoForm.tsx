@@ -1,12 +1,14 @@
 import { UserProfile } from '@/features/profile/api/profileApi.types'
 import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/ProfileInfoSchema'
-import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Separator } from '@/shared/ui'
+import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Loader, Separator } from '@/shared/ui'
 import { formatDateOfBirth } from '@/shared/utils/dateFunctions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { FormProvider, useForm } from 'react-hook-form'
 import { CitySelect, CountrySelect } from './components'
 import s from './ProfileInfoForm.module.scss'
+import { useEffect, useMemo } from 'react'
+import { useFormHasChanges } from './hooks/useFormHasChanges'
 
 type Props = {
   userInfo?: UserProfile
@@ -17,27 +19,42 @@ type Props = {
 export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => {
   const { aboutMe, userName, firstName, lastName, dateOfBirth, country, city } = userInfo || {}
 
-  const methods = useForm<ProfileInfo>({
-    resolver: zodResolver(ProfileInfoSchema),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    defaultValues: {
-      userName,
+  const initialValues = useMemo<ProfileInfo>(
+    () => ({
+      userName: userName || '',
       firstName: firstName || '',
       lastName: lastName || '',
       dateOfBirth: formatDateOfBirth(dateOfBirth) || '',
       country: country || '',
       city: city || undefined,
       aboutMe: aboutMe || '',
-    },
+    }),
+    [userName, firstName, lastName, dateOfBirth, country, city, aboutMe]
+  )
+
+  const methods = useForm<ProfileInfo>({
+    resolver: zodResolver(ProfileInfoSchema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    defaultValues: initialValues,
   })
 
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
+    reset,
   } = methods
+
+  useEffect(() => {
+    reset(initialValues)
+  }, [reset, initialValues])
+
+  const hasChanges = useFormHasChanges(control, initialValues)
+
   const formSubmitHandler = handleSubmit(onSubmit)
+
+  const isSubmitDisabled = !isValid || !hasChanges || isSubmitting
 
   return (
     <FormProvider {...methods}>
@@ -84,8 +101,8 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
           <Separator />
         </div>
 
-        <Button type="submit" className={s.submitButton} form="profileForm" disabled={isSubmitting || !isValid}>
-          Save changes
+        <Button type="submit" className={s.submitButton} form="profileForm" disabled={isSubmitDisabled}>
+          {isSubmitting ? <Loader /> : 'Save changes'}
         </Button>
       </div>
     </FormProvider>

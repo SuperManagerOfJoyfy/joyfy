@@ -1,11 +1,12 @@
 'use client'
-import { convertToISOString } from '@/shared/utils/dateFunctions'
 import { toast } from 'react-toastify'
-import { useGetUserProfileQuery, useUpdateUserProfileMutation } from '../../api/profileApi'
-import { ProfileInfo } from '../../utils/schema/ProfileInfoSchema'
-import { ProfilePhoto } from '../profilePhoto/ui/ProfilePhoto'
-import s from './GeneralInformation.module.scss'
+import { useGetUserProfileQuery, useUpdateUserProfileMutation } from '@/features/profile/api'
 import { ProfileInfoForm } from './profileInfoForm'
+import { ProfilePhoto } from '../profilePhoto/ui/ProfilePhoto'
+import { ProfileInfo } from '@/features/profile/utils/schema'
+import { convertToISOString } from '@/shared/utils/dateFunctions'
+import { MESSAGES } from '@/shared/config/messages'
+import s from './GeneralInformation.module.scss'
 
 export const GeneralInformation = () => {
   const { data: userInfo } = useGetUserProfileQuery()
@@ -15,9 +16,9 @@ export const GeneralInformation = () => {
     try {
       const isoDate = convertToISOString(data.dateOfBirth)
       await updateUserProfile({ ...data, dateOfBirth: isoDate }).unwrap()
-      toast.success('Your settings are saved')
+      toast.success(MESSAGES.PROFILE.SETTINGS_SUCCESS)
     } catch (error) {
-      toast.error('Error! Server is not available')
+      toast.error(MESSAGES.PROFILE.SETTINGS_ERROR)
     }
   }
 
