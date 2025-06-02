@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useEffect, useRef, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
 import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/ProfileInfoSchema'
 
@@ -22,21 +22,24 @@ type Props = {
 export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => {
   const { aboutMe, userName, firstName, lastName, dateOfBirth, country, city } = userInfo || {}
 
-  const defaultValuesRef = useRef<ProfileInfo>({
-    userName: userName || '',
-    firstName: firstName || '',
-    lastName: lastName || '',
-    dateOfBirth: formatDateOfBirth(dateOfBirth) || '',
-    country: country || '',
-    city: city || '',
-    aboutMe: aboutMe || '',
-  })
+  const initialValues = useMemo<ProfileInfo>(
+    () => ({
+      userName: userName || '',
+      firstName: firstName || '',
+      lastName: lastName || '',
+      dateOfBirth: formatDateOfBirth(dateOfBirth) || '',
+      country: country || '',
+      city: city || '',
+      aboutMe: aboutMe || '',
+    }),
+    [userName, firstName, lastName, dateOfBirth, country, city, aboutMe]
+  )
 
   const methods = useForm<ProfileInfo>({
     resolver: zodResolver(ProfileInfoSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    defaultValues: defaultValuesRef.current,
+    defaultValues: initialValues,
   })
 
   const {
@@ -47,12 +50,14 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
   } = methods
 
   useEffect(() => {
-    reset(defaultValuesRef.current)
-  }, [reset])
+    reset(initialValues)
+  }, [reset, initialValues])
 
-  const hasChanges = useFormHasChanges(control, defaultValuesRef.current)
+  const hasChanges = useFormHasChanges(control, initialValues)
 
   const formSubmitHandler = handleSubmit(onSubmit)
+
+  const isSubmitDisabled = !isValid || !hasChanges || isSubmitting
 
   return (
     <FormProvider {...methods}>
@@ -98,12 +103,7 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
           <Separator />
         </div>
 
-        <Button
-          type="submit"
-          className={s.submitButton}
-          form="profileForm"
-          disabled={isSubmitting || !isValid || !hasChanges}
-        >
+        <Button type="submit" className={s.submitButton} form="profileForm" disabled={isSubmitDisabled}>
           {isSubmitting ? <Loader /> : 'Save changes'}
         </Button>
       </div>

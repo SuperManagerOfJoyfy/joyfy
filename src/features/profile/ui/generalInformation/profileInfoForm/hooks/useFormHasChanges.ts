@@ -1,15 +1,20 @@
-import { useFormState } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 import { useMemo } from 'react'
 import { Control } from 'react-hook-form'
 import { ProfileInfo } from '@/features/profile/utils/schema/ProfileInfoSchema'
 
-export const useFormHasChanges = (control: Control<ProfileInfo>, initial: Partial<ProfileInfo>) => {
-  const { dirtyFields } = useFormState({ control })
+export const useFormHasChanges = (control: Control<ProfileInfo>, initial: ProfileInfo) => {
+  const currentValues = useWatch({ control })
 
   return useMemo(() => {
-    return Object.keys(dirtyFields).some((key) => {
+    if (!currentValues) return false
+
+    return Object.keys(initial).some((key) => {
       const typedKey = key as keyof ProfileInfo
-      return dirtyFields[typedKey] && initial[typedKey] !== undefined
+      const currentValue = String(currentValues[typedKey] || '').trim()
+      const initialValue = String(initial[typedKey] || '').trim()
+
+      return currentValue !== initialValue
     })
-  }, [dirtyFields, initial])
+  }, [currentValues, initial])
 }
