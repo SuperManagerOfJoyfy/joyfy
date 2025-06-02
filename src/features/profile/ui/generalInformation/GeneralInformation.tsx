@@ -1,10 +1,12 @@
 'use client'
 import { toast } from 'react-toastify'
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from '../../api/profileApi'
-import { ProfileInfo } from '../../utils/schema/ProfileInfoSchema'
 import { ProfileInfoForm } from './profileInfoForm'
 import { convertToISOString } from '@/shared/utils/dateFunctions'
 import { ProfilePhoto } from '../profilePhoto/ui/ProfilePhoto'
+import { MESSAGES } from '@/shared/config/messages'
+import { ProfileInfo } from '../../utils/schema/ProfileInfoSchema'
+
 import s from './GeneralInformation.module.scss'
 
 export const GeneralInformation = () => {
@@ -15,16 +17,16 @@ export const GeneralInformation = () => {
     try {
       const isoDate = convertToISOString(data.dateOfBirth)
       await updateUserProfile({ ...data, dateOfBirth: isoDate }).unwrap()
-      isSuccess && toast.success('Your settings are saved')
+      isSuccess && toast.success(MESSAGES.PROFILE.SETTINGS_SUCCESS)
     } catch (error) {
-      isError && toast.error('Error! Server is not available')
+      isError && toast.error(MESSAGES.PROFILE.SETTINGS_ERROR)
     }
   }
 
   return (
     <div className={s.generalContainer}>
       <ProfilePhoto />
-      <ProfileInfoForm userInfo={userInfo} onSubmit={onSubmitProfileInfoForm} isSubmitting={isLoading} />
+      {userInfo && <ProfileInfoForm userInfo={userInfo} onSubmit={onSubmitProfileInfoForm} isSubmitting={isLoading} />}
     </div>
   )
 }

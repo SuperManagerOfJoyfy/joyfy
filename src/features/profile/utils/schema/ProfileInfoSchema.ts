@@ -5,7 +5,7 @@ const NameSchema = z
   .string()
   .min(1, 'This field is required')
   .max(50, 'Maximum number of characters 50')
-  .regex(/[A-Za-zА-Яа-я]/, { message: 'Invalid characters entered' })
+  .regex(/^[A-Za-zА-Яа-яЁё]+$/, { message: 'Invalid characters entered' })
 
 export const ProfileInfoSchema = z.object({
   userName: z
@@ -34,8 +34,12 @@ export const ProfileInfoSchema = z.object({
     .string()
     .transform((val) => (val.trim() === '' ? undefined : val))
     .optional()
-    .refine((val) => val === undefined || val.length <= 200, { message: 'About Me must be 200 characters or fewer.' })
-    .refine((val) => val === undefined || /[0-9A-Za-zА-Яа-яЁё\W]/.test(val), { message: 'Invalid characters entered' }),
+    .refine((val) => val === undefined || val.length <= 200, {
+      message: 'About Me must be 200 characters or fewer.',
+    })
+    .refine((val) => val === undefined || /^[0-9A-Za-zА-Яа-яЁё\s.,!?;:'"()\-_@#$%&*+=<>{}[\]|\\\/]*$/.test(val), {
+      message: 'Invalid characters entered',
+    }),
 })
 
 export type ProfileInfo = z.infer<typeof ProfileInfoSchema>
