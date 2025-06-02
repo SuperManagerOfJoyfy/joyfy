@@ -1,1 +1,1 @@
-export * from './profileSettings/ProfileSettings'
+export * from './profileSettings'

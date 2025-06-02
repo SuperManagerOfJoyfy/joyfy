@@ -1,11 +1,11 @@
 'use client'
+import { convertToISOString } from '@/shared/utils/dateFunctions'
 import { toast } from 'react-toastify'
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from '../../api/profileApi'
 import { ProfileInfo } from '../../utils/schema/ProfileInfoSchema'
-import { ProfileInfoForm } from './profileInfoForm'
-import { convertToISOString } from '@/shared/utils/dateFunctions'
 import { ProfilePhoto } from '../profilePhoto/ui/ProfilePhoto'
 import s from './GeneralInformation.module.scss'
+import { ProfileInfoForm } from './profileInfoForm'
 
 export const GeneralInformation = () => {
   const { data: userInfo } = useGetUserProfileQuery()

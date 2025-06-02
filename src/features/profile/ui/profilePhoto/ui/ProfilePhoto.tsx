@@ -1,18 +1,20 @@
 import { Button, ConfirmModal } from '@/shared/ui'
 import s from './ProfilePhoto.module.scss'
-import { CreatePostModal } from '@/features/post/ui/createPost/createPostModal'
 import { useDeleteProfileAvatarMutation, useGetUserProfileQuery } from '@/features/profile/api/profileApi'
 import { useState } from 'react'
 import { IoImageOutline } from 'react-icons/io5'
 import { toast } from 'react-toastify'
 import Image from 'next/image'
+import { AvatarModal } from './avatarModal'
 
 export const ProfilePhoto = () => {
   const [openAddPhotoModal, setOpenAddPhotoModal] = useState(false)
   const [confirmRemoveModalOpen, setConfirmRemoveModalOpen] = useState(false)
   const { data: userData, isLoading: isProfileLoading } = useGetUserProfileQuery()
   const [deleteProfileAvatar, { isLoading: isDeleteLoading }] = useDeleteProfileAvatarMutation()
+
   if (!userData) return null
+
   const userAvatar = userData.avatars[0]?.url
 
   const confirmRemoveAvatar = async () => {
@@ -41,21 +43,11 @@ export const ProfilePhoto = () => {
             </div>
           )}
         </div>
-        <Button
-          disabled={isDeleteLoading}
-          variant="outline"
-          onClick={() => {
-            setOpenAddPhotoModal(true)
-          }}
-        >
+        <Button disabled={isDeleteLoading} variant="outline" onClick={() => setOpenAddPhotoModal(true)}>
           Add a Profile Photo
         </Button>
-        <CreatePostModal
-          flowType="avatar"
-          open={openAddPhotoModal === true}
-          onClose={() => setOpenAddPhotoModal(false)}
-          user={userData}
-        />
+
+        <AvatarModal open={openAddPhotoModal} onClose={() => setOpenAddPhotoModal(false)} />
       </div>
 
       <ConfirmModal

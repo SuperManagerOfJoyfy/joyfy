@@ -1,11 +1,11 @@
-import Link from 'next/link'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FormProvider, useForm } from 'react-hook-form'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
-import { CitySelect, CountrySelect } from './components'
 import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/ProfileInfoSchema'
 import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Separator } from '@/shared/ui'
 import { formatDateOfBirth } from '@/shared/utils/dateFunctions'
+import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
+import { FormProvider, useForm } from 'react-hook-form'
+import { CitySelect, CountrySelect } from './components'
 import s from './ProfileInfoForm.module.scss'
 
 type Props = {

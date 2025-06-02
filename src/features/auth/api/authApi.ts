@@ -76,7 +76,7 @@ export const authApi = joyfyApi.injectEndpoints({
         try {
           await queryFulfilled
 
-          localStorage.removeItem('accessToken')
+          LocalStorage.removeToken()
           // localStorage.removeItem('lightBackground')
           // localStorage.removeItem('textColor')
 

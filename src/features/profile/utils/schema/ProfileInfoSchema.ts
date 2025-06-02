@@ -41,17 +41,6 @@ export const ProfileInfoSchema = z.object({
     )
     .optional(),
 
-  // dateOfBirth: z
-  //   .string()
-  //   .transform((val) => (val.trim() === '' ? undefined : val))
-  //   .optional()
-  //   .refine((val) => val === undefined || /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)\d{2}$/.test(val), {
-  //     message: 'Date must be in format dd.mm.yyyy',
-  //   })
-  //   .refine((value) => value === undefined || calculateAge(value), {
-  //     message: 'A user under 13 cannot create a profile. Privacy Policy',
-  //   }),
-
   country: z.string().optional(),
   city: z.string().optional(),
   aboutMe: z

@@ -40,7 +40,6 @@ export const CitySelect = () => {
       name="city"
       control={control}
       render={({ field }) => {
-        console.log('City field value:', field.value, typeof field.value)
         return (
           <SelectBox
             placeholder="Select city"

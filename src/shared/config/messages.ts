@@ -1,12 +1,15 @@
-export const AUTH_MESSAGES = {
-  AUTH_SUCCESS: 'Successfully authenticated',
-  SESSION_RESTORED: 'Session restored',
-  LOGOUT_SUCCESS: 'You have been logged out',
-  LOGOUT_ERROR: 'JWT accessToken is missing, expired or incorrect',
-  queryErrors: {
-    email_exists: 'This email is already registered with a different method. Please use your original login method.',
-    account_not_found: 'Account not found. Please register first.',
-    unauthorized: 'Authentication failed. Please try again.',
-    unknown: 'Authentication error. Please try again later.',
+export const MESSAGES = {
+  AUTH: {
+    LOGOUT_SUCCESS: 'You have been logged out',
+    LOGOUT_ERROR: 'JWT accessToken is missing, expired or incorrect',
+  },
+  POST: {
+    POST_PUBLISHED: 'Post successfully published!',
+    POST_DRAFT: 'Draft saved',
+    POST_DISCARDED: 'Draft discarded',
+  },
+  PROFILE: {
+    SETTINGS_SUCCESS: 'Your settings are saved',
+    SETTINGS_ERROR: 'Error! Server is not available',
   },
 }
