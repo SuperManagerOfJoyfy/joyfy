@@ -22,12 +22,14 @@ export const formatSmartDate = (dateString: string) => {
 export const parseDate = (dateString: string): Date | null => {
   if (!dateString) return null
   const parsed = parse(dateString, 'dd.MM.yyyy', new Date())
+
   return isValid(parsed) ? parsed : null
 }
 
 export const formatDateOfBirth = (isoString: string | undefined): string => {
   if (!isoString) return ''
   const date = new Date(isoString)
+
   return format(date, 'dd.MM.yyyy')
 }
 
@@ -49,5 +51,6 @@ export const calculateAge = (dateString: string) => {
 
   const dob = new Date(year, month - 1, day)
   if (isNaN(dob.getTime())) return false
+
   return differenceInYears(new Date(), dob) >= 13
 }
