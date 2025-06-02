@@ -1,12 +1,12 @@
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
-import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/ProfileInfoSchema'
-import { Avatar, Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Separator } from '@/shared/ui'
 import { CitySelect, CountrySelect } from './components'
+import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/ProfileInfoSchema'
+import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Separator } from '@/shared/ui'
 import { formatDateOfBirth } from '@/shared/utils/dateFunctions'
 import s from './ProfileInfoForm.module.scss'
-import Link from 'next/link'
 
 type Props = {
   userInfo?: UserProfile
@@ -19,7 +19,7 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
 
   const methods = useForm<ProfileInfo>({
     resolver: zodResolver(ProfileInfoSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: {
       userName,
@@ -27,7 +27,7 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
       lastName: lastName || '',
       dateOfBirth: formatDateOfBirth(dateOfBirth) || '',
       country: country || '',
-      city: city || '',
+      city: city || undefined,
       aboutMe: aboutMe || '',
     },
   })

@@ -1,4 +1,5 @@
-import { calculateAge } from '@/shared/utils/dateFunctions'
+import { calculateAge, convertDateToString } from '@/shared/utils/dateFunctions'
+
 import { z } from 'zod'
 
 const NameSchema = z
@@ -18,15 +19,38 @@ export const ProfileInfoSchema = z.object({
   lastName: NameSchema,
 
   dateOfBirth: z
-    .string()
-    .transform((val) => (val.trim() === '' ? undefined : val))
-    .optional()
-    .refine((val) => val === undefined || /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)\d{2}$/.test(val), {
-      message: 'Date must be in format dd.mm.yyyy',
-    })
-    .refine((value) => value === undefined || calculateAge(value), {
-      message: 'A user under 13 cannot create a profile. Privacy Policy',
-    }),
+    .preprocess(
+      (val) => {
+        if (val instanceof Date) {
+          // Convert Date object to "dd.mm.yyyy"
+          return convertDateToString(val)
+        }
+        if (typeof val === 'string' && val.trim() === '') {
+          return undefined
+        }
+        return val
+      },
+      z
+        .string()
+        .regex(/^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)\d{2}$/, {
+          message: 'Date must be in format dd.mm.yyyy',
+        })
+        .refine((value) => calculateAge(value), {
+          message: 'A user under 13 cannot create a profile. Privacy Policy',
+        })
+    )
+    .optional(),
+
+  // dateOfBirth: z
+  //   .string()
+  //   .transform((val) => (val.trim() === '' ? undefined : val))
+  //   .optional()
+  //   .refine((val) => val === undefined || /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)\d{2}$/.test(val), {
+  //     message: 'Date must be in format dd.mm.yyyy',
+  //   })
+  //   .refine((value) => value === undefined || calculateAge(value), {
+  //     message: 'A user under 13 cannot create a profile. Privacy Policy',
+  //   }),
 
   country: z.string().optional(),
   city: z.string().optional(),
@@ -34,8 +58,7 @@ export const ProfileInfoSchema = z.object({
     .string()
     .transform((val) => (val.trim() === '' ? undefined : val))
     .optional()
-    .refine((val) => val === undefined || val.length <= 200, { message: 'About Me must be 200 characters or fewer.' })
-    .refine((val) => val === undefined || /[0-9A-Za-zА-Яа-яЁё\W]/.test(val), { message: 'Invalid characters entered' }),
+    .refine((val) => val === undefined || val.length <= 200, { message: 'About Me must be 200 characters or fewer.' }),
 })
 
 export type ProfileInfo = z.infer<typeof ProfileInfoSchema>
