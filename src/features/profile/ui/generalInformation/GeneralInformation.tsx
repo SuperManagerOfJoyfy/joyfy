@@ -9,15 +9,15 @@ import s from './GeneralInformation.module.scss'
 
 export const GeneralInformation = () => {
   const { data: userInfo } = useGetUserProfileQuery()
-  const [updateUserProfile, { isSuccess, isError, isLoading }] = useUpdateUserProfileMutation()
+  const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation()
 
   const onSubmitProfileInfoForm = async (data: ProfileInfo) => {
     try {
       const isoDate = convertToISOString(data.dateOfBirth)
       await updateUserProfile({ ...data, dateOfBirth: isoDate }).unwrap()
-      isSuccess && toast.success('Your settings are saved')
+      toast.success('Your settings are saved')
     } catch (error) {
-      isError && toast.error('Error! Server is not available')
+      toast.error('Error! Server is not available')
     }
   }
 
