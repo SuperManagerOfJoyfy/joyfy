@@ -57,13 +57,15 @@
   margin-top: 0;
   a {
     color: var(--color-accent-500);
-    // font-size: var(--font-size-s);
   }
 }
 
 .submitButton {
   align-self: flex-end;
-  min-width: 160px;
+}
+
+.selectBox {
+  padding: 0 12px;
 }
 
 .searchCityInput {
@@ -71,4 +73,10 @@
   padding: 6px 8px;
   margin-bottom: 8;
   background-color: var(--color-dark-500);
+}
+
+.displayMoreBtn {
+  background-color: var(--color-dark-500);
+  padding: 12px 2px;
+  font-size: var(--font-size-s);
 }
