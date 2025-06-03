@@ -1,16 +1,13 @@
-'use client'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useEffect, useMemo } from 'react'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
 import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/ProfileInfoSchema'
-
-import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Separator, Loader } from '@/shared/ui'
-import { CitySelect, CountrySelect } from './components'
+import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Loader, Separator } from '@/shared/ui'
 import { formatDateOfBirth } from '@/shared/utils/dateFunctions'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
+import { FormProvider, useForm } from 'react-hook-form'
+import { CitySelect, CountrySelect } from './components'
 import s from './ProfileInfoForm.module.scss'
+import { useEffect, useMemo } from 'react'
 import { useFormHasChanges } from './hooks/useFormHasChanges'
 
 type Props = {
@@ -29,7 +26,7 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
       lastName: lastName || '',
       dateOfBirth: formatDateOfBirth(dateOfBirth) || '',
       country: country || '',
-      city: city || '',
+      city: city || undefined,
       aboutMe: aboutMe || '',
     }),
     [userName, firstName, lastName, dateOfBirth, country, city, aboutMe]
@@ -37,7 +34,7 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
 
   const methods = useForm<ProfileInfo>({
     resolver: zodResolver(ProfileInfoSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: initialValues,
   })
@@ -45,8 +42,8 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
   const {
     control,
     handleSubmit,
-    reset,
     formState: { errors, isValid },
+    reset,
   } = methods
 
   useEffect(() => {
@@ -89,6 +86,7 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
             <div className={s.selectGroup}>
               <span>
                 <label className={s.label}>Select your country</label>
+
                 <CountrySelect />
               </span>
               <span>
