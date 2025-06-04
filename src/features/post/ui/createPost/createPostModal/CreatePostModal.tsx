@@ -37,8 +37,6 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
 
   const handleCloseButtonClick = () => {
     if (images.length > 0) {
-      console.log(images)
-
       setIsCloseModalOpen(true)
     } else {
       onClose(ECreatePostCloseModal.default)
