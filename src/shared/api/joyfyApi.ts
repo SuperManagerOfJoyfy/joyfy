@@ -4,6 +4,6 @@ import { baseQueryWithReauth } from '@/shared/api/baseQueryWithReauth'
 export const joyfyApi = createApi({
   reducerPath: 'joyfyApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Auth', 'User', 'Posts', 'Profile', 'Post'],
+  tagTypes: ['Auth', 'User', 'Posts', 'Profile', 'Post', 'Payments'],
   endpoints: () => ({}),
 })
