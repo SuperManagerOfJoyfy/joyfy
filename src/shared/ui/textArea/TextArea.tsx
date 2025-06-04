@@ -2,7 +2,7 @@ import { ComponentProps, useId } from 'react'
 import clsx from 'clsx'
 import s from './textArea.module.scss'
 
-type TextAreaProps = {
+export type TextAreaProps = {
   label?: string
   error?: string
   textAreaClassName?: string
