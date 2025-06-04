@@ -27,6 +27,7 @@ export const PostModal = ({ initialPost, userId }: Props) => {
 
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
   const [isEditing, setIsEditing] = useState(false)
+  const [isInitPost, setIsInitPost] = useState(true)
   const [hasFormChanges, setHasFormChanges] = useState(false)
 
   const { data: user } = useGetMeQuery()
@@ -55,9 +56,9 @@ export const PostModal = ({ initialPost, userId }: Props) => {
     setIsEditing,
   })
 
-  if (!post) return null
+  const currentPost = isInitPost ? initialPost : (post ?? initialPost)
 
-  const { userName, ownerId, avatarOwner, description, images } = post
+  const { userName, ownerId, avatarOwner, description, images } = currentPost
 
   const isOwnPost = ownerId === user?.userId
 
@@ -68,6 +69,7 @@ export const PostModal = ({ initialPost, userId }: Props) => {
 
   const handleEditSave = async () => {
     await refetch()
+    setIsInitPost(false)
     setIsEditing(false)
     setHasFormChanges(false)
   }
@@ -130,7 +132,7 @@ export const PostModal = ({ initialPost, userId }: Props) => {
               />
             ) : (
               <PostContent
-                post={post}
+                post={currentPost}
                 onEdit={handleEdit}
                 onDelete={() => setConfirmAction('delete')}
                 isOwnPost={isOwnPost}
