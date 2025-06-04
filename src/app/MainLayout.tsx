@@ -2,9 +2,9 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Header } from '@/shared/ui/header/Header'
+import { Header } from '@/widgets/header/Header'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { createSidebarItems } from '@/shared/ui/sidebar/SidebarItem'
+import { createSidebarItems } from '@/widgets/sidebar/SidebarItem'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { CreatePost } from '@/features/post/ui'
 
