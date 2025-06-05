@@ -8,14 +8,46 @@
 
 .gridItem {
   width: 100%;
+  max-height: 228px;
   height: 100%;
   cursor: pointer;
+  position: relative;
   img {
     width: 100%;
     height: auto;
     object-fit: cover;
     aspect-ratio: 1.03;
   }
+
+  &:hover {
+    .overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.486);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.likes {
+  display: flex;
+  gap: 28px;
+}
+
+.likeItem {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  gap: 4px;
 }
 
 .loaderContainer {
