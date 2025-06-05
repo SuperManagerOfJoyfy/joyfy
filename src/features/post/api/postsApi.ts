@@ -12,7 +12,7 @@ export const postsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
     getPosts: builder.query<GetPostsResponse, PostsQueryParams>({
       query: ({ userId, endCursorPostId, pageSize = 8, ...params }) => ({
-        url: `{public-posts/user/${userId}/${endCursorPostId}`,
+        url: `public-posts/user/${userId}/${endCursorPostId}`,
         method: 'GET',
         params: {
           pageSize,

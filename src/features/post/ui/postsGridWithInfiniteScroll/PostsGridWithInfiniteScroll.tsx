@@ -20,19 +20,25 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
   const loaderRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [trigger, { data: fetchData, isFetching, isLoading }] = useLazyGetPostsQuery()
+  const [trigger] = useLazyGetPostsQuery()
 
   const isInitializedRef = useRef(false)
   const isFetchingRef = useRef(false)
   const requestQueue = useRef<ReturnType<typeof trigger> | null>(null)
 
   // Получаем текущие данные из кэша
-  const { data: cachedData, isUninitialized } = postsApi.endpoints.getPosts.useQueryState(
+  const {
+    data: cachedData,
+    isUninitialized,
+    isLoading,
+    isFetching,
+  } = postsApi.endpoints.getPosts.useQueryState(
     { userId },
     {
-      selectFromResult: ({ data, isLoading, isUninitialized }) => ({
+      selectFromResult: ({ data, isLoading, isUninitialized, isFetching }) => ({
         data,
         isLoading,
+        isFetching,
         isUninitialized,
       }),
     }
@@ -53,10 +59,11 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
     }
   }, [dispatch, initialPostsData, userId])
 
-  const posts = fetchData?.items || cachedData?.items || initialPostsData.items
+  const posts = cachedData?.items || initialPostsData.items
+  console.log('cachedData', cachedData)
 
-  const totalCount = fetchData?.totalCount || cachedData?.totalCount || initialPostsData.totalCount
-  const hasMore = posts.length < totalCount
+  const totalCount = cachedData?.totalCount || initialPostsData.totalCount
+  const hasMore = posts ? posts.length < totalCount : false
 
   const fetchMore = useCallback(async () => {
     if (!hasMore || isFetchingRef.current) return
@@ -108,7 +115,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
     router.push(`${newParams.toString()}, { scroll: false }`)
   }
 
-  if (posts.length === 0 && !isLoading) {
+  if (!posts?.length && !isLoading) {
     return <div>Нет постов для отображения</div>
   }
 
