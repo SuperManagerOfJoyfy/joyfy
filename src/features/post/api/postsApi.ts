@@ -21,28 +21,14 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
       // Ключ кэширования только по userId
       serializeQueryArgs: ({ queryArgs }) => queryArgs.userId,
-
       merge: (currentCache, newItems, { arg }) => {
         return {
           ...newItems,
           items: [...currentCache.items, ...newItems.items],
         }
-
-        // Объединяем посты только если новые данные действительно новее
-        const lastExistingId = currentCache.items[currentCache.items.length - 1]?.id
-        const firstNewId = newItems.items[0]?.id
-
-        if (!lastExistingId || !firstNewId || firstNewId > lastExistingId) {
-          return {
-            ...newItems,
-            items: [...currentCache.items, ...newItems.items],
-          }
-        }
-        return currentCache // Игнорируем "старые" данные
       },
-      forceRefetch: () => false,
       providesTags: ['Posts'],
-      keepUnusedDataFor: 10,
+      keepUnusedDataFor: 600,
     }),
     getPostById: builder.query<Post, number>({
       query: (postId) => ({
@@ -121,7 +107,6 @@ export const postsApi = joyfyApi.injectEndpoints({
 })
 
 export const {
-  useGetPostsQuery,
   useLazyGetPostsQuery,
   useGetPostByIdQuery,
   useUploadImageMutation,

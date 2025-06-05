@@ -17,63 +17,51 @@ type Props = {
 
 export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props) => {
   const dispatch = useAppDispatch()
-  const loaderRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
   const [trigger] = useLazyGetPostsQuery()
-
+  const loaderRef = useRef<HTMLDivElement>(null)
   const isInitializedRef = useRef(false)
   const isFetchingRef = useRef(false)
   const requestQueue = useRef<ReturnType<typeof trigger> | null>(null)
 
   // Получаем текущие данные из кэша
-  const {
-    data: cachedData,
-    isUninitialized,
-    isLoading,
-    isFetching,
-  } = postsApi.endpoints.getPosts.useQueryState(
+  const { data: cachedData, isUninitialized } = postsApi.endpoints.getPosts.useQueryState(
     { userId },
     {
-      selectFromResult: ({ data, isLoading, isUninitialized, isFetching }) => ({
+      selectFromResult: ({ data, isUninitialized }) => ({
         data,
-        isLoading,
-        isFetching,
-        isUninitialized,
+        isUninitialized, // проверка, делался ли запрос
       }),
     }
   )
 
-  // Инициализируем кэш с initialPosts один раз
+  // Инициализация кэша с initialPosts один раз
   useEffect(() => {
-    const shouldInitCache =
-      !isInitializedRef.current &&
-      isUninitialized &&
-      initialPostsData &&
-      Array.isArray(initialPostsData.items) &&
-      initialPostsData.items.length > 0
-
-    if (shouldInitCache) {
+    if (initialPostsData?.items?.length && isUninitialized && !isInitializedRef.current) {
       dispatch(postsApi.util.upsertQueryData('getPosts', { userId }, initialPostsData))
       isInitializedRef.current = true
     }
-  }, [dispatch, initialPostsData, userId])
+  }, [dispatch, initialPostsData, userId, isUninitialized])
 
-  const posts = cachedData?.items || initialPostsData.items
-  console.log('cachedData', cachedData)
+  const posts = useMemo(() => {
+    return !isUninitialized && cachedData?.items ? cachedData.items : initialPostsData.items
+  }, [cachedData, initialPostsData.items])
 
-  const totalCount = cachedData?.totalCount || initialPostsData.totalCount
-  const hasMore = posts ? posts.length < totalCount : false
+  const hasMore = useMemo(() => {
+    if (isUninitialized) return true // Если кэш пуст - предполагаем что есть ещё данные
+    const total = cachedData?.totalCount ?? initialPostsData.totalCount
+
+    return posts.length < total
+  }, [isUninitialized, cachedData, initialPostsData.totalCount, posts.length])
 
   const fetchMore = useCallback(async () => {
     if (!hasMore || isFetchingRef.current) return
 
     isFetchingRef.current = true
-
     try {
       let lastPostId = posts[posts.length - 1]?.id
       if (!lastPostId) return
-      console.log('lastPostId1', lastPostId)
 
       if (requestQueue.current) {
         await requestQueue.current
@@ -89,7 +77,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
   }, [hasMore, trigger, userId, posts])
 
   const debouncedHandleIntersect = useDebounce((entries: IntersectionObserverEntry[]) => {
-    if (entries[0].isIntersecting && !isFetchingRef.current) {
+    if (entries[0].isIntersecting) {
       fetchMore()
     }
   }, 100)
@@ -115,13 +103,9 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
     router.push(`?${newParams.toString()}`, { scroll: false })
   }
 
-  if (!posts?.length && !isLoading) {
-    return <div>Нет постов для отображения</div>
-  }
-
   return (
     <>
-      {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openPostModal} />}
+      {<PostsGrid posts={posts} onPostClick={openPostModal} />}
       {hasMore && (
         <div ref={loaderRef}>
           <Loader reduced />
