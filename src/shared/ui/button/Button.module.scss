@@ -7,7 +7,7 @@
   border: 1px solid transparent;
   padding: 6px 24px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   line-height: 150%;
   cursor: pointer;
   transition: all 0.3s ease;
