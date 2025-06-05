@@ -34,15 +34,25 @@ export const CreatePost = () => {
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.delete('action')
 
+    const updateCurrentUrl = () => {
+      const newUrl = pathname + (newParams.toString() ? `?${newParams.toString()}` : '')
+      window.history.replaceState(null, '', newUrl)
+    }
+
     switch (createPostCloseModal) {
       case ECreatePostCloseModal.redirectToProfile:
-        router.replace(`${PATH.USER.PROFILE}/${userData.id}`)
+        if (pathname === `${PATH.USER.PROFILE}/${userData.id}`) {
+          updateCurrentUrl()
+        } else {
+          router.replace(`${PATH.USER.PROFILE}/${userData.id}`)
+        }
         break
       case ECreatePostCloseModal.redirectToHome:
         router.push(PATH.ROOT, { scroll: false })
         break
       default:
-        window.history.replaceState(null, '', pathname + newParams.toString())
+        updateCurrentUrl()
+        break
     }
   }
 

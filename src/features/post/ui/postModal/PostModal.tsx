@@ -14,11 +14,12 @@ import s from './PostModal.module.scss'
 
 type Props = {
   initialPost: Post
+  userId: number
 }
 
 type ConfirmAction = 'delete' | 'cancelEdit' | null
 
-export const PostModal = ({ initialPost }: Props) => {
+export const PostModal = ({ initialPost, userId }: Props) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -26,6 +27,7 @@ export const PostModal = ({ initialPost }: Props) => {
 
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
   const [isEditing, setIsEditing] = useState(false)
+  const [isInitPost, setIsInitPost] = useState(true)
   const [hasFormChanges, setHasFormChanges] = useState(false)
 
   const { data: user } = useGetMeQuery()
@@ -47,15 +49,16 @@ export const PostModal = ({ initialPost }: Props) => {
   const isFollowing = false
 
   const { handleEdit, handleDelete, handleFollowToggle, handleCopyLink } = usePostDropdownMenuActions({
+    userId,
     postId: postId || 0,
     ownerId: post?.ownerId ?? 0,
     isFollowing,
     setIsEditing,
   })
 
-  if (!post) return null
+  const currentPost = isInitPost ? initialPost : (post ?? initialPost)
 
-  const { userName, ownerId, avatarOwner, description, images } = post
+  const { userName, ownerId, avatarOwner, description, images } = currentPost
 
   const isOwnPost = ownerId === user?.userId
 
@@ -66,6 +69,7 @@ export const PostModal = ({ initialPost }: Props) => {
 
   const handleEditSave = async () => {
     await refetch()
+    setIsInitPost(false)
     setIsEditing(false)
     setHasFormChanges(false)
   }
@@ -128,7 +132,7 @@ export const PostModal = ({ initialPost }: Props) => {
               />
             ) : (
               <PostContent
-                post={post}
+                post={currentPost}
                 onEdit={handleEdit}
                 onDelete={() => setConfirmAction('delete')}
                 isOwnPost={isOwnPost}
