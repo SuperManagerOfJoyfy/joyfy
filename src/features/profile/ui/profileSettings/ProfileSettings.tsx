@@ -9,10 +9,10 @@ import { GeneralInformation } from '../generalInformation/GeneralInformation'
 import { PATH } from '@/shared/config/routes'
 
 import s from './ProfileSettings.module.scss'
+import { MyPayments } from '../myPayments/MyPayments'
 
 type ProfileSettingsProps = {
   activePart: string
-  userId: number
 }
 
 const SETTINGS_TABS = [
@@ -53,7 +53,7 @@ const renderTabContent = (activePart: string) => {
     case 'management':
       return <ComingSoonPlaceholder feature="Account management" />
     case 'payments':
-      return <ComingSoonPlaceholder feature="My payments" />
+      return <MyPayments />
     default:
       return <GeneralInformation />
   }
