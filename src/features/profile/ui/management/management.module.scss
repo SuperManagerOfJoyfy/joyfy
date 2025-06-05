@@ -1,19 +1,35 @@
 .management {
 	.title {
 		margin-top: 30px;
-
-		&:last-child {
-			margin-top: 42px;
-		}
 	}
 
 	.card {
 		margin-top: 6px;
+		padding: 12px 24px;
+
+		.dateWrapper {
+			display: grid;
+			grid-auto-flow: column;
+			grid-auto-columns: max-content;
+			gap: 45px;
+
+			.label {
+				color: var(--color-light-900);
+			}
+
+			.value {
+				margin-top: 10px;
+			}
+		}
 
 		.radioGroup {
 			flex-direction: column;
 			gap: 20px;
 		}
+	}
+
+	.checkbox {
+		margin-top: 20px;
 	}
 
 	.buttons {
