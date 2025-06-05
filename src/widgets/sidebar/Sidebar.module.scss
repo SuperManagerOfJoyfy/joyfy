@@ -47,7 +47,7 @@
   border-radius: 4px;
   font-size: 14px;
   line-height: 171%;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 
   &:hover:not(.sidebarLink--disabled) {
     color: var(--color-accent-100);

@@ -131,6 +131,6 @@
 .labelText {
   span.highlighted {
     color: var(--color-light-100);
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
   }
 }
