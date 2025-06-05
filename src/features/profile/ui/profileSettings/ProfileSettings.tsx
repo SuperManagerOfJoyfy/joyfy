@@ -9,6 +9,7 @@ import { GeneralInformation } from '../generalInformation/GeneralInformation'
 import { PATH } from '@/shared/config/routes'
 
 import s from './ProfileSettings.module.scss'
+import { Management } from '@/features/profile/ui/management/Management'
 
 type ProfileSettingsProps = {
   activePart: string
@@ -47,15 +48,15 @@ const ComingSoonPlaceholder = ({ feature }: { feature: string }) => (
 const renderTabContent = (activePart: string, userId: number) => {
   switch (activePart as SettingsTabValue) {
     case 'info':
-      return <GeneralInformation userId={userId} />
+      return <GeneralInformation />
     case 'devices':
       return <ComingSoonPlaceholder feature="Devices settings" />
     case 'management':
-      return <ComingSoonPlaceholder feature="Account management" />
+      return <Management />
     case 'payments':
       return <ComingSoonPlaceholder feature="My payments" />
     default:
-      return <GeneralInformation userId={userId} />
+      return <GeneralInformation />
   }
 }
 
