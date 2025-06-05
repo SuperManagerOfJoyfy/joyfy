@@ -2,85 +2,119 @@
 
 import { useAppDispatch } from '@/app/store/store'
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
-import { postsApi, useGetPostsQuery } from '@/features/post/api/postsApi'
+import { postsApi, useLazyGetPostsQuery } from '@/features/post/api/postsApi'
 import { GetPostsResponse } from '@/features/post/api/postsApi.types'
 import { Post } from '@/features/post/types/types'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useDebounce } from './useDebounce'
 
 type Props = {
-  initialPosts: GetPostsResponse
+  initialPostsData: GetPostsResponse
   userId: number
 }
 
-export const PostsGridWithInfiniteScroll = ({ initialPosts, userId }: Props) => {
+export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props) => {
   const dispatch = useAppDispatch()
   const loaderRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [endCursorPostId, setEndCursorPostId] = useState<number | undefined>(undefined)
+  const [trigger, { data: fetchData, isFetching, isLoading }] = useLazyGetPostsQuery()
 
-  const { data, isFetching, isLoading } = useGetPostsQuery({
-    userId,
-    endCursorPostId,
-  })
+  const isInitializedRef = useRef(false)
+  const isFetchingRef = useRef(false)
+  const requestQueue = useRef<ReturnType<typeof trigger> | null>(null)
 
-  /** Гидратация кэша с initialPosts */
-  useEffect(() => {
-    if (initialPosts.items.length > 0) {
-      dispatch(postsApi.util.upsertQueryData('getPosts', { userId }, initialPosts))
+  // Получаем текущие данные из кэша
+  const { data: cachedData, isUninitialized } = postsApi.endpoints.getPosts.useQueryState(
+    { userId },
+    {
+      selectFromResult: ({ data, isLoading, isUninitialized }) => ({
+        data,
+        isLoading,
+        isUninitialized,
+      }),
     }
-  }, [dispatch, initialPosts, userId])
-
-  const hasMore = data ? data.items.length < data.totalCount : false
-
-  const fetchMore = useCallback(() => {
-    if (!hasMore || isFetching) return
-
-    const lastPostId = data?.items.at(-1)?.id
-    if (lastPostId) {
-      setEndCursorPostId(lastPostId)
-    }
-  }, [data, isFetching, hasMore])
-
-  const handleObserver = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const [entry] = entries
-      if (entry.isIntersecting && !isFetching && hasMore) {
-        fetchMore()
-      }
-    },
-    [isFetching, hasMore, fetchMore]
   )
 
+  // Инициализируем кэш с initialPosts один раз
   useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
+    const shouldInitCache =
+      !isInitializedRef.current &&
+      isUninitialized &&
+      initialPostsData &&
+      Array.isArray(initialPostsData.items) &&
+      initialPostsData.items.length > 0
+
+    if (shouldInitCache) {
+      dispatch(postsApi.util.upsertQueryData('getPosts', { userId }, initialPostsData))
+      isInitializedRef.current = true
+    }
+  }, [dispatch, initialPostsData, userId])
+
+  const posts = fetchData?.items || cachedData?.items || initialPostsData.items
+
+  const totalCount = fetchData?.totalCount || cachedData?.totalCount || initialPostsData.totalCount
+  const hasMore = posts.length < totalCount
+
+  const fetchMore = useCallback(async () => {
+    if (!hasMore || isFetchingRef.current) return
+
+    isFetchingRef.current = true
+
+    try {
+      let lastPostId = posts[posts.length - 1]?.id
+      if (!lastPostId) return
+      console.log('lastPostId1', lastPostId)
+
+      if (requestQueue.current) {
+        await requestQueue.current
+      }
+      requestQueue.current = trigger({ userId, endCursorPostId: lastPostId })
+      await requestQueue.current
+    } catch (err) {
+      console.error('Ошибка при получении данных:', err)
+    } finally {
+      isFetchingRef.current = false
+      requestQueue.current = null
+    }
+  }, [hasMore, trigger, userId, posts])
+
+  const debouncedHandleIntersect = useDebounce((entries: IntersectionObserverEntry[]) => {
+    if (entries[0].isIntersecting && !isFetchingRef.current) {
+      fetchMore()
+    }
+  }, 100)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(debouncedHandleIntersect, {
       root: null,
-      rootMargin: '20px',
+      rootMargin: '200px',
       threshold: 0.1,
     })
 
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current)
-    }
+    const el = loaderRef.current
+    if (el) observer.observe(el)
 
     return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current)
-      }
+      if (el) observer.unobserve(el)
     }
-  }, [handleObserver])
+  }, [fetchMore])
 
   const openPostModal = (post: Post) => {
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.set('postId', post.id.toString())
-    router.push(`?${newParams.toString()}`, { scroll: false })
+    router.push(`${newParams.toString()}, { scroll: false }`)
+  }
+
+  if (posts.length === 0 && !isLoading) {
+    return <div>Нет постов для отображения</div>
   }
 
   return (
     <>
-      {<PostsGrid posts={data?.items || []} isLoading={isLoading} onPostClick={openPostModal} />}
+      {<PostsGrid posts={posts} isLoading={isLoading} onPostClick={openPostModal} />}
       {hasMore && (
         <div ref={loaderRef}>
           <Loader reduced />
