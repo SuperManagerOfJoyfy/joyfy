@@ -112,7 +112,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
   const openPostModal = (post: Post) => {
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.set('postId', post.id.toString())
-    router.push(`${newParams.toString()}, { scroll: false }`)
+    router.push(`?${newParams.toString()}`, { scroll: false })
   }
 
   if (!posts?.length && !isLoading) {
