@@ -12,35 +12,24 @@ export const postsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
     getPosts: builder.query<GetPostsResponse, PostsQueryParams>({
       query: ({ userId, endCursorPostId, pageSize = 8, ...params }) => ({
-        url: endCursorPostId ? `public-posts/user/${userId}/${endCursorPostId}` : `public-posts/user/${userId}`,
+        url: `public-posts/user/${userId}/${endCursorPostId}`,
         method: 'GET',
         params: {
           pageSize,
           ...params,
         },
       }),
+      // Ключ кэширования только по userId
       serializeQueryArgs: ({ queryArgs }) => queryArgs.userId,
-
       merge: (currentCache, newItems, { arg }) => {
-        if (!arg.endCursorPostId) {
-          return newItems
-        }
         return {
-          items: [
-            ...currentCache.items,
-            ...newItems.items.filter((post) => currentCache.items.every((p) => p.id !== post.id)),
-          ],
-          totalCount: newItems.totalCount,
-          pageSize: newItems.pageSize,
-          totalUsers: newItems.totalUsers,
+          ...newItems,
+          items: [...currentCache.items, ...newItems.items],
         }
-      },
-      forceRefetch: ({ currentArg, previousArg }) => {
-        return currentArg?.endCursorPostId !== previousArg?.endCursorPostId
       },
       providesTags: ['Posts'],
+      keepUnusedDataFor: 600,
     }),
-
     getPostById: builder.query<Post, number>({
       query: (postId) => ({
         url: `posts/id/${postId}`,
@@ -118,7 +107,7 @@ export const postsApi = joyfyApi.injectEndpoints({
 })
 
 export const {
-  useGetPostsQuery,
+  useLazyGetPostsQuery,
   useGetPostByIdQuery,
   useUploadImageMutation,
   useDeleteUploadedImageMutation,
