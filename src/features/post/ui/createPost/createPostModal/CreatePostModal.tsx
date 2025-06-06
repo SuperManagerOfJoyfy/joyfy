@@ -11,9 +11,10 @@ import { UserProfile } from '@/features/profile/api/profileApi.types'
 import { PostContextProvider, usePostContext } from '../providers/PostContext'
 import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
-import { getCardPadding, getModalSize, getModalTitle } from '../utils/modalStepUtils'
-import { LeftButton, RightButton } from '../createNavigationButtons/CeateNavigationButtons'
 import { ECreatePostCloseModal } from '../CreatePost'
+import { getModalConfig } from '@/features/imageFlow/utils/modalUtils'
+import { MESSAGES } from '@/shared/config/messages'
+import { LeftButton, RightButton } from '@/features/imageFlow/ui'
 
 type CreatePostModalProps = {
   open: boolean
@@ -27,6 +28,8 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
   const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
+
+  const modalConfig = getModalConfig(currentStep)
 
   const handleMainModalOpenChange = (newOpen: boolean) => {
     if (!newOpen) handleCloseButtonClick()
@@ -72,7 +75,7 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
         try {
           await publishPost()
 
-          toast.success('Post successfully published!')
+          toast.success(MESSAGES.POST.POST_PUBLISHED)
           onClose(ECreatePostCloseModal.redirectToProfile)
         } finally {
           setIsPublishing(false)
@@ -83,10 +86,10 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
 
   const handleConfirmClose = (saveDraft: boolean) => {
     if (saveDraft) {
-      toast.info('Draft saved')
+      toast.info(MESSAGES.POST.POST_DRAFT)
       onClose(ECreatePostCloseModal.redirectToHome)
     } else {
-      toast.info('Draft discarded')
+      toast.info(MESSAGES.POST.POST_DISCARDED)
       onClose(ECreatePostCloseModal.default)
     }
   }
@@ -99,10 +102,10 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
       <Modal
         open={open}
         onOpenChange={handleMainModalOpenChange}
-        title={getModalTitle(currentStep)}
-        size={getModalSize(currentStep)}
-        cardPadding={getCardPadding(currentStep)}
-        centerTitle={currentStep !== 'upload'}
+        title={modalConfig.title}
+        size={modalConfig.size}
+        cardPadding={modalConfig.cardPadding}
+        centerTitle={modalConfig.centerTitle}
         leftButton={<LeftButton currentStep={currentStep} onBack={handleBack} disabled={isButtonPrevDisabled} />}
         rightButton={
           <RightButton
@@ -136,7 +139,7 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
 
 export const CreatePostModal = (props: CreatePostModalProps) => {
   return (
-    <PostContextProvider>
+    <PostContextProvider userId={props.user.id}>
       <PostModalContent {...props} />
     </PostContextProvider>
   )

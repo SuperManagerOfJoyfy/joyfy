@@ -3,7 +3,7 @@ import { Avatar } from '@/shared/ui'
 import s from './AvatarGroup.module.scss'
 
 type Props = {
-  avatars: Array<string | null>
+  avatars: Array<string>
   maxDisplay?: number
 }
 

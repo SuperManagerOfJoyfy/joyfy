@@ -41,7 +41,7 @@ export const usePostContext = () => {
   return ctx
 }
 
-export const PostContextProvider = ({ children }: { children: ReactNode }) => {
+export const PostContextProvider = ({ children, userId }: { children: ReactNode; userId: number }) => {
   const [currentImageIdx, setCurrentImageIdx] = useState<number>(0)
   const [images, setImages] = useState<ImageItem[]>([])
   const [imagesEditData, setImagesEditData] = useState<ImageEditData[]>([])
@@ -237,8 +237,15 @@ export const PostContextProvider = ({ children }: { children: ReactNode }) => {
       Object.values(imagesBlob.current).forEach((blob, idx) => formData.append('file', blob))
       const uploadImagesData = await uploadImage(formData).unwrap()
       const imageIds = uploadImagesData.images.map(({ uploadId }) => ({ uploadId }))
-      await createPost({ description, childrenMetadata: imageIds }).unwrap()
-    } catch (err) {}
+
+      await createPost({
+        description,
+        childrenMetadata: imageIds,
+        userId,
+      }).unwrap()
+    } catch (err) {
+      console.error('Error publishing post:', err)
+    }
   }
 
   return (

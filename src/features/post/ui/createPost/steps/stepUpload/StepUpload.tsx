@@ -4,7 +4,7 @@ import { useCallback } from 'react'
 import { toast } from 'react-toastify'
 
 import { ACCEPTED_TYPES, MAX_FILE_SIZE_MB, MAX_IMAGES } from '@/features/post/utils/constats'
-import { FullImageUpload } from './fullImageUpload/FullImageUpload'
+import { FullImageUpload } from '../../../../../imageFlow/ui/fullImageUpload/FullImageUpload'
 
 type StepUploadProps = {
   onNext: (files: File[]) => void

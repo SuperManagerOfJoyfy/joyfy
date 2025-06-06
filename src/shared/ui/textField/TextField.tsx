@@ -11,6 +11,7 @@ export type TextFieldProps = ComponentProps<'input'> & {
   errorMessage?: string
   label?: ReactNode
   search?: boolean
+  required?: boolean
   startIcon?: ReactNode
   onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void
   onShowPasswordClick?: () => void
@@ -26,6 +27,7 @@ export const TextField = ({
   onEnter,
   onShowPasswordClick,
   disabled,
+  required,
   type = 'text',
   ...rest
 }: TextFieldProps) => {
@@ -68,7 +70,12 @@ export const TextField = ({
 
   return (
     <div className={classNames.root}>
-      {label && <Label htmlFor={inputId} label={label} disabled={disabled} />}
+      {label && (
+        <div className={s.labelGroup}>
+          <Label htmlFor={inputId} label={label} disabled={disabled} />
+          {required && <span className={s.asteriks}>*</span>}
+        </div>
+      )}
       <div className={classNames.inputContainer}>
         {startIcon && <span className={classNames.startIcon}>{startIcon}</span>}
         <input
