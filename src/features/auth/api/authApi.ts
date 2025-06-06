@@ -129,6 +129,13 @@ export const authApi = joyfyApi.injectEndpoints({
         },
       }),
     }),
+    //удаление юзера по id для тестирования
+    deleteUser: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `/users/profile/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
@@ -144,4 +151,5 @@ export const {
   useRefreshTokenMutation,
   useLazyGetMeQuery,
   useGoogleLoginMutation,
+  useDeleteUserMutation,
 } = authApi
