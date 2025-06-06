@@ -8,4 +8,8 @@ export const MESSAGES = {
     POST_DRAFT: 'Draft saved',
     POST_DISCARDED: 'Draft discarded',
   },
+  PROFILE: {
+    SETTINGS_SUCCESS: 'Your settings are saved',
+    SETTINGS_ERROR: 'Error! Server is not available',
+  },
 }
