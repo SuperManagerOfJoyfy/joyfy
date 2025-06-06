@@ -78,7 +78,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
       showDraftButton: true,
       draftButtonText: 'Open Draft',
       onDraftClick: () => {
-        toast.info('Opening draft will be implemented in the real project.')
+        toast.info('Draft functionality is limited. Files would need to be stored on the server to be restored.')
       },
     },
     crop: {
