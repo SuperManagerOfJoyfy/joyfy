@@ -1,35 +1,14 @@
 'use client'
 
-import React from 'react'
 import Image from 'next/image'
 import s from './UserProfile.module.scss'
 import { Button, Typography } from '@/shared/ui'
-import defaultAvatar from '../../../../../public/default-avatar.png'
 import verifiedBudget from '../../../../../public/verifiedBudget.svg'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-
-type Avatar = {
-  url: string
-  width: number
-  height: number
-  fileSize: number
-  createdAt: string
-}
-
-type MetaData = {
-  following: number
-  followers: number
-  publications: number
-}
-
-export type UserProfileProps = {
-  id: number
-  userName: string
-  aboutMe: string | null
-  avatars: Avatar[]
-  userMetadata: MetaData
-  hasPaymentSubscription: boolean
-}
+import { PublicUserProfile } from '@/features/profile/api/profileApi.types'
+import Link from 'next/link'
+import { PATH } from '@/shared/config/routes'
+import { Avatar } from '@/shared/ui/avatar/Avatar'
 
 type StatItemProps = {
   value: number
@@ -43,35 +22,19 @@ const StatItem = ({ value, label }: StatItemProps) => (
   </div>
 )
 
-export const UserProfile = ({ userName, aboutMe, avatars, userMetadata, hasPaymentSubscription }: UserProfileProps) => {
+export const UserProfile = (userProfile: PublicUserProfile) => {
   const { data: user } = useGetMeQuery()
 
-  const profileAvatar: Avatar | undefined = avatars?.[0]
+  const { userName, aboutMe, avatars, userMetadata, hasPaymentSubscription } = userProfile
 
-  const isAvatarValid = (profileAvatar: Avatar): boolean => {
-    if (!profileAvatar) return false
-    return Boolean(profileAvatar.url?.trim()) && profileAvatar.width > 0 && profileAvatar.height > 0
-  }
-
-  const bioText =
-    aboutMe ||
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore' +
-      ' magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco'
+  const profileAvatar = avatars?.[0]?.url
+  const bioText = aboutMe || ''
 
   return (
     <div className={s.profileContainer}>
       <div className={s.profileImageContainer}>
         <div className={s.profileImageWrapper}>
-          {isAvatarValid(profileAvatar) ? (
-            <Image
-              src={profileAvatar.url}
-              width={profileAvatar.width}
-              height={profileAvatar.height}
-              alt={`${userName}'s avatar`}
-            />
-          ) : (
-            <Image src={defaultAvatar} width={204} height={204} alt="default avatar" priority />
-          )}
+          <Avatar name={userName} size={'large'} avatar={profileAvatar} />
         </div>
       </div>
 
@@ -85,7 +48,11 @@ export const UserProfile = ({ userName, aboutMe, avatars, userMetadata, hasPayme
               <Image src={verifiedBudget} width={24} height={24} alt="verifiedIcon" priority />
             )}
           </div>
-          {user && <Button variant={'secondary'}>Profile Settings</Button>}
+          {user?.userId === userProfile.id && (
+            <Button as={Link} href={`${PATH.USER.SETTINGS}?part=info`} variant="secondary">
+              Profile Settings
+            </Button>
+          )}
         </div>
         <div className={s.profileStats}>
           <StatItem value={userMetadata.following} label="Following" />

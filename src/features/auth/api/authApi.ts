@@ -75,7 +75,11 @@ export const authApi = joyfyApi.injectEndpoints({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          localStorage.removeItem('accessToken')
+
+          LocalStorage.removeToken()
+          // localStorage.removeItem('lightBackground')
+          // localStorage.removeItem('textColor')
+
           dispatch(authApi.util.resetApiState())
         } catch (error) {
           console.error('Logout failed:', error)

@@ -1,0 +1,14 @@
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18px 0 24px;
+  height: var(--header-height);
+  flex-shrink: 0;
+}
+
+.scrollArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}

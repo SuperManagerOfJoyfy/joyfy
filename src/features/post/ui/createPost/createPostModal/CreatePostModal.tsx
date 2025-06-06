@@ -3,30 +3,33 @@
 import { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
 
 import { Modal } from '@/shared/ui/modal'
 import { PostCreationStep } from '@/features/post/types/types'
+import { UserProfile } from '@/features/profile/api/profileApi.types'
+
 import { PostContextProvider, usePostContext } from '../providers/PostContext'
 import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
-import { getCardPadding, getModalSize, getModalTitle } from '../utils/modalStepUtils'
-import { LeftButton, RightButton } from '../navigationButtons/NavigationButtons'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { ECreatePostCloseModal } from '../CreatePost'
+import { getModalConfig } from '@/features/imageFlow/utils/modalUtils'
+import { MESSAGES } from '@/shared/config/messages'
+import { LeftButton, RightButton } from '@/features/imageFlow/ui'
 
 type CreatePostModalProps = {
   open: boolean
-  onClose: () => void
+  onClose: (createPostCloseModal?: ECreatePostCloseModal) => void
+  user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
 }
 
-const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
-  const { addImage, images, publishPost } = usePostContext()
-  const router = useRouter()
-  const { data: user } = useGetMeQuery()
+const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
+  const { addImage, images, publishPost, clearAll, description } = usePostContext()
 
   const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
+
+  const modalConfig = getModalConfig(currentStep)
 
   const handleMainModalOpenChange = (newOpen: boolean) => {
     if (!newOpen) handleCloseButtonClick()
@@ -36,7 +39,7 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
     if (images.length > 0) {
       setIsCloseModalOpen(true)
     } else {
-      onClose()
+      onClose(ECreatePostCloseModal.default)
     }
   }
 
@@ -45,14 +48,17 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
     setCurrentStep('crop')
   }
 
-  const handleBack = (step: PostCreationStep): PostCreationStep => {
+  const handleBack = (step: PostCreationStep) => {
     switch (step) {
       case 'filter':
-        return 'crop'
+        setCurrentStep('crop')
+        break
       case 'description':
-        return 'filter'
+        setCurrentStep('filter')
+        break
       default:
-        return 'upload'
+        clearAll()
+        setCurrentStep('upload')
     }
   }
 
@@ -68,45 +74,39 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
         setIsPublishing(true)
         try {
           await publishPost()
-          toast.success('Post successfully published!')
-          router.push(`/profile/${user?.userId || ''}`)
+
+          toast.success(MESSAGES.POST.POST_PUBLISHED)
+          onClose(ECreatePostCloseModal.redirectToProfile)
         } finally {
           setIsPublishing(false)
-          onClose()
         }
         break
     }
   }
 
   const handleConfirmClose = (saveDraft: boolean) => {
-    setIsCloseModalOpen(false)
-
     if (saveDraft) {
-      toast.info('Draft saved')
-      onClose()
-      router.push('/')
+      toast.info(MESSAGES.POST.POST_DRAFT)
+      onClose(ECreatePostCloseModal.redirectToHome)
     } else {
-      toast.info('Draft discarded')
+      toast.info(MESSAGES.POST.POST_DISCARDED)
+      onClose(ECreatePostCloseModal.default)
     }
   }
 
-  const isButtonDisabled = currentStep === 'description' && isPublishing
+  const isButtonPrevDisabled = currentStep === 'description' && isPublishing
+  const isButtonNextDisabled = currentStep === 'description' && (isPublishing || !description.length)
 
   return (
     <>
       <Modal
         open={open}
         onOpenChange={handleMainModalOpenChange}
-        title={getModalTitle(currentStep)}
-        size={getModalSize(currentStep)}
-        cardPadding={getCardPadding(currentStep)}
-        leftButton={
-          <LeftButton
-            currentStep={currentStep}
-            onBack={() => setCurrentStep(handleBack(currentStep))}
-            disabled={isButtonDisabled}
-          />
-        }
+        title={modalConfig.title}
+        size={modalConfig.size}
+        cardPadding={modalConfig.cardPadding}
+        centerTitle={modalConfig.centerTitle}
+        leftButton={<LeftButton currentStep={currentStep} onBack={handleBack} disabled={isButtonPrevDisabled} />}
         rightButton={
           <RightButton
             currentStep={currentStep}
@@ -114,14 +114,14 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
             onNext={handleNextClick}
             isCreating={isPublishing}
             isUploading={isPublishing}
-            disabled={isButtonDisabled}
+            disabled={isButtonNextDisabled}
           />
         }
       >
         {currentStep === 'upload' && <StepUpload onNext={handleFilesSelected} />}
         {currentStep === 'crop' && <StepCrop onNavigateBack={() => setCurrentStep('upload')} />}
         {currentStep === 'filter' && <StepFilters />}
-        {currentStep === 'description' && <StepDescription disabled={isPublishing} />}
+        {currentStep === 'description' && <StepDescription disabled={isPublishing} user={user} />}
       </Modal>
 
       {isCloseModalOpen &&
@@ -139,7 +139,7 @@ const PostModalContent = ({ open, onClose }: CreatePostModalProps) => {
 
 export const CreatePostModal = (props: CreatePostModalProps) => {
   return (
-    <PostContextProvider>
+    <PostContextProvider userId={props.user.id}>
       <PostModalContent {...props} />
     </PostContextProvider>
   )
