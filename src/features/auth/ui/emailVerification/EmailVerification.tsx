@@ -7,23 +7,27 @@ import { Typography } from '@/shared/ui'
 type Props = {
   title: string
   description: string
-  imageSrc: StaticImageData
+  imageSrc?: StaticImageData
   className?: string
 } & ComponentProps<'div'>
 
 export const EmailVerification = ({ title, description, imageSrc, children, className }: Props) => {
   return (
     <div className={clsx(s.container, className)}>
-      <Typography variant="h2" as="h2">
-        {title}
-      </Typography>
-      <Typography variant="body1" className={s.description}>
-        {description}
-      </Typography>
-      {children}
-      <div className={s.imageContainer}>
-        <Image src={imageSrc} alt="" />
+      <div className={s.infoTextContainer}>
+        <Typography variant="h2" as="h2">
+          {title}
+        </Typography>
+        <Typography variant="body1" className={s.description}>
+          {description}
+        </Typography>
       </div>
+      {children}
+      {imageSrc && (
+        <div className={s.imageContainer}>
+          <Image src={imageSrc} alt="" />
+        </div>
+      )}
     </div>
   )
 }

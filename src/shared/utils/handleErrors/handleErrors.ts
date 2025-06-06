@@ -15,6 +15,8 @@ export const extractMessage = (data: any, fallback: string): string => {
   return fallback
 }
 
+const hiddenEndpoints = ['getMe']
+
 export const handleErrors = (api: BaseQueryApi, result: QueryReturnValue<unknown, FetchBaseQueryError>) => {
   let error = 'Some error occurred'
 
@@ -51,6 +53,9 @@ export const handleErrors = (api: BaseQueryApi, result: QueryReturnValue<unknown
         error = JSON.stringify(result.error)
         break
     }
-    toast.error(error)
+
+    if (!hiddenEndpoints.includes(api.endpoint)) {
+      toast.error(error)
+    }
   }
 }
