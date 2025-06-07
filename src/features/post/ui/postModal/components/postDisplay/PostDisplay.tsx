@@ -1,8 +1,8 @@
-import { HiDotsHorizontal } from 'react-icons/hi'
-import { PostDropdownMenuItems, PostActions, PostItem } from '@/features/post/ui/postModal'
+import { Post } from '@/features/post/types/postTypes'
+import { PostActions, PostDropdownMenuItems, PostItem } from '@/features/post/ui/postModal'
 import { DropdownMenu, Scroll, Separator, UserCard } from '@/shared/ui'
-import { Post } from '@/features/post/types/types'
-import s from './PostContent.module.scss'
+import { HiDotsHorizontal } from 'react-icons/hi'
+import s from './PostDisplay.module.scss'
 
 type Props = {
   post: Post
@@ -14,7 +14,7 @@ type Props = {
   onCopyLink: () => void
 }
 
-export const PostContent = ({ post, isOwnPost, isFollowing, onEdit, onDelete, onFollowToggle, onCopyLink }: Props) => {
+export const PostDisplay = ({ post, isOwnPost, isFollowing, onEdit, onDelete, onFollowToggle, onCopyLink }: Props) => {
   const { userName, ownerId, avatarOwner, likesCount, id: postId, createdAt } = post
 
   return (

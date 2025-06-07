@@ -1,5 +1,5 @@
 import { useEditPostMutation } from '@/features/post/api/postsApi'
-import { Post } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/postTypes'
 import { extractMessage, isFetchBaseQueryError } from '@/shared/utils/handleErrors/handleErrors'
 import { toast } from 'react-toastify'
 
@@ -9,7 +9,7 @@ type Props = {
   onSuccess?: (updatedPost: Post) => void
 }
 
-export const useEditPostHandler = () => {
+export const usePostEditHandler = () => {
   const [editPost, { isLoading }] = useEditPostMutation()
 
   const handleEditPost = async ({ postId, description, onSuccess }: Props) => {

@@ -1,1 +1,1 @@
-export * from './EditPostForm'
+export * from './PostEditForm'

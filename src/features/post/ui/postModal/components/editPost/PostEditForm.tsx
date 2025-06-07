@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Post } from '@/features/post/types/types'
-import { User, UserCard } from '@/shared/ui/userCard'
+import { Post } from '@/features/post/types/postTypes'
 import { Button, PublicationDescription } from '@/shared/ui'
-import { useEditPostHandler } from './useEditPostHandler'
+import { User, UserCard } from '@/shared/ui/userCard'
+import { useEffect, useState } from 'react'
+import { usePostEditHandler } from './usePostEditHandler'
 
-import s from './EditPostForm.module.scss'
+import s from './PostEditForm.module.scss'
 
 type Props = {
   user: User
@@ -17,9 +17,9 @@ type Props = {
   onFormChange: (hasChanges: boolean) => void
 }
 
-export const EditPostForm = ({ user, defaultDescription, postId, onCancelEdit, onSaveEdit, onFormChange }: Props) => {
+export const PostEditForm = ({ user, defaultDescription, postId, onCancelEdit, onSaveEdit, onFormChange }: Props) => {
   const [description, setDescription] = useState(defaultDescription)
-  const { handleEditPost, isLoading } = useEditPostHandler()
+  const { handleEditPost, isLoading } = usePostEditHandler()
 
   useEffect(() => {
     const hasChanges = description.trim() !== defaultDescription.trim()
