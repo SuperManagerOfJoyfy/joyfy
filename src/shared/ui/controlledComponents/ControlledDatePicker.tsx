@@ -1,11 +1,12 @@
 import { Controller, Control } from 'react-hook-form'
 import { DatePicker } from '../datePicker/DatePicker'
 import { convertDateToString, formatDateOfBirth, parseDate } from '@/shared/utils/dateFunctions'
+import { ReactNode } from 'react'
 
 type Props = {
   name: string
   control: Control<any>
-  label?: string
+  label?: string | ReactNode
   error?: string
   disabled?: boolean
 }
