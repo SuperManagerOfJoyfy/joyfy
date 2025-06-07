@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 
 import { Modal, ConfirmModal } from '@/shared/ui'
