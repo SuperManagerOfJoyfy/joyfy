@@ -1,5 +1,5 @@
 import { PublicPosts } from '@/features/main/ui/publicPosts/PublicPosts'
-import { Post } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/postTypes'
 
 export const revalidate = 60
 

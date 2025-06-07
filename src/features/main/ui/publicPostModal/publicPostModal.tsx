@@ -1,7 +1,7 @@
-import s from './publicPostModal.module.scss'
-import { AvatarGroup, ImageSlider, Modal, Scroll, Separator, Typography, UserCard } from '@/shared/ui'
-import { Post } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/postTypes'
 import { PostItem } from '@/features/post/ui/postModal'
+import { AvatarGroup, ImageSlider, Modal, Scroll, Separator, Typography, UserCard } from '@/shared/ui'
+import s from './publicPostModal.module.scss'
 
 type Props = {
   open: boolean

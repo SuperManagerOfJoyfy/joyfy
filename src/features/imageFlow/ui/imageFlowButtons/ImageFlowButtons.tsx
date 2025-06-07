@@ -1,8 +1,8 @@
-import { FiChevronLeft } from 'react-icons/fi'
 import clsx from 'clsx'
+import { FiChevronLeft } from 'react-icons/fi'
 
+import { PostCreationStep } from '@/features/post/types/postTypes'
 import { Button } from '@/shared/ui'
-import { PostCreationStep } from '@/features/post/types/types'
 
 import s from './ImageFlowButtons.module.scss'
 

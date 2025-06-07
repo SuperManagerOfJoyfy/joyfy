@@ -1,4 +1,4 @@
-import { PostCreationStep } from '@/features/post/types/types'
+import { PostCreationStep } from '@/features/post/types/postTypes'
 
 export type ModalStep = PostCreationStep | 'avatar-upload' | 'avatar-position'
 

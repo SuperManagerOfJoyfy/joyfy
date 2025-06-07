@@ -4,17 +4,17 @@ import { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { toast } from 'react-toastify'
 
-import { Modal } from '@/shared/ui/modal'
-import { PostCreationStep } from '@/features/post/types/types'
+import { PostCreationStep } from '@/features/post/types/postTypes'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
+import { Modal } from '@/shared/ui/modal'
 
-import { PostContextProvider, usePostContext } from '../providers/PostContext'
-import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
-import { ClosePostModal } from '../closeModal/ClosePostModal'
-import { ECreatePostCloseModal } from '../CreatePost'
+import { LeftButton, RightButton } from '@/features/imageFlow/ui'
 import { getModalConfig } from '@/features/imageFlow/utils/modalUtils'
 import { MESSAGES } from '@/shared/config/messages'
-import { LeftButton, RightButton } from '@/features/imageFlow/ui'
+import { ClosePostModal } from '../closeModal/ClosePostModal'
+import { ECreatePostCloseModal } from '../CreatePost'
+import { PostContextProvider, usePostContext } from '../providers/PostContext'
+import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
 
 type CreatePostModalProps = {
   open: boolean
