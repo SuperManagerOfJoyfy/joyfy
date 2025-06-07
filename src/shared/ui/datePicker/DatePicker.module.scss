@@ -93,107 +93,6 @@
     line-height: var(--line-height-s);
     color: var(--color-danger-500);
   }
-
-  :global(.react-datepicker__aria-live) {
-    display: none;
-  }
-  :global(.react-datepicker__day-name) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 36px;
-    height: 36px;
-    margin: 0;
-
-    color: var(--color-light-100);
-  }
-
-  :global(.react-datepicker-wrapper) {
-    width: 100%;
-  }
-
-  :global(.react-datepicker__header) {
-    padding: 0;
-    background-color: transparent;
-    border-bottom: none;
-  }
-
-  :global(.react-datepicker__month) {
-    margin: 0;
-  }
-
-  :global(.react-datepicker__month-container) {
-    width: 252px;
-  }
-
-  :global(.react-datepicker__day-names) {
-    margin-bottom: 12px;
-  }
-
-  /* day styles */
-  :global(.react-datepicker__day) {
-    position: relative;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 36px;
-    height: 36px;
-    margin: 0;
-
-    color: var(--color-light-100);
-
-    border-radius: 50%;
-    outline: none;
-
-    transition: all 0.3s ease 0s;
-
-    &:hover {
-      background-color: var(--color-accent-900);
-      border-radius: 50%;
-    }
-
-    &:focus-visible {
-      background-color: transparent;
-      border: 2px solid var(--color-accent-500);
-    }
-  }
-
-  :global(.react-datepicker__day--outside-month) {
-    color: var(--color-light-900);
-  }
-
-  :global(.react-datepicker__day--weekend) {
-    color: var(--color-danger-300);
-  }
-
-  :global(.react-datepicker__day--today) {
-    color: var(--color-accent-500);
-  }
-
-  :global(.react-datepicker__day--selected) {
-    color: var(--color-light-100);
-    background-color: var(--color-accent-900);
-    background-image: radial-gradient(28px circle, var(--color-accent-900) 48%, transparent 51%);
-    border-radius: 50%;
-  }
-
-  :global(.react-datepicker__day--keyboard-selected) {
-    background-color: transparent;
-  }
-
-  .errorText {
-    margin: 2px 0 0;
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-s);
-    color: var(--color-danger-500);
-  }
-
-  :global(.react-datepicker__aria-live) {
-    display: none;
-  }
 }
 
 .calendar {
@@ -242,7 +141,6 @@
 
 .icon {
   cursor: pointer;
-
   position: absolute;
   top: 8px;
   right: 12px;
@@ -258,7 +156,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 8px;
+  padding-left: 5px;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-m);
   color: var(--color-light-100);
