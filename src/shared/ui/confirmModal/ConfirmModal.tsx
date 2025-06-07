@@ -1,9 +1,11 @@
-import s from './confirmModal.module.scss'
+import { ReactNode } from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
+
+import s from './confirmModal.module.scss'
 
 type Props = {
   title: string
-  description: string
+  description: string | ReactNode
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   onConfirm: () => void

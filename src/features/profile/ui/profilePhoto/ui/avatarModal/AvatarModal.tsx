@@ -1,42 +1,32 @@
-'use client'
-
-import { useState } from 'react'
-import ReactDOM from 'react-dom'
+import { useState, useEffect } from 'react'
 import { IoImageOutline } from 'react-icons/io5'
 
-import { Modal, ConfirmModal } from '@/shared/ui'
-import { FullImageUpload } from '@/features/imageFlow/ui/fullImageUpload/FullImageUpload'
-import { getModalConfig } from '@/features/imageFlow/utils/modalUtils'
-import { LeftButton, RightButton } from '@/features/imageFlow/ui/imageFlowButtons/ImageFlowButtons'
+import { createAvatarFlow } from '@/features/profile/ui/profilePhoto/hooks/avatarFlow'
+import { CreateItemModal } from '@/features/imageFlow/ui/createItemModal/CreateItemModal'
 import { ACCEPTED_TYPES, MAX_FILE_SIZE_MB, MAX_IMAGES } from '@/features/profile/utils'
-import { StepAvatarPosition } from '../stepAvatarPosition/StepAvatarPosition'
 
 type AvatarModalProps = {
   open: boolean
   onClose: () => void
 }
 
-type AvatarStep = 'avatar-upload' | 'avatar-position'
-
 export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
-  const [currentStep, setCurrentStep] = useState<AvatarStep>('avatar-upload')
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+  const [modalResetKey, setModalResetKey] = useState(0)
 
-  const modalConfig = getModalConfig(currentStep)
+  const avatarFlow = createAvatarFlow()
 
-  const handleMainModalOpenChange = (newOpen: boolean) => {
-    if (!newOpen) {
-      handleCloseButtonClick()
+  const handleFilesSelected = (files: File[]) => {
+    const selectedFile = files[0]
+    if (selectedImage) {
+      URL.revokeObjectURL(selectedImage)
     }
+    const imageUrl = URL.createObjectURL(selectedFile)
+    setSelectedImage(imageUrl)
   }
 
-  const handleCloseButtonClick = () => {
-    if (selectedImage) {
-      setIsConfirmModalOpen(true)
-    } else {
-      handleClose()
-    }
+  const handleComplete = () => {
+    handleClose()
   }
 
   const handleClose = () => {
@@ -44,100 +34,56 @@ export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
       URL.revokeObjectURL(selectedImage)
     }
     setSelectedImage(null)
-    setCurrentStep('avatar-upload')
+    // Force modal to re-render and reset to initial step
+    setModalResetKey((prev) => prev + 1)
     onClose()
   }
 
-  const handleFilesSelected = (files: File[]) => {
-    const selectedFile = files[0]
-
-    if (selectedImage) {
+  // Reset state when modal opens
+  useEffect(() => {
+    if (open && selectedImage) {
+      // Clean up any existing image URL
       URL.revokeObjectURL(selectedImage)
-    }
-
-    const imageUrl = URL.createObjectURL(selectedFile)
-    setSelectedImage(imageUrl)
-    setCurrentStep('avatar-position')
-  }
-
-  const handleBack = (step: AvatarStep) => {
-    if (step === 'avatar-position') {
-      if (selectedImage) {
-        URL.revokeObjectURL(selectedImage)
-      }
       setSelectedImage(null)
-      setCurrentStep('avatar-upload')
+      setModalResetKey((prev) => prev + 1)
     }
-  }
+  }, [open])
 
-  const handleAvatarUpload = () => {
-    if (selectedImage) {
-      URL.revokeObjectURL(selectedImage)
-    }
-    handleClose()
-  }
+  const hasUnsavedChanges = () => selectedImage !== null
 
-  const handleConfirmClose = (confirm: boolean) => {
-    setIsConfirmModalOpen(false)
-    if (confirm) {
-      handleClose()
-    }
-  }
-
-  const handleNext = () => {
-    handleAvatarUpload()
+  const stepProps = {
+    'avatar-upload': {
+      onFilesSelected: handleFilesSelected,
+      placeholder: '',
+      dragPlaceholder: 'Drop your profile photo here',
+      primaryButtonText: 'Select Photo',
+      icon: <IoImageOutline size={50} />,
+      maxImages: MAX_IMAGES,
+      acceptedTypes: ACCEPTED_TYPES,
+      maxFileSize: MAX_FILE_SIZE_MB,
+      showDraftButton: false,
+      largeBottomPadding: true,
+    },
+    'avatar-position': {
+      imageSrc: selectedImage,
+      onUpload: handleComplete,
+    },
   }
 
   return (
-    <>
-      <Modal
-        open={open}
-        onOpenChange={handleMainModalOpenChange}
-        title={modalConfig.title}
-        size={modalConfig.size}
-        cardPadding={modalConfig.cardPadding}
-        centerTitle={modalConfig.centerTitle}
-        leftButton={<LeftButton currentStep={currentStep} onBack={handleBack} disabled={false} />}
-        rightButton={
-          <RightButton
-            currentStep={currentStep}
-            onClose={handleCloseButtonClick}
-            onNext={handleNext}
-            disabled={false}
-          />
-        }
-      >
-        {currentStep === 'avatar-upload' && (
-          <FullImageUpload
-            showDraftButton={false}
-            largeBottomPadding={true}
-            onFilesSelected={handleFilesSelected}
-            placeholder=""
-            dragPlaceholder="Drop your profile photo here"
-            primaryButtonText="Select Photo"
-            icon={<IoImageOutline size={50} />}
-            maxImages={MAX_IMAGES}
-            acceptedTypes={ACCEPTED_TYPES}
-            maxFileSize={MAX_FILE_SIZE_MB}
-          />
-        )}
-
-        {currentStep === 'avatar-position' && selectedImage && (
-          <StepAvatarPosition imageSrc={selectedImage} onUpload={handleAvatarUpload} />
-        )}
-      </Modal>
-
-      {isConfirmModalOpen &&
-        ReactDOM.createPortal(
-          <ConfirmModal
-            title="Close"
-            description="Are you sure you want to exit without saving changes?"
-            isOpen={isConfirmModalOpen}
-            setIsOpen={() => setIsConfirmModalOpen(false)}
-            onConfirm={() => handleConfirmClose(true)}
-          />,
-          document.body
-        )}
-    </>
+    <CreateItemModal
+      key={modalResetKey}
+      open={open}
+      onClose={handleClose}
+      flow={avatarFlow}
+      initialStep="avatar-upload"
+      onComplete={handleComplete}
+      hasUnsavedChanges={hasUnsavedChanges}
+      stepProps={stepProps}
+      confirmModalConfig={{
+        title: 'Close',
+        description: 'Are you sure you want to exit without saving changes?',
+      }}
+    />
   )
 }

@@ -1,20 +1,14 @@
-'use client'
-
-import { useState } from 'react'
-import ReactDOM from 'react-dom'
 import { toast } from 'react-toastify'
+import { useState } from 'react'
 
-import { Modal } from '@/shared/ui/modal'
-import { PostCreationStep } from '@/features/post/types/types'
+import { createPostFlow } from '@/features/post/ui/createPost/hooks/postFlow'
+import { CreateItemModal } from '@/features/imageFlow/ui/createItemModal/CreateItemModal'
+import { MESSAGES } from '@/shared/config/messages'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
 
-import { PostContextProvider, usePostContext } from '../providers/PostContext'
-import { StepCrop, StepDescription, StepFilters, StepUpload } from '../steps'
-import { ClosePostModal } from '../closeModal/ClosePostModal'
 import { ECreatePostCloseModal } from '../CreatePost'
-import { getModalConfig } from '@/features/imageFlow/utils/modalUtils'
-import { MESSAGES } from '@/shared/config/messages'
-import { LeftButton, RightButton } from '@/features/imageFlow/ui'
+import { ClosePostModal } from '../closeModal/ClosePostModal'
+import { usePostContext, PostContextProvider } from '../providers/PostContext'
 
 type CreatePostModalProps = {
   open: boolean
@@ -22,117 +16,102 @@ type CreatePostModalProps = {
   user: Pick<UserProfile, 'userName' | 'avatars' | 'id'>
 }
 
-const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
-  const { addImage, images, publishPost, clearAll, description } = usePostContext()
-
-  const [currentStep, setCurrentStep] = useState<PostCreationStep>('upload')
-  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false)
+const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
+  const { images, publishPost, addImage, description, clearAll } = usePostContext()
   const [isPublishing, setIsPublishing] = useState(false)
+  const [showCloseModal, setShowCloseModal] = useState(false)
 
-  const modalConfig = getModalConfig(currentStep)
+  const postFlow = createPostFlow()
 
-  const handleMainModalOpenChange = (newOpen: boolean) => {
-    if (!newOpen) handleCloseButtonClick()
-  }
-
-  const handleCloseButtonClick = () => {
-    if (images.length > 0) {
-      setIsCloseModalOpen(true)
-    } else {
-      onClose(ECreatePostCloseModal.default)
+  const handlePublishPost = async () => {
+    setIsPublishing(true)
+    try {
+      await publishPost()
+      toast.success(MESSAGES.POST.POST_PUBLISHED)
+      onClose(ECreatePostCloseModal.redirectToProfile)
+    } catch (error) {
+      toast.error('Failed to publish post')
+      console.error('Publish error:', error)
+    } finally {
+      setIsPublishing(false)
     }
   }
 
-  const handleFilesSelected = (files: File[]) => {
+  const handleAddImage = (files: File[]) => {
     addImage(files)
-    setCurrentStep('crop')
   }
 
-  const handleBack = (step: PostCreationStep) => {
-    switch (step) {
-      case 'filter':
-        setCurrentStep('crop')
-        break
-      case 'description':
-        setCurrentStep('filter')
-        break
-      default:
-        clearAll()
-        setCurrentStep('upload')
+  const handleModalClose = () => {
+    if (!hasUnsavedChanges()) {
+      onClose(ECreatePostCloseModal.default)
+      return
     }
+
+    setShowCloseModal(true)
   }
 
-  const handleNextClick = async () => {
-    switch (currentStep) {
-      case 'crop':
-        setCurrentStep('filter')
-        break
-      case 'filter':
-        setCurrentStep('description')
-        break
-      case 'description':
-        setIsPublishing(true)
-        try {
-          await publishPost()
+  const handleCloseConfirm = (saveDraft: boolean) => {
+    setShowCloseModal(false)
 
-          toast.success(MESSAGES.POST.POST_PUBLISHED)
-          onClose(ECreatePostCloseModal.redirectToProfile)
-        } finally {
-          setIsPublishing(false)
-        }
-        break
-    }
-  }
-
-  const handleConfirmClose = (saveDraft: boolean) => {
     if (saveDraft) {
       toast.info(MESSAGES.POST.POST_DRAFT)
       onClose(ECreatePostCloseModal.redirectToHome)
     } else {
+      clearAll()
       toast.info(MESSAGES.POST.POST_DISCARDED)
       onClose(ECreatePostCloseModal.default)
     }
   }
 
-  const isButtonPrevDisabled = currentStep === 'description' && isPublishing
-  const isButtonNextDisabled = currentStep === 'description' && (isPublishing || !description.length)
+  const handleCloseModalCancel = () => {
+    setShowCloseModal(false)
+  }
+
+  const hasUnsavedChanges = () => images.length > 0
+
+  const stepProps = {
+    upload: {
+      onFilesSelected: handleAddImage,
+      placeholder: 'Drag and drop your image here or click to browse',
+      dragPlaceholder: 'Drop the image here',
+      primaryButtonText: 'Select from Computer',
+      showDraftButton: true,
+      draftButtonText: 'Open Draft',
+      onDraftClick: () => {
+        toast.info('Draft functionality is limited. Files would need to be stored on the server to be restored.')
+      },
+    },
+    crop: {
+      onNavigateBack: clearAll,
+    },
+    filter: {
+      onNavigateBack: () => {},
+    },
+    description: {
+      user,
+      disabled: isPublishing,
+      onNavigateBack: () => {},
+      getValidationState: () => ({
+        isValid: description?.length > 0,
+        isProcessing: isPublishing,
+      }),
+    },
+  }
 
   return (
     <>
-      <Modal
+      <CreateItemModal
         open={open}
-        onOpenChange={handleMainModalOpenChange}
-        title={modalConfig.title}
-        size={modalConfig.size}
-        cardPadding={modalConfig.cardPadding}
-        centerTitle={modalConfig.centerTitle}
-        leftButton={<LeftButton currentStep={currentStep} onBack={handleBack} disabled={isButtonPrevDisabled} />}
-        rightButton={
-          <RightButton
-            currentStep={currentStep}
-            onClose={handleCloseButtonClick}
-            onNext={handleNextClick}
-            isCreating={isPublishing}
-            isUploading={isPublishing}
-            disabled={isButtonNextDisabled}
-          />
-        }
-      >
-        {currentStep === 'upload' && <StepUpload onNext={handleFilesSelected} />}
-        {currentStep === 'crop' && <StepCrop onNavigateBack={() => setCurrentStep('upload')} />}
-        {currentStep === 'filter' && <StepFilters />}
-        {currentStep === 'description' && <StepDescription disabled={isPublishing} user={user} />}
-      </Modal>
+        onClose={handleModalClose}
+        flow={postFlow}
+        initialStep="upload"
+        onComplete={handlePublishPost}
+        useBuiltInConfirmModal={false}
+        hasUnsavedChanges={hasUnsavedChanges}
+        stepProps={stepProps}
+      />
 
-      {isCloseModalOpen &&
-        ReactDOM.createPortal(
-          <ClosePostModal
-            open={isCloseModalOpen}
-            onClose={() => setIsCloseModalOpen(false)}
-            onConfirm={handleConfirmClose}
-          />,
-          document.body
-        )}
+      <ClosePostModal open={showCloseModal} onClose={handleCloseModalCancel} onConfirm={handleCloseConfirm} />
     </>
   )
 }
@@ -140,7 +119,7 @@ const PostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
 export const CreatePostModal = (props: CreatePostModalProps) => {
   return (
     <PostContextProvider userId={props.user.id}>
-      <PostModalContent {...props} />
+      <CreatePostModalContent {...props} />
     </PostContextProvider>
   )
 }
