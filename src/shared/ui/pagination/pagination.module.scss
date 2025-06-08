@@ -1,81 +1,81 @@
 .pagination {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	align-items: center;
 
-  .buttons {
-    display: flex;
-    column-gap: 5px;
-    align-items: center;
+	.buttons {
+		display: flex;
+		column-gap: 5px;
+		align-items: center;
 
-    .button {
-      cursor: pointer;
+		.buttonWrapper {
+			cursor: pointer;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
-      min-width: 24px;
-      height: 24px;
+			min-width: 24px;
+			height: 24px;
 
-      font-size: var(--font-size-s);
-      font-weight: var(--font-weight-regular);
-      line-height: var(--line-height-m);
+			font-size: var(--font-size-s);
+			font-weight: var(--font-weight-regular);
+			line-height: var(--line-height-m);
 
-      background: none;
-      border: none;
-      border-radius: 2px;
+			background: none;
+			border: none;
+			border-radius: 2px;
 
-      &:hover {
-        background-color: var(--color-dark-500);
-      }
+			&:hover {
+				background-color: var(--color-dark-500);
+			}
 
-      &:focus-visible {
-        outline: 2px solid var(--color-accent-700);
-      }
+			&:focus-visible {
+				outline: 2px solid var(--color-accent-700);
+			}
 
-      &:disabled {
-        cursor: default;
+			&:disabled {
+				cursor: default;
 
-        &:hover {
-          background-color: transparent;
-        }
-      }
+				&:hover {
+					background-color: transparent;
+				}
+			}
 
-      &.active {
-        touch-action: none;
-        color: var(--color-dark-900);
-        background-color: var(--color-light-100);
-      }
+			&.active {
+				touch-action: none;
+				color: var(--color-dark-900);
+				background-color: var(--color-light-100);
+			}
 
-      &.arrowDisabled {
-        color: var(--color-dark-500);
-      }
-    }
-  }
+			&.arrowDisabled {
+				color: var(--color-dark-500);
+			}
+		}
+	}
 
-  .perPage {
-    display: flex;
-    align-items: center;
-    column-gap: 4px;
-    padding-left: 24px;
+	.perPage {
+		display: flex;
+		align-items: center;
+		column-gap: 4px;
+		padding-left: 24px;
 
-    .select {
-      height: 22px;
-      padding: 0 6px;
-      column-gap: unset;
+		.select {
+			height: 22px;
+			padding: 0 6px;
+			column-gap: unset;
 
-      span {
-        &:nth-child(2) {
-          width: 16px;
-        }
-      }
-    }
-  }
+			span {
+				&:nth-child(2) {
+					width: 16px;
+				}
+			}
+		}
+	}
 }
 
 .item {
-  height: 24px !important;
-  padding: 0 6px !important;
+	height: 24px !important;
+	padding: 0 6px !important;
 }
