@@ -1,9 +1,21 @@
+import { EmailConfirmation } from '@/features/auth/ui/emailConfirmation/EmailConfirmation'
 import { PublicPosts } from '@/features/main/ui/publicPosts/PublicPosts'
 import { Post } from '@/features/post/types/postTypes'
 
+type PageProps = {
+  searchParams?: Promise<{ code?: string }>
+}
+
 export const revalidate = 60
 
-export default async function HomePage() {
+export default async function HomePage({ searchParams }: PageProps) {
+  const params = await searchParams
+  const code = params?.code
+
+  if (code) {
+    return <EmailConfirmation code={code} />
+  }
+
   let count = 0
   let posts: Post[] = []
 
