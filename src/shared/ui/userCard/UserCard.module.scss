@@ -1,7 +1,6 @@
 .userInfo {
   display: flex;
   gap: 6px;
-  align-items: center;
 }
 
 .userName {
@@ -11,4 +10,28 @@
   &:hover {
     color: var(--color-accent-500);
   }
+}
+
+.standalone {
+  align-items: center;
+}
+
+.inline,
+.stacked {
+  align-items: flex-start;
+
+  .userName {
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-semibold);
+  }
+}
+
+.inline .textBlock {
+  display: flex;
+  gap: 6px;
+}
+
+.stacked .textBlock {
+  display: flex;
+  flex-direction: column;
 }

@@ -12,16 +12,25 @@ export type User = {
 type Props = {
   user: User
   className?: string
+  layout?: 'standalone' | 'inline' | 'stacked' //  'standalone' for use in headers, 'inline' - inside comments/posts, 'stacked' - messages
+  children?: React.ReactNode
 }
 
-export const UserCard = ({ user, className }: Props) => {
+export const UserCard = ({ user, className, layout = 'standalone', children }: Props) => {
   const { avatar, id, userName } = user
   return (
-    <div className={clsx(s.userInfo, className)}>
+    <div className={clsx(s.userInfo, s[layout], className)}>
       <Avatar avatar={avatar} name={userName} />
-      <Link href={`/profile/${id}`} className={s.userName}>
-        {userName}
-      </Link>
+      <div className={s.textBlock}>
+        <Link href={`/profile/${id}`} className={s.userName}>
+          {userName}
+        </Link>
+        {children}
+      </div>
     </div>
   )
 }
+
+//  <UserCard user={{ id: ownerId, userName, avatar: avatarOwner }} alignment="start">
+//         {description}
+//       </UserCard>
