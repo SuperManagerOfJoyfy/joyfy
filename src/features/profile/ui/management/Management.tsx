@@ -12,18 +12,23 @@ import {
 export const Management = () => {
   const [type, setType] = useState('Personal')
   const [subscription, setSubscription] = useState('10')
-  const [showPayment, setShowPayment] = useState(true)
+  const [showModal, setShowModal] = useState(false)
 
   const currentSubscription = true
 
   return (
     <>
-      <PaymentModal open={showPayment} onOpenChange={setShowPayment} />
+      <PaymentModal open={showModal} onOpenChange={setShowModal} handleSubmit={() => console.log('handleSubmit')} />
       <div className={s.management}>
         {currentSubscription && <SubscriptionCard />}
         <AccountTypeSelector value={type} onChange={setType} />
         {type === 'Business' && (
-          <BusinessSubscription subscription={subscription} onChange={setSubscription} current={currentSubscription} />
+          <BusinessSubscription
+            subscription={subscription}
+            onChange={setSubscription}
+            current={currentSubscription}
+            onOpenModal={() => setShowModal(true)}
+          />
         )}
       </div>
     </>
