@@ -60,10 +60,6 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 
   let result = await baseQuery(args, api, extraOptions)
 
-  if (isAuthMeRequest && result.error?.status === 401) {
-    return { data: null, meta: {} }
-  }
-
   if (result.error?.status === 401 && !isRefreshEndpoint) {
     const currentTime = Date.now()
     const refreshCooldown = 3000

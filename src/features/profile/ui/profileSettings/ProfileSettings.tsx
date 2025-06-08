@@ -9,11 +9,11 @@ import { GeneralInformation } from '../generalInformation/GeneralInformation'
 import { PATH } from '@/shared/config/routes'
 
 import s from './ProfileSettings.module.scss'
+import { MyPayments } from '../myPayments/MyPayments'
 import { Management } from '@/features/profile/ui/management/Management'
 
 type ProfileSettingsProps = {
   activePart: string
-  userId: number
 }
 
 const SETTINGS_TABS = [
@@ -45,7 +45,7 @@ const ComingSoonPlaceholder = ({ feature }: { feature: string }) => (
   <div className={s.comingSoon}>{feature} - Coming soon</div>
 )
 
-const renderTabContent = (activePart: string, userId: number) => {
+const renderTabContent = (activePart: string) => {
   switch (activePart as SettingsTabValue) {
     case 'info':
       return <GeneralInformation />
@@ -54,13 +54,13 @@ const renderTabContent = (activePart: string, userId: number) => {
     case 'management':
       return <Management />
     case 'payments':
-      return <ComingSoonPlaceholder feature="My payments" />
+      return <MyPayments />
     default:
       return <GeneralInformation />
   }
 }
 
-export const ProfileSettings = ({ activePart, userId }: ProfileSettingsProps) => {
+export const ProfileSettings = ({ activePart }: ProfileSettingsProps) => {
   const router = useRouter()
   const tabs: Tab[] = useMemo(() => SETTINGS_TABS.map(({ value, title }) => ({ value, title })), [])
 
@@ -78,7 +78,7 @@ export const ProfileSettings = ({ activePart, userId }: ProfileSettingsProps) =>
       <div className={s.tabsWrapper}>
         <Tabs tabs={tabs} value={activePart} onValueChange={handleTabChange} />
 
-        <div className={s.tabContent}>{renderTabContent(activePart, userId)}</div>
+        <div className={s.tabContent}>{renderTabContent(activePart)}</div>
       </div>
     </div>
   )

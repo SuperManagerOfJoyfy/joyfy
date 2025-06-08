@@ -5,10 +5,6 @@ import s from './UserProfile.module.scss'
 import { Button, Typography } from '@/shared/ui'
 import verifiedBudget from '../../../../../public/verifiedBudget.svg'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { useAppDispatch } from '@/app/store/store'
-import { useEffect } from 'react'
-import { profileApi, useGetPublicUserProfileQuery } from '@/features/profile/api/profileApi'
-import { useParams } from 'next/navigation'
 import { PublicUserProfile } from '@/features/profile/api/profileApi.types'
 import Link from 'next/link'
 import { PATH } from '@/shared/config/routes'
@@ -27,26 +23,11 @@ const StatItem = ({ value, label }: StatItemProps) => (
 )
 
 export const UserProfile = (userProfile: PublicUserProfile) => {
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    if (userProfile) {
-      dispatch(profileApi.util.upsertQueryData('getPublicUserProfile', id, userProfile))
-    }
-  }, [dispatch, userProfile])
-
-  const params = useParams()
-  const id = String(params?.id)
-
   const { data: user } = useGetMeQuery()
-  const { data: profile } = useGetPublicUserProfileQuery(id)
 
-  if (!profile) return null
-
-  const { userName, aboutMe, avatars, userMetadata, hasPaymentSubscription } = profile
+  const { userName, aboutMe, avatars, userMetadata, hasPaymentSubscription } = userProfile
 
   const profileAvatar = avatars?.[0]?.url
-
   const bioText = aboutMe || ''
 
   return (
@@ -67,7 +48,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
               <Image src={verifiedBudget} width={24} height={24} alt="verifiedIcon" priority />
             )}
           </div>
-          {user && (
+          {user?.userId === userProfile.id && (
             <Button as={Link} href={`${PATH.USER.SETTINGS}?part=info`} variant="secondary">
               Profile Settings
             </Button>

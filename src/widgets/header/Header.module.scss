@@ -18,7 +18,7 @@
 .logo {
   color: var(--color-light-100);
   font-family: var(--font-family-primary), sans-serif;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   font-size: 26px;
   letter-spacing: 8px;
   display: flex;
