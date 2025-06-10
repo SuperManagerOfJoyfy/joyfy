@@ -1,13 +1,13 @@
 'use client'
 
-import { Avatar, Button, Card, ImageSlider, Typography } from '@/shared/ui'
-import s from './publicPosts.module.scss'
-import { Post } from '@/features/post/types/types'
 import { formatNumberToSixDigits, timeAgo } from '@/features/main/utils'
-import { useState } from 'react'
+import { Post } from '@/features/post/types/postTypes'
+import { Avatar, Button, Card, ImageSlider, Typography } from '@/shared/ui'
 import clsx from 'clsx'
-import { PublicPostModal } from '../publicPostModal'
 import Link from 'next/link'
+import { useState } from 'react'
+import { PublicPostModal } from '../publicPostModal'
+import s from './publicPosts.module.scss'
 
 type Props = {
   count: number

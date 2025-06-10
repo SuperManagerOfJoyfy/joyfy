@@ -1,8 +1,9 @@
-import { UserProfile } from '@/features/profile/ui/userProfile'
 import { GetPostsResponse } from '@/features/post/api/postsApi.types'
-import { PostModal } from '@/features/post/ui/postModal'
-import { PublicUserProfile } from '@/features/profile/api/profileApi.types'
 import { PostsGridWithInfiniteScroll } from '@/features/post/ui/postsGridWithInfiniteScroll'
+import { PostModal } from '@/features/postModal/ui'
+
+import { PublicUserProfile } from '@/features/profile/api/profileApi.types'
+import { UserProfile } from '@/features/profile/ui/userProfile'
 
 type PageProps = {
   params: Promise<{ id: string }>

@@ -1,11 +1,12 @@
 'use client'
 
-import { Post } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/postTypes'
+
 import Image from 'next/image'
-import s from './PostsGrid.module.scss'
-import { FaComment } from 'react-icons/fa6'
 import { FaHeart } from 'react-icons/fa'
+import { FaComment } from 'react-icons/fa6'
 import fallback from './fallbackNoImage.png'
+import s from './PostsGrid.module.scss'
 
 type Props = {
   posts: Post[] | undefined

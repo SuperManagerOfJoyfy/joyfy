@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ComponentProps, forwardRef, useEffect, useState } from 'react'
+import React, { ComponentProps, forwardRef, ReactNode, useEffect, useState } from 'react'
 import { ReactDatePickerCustomHeaderProps, registerLocale } from 'react-datepicker'
 import * as RDP from 'react-datepicker'
 import { format } from 'date-fns'
@@ -20,7 +20,7 @@ type DatePickerProps = {
   onSetStartDate: (date: Date | null) => void
   onSetEndDate?: (date: Date | null) => void
   className?: string
-  label?: string
+  label?: string | ReactNode
   disabled?: boolean
   errorMessage?: string
 }

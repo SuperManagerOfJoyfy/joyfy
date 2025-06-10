@@ -5,10 +5,9 @@ import { ChangeEvent } from 'react'
 import { usePostContext } from '@/features/post/ui/createPost/providers'
 import { ImageSlider } from '@/shared/ui/imageSlider'
 
+import { User } from '@/entities/user/ui/userCard'
 import { PublicationDescription, UserCard } from '@/shared/ui'
-import { User } from '@/shared/ui/userCard'
 import s from './StepDescription.module.scss'
-import { Separator } from '@radix-ui/react-dropdown-menu'
 
 type StepDescriptionProps = {
   disabled?: boolean
