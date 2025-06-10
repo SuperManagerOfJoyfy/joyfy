@@ -28,6 +28,8 @@
 .content {
   flex: 1;
   padding-top: 36px;
+  max-width: 972px;
+  margin: 0px auto;
 
   &.leftPadding {
     padding-left: 24px;
