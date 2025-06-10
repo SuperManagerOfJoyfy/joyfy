@@ -1,7 +1,9 @@
+import { Post } from '@/features/post/types/postTypes'
+
+import { AvatarGroup, DateStamp, ImageSlider, Modal, Scroll, Separator, Typography } from '@/shared/ui'
+import { PostItem } from '@/entities/post/ui/postItem'
+import { UserCard } from '@/entities/user'
 import s from './publicPostModal.module.scss'
-import { AvatarGroup, ImageSlider, Modal, Scroll, Separator, Typography, UserCard } from '@/shared/ui'
-import { Post } from '@/features/post/types/types'
-import { PostItem } from '@/features/post/ui/postModal'
 
 type Props = {
   open: boolean
@@ -14,6 +16,7 @@ export const PublicPostModal = ({ open, closeModal, post }: Props) => {
 
   const { userName, avatarOwner: avatar, images, ownerId, likesCount, createdAt, avatarWhoLikes } = post
 
+  // TODO: make postLikes query and feed AvatarGroup component with data from this query
   const arrayOfAvatars = typeof avatarWhoLikes !== 'boolean' ? avatarWhoLikes : []
 
   return (
@@ -31,7 +34,7 @@ export const PublicPostModal = ({ open, closeModal, post }: Props) => {
           <Separator />
 
           <Scroll className={s.scroll}>
-            <PostItem item={post} />
+            <PostItem post={post} />
           </Scroll>
 
           <Separator />
@@ -39,7 +42,7 @@ export const PublicPostModal = ({ open, closeModal, post }: Props) => {
           <div className={s.footer}>
             {likesCount > 0 && (
               <div className={s.likes}>
-                <AvatarGroup avatars={arrayOfAvatars} />
+                {/* <AvatarGroup avatars={arrayOfAvatars} /> */}
 
                 <Typography variant={'body2'}>
                   {likesCount} <b>"Like"</b>
@@ -47,13 +50,7 @@ export const PublicPostModal = ({ open, closeModal, post }: Props) => {
               </div>
             )}
 
-            <Typography variant={'caption'} className={s.data}>
-              {new Date(createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </Typography>
+            <DateStamp date={createdAt} />
           </div>
         </div>
       </div>

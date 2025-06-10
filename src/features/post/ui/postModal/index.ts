@@ -1,6 +1,0 @@
-export * from './components/postActions'
-export * from './components/postItem'
-export * from './PostModal'
-export * from './components/editPost'
-export * from './components/postContent'
-export * from './components/postDropdownMenuItems'

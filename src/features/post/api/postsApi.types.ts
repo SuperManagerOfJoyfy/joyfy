@@ -1,4 +1,4 @@
-import { Post } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/postTypes'
 
 export type GetPostsResponse = {
   totalCount: number

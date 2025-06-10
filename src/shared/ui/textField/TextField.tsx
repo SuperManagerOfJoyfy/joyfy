@@ -73,7 +73,7 @@ export const TextField = ({
       {label && (
         <div className={s.labelGroup}>
           <Label htmlFor={inputId} label={label} disabled={disabled} />
-          {required && <span className={s.asteriks}>*</span>}
+          {required && <span className={s.asterisk}>*</span>}
         </div>
       )}
       <div className={classNames.inputContainer}>

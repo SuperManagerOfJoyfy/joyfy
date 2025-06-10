@@ -5,7 +5,8 @@ import {
   UploadImageResponse,
 } from '@/features/post/api/postsApi.types'
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { Post } from '../types/types'
+import { Post, PostLikes } from '../types/postTypes'
+import { number } from 'zod'
 
 export const postsApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
@@ -103,6 +104,14 @@ export const postsApi = joyfyApi.injectEndpoints({
       },
       invalidatesTags: (result, error, { postId }) => [{ type: 'Post', id: postId }],
     }),
+
+    getPostLikes: builder.query<PostLikes, number>({
+      query: (postId) => ({
+        url: `posts/${postId}/likes`,
+        method: 'GET',
+      }),
+      providesTags: (result, error, postId) => [{ type: 'Post', id: postId }],
+    }),
   }),
 })
 
@@ -114,4 +123,5 @@ export const {
   useCreatePostMutation,
   useDeletePostMutation,
   useEditPostMutation,
+  useGetPostLikesQuery,
 } = postsApi

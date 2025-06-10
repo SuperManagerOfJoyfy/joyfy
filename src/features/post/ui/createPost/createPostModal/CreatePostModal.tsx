@@ -5,6 +5,7 @@ import { createPostFlow } from '@/features/post/ui/createPost/hooks/postFlow'
 import { CreateItemModal } from '@/features/imageFlow/ui/createItemModal/CreateItemModal'
 import { MESSAGES } from '@/shared/config/messages'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
+import { Modal } from '@/shared/ui/modal'
 
 import { ECreatePostCloseModal } from '../CreatePost'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
