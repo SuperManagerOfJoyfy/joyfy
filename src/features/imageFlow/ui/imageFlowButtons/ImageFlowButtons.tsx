@@ -3,46 +3,45 @@ import { FiChevronLeft } from 'react-icons/fi'
 
 import { PostCreationStep } from '@/features/post/types/postTypes'
 import { Button } from '@/shared/ui'
+import { ModalStep } from '../../types/modalTypes'
 
 import s from './ImageFlowButtons.module.scss'
 
-type AvatarStep = 'avatar-upload' | 'avatar-position'
-
-type AllSteps = PostCreationStep | AvatarStep
-
-type LeftButtonProps<T extends AllSteps = AllSteps> = {
-  currentStep: T
-  onBack: (step: T) => void
+type LeftButtonProps = {
+  currentStep: ModalStep
+  onBack: () => void
   disabled?: boolean
+  isFirstStep: boolean
 }
 
-type RightButtonProps<T extends AllSteps = AllSteps> = {
-  currentStep: T
-  isCreating?: boolean
-  isUploading?: boolean
+type RightButtonProps = {
+  currentStep: ModalStep
   onNext: () => void
   onClose: () => void
   disabled?: boolean
+  isProcessing?: boolean
+  isLastStep: boolean
+  isCreating?: boolean
 }
 
-export const LeftButton = <T extends AllSteps = AllSteps>({ currentStep, onBack, disabled }: LeftButtonProps<T>) => {
-  if (currentStep === 'upload' || currentStep === 'avatar-upload') return null
+export const LeftButton = ({ currentStep, onBack, disabled, isFirstStep }: LeftButtonProps) => {
+  if (currentStep === 'upload' || currentStep === 'avatar-upload' || isFirstStep) return null
 
   return (
-    <Button variant="icon" onClick={() => onBack(currentStep)} className="button-back" disabled={disabled}>
+    <Button variant="icon" onClick={onBack} className="button-back" disabled={disabled}>
       <FiChevronLeft size={20} />
     </Button>
   )
 }
 
-export const RightButton = <T extends AllSteps = AllSteps>({
+export const RightButton = ({
   currentStep,
-  isCreating = false,
-  isUploading = false,
   onNext,
   onClose,
   disabled,
-}: RightButtonProps<T>) => {
+  isProcessing = false,
+  isCreating = false,
+}: RightButtonProps) => {
   if (currentStep === 'upload' || currentStep === 'avatar-upload' || currentStep === 'avatar-position') {
     return (
       <Button
@@ -59,13 +58,13 @@ export const RightButton = <T extends AllSteps = AllSteps>({
 
   const getButtonText = () => {
     if (currentStep === 'description') {
-      return isCreating ? 'Publishing...' : 'Publish'
+      return isCreating || isProcessing ? 'Publishing...' : 'Publish'
     }
     return 'Next'
   }
 
   return (
-    <Button variant="text" onClick={onNext} disabled={disabled} className="button-next">
+    <Button variant="text" onClick={onNext} disabled={disabled || isProcessing || isCreating} className="button-next">
       {getButtonText()}
     </Button>
   )
