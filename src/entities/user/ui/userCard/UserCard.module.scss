@@ -1,0 +1,34 @@
+.userInfo {
+  display: flex;
+  gap: 6px;
+}
+
+.userName {
+  color: var(--color-light-100);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    color: var(--color-accent-500);
+  }
+}
+
+.standalone {
+  align-items: center;
+}
+
+.inline,
+.stacked {
+  align-items: flex-start;
+
+  .userName {
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-bold);
+    margin-right: 6px;
+  }
+}
+
+.stacked .textBlock {
+  display: flex;
+  flex-direction: column;
+}

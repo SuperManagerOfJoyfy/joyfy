@@ -1,7 +1,7 @@
-import { createContext, useContext, useState, ReactNode, useRef, useEffect } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react'
 
 import { useCreatePostMutation, useUploadImageMutation } from '@/features/post/api/postsApi'
-import { ASPECT_RATIOS, AspectRatioType, FilterType, IMAGE_FILTERS } from '@/features/post/types/types'
+import { ASPECT_RATIOS, AspectRatioType, FilterType, IMAGE_FILTERS } from '@/features/post/types/postTypes'
 
 export type ImageItem = {
   id: string

@@ -56,6 +56,12 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
 
   const isSubmitDisabled = !isValid || !hasChanges || isSubmitting
 
+  const labelContent = (
+    <>
+      Date of Birth <span className={s.asterisk}>*</span>
+    </>
+  )
+
   return (
     <FormProvider {...methods}>
       <div className={s.container}>
@@ -71,12 +77,7 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
             />
             <ControlledTextField label="Last Name" name="lastName" control={control} disabled={isSubmitting} required />
             <div>
-              <ControlledDatePicker
-                label="Date of Birth"
-                name="dateOfBirth"
-                control={control}
-                disabled={isSubmitting}
-              />
+              <ControlledDatePicker label={labelContent} name="dateOfBirth" control={control} disabled={isSubmitting} />
               {errors.dateOfBirth && (
                 <p className={s.error}>
                   You must be at least 13 years old. See our <Link href="/auth/privacy-policy">Privacy Policy</Link>
