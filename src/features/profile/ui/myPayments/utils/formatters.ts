@@ -25,6 +25,6 @@ export const formatters = {
   },
 
   currency: (price: number): string => {
-    return `$${price.toFixed(2)}`
+    return `$${Math.round(price)}`
   },
 }

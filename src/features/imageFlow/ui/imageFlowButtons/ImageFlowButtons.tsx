@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import { FiChevronLeft } from 'react-icons/fi'
 
-import { PostCreationStep } from '@/features/post/types/postTypes'
 import { Button } from '@/shared/ui'
 import { ModalStep } from '../../types/modalTypes'
 

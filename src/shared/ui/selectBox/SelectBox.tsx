@@ -28,7 +28,7 @@ const SelectBox = ({
       disabled={disabled}
     >
       <Select.Value placeholder={placeholder} />
-      <Select.Icon className={clsx(s.icon, s.open)}>
+      <Select.Icon className={s.icon}>
         <FiChevronDown />
       </Select.Icon>
     </Select.Trigger>

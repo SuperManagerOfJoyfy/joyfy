@@ -1,11 +1,12 @@
 import { Metadata } from 'next'
+import { ReactNode } from 'react'
+
 import { ReduxProvider } from './providers/ReduxProvider'
 import MainLayout from './MainLayout'
+import { ToastSnackbar } from '@/shared/ui'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/globals.css'
-import { ToastSnackbar } from '@/shared/ui/toastSnackbar/ToastSnackbar'
-import { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
