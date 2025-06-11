@@ -43,14 +43,16 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : ''
 
-  const isPublicPage = [
-    PATH.ROOT,
-    PATH.AUTH.REGISTRATION,
-    PATH.AUTH.LOGIN,
-    PATH.AUTH.PRIVACY_POLICY,
-    PATH.AUTH.TERMS_OF_SERVICE,
-    PATH.AUTH.EMAIL_CONFIRMED,
-  ].includes(currentPath)
+  const isPublicPage =
+    [
+      PATH.ROOT,
+      PATH.AUTH.REGISTRATION,
+      PATH.AUTH.LOGIN,
+      PATH.AUTH.PRIVACY_POLICY,
+      PATH.AUTH.TERMS_OF_SERVICE,
+      PATH.AUTH.EMAIL_CONFIRMED,
+      PATH.USER.PROFILE,
+    ].includes(currentPath) || currentPath.startsWith(PATH.USER.PROFILE)
 
   if (isLoginEndpoint) {
     const result = await baseQuery(args, api, extraOptions)
@@ -92,9 +94,12 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
           console.log('Token refresh failed:', refreshResult.error)
           lastRefreshResult = false
           if (!(isAuthMeRequest && isPublicPage)) {
-            await baseQuery({ url: '/auth/logout', method: 'POST' }, api, extraOptions)
             LocalStorage.removeToken()
             localStorage.removeItem('userEmail')
+
+            if (typeof window !== 'undefined') {
+              window.location.href = PATH.AUTH.LOGIN
+            }
           }
         }
       } finally {
