@@ -7,3 +7,10 @@ export type PaymentRecord = {
   subscriptionType: 'MONTHLY' | 'WEEKLY' | 'DAILY'
   paymentType: 'STRIPE' | 'PAYPAL'
 }
+
+export type CreatePaymentRequest = {
+  typeSubscription: 'MONTHLY' | 'DAY' | 'WEEKLY'
+  paymentType: 'STRIPE' | 'PAYPAL'
+  amount: number
+  baseUrl: string
+}

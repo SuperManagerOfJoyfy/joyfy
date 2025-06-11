@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Checkbox, Modal, Typography } from '@/shared/ui'
 import s from './paymentModal.module.scss'
 import Loading from '@/app/loading'
@@ -8,21 +8,27 @@ import Loading from '@/app/loading'
 type Props = {
   open: boolean
   onOpenChange: (value: boolean) => void
-  handleSubmit: () => void
+  handleSubmit: () => Promise<void>
+  initialStep?: 'success' | 'error'
 }
 
-export const PaymentModal = ({ open, onOpenChange, handleSubmit }: Props) => {
+export const PaymentModal = ({ open, onOpenChange, handleSubmit, initialStep }: Props) => {
   const [step, setStep] = useState<'initial' | 'loading' | 'success' | 'error'>('initial')
   const [agreed, setAgreed] = useState(false)
+
+  useEffect(() => {
+    if (initialStep === 'success' || initialStep === 'error') {
+      setStep(initialStep)
+    }
+  }, [initialStep])
 
   const handlePayment = async () => {
     setStep('loading')
 
     try {
-      handleSubmit()
-      setStep('success')
+      await handleSubmit()
     } catch {
-      setStep('error')
+      console.error('error creating payment')
     }
   }
 
@@ -62,7 +68,7 @@ export const PaymentModal = ({ open, onOpenChange, handleSubmit }: Props) => {
         {step === 'error' && (
           <>
             <Typography variant="body1">Transaction failed. Please, write to support</Typography>
-            <Button onClick={() => setStep('initial')}>Back to payment</Button>
+            <Button onClick={handleClose}>Back to payment</Button>
           </>
         )}
       </div>

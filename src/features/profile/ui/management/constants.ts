@@ -4,7 +4,7 @@ export const typeOptions = [
 ]
 
 export const subscriptionOptions = [
-  { label: '$10 per 1 Day', value: '10' },
-  { label: '$50 per 7 Day', value: '50' },
-  { label: '$100 per month', value: '100' },
+  { label: '$10 per 1 Day', value: 'DAY' },
+  { label: '$50 per 7 Day', value: 'WEEKLY' },
+  { label: '$100 per month', value: 'MONTHLY' },
 ]

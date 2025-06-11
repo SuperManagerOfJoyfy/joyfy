@@ -1,7 +1,13 @@
 import { Card, Checkbox, Typography } from '@/shared/ui'
 import s from './subscriptionCard.module.scss'
+import { PaymentRecord } from '@/features/profile/api'
+import { getNextPaymentDate } from './dateUtils'
 
-export const SubscriptionCard = () => {
+type Props = {
+  subscription: PaymentRecord[]
+}
+
+export const SubscriptionCard = ({ subscription }: Props) => {
   return (
     <div>
       <Typography className={s.title} variant="h3">
@@ -15,9 +21,11 @@ export const SubscriptionCard = () => {
               Expire at
             </Typography>
 
-            <Typography className={s.value} variant="body2" fontWeight="bold">
-              12.02.2022
-            </Typography>
+            {subscription.map(({ subscriptionId, endDateOfSubscription }) => (
+              <Typography className={s.value} variant="body2" fontWeight="bold" key={subscriptionId}>
+                {new Date(endDateOfSubscription).toLocaleDateString('pl-PL')}
+              </Typography>
+            ))}
           </div>
 
           <div>
@@ -25,9 +33,15 @@ export const SubscriptionCard = () => {
               Next payment
             </Typography>
 
-            <Typography className={s.value} variant="body2" fontWeight="bold">
-              13.02.2022
-            </Typography>
+            {subscription.map(({ subscriptionId, dateOfPayment, subscriptionType }) => {
+              const nextPayment = getNextPaymentDate(dateOfPayment, subscriptionType)
+
+              return (
+                <Typography className={s.value} variant="body2" fontWeight="bold" key={subscriptionId}>
+                  {nextPayment.toLocaleDateString('pl-PL')}
+                </Typography>
+              )
+            })}
           </div>
         </div>
       </Card>

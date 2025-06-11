@@ -6,12 +6,18 @@ import { subscriptionOptions } from '@/features/profile/ui/management'
 
 type Props = {
   subscription: string
-  onChange: (val: string) => void
+  onChange: (val: 'MONTHLY' | 'DAY' | 'WEEKLY') => void
   current: boolean
   onOpenModal: () => void
+  setPaymentType: (type: 'STRIPE' | 'PAYPAL') => void
 }
 
-export const BusinessSubscription = ({ subscription, onChange, current, onOpenModal }: Props) => {
+export const BusinessSubscription = ({ subscription, onChange, current, onOpenModal, setPaymentType }: Props) => {
+  const onOpenChange = (type: 'STRIPE' | 'PAYPAL') => {
+    setPaymentType(type)
+    onOpenModal()
+  }
+
   return (
     <div>
       <Typography className={s.title} variant="h3">
@@ -29,13 +35,23 @@ export const BusinessSubscription = ({ subscription, onChange, current, onOpenMo
       </Card>
 
       <div className={s.buttons}>
-        <Button variant={'secondary'} className={s.button} aria-label="Pay with PayPal" onClick={onOpenModal}>
+        <Button
+          variant={'secondary'}
+          className={s.button}
+          aria-label="Pay with PayPal"
+          onClick={() => onOpenChange('PAYPAL')}
+        >
           <PaypalIcon />
         </Button>
 
         <span>Or</span>
 
-        <Button variant={'secondary'} className={s.button} aria-label="Pay with Stripe" onClick={onOpenModal}>
+        <Button
+          variant={'secondary'}
+          className={s.button}
+          aria-label="Pay with Stripe"
+          onClick={() => onOpenChange('STRIPE')}
+        >
           <StripeIcon />
         </Button>
       </div>
