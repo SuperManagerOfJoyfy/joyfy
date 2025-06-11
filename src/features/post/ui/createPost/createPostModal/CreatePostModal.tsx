@@ -5,7 +5,6 @@ import { createPostFlow } from '@/features/post/ui/createPost/hooks/postFlow'
 import { CreateItemModal } from '@/features/imageFlow/ui/createItemModal/CreateItemModal'
 import { MESSAGES } from '@/shared/config/messages'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
-import { Modal } from '@/shared/ui/modal'
 
 import { ECreatePostCloseModal } from '../CreatePost'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
@@ -31,7 +30,6 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
       toast.success(MESSAGES.POST.POST_PUBLISHED)
       onClose(ECreatePostCloseModal.redirectToProfile)
     } catch (error) {
-      toast.error('Failed to publish post')
       console.error('Publish error:', error)
     } finally {
       setIsPublishing(false)

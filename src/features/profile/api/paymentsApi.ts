@@ -6,7 +6,6 @@ export const paymentsApi = joyfyApi.injectEndpoints({
     getMyPayments: builder.query<PaymentRecord[], void>({
       query: () => ({
         url: '/subscriptions/my-payments',
-        method: 'GET',
       }),
       providesTags: ['Payments'],
     }),

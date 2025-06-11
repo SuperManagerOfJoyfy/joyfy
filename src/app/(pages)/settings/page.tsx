@@ -28,7 +28,7 @@ const SettingsPage = () => {
     return null
   }
 
-  return <ProfileSettings activePart={part} userId={user.userId} />
+  return <ProfileSettings activePart={part} />
 }
 
 export default SettingsPage

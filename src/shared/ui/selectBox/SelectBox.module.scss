@@ -45,6 +45,9 @@
 .icon {
   max-height: 24px;
   max-width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   svg {
     transition: transform 0.3s ease 0s;

@@ -1,7 +1,7 @@
 import { Loader, Pagination } from '@/shared/ui'
-import { useMockPaymentsQuery } from './useMockPaymentsQuery'
-import { usePagination } from './hooks/usePaginationTable'
-import { PAGINATION_CONSTANTS } from './utils/pagination'
+import { useMockPaymentsQuery } from '../useMockPaymentsQuery'
+import { usePagination } from '../hooks/usePaginationTable'
+import { PAGINATION_CONSTANTS } from '../utils/pagination'
 import { PaymentsTable } from './paymentsTable'
 
 import s from './MyPayments.module.scss'
