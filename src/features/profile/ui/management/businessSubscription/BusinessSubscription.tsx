@@ -3,10 +3,11 @@ import { PaypalIcon } from '@/shared/ui/icons/PaypalIcon'
 import { StripeIcon } from '@/shared/ui/icons/StripeIcon'
 import s from './businessSubscription.module.scss'
 import { subscriptionOptions } from '@/features/profile/ui/management'
+import { SubscriptionType } from '@/features/profile/api'
 
 type Props = {
   subscription: string
-  onChange: (val: 'MONTHLY' | 'DAY' | 'WEEKLY') => void
+  onChange: (val: SubscriptionType) => void
   current: boolean
   onOpenModal: () => void
   setPaymentType: (type: 'STRIPE' | 'PAYPAL') => void

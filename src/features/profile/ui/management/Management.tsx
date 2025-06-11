@@ -8,12 +8,12 @@ import {
   PaymentModal,
   SubscriptionCard,
 } from '@/features/profile/ui/management'
-import { useCreatePaymentMutation, useGetMyPaymentsQuery } from '@/features/profile/api'
+import { SubscriptionType, useCreatePaymentMutation, useGetMyPaymentsQuery } from '@/features/profile/api'
 import { useSearchParams } from 'next/navigation'
 
 export const Management = () => {
   const [type, setType] = useState('Personal')
-  const [typeSubscription, setTypeSubscription] = useState<'MONTHLY' | 'DAY' | 'WEEKLY'>('DAY')
+  const [typeSubscription, setTypeSubscription] = useState<SubscriptionType>(SubscriptionType.DAY)
   const [paymentType, setPaymentType] = useState<'STRIPE' | 'PAYPAL'>('STRIPE')
   const [showModal, setShowModal] = useState(false)
   const [initialStep, setInitialStep] = useState<'success' | 'error' | undefined>()
@@ -26,15 +26,10 @@ export const Management = () => {
   useEffect(() => {
     const successParam = searchParams.get('success')
 
-    if (successParam === 'true') {
-      setInitialStep('success')
-      setShowModal(true)
-    } else if (successParam === 'false') {
-      setInitialStep('error')
-      setShowModal(true)
-    }
-    
-    if (successParam !== null) {
+    setInitialStep(successParam === 'true' ? 'success' : 'error')
+    setShowModal(true)
+
+    if (successParam) {
       const url = new URL(window.location.href)
       url.searchParams.delete('success')
       window.history.replaceState({}, '', url.toString())
@@ -42,14 +37,14 @@ export const Management = () => {
   }, [searchParams])
 
   useEffect(() => {
-    if (Array.isArray(currentSubscription) && currentSubscription?.length > 0) {
+    if (Array.isArray(currentSubscription) && currentSubscription?.length) {
       setType('Business')
     }
   }, [currentSubscription])
 
   if (!currentSubscription) return null
 
-  const subscriptions = currentSubscription.length > 0
+  const subscriptions = !!currentSubscription.length
 
   const handlePay = async () => {
     try {
