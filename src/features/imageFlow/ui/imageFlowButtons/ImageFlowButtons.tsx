@@ -1,5 +1,5 @@
-import { FiChevronLeft } from 'react-icons/fi'
 import clsx from 'clsx'
+import { FiChevronLeft } from 'react-icons/fi'
 
 import { Button } from '@/shared/ui'
 import { ModalStep } from '../../types/modalTypes'

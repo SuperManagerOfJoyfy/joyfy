@@ -30,7 +30,6 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
       toast.success(MESSAGES.POST.POST_PUBLISHED)
       onClose(ECreatePostCloseModal.redirectToProfile)
     } catch (error) {
-      toast.error('Failed to publish post')
       console.error('Publish error:', error)
     } finally {
       setIsPublishing(false)

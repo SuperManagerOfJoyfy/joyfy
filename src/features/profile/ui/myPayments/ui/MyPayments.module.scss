@@ -1,0 +1,18 @@
+.container {
+  width: 100%;
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.paginationContainer {
+  display: flex;
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+}

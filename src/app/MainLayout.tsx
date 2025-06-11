@@ -2,16 +2,15 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Header } from '@/widgets/header/Header'
+import { clsx } from 'clsx'
+
 import { Loader } from '@/shared/ui/loader/Loader'
-import { createSidebarItems } from '@/widgets/sidebar/SidebarItem'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { CreatePost } from '@/features/post/ui'
+import { LogoutModal } from '@/features/auth/ui'
+import { Header, createSidebarItems, Sidebar } from '@/widgets'
 
 import s from '../styles/layout.module.scss'
-import { clsx } from 'clsx'
-import { Sidebar } from '@/shared/ui'
-import { LogoutModal } from '@/features/auth/ui'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -83,7 +82,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </div>
         )}
 
-        <main className={clsx(s.content, !isLoading && user && s.leftPadding)}>
+        <main className={s.content}>
           {showLoader ? (
             <div className={s.loaderWrapper}>
               <Loader message="Loading..." />

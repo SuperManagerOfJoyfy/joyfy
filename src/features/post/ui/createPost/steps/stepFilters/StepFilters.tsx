@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 
-import { FilterType, IMAGE_FILTERS, IMAGE_FILTERS_LIST } from '@/features/post/types/types'
+import { FilterType, IMAGE_FILTERS, IMAGE_FILTERS_LIST } from '@/features/post/types/postTypes'
 import { ImageSlider } from '@/shared/ui/imageSlider'
 import { usePostContext } from '../../providers/PostContext'
 

@@ -1,15 +1,15 @@
 'use client'
 
-import { FiZoomIn } from 'react-icons/fi'
-import { TbAspectRatio, TbSquare, TbRectangleVertical, TbRectangle } from 'react-icons/tb'
-import { ChangeEvent, useState } from 'react'
 import clsx from 'clsx'
+import { ChangeEvent, useState } from 'react'
+import { FiZoomIn } from 'react-icons/fi'
+import { TbAspectRatio, TbRectangle, TbRectangleVertical, TbSquare } from 'react-icons/tb'
 
-import { AspectRatioType } from '@/features/post/types/types'
-import { Button } from '@/shared/ui'
-import { StepCropAddPhoto } from '../stepCropAddPhoto/StepCropAddPhoto'
-import { usePostContext } from '../../../providers'
+import { AspectRatioType } from '@/features/post/types/postTypes'
 import { useOutsideClick } from '@/shared/hooks/useOutsideClick'
+import { Button } from '@/shared/ui'
+import { usePostContext } from '../../../providers'
+import { StepCropAddPhoto } from '../stepCropAddPhoto/StepCropAddPhoto'
 
 import s from '../StepCrop.module.scss'
 

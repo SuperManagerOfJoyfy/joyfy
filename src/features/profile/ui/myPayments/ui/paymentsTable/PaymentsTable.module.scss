@@ -1,0 +1,126 @@
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 36px;
+  flex: 1;
+  border: 1px solid var(--color-dark-500);
+  border-radius: 2px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead {
+    background-color: var(--color-dark-500);
+
+    th {
+      padding: 12px 36px;
+      text-align: left;
+      font-weight: var(--font-weight-semibold);
+      font-size: 14px;
+      color: var(--color-light-100);
+      border-bottom: 1px solid var(--color-dark-500);
+      white-space: nowrap;
+
+      &:first-child {
+        padding-left: 24px;
+        border-top-left-radius: 2px;
+      }
+
+      &:last-child {
+        border-top-right-radius: 2px;
+        padding-right: 126px;
+      }
+
+      &:nth-child(3) {
+        text-align: right;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: var(--color-light-100);
+      }
+
+      td {
+        padding: 12px 36px;
+        font-size: 14px;
+        color: var(--color-dark-500);
+        white-space: nowrap;
+        border-bottom: 1px solid var(--color-dark-500);
+
+        &:first-child {
+          padding-left: 24px;
+        }
+
+        &:last-child {
+          padding-right: 126px;
+        }
+
+        &:nth-child(3) {
+          text-align: right;
+          font-variant-numeric: tabular-nums;
+        }
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .table {
+    thead {
+      background-color: var(--color-dark-500);
+
+      th {
+        color: var(--color-light-100);
+      }
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          background-color: var(--color-dark-500);
+        }
+
+        td {
+          color: var(--color-light-100);
+          border-bottom: 1px solid var(--color-dark-500);
+          font-weight: var(--font-weight-regular);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .table {
+    font-size: 12px;
+
+    thead th,
+    tbody td {
+      padding: 12px 8px;
+
+      &:first-child {
+        padding-left: 16px;
+      }
+
+      &:last-child {
+        padding-right: 16px;
+      }
+    }
+
+    tbody td {
+      font-weight: var(--font-weight-regular);
+    }
+  }
+}

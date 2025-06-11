@@ -1,6 +1,6 @@
 import { EmailConfirmation } from '@/features/auth/ui/emailConfirmation/EmailConfirmation'
 import { PublicPosts } from '@/features/main/ui/publicPosts/PublicPosts'
-import { Post } from '@/features/post/types/types'
+import { Post } from '@/features/post/types/postTypes'
 
 type PageProps = {
   searchParams?: Promise<{ code?: string }>
