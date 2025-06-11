@@ -19,12 +19,13 @@ export const Management = () => {
   const [initialStep, setInitialStep] = useState<'success' | 'error' | undefined>()
 
   const searchParams = useSearchParams()
-  const successParam = searchParams.get('?success')
 
   const { data: currentSubscription } = useGetMyPaymentsQuery()
   const [pay] = useCreatePaymentMutation()
 
   useEffect(() => {
+    const successParam = searchParams.get('success')
+
     if (successParam === 'true') {
       setInitialStep('success')
       setShowModal(true)
@@ -32,7 +33,13 @@ export const Management = () => {
       setInitialStep('error')
       setShowModal(true)
     }
-  }, [successParam])
+    
+    if (successParam !== null) {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('success')
+      window.history.replaceState({}, '', url.toString())
+    }
+  }, [searchParams])
 
   useEffect(() => {
     if (Array.isArray(currentSubscription) && currentSubscription?.length > 0) {
@@ -50,7 +57,7 @@ export const Management = () => {
         typeSubscription,
         paymentType,
         amount: 0,
-        baseUrl: 'http://localhost:3000/settings?part=management&',
+        baseUrl: 'http://localhost:3000/settings?part=management',
         // baseUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings?part=management&`,
       }).unwrap()
 

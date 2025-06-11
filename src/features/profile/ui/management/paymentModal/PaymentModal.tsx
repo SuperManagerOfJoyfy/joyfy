@@ -29,6 +29,8 @@ export const PaymentModal = ({ open, onOpenChange, handleSubmit, initialStep }: 
       await handleSubmit()
     } catch {
       console.error('error creating payment')
+    } finally {
+      handleClose()
     }
   }
 
@@ -39,7 +41,11 @@ export const PaymentModal = ({ open, onOpenChange, handleSubmit, initialStep }: 
   }
 
   return (
-    <Modal open={open} onOpenChange={onOpenChange} title="Create payment">
+    <Modal
+      open={open}
+      onOpenChange={initialStep === 'error' || initialStep === 'success' ? handleClose : onOpenChange}
+      title="Create payment"
+    >
       <div className={s.modalWrapper}>
         {step === 'initial' && (
           <>
