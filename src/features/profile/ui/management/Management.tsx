@@ -29,7 +29,7 @@ export const Management = () => {
     if (successParam === 'true') {
       setInitialStep('success')
       setShowModal(true)
-    } else if (successParam === 'error') {
+    } else if (successParam === 'false') {
       setInitialStep('error')
       setShowModal(true)
     }
@@ -37,6 +37,7 @@ export const Management = () => {
     if (successParam !== null) {
       const url = new URL(window.location.href)
       url.searchParams.delete('success')
+      url.searchParams.delete('token')
       window.history.replaceState({}, '', url.toString())
     }
   }, [searchParams])

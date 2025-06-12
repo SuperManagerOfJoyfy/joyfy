@@ -29,8 +29,6 @@ export const PaymentModal = ({ open, onOpenChange, handleSubmit, initialStep }: 
       await handleSubmit()
     } catch {
       console.error('error creating payment')
-    } finally {
-      handleClose()
     }
   }
 
