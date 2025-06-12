@@ -6,6 +6,7 @@ import {
   AccountTypeSelector,
   BusinessSubscription,
   PaymentModal,
+  price,
   SubscriptionCard,
 } from '@/features/profile/ui/management'
 import { SubscriptionType, useCreatePaymentMutation, useGetMyPaymentsQuery } from '@/features/profile/api'
@@ -57,7 +58,7 @@ export const Management = () => {
       const response = await pay({
         typeSubscription,
         paymentType,
-        amount: 0,
+        amount: price[typeSubscription],
         baseUrl: 'http://localhost:3000/settings?part=management',
         // baseUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings?part=management&`,
       }).unwrap()

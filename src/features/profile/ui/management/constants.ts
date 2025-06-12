@@ -8,3 +8,9 @@ export const subscriptionOptions = [
   { label: '$50 per 7 Day', value: 'WEEKLY' },
   { label: '$100 per month', value: 'MONTHLY' },
 ]
+
+export const price = {
+  DAY: 10,
+  WEEKLY: 50,
+  MONTHLY: 100,
+}
