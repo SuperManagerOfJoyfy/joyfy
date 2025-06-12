@@ -26,10 +26,15 @@ export const Management = () => {
   useEffect(() => {
     const successParam = searchParams.get('success')
 
-    setInitialStep(successParam === 'true' ? 'success' : 'error')
-    setShowModal(true)
+    if (successParam === 'true') {
+      setInitialStep('success')
+      setShowModal(true)
+    } else if (successParam === 'error') {
+      setInitialStep('error')
+      setShowModal(true)
+    }
 
-    if (successParam) {
+    if (successParam !== null) {
       const url = new URL(window.location.href)
       url.searchParams.delete('success')
       window.history.replaceState({}, '', url.toString())
