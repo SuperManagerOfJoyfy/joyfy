@@ -1,8 +1,10 @@
-export const getNextPaymentDate = (dateOfPayment: string, type: 'DAILY' | 'WEEKLY' | 'MONTHLY') => {
+import { SubscriptionType } from '@/features/profile/api'
+
+export const getNextPaymentDate = (dateOfPayment: string, type: SubscriptionType) => {
   const date = new Date(dateOfPayment)
 
   switch (type) {
-    case 'DAILY':
+    case 'DAY':
       date.setDate(date.getDate() + 1)
       break
     case 'WEEKLY':

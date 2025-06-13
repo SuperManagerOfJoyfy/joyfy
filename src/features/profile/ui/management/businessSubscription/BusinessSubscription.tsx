@@ -3,18 +3,18 @@ import { PaypalIcon } from '@/shared/ui/icons/PaypalIcon'
 import { StripeIcon } from '@/shared/ui/icons/StripeIcon'
 import s from './businessSubscription.module.scss'
 import { subscriptionOptions } from '@/features/profile/ui/management'
-import { SubscriptionType } from '@/features/profile/api'
+import { PaymentType, SubscriptionType } from '@/features/profile/api'
 
 type Props = {
   subscription: string
   onChange: (val: SubscriptionType) => void
   current: boolean
   onOpenModal: () => void
-  setPaymentType: (type: 'STRIPE' | 'PAYPAL') => void
+  setPaymentType: (type: PaymentType) => void
 }
 
 export const BusinessSubscription = ({ subscription, onChange, current, onOpenModal, setPaymentType }: Props) => {
-  const onOpenChange = (type: 'STRIPE' | 'PAYPAL') => {
+  const onOpenChange = (type: PaymentType) => {
     setPaymentType(type)
     onOpenModal()
   }
@@ -40,7 +40,7 @@ export const BusinessSubscription = ({ subscription, onChange, current, onOpenMo
           variant={'secondary'}
           className={s.button}
           aria-label="Pay with PayPal"
-          onClick={() => onOpenChange('PAYPAL')}
+          onClick={() => onOpenChange(PaymentType.PAYPAL)}
         >
           <PaypalIcon />
         </Button>
@@ -51,7 +51,7 @@ export const BusinessSubscription = ({ subscription, onChange, current, onOpenMo
           variant={'secondary'}
           className={s.button}
           aria-label="Pay with Stripe"
-          onClick={() => onOpenChange('STRIPE')}
+          onClick={() => onOpenChange(PaymentType.STRIPE)}
         >
           <StripeIcon />
         </Button>

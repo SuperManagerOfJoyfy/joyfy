@@ -9,13 +9,13 @@ import {
   price,
   SubscriptionCard,
 } from '@/features/profile/ui/management'
-import { SubscriptionType, useCreatePaymentMutation, useGetMyPaymentsQuery } from '@/features/profile/api'
+import { PaymentType, SubscriptionType, useCreatePaymentMutation, useGetMyPaymentsQuery } from '@/features/profile/api'
 import { useSearchParams } from 'next/navigation'
 
 export const Management = () => {
   const [type, setType] = useState('Personal')
   const [typeSubscription, setTypeSubscription] = useState<SubscriptionType>(SubscriptionType.DAY)
-  const [paymentType, setPaymentType] = useState<'STRIPE' | 'PAYPAL'>('STRIPE')
+  const [paymentType, setPaymentType] = useState<PaymentType>(PaymentType.STRIPE)
   const [showModal, setShowModal] = useState(false)
   const [initialStep, setInitialStep] = useState<'success' | 'error' | undefined>()
 

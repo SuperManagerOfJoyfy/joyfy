@@ -5,12 +5,12 @@ export type PaymentRecord = {
   endDateOfSubscription: string
   price: number
   subscriptionType: SubscriptionType
-  paymentType: 'STRIPE' | 'PAYPAL'
+  paymentType: PaymentType
 }
 
 export type CreatePaymentRequest = {
   typeSubscription: SubscriptionType
-  paymentType: 'STRIPE' | 'PAYPAL'
+  paymentType: PaymentType
   amount: number
   baseUrl: string
 }
@@ -19,4 +19,9 @@ export enum SubscriptionType {
   MONTHLY = 'MONTHLY',
   WEEKLY = 'WEEKLY',
   DAY = 'DAY',
+}
+
+export enum PaymentType {
+  STRIPE = 'STRIPE',
+  PAYPAL = 'PAYPAL',
 }
