@@ -1,23 +1,23 @@
 .card {
-	margin-top: 6px;
-	padding: 12px 24px;
+  margin-top: 6px;
+  padding: 12px 24px;
 
-	.dateWrapper {
-		display: grid;
-		grid-auto-flow: column;
-		grid-auto-columns: max-content;
-		gap: 45px;
+  .dateWrapper {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: 45px;
 
-		.label {
-			color: var(--color-light-900);
-		}
+    .label {
+      color: var(--color-light-900);
+    }
 
-		.value {
-			margin-top: 10px;
-		}
-	}
+    .value {
+      margin-top: 10px;
+    }
+  }
 }
 
 .checkbox {
-	margin-top: 20px;
+  margin-top: 20px;
 }

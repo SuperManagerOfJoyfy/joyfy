@@ -1,61 +1,51 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState } from 'react'
 
-type UsePaginationProps<T> = {
-  data: T[] | undefined
+import { createPaginationStorageKeys, getStoredValue, PAGINATION_CONSTANTS, setStoredValue } from '../utils'
+
+type UsePaginationProps = {
+  storageKey: string
+  defaultPage?: number
   defaultItemsPerPage?: number
-  defaultCurrentPage?: number
 }
 
-type PaginationData<T> = {
-  totalItems: number
-  totalPages: number
-  currentData: T[]
-  hasData: boolean
-  shouldShowPagination: boolean
+type UsePaginationReturn = {
+  currentPage: number
+  itemsPerPage: number
+  setCurrentPage: (page: number) => void
+  setItemsPerPage: (items: number) => void
 }
 
-export const usePagination = <T>({ data, defaultItemsPerPage = 10, defaultCurrentPage = 1 }: UsePaginationProps<T>) => {
-  const [currentPage, setCurrentPage] = useState(defaultCurrentPage)
-  const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage)
+export const usePaginationTable = ({
+  storageKey,
+  defaultPage = PAGINATION_CONSTANTS.DEFAULT_CURRENT_PAGE,
+  defaultItemsPerPage = PAGINATION_CONSTANTS.DEFAULT_ITEMS_PER_PAGE,
+}: UsePaginationProps): UsePaginationReturn => {
+  const STORAGE_KEYS = createPaginationStorageKeys(storageKey)
 
-  const paginationData: PaginationData<T> = useMemo(() => {
-    const totalItems = data?.length || 0
-    const totalPages = Math.ceil(totalItems / itemsPerPage)
-    const startIndex = (currentPage - 1) * itemsPerPage
-    const endIndex = startIndex + itemsPerPage
-    const currentData = data?.slice(startIndex, endIndex) || []
+  const [currentPage, setCurrentPageState] = useState(() => {
+    const saved = sessionStorage.getItem(STORAGE_KEYS.CURRENT_PAGE)
+    return saved ? parseInt(saved, 10) : defaultPage
+  })
 
-    return {
-      totalItems,
-      totalPages,
-      currentData,
-      hasData: totalItems > 0,
-      shouldShowPagination: totalPages > 1,
-    }
-  }, [data, currentPage, itemsPerPage])
-
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page)
-  }, [])
-
-  const handleItemsPerPageChange = useCallback(
-    (items: number) => {
-      setItemsPerPage(items)
-      const newTotalPages = Math.ceil((data?.length || 0) / items)
-      if (currentPage > newTotalPages && newTotalPages > 0) {
-        setCurrentPage(newTotalPages)
-      } else {
-        setCurrentPage(defaultCurrentPage)
-      }
-    },
-    [data?.length, currentPage, defaultCurrentPage]
+  const [itemsPerPage, setItemsPerPageState] = useState(() =>
+    getStoredValue(STORAGE_KEYS.ITEMS_PER_PAGE, defaultItemsPerPage)
   )
+
+  const setCurrentPage = (page: number) => {
+    setCurrentPageState(page)
+    sessionStorage.setItem(STORAGE_KEYS.CURRENT_PAGE, page.toString())
+  }
+
+  const setItemsPerPage = (items: number) => {
+    setItemsPerPageState(items)
+    setStoredValue(STORAGE_KEYS.ITEMS_PER_PAGE, items)
+    setCurrentPage(1)
+  }
 
   return {
     currentPage,
     itemsPerPage,
-    paginationData,
-    handlePageChange,
-    handleItemsPerPageChange,
+    setCurrentPage,
+    setItemsPerPage,
   }
 }
