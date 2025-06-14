@@ -1,7 +1,7 @@
 import { UserProfile } from '@/features/profile/api/profileApi.types'
 import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/ProfileInfoSchema'
 import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Loader, Separator } from '@/shared/ui'
-import { formatDateOfBirth } from '@/shared/utils/dateFunctions'
+import { formatDateToString } from '@/shared/utils/dateFunctions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -24,7 +24,7 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
       userName: userName || '',
       firstName: firstName || '',
       lastName: lastName || '',
-      dateOfBirth: formatDateOfBirth(dateOfBirth) || '',
+      dateOfBirth: formatDateToString(dateOfBirth ? new Date(dateOfBirth) : null),
       country: country || '',
       city: city || undefined,
       aboutMe: aboutMe || '',
