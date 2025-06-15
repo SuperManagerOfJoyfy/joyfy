@@ -1,1 +1,1 @@
-export { PublicPostModal } from './publicPostModal'
+export { PublicPostModal } from './PublicPostModal'
