@@ -19,7 +19,7 @@ export const PostFooter = () => {
     <>
       <PostReactions />
 
-      {count > 0 && <PostLikes users={users} count={count} />}
+      {count > 0 && <PostLikes users={users} count={count} className={s.postLikes} />}
 
       <DateStamp date={createdAt} className={s.date} />
 
