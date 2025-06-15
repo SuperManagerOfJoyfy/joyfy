@@ -1,23 +1,24 @@
 import { usePostModalContext } from '../context/PostModalContext'
 import { PostEditForm } from '../postEditMode'
 
-import { PostViewContent } from '../postViewMode'
+import { PostContent } from '../postViewMode'
 import s from './PostModal.module.scss'
 
 export const PostModalBody = () => {
   const {
     isEditing,
+    isUpdating,
+    isOwnPost,
+    isFollowing,
     currentPost,
     postId,
     setHasFormChanges,
-    handleEditSave,
+    savePostChanges,
     handleCancelEdit,
     handleEdit,
     setConfirmAction,
     handleFollowToggle,
     handleCopyLink,
-    isOwnPost,
-    isFollowing,
   } = usePostModalContext()
 
   const { description, ownerId, userName, avatarOwner } = currentPost
@@ -28,19 +29,20 @@ export const PostModalBody = () => {
       {isEditing ? (
         <PostEditForm
           user={user}
-          defaultDescription={description}
+          initialDescription={description}
           postId={postId}
           onCancelEdit={handleCancelEdit}
-          onSaveEdit={handleEditSave}
+          onSave={savePostChanges}
+          isSaving={isUpdating}
           onFormChange={setHasFormChanges}
         />
       ) : (
-        <PostViewContent
+        <PostContent
           post={currentPost}
-          onEdit={handleEdit}
-          onDelete={() => setConfirmAction('delete')}
           isOwnPost={isOwnPost}
           isFollowing={isFollowing}
+          onEdit={handleEdit}
+          onDelete={() => setConfirmAction('delete')}
           onFollowToggle={handleFollowToggle}
           onCopyLink={handleCopyLink}
         />

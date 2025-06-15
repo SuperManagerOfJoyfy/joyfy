@@ -1,37 +1,40 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { User, UserCard } from '@/entities/user'
-import { Post } from '@/features/post/types/postTypes'
+import { UserCard } from '@/entities/user'
+import { User } from '@/entities/user/types/userTypes'
 import { Button, PublicationDescription } from '@/shared/ui'
-import { usePostEditHandler } from '../hooks'
+import { useEffect, useState } from 'react'
 
 import s from './PostEditForm.module.scss'
 
 type Props = {
   user: User
-  defaultDescription: string
+  initialDescription: string
   postId: number
   onCancelEdit: () => void
-  onSaveEdit: (updatedPost: Post) => void
   onFormChange: (hasChanges: boolean) => void
+  onSave: (postId: number, description: string) => Promise<void>
+  isSaving: boolean
 }
 
-export const PostEditForm = ({ user, defaultDescription, postId, onCancelEdit, onSaveEdit, onFormChange }: Props) => {
-  const [description, setDescription] = useState(defaultDescription)
-  const { handleEditPost, isLoading } = usePostEditHandler()
+export const PostEditForm = ({
+  user,
+  initialDescription,
+  postId,
+  onCancelEdit,
+  onSave,
+  isSaving,
+  onFormChange,
+}: Props) => {
+  const [description, setDescription] = useState(initialDescription)
 
   useEffect(() => {
-    const hasChanges = description.trim() !== defaultDescription.trim()
+    const hasChanges = description.trim() !== initialDescription.trim()
     onFormChange(hasChanges)
-  }, [description, defaultDescription, onFormChange])
+  }, [description, initialDescription, onFormChange])
 
-  const handleSave = () => {
-    handleEditPost({
-      postId,
-      description,
-      onSuccess: onSaveEdit,
-    })
+  const handleSave = async () => {
+    await onSave(postId, description)
   }
 
   return (
@@ -40,14 +43,14 @@ export const PostEditForm = ({ user, defaultDescription, postId, onCancelEdit, o
       <PublicationDescription
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        disabled={isLoading}
+        disabled={isSaving}
       />
 
       <div className={s.actionButtons}>
-        <Button variant="outline" onClick={onCancelEdit} disabled={isLoading}>
+        <Button variant="outline" onClick={onCancelEdit} disabled={isSaving}>
           Cancel
         </Button>
-        <Button onClick={handleSave} disabled={isLoading}>
+        <Button onClick={handleSave} disabled={isSaving}>
           Save Changes
         </Button>
       </div>
