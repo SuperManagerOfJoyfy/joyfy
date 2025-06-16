@@ -1,4 +1,4 @@
-import { calculateAge, convertDateToString } from '@/shared/utils/dateFunctions'
+import { calculateAge, formatDateToString } from '@/shared/utils/dateFunctions'
 
 import { z } from 'zod'
 
@@ -23,7 +23,7 @@ export const ProfileInfoSchema = z.object({
       (val) => {
         if (val instanceof Date) {
           // Convert Date object to "dd.mm.yyyy"
-          return convertDateToString(val)
+          return formatDateToString(val)
         }
         if (typeof val === 'string' && val.trim() === '') {
           return undefined

@@ -1,17 +1,21 @@
-import { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 import { UserCard } from './UserCard'
+import type { User } from '../../types/userTypes'
 
 const meta: Meta<typeof UserCard> = {
   title: 'Components/UserCard',
   component: UserCard,
-  parameters: {
-    layout: 'centered',
-  },
   tags: ['autodocs'],
   argTypes: {
-    user: {
-      description: 'User object containing id, userName, and optional avatar',
-      control: 'object',
+    layout: {
+      control: { type: 'radio' },
+      options: ['standalone', 'inline', 'stacked'],
+    },
+    className: {
+      control: 'text',
+    },
+    children: {
+      control: 'text',
     },
   },
 }
@@ -19,21 +23,32 @@ const meta: Meta<typeof UserCard> = {
 export default meta
 type Story = StoryObj<typeof UserCard>
 
-export const Default: Story = {
+const mockUser: User = {
+  id: 1,
+  userName: 'JaneDoe',
+  avatar: 'https://i.pravatar.cc/150?img=32',
+}
+
+export const Standalone: Story = {
   args: {
-    user: {
-      id: 1,
-      userName: 'johndoe',
-    },
+    user: mockUser,
+    layout: 'standalone',
   },
 }
 
-export const WithAvatar: Story = {
+export const Inline: Story = {
   args: {
-    user: {
-      id: 2,
-      userName: 'janedoe',
-      avatar: 'https://i.pravatar.cc/300?img=5',
-    },
+    user: mockUser,
+    layout: 'inline',
+    children:
+      'Comment or post content:  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate magnam mollitia error neque.',
+  },
+}
+
+export const Stacked: Story = {
+  args: {
+    user: mockUser,
+    layout: 'stacked',
+    children: 'Message text',
   },
 }

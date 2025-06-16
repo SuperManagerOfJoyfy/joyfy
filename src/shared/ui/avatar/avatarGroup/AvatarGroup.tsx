@@ -1,14 +1,10 @@
 import { Avatar } from '@/shared/ui'
 
 import s from './AvatarGroup.module.scss'
-
-type User = {
-  userName: string
-  avatars: { url: string }[]
-}
+import { AvatarUser } from '@/entities/user/types/userTypes'
 
 type Props = {
-  users: User[]
+  users: AvatarUser[]
   maxDisplay?: number
 }
 

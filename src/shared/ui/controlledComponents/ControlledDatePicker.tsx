@@ -1,6 +1,8 @@
+'use client'
+
 import { Controller, Control } from 'react-hook-form'
 import { DatePicker } from '../datePicker/DatePicker'
-import { convertDateToString, formatDateOfBirth, parseDate } from '@/shared/utils/dateFunctions'
+import { formatDateToString, parseDateString } from '@/shared/utils/dateFunctions'
 import { ReactNode } from 'react'
 
 type Props = {
@@ -20,9 +22,9 @@ export const ControlledDatePicker = ({ name, control, label, disabled }: Props) 
         return (
           <DatePicker
             label={label}
-            startDate={parseDate(value)}
+            startDate={parseDateString(value)}
             onSetStartDate={(date: Date | null) => {
-              onChange(convertDateToString(date))
+              onChange(formatDateToString(date))
             }}
             disabled={disabled}
           />

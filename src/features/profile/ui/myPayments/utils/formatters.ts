@@ -3,7 +3,7 @@ import { PaymentRecord } from '@/features/profile/api'
 export const formatters = {
   date: (dateString: string): string => {
     return new Date(dateString)
-      .toLocaleDateString('uk-UA', {
+      .toLocaleDateString('en-GB', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
@@ -15,7 +15,7 @@ export const formatters = {
     const typeMap: Record<PaymentRecord['subscriptionType'], string> = {
       MONTHLY: '1 month',
       WEEKLY: '7 days',
-      DAILY: '1 day',
+      DAY: '1 day',
     }
     return typeMap[type] || type.toLowerCase()
   },

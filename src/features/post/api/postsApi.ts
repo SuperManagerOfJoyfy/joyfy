@@ -5,8 +5,8 @@ import {
   UploadImageResponse,
 } from '@/features/post/api/postsApi.types'
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { Post, PostLikes } from '../types/postTypes'
-import { number } from 'zod'
+import { Post } from '../types/postTypes'
+import { PostLikes } from '@/entities/post/ui/postLikes/types/postLikesTypes'
 
 export const postsApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
@@ -31,10 +31,11 @@ export const postsApi = joyfyApi.injectEndpoints({
       providesTags: ['Posts'],
       keepUnusedDataFor: 600,
     }),
+
     getPostById: builder.query<Post, number>({
       query: (postId) => ({
         url: `posts/id/${postId}`,
-        method: 'GET',
+        keepUnusedDataFor: 60,
       }),
       providesTags: (result, error, postId) => [{ type: 'Post', id: postId }],
     }),
@@ -108,9 +109,9 @@ export const postsApi = joyfyApi.injectEndpoints({
     getPostLikes: builder.query<PostLikes, number>({
       query: (postId) => ({
         url: `posts/${postId}/likes`,
-        method: 'GET',
+        keepUnusedDataFor: 60,
       }),
-      providesTags: (result, error, postId) => [{ type: 'Post', id: postId }],
+      providesTags: (result, error, postId) => [{ type: 'PostLikes', id: postId }],
     }),
   }),
 })

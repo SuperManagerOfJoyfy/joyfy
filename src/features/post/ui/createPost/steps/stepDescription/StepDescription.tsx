@@ -2,9 +2,10 @@
 
 import { ChangeEvent } from 'react'
 
+import { UserCard } from '@/entities/user'
+import { User } from '@/entities/user/types/userTypes'
 import { usePostContext } from '@/features/post/ui/createPost/providers'
 import { ImageSlider } from '@/shared/ui/imageSlider'
-import { User, UserCard } from '@/entities/user'
 
 import { PublicationDescription } from '@/shared/ui'
 import s from './StepDescription.module.scss'

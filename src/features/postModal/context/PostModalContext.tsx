@@ -5,9 +5,11 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { useAppDispatch } from '@/app/store/store'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { MeResponse } from '@/features/auth/api/authApi.types'
-import { postsApi, useGetPostByIdQuery } from '@/features/post/api'
+import { postsApi, useEditPostMutation, useGetPostByIdQuery } from '@/features/post/api'
 import { Post } from '@/features/post/types/postTypes'
 import { usePostDropdownMenuActions } from '../hooks'
+import { toast } from 'react-toastify'
+import { extractMessage, isFetchBaseQueryError } from '@/shared/utils/handleErrors/handleErrors'
 
 export type ConfirmAction = 'delete' | 'cancelEdit' | null
 
@@ -17,10 +19,9 @@ type PostModalContextValue = {
   setConfirmAction: (action: ConfirmAction) => void
   isEditing: boolean
   setIsEditing: (value: boolean) => void
-  isInitPost: boolean
-  setIsInitPost: (value: boolean) => void
   hasFormChanges: boolean
   setHasFormChanges: (value: boolean) => void
+  isUpdating: boolean
 
   // Data
   user: MeResponse | undefined
@@ -38,10 +39,10 @@ type PostModalContextValue = {
 
   // Modal-specific actions
   handleDeletePost: () => Promise<void>
-  handleEditSave: () => Promise<void>
   handleModalClose: () => void
   handleCancelEdit: () => void
   handleConfirmAction: () => Promise<void>
+  savePostChanges: (postId: number, description: string) => Promise<void>
 
   // Basic actions
   dismissModal: () => void
@@ -70,22 +71,24 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
   // State
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [isInitPost, setIsInitPost] = useState(true)
   const [hasFormChanges, setHasFormChanges] = useState(false)
+  const [skipQuery, setSkipQuery] = useState(true)
 
   // Data fetching
   const { data: user } = useGetMeQuery()
-  const { data: post, refetch } = useGetPostByIdQuery(postId)
+  const { data: post } = useGetPostByIdQuery(postId, { skip: skipQuery })
+  const [editPost, { isLoading: isUpdating }] = useEditPostMutation()
 
   // Initialize post data in cache
   useEffect(() => {
     if (initialPost) {
       dispatch(postsApi.util.upsertQueryData('getPostById', initialPost.id, initialPost))
+      setSkipQuery(false)
     }
   }, [dispatch, initialPost])
 
   // Derived state
-  const currentPost = isInitPost ? initialPost : (post ?? initialPost)
+  const currentPost = post || initialPost
   const isOwnPost = currentPost?.ownerId === user?.userId
   const isFollowing = false // TODO: Add condition
 
@@ -100,7 +103,7 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
   const { handleEdit, handleDelete, handleFollowToggle, handleCopyLink } = usePostDropdownMenuActions({
     userId,
     postId: postId || 0,
-    ownerId: post?.ownerId ?? 0,
+    ownerId: currentPost?.ownerId ?? 0,
     isFollowing,
     setIsEditing,
   })
@@ -111,11 +114,24 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
     dismissModal()
   }
 
-  const handleEditSave = async () => {
-    await refetch()
-    setIsInitPost(false)
-    setIsEditing(false)
-    setHasFormChanges(false)
+  const savePostChanges = async (postId: number, description: string) => {
+    try {
+      await editPost({ postId, description }).unwrap()
+
+      toast.success('Post updated successfully!')
+
+      setIsEditing(false)
+      setHasFormChanges(false)
+    } catch (error) {
+      if (isFetchBaseQueryError(error)) {
+        const message = extractMessage(error.data, 'Failed to update the post.')
+        toast.error(message)
+      } else if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('An unknown error occurred.')
+      }
+    }
   }
 
   const handleModalClose = () => {
@@ -150,10 +166,9 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
     setConfirmAction,
     isEditing,
     setIsEditing,
-    isInitPost,
-    setIsInitPost,
     hasFormChanges,
     setHasFormChanges,
+    isUpdating,
 
     // Data
     user,
@@ -171,10 +186,10 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
 
     // Modal-specific actions
     handleDeletePost,
-    handleEditSave,
     handleModalClose,
     handleCancelEdit,
     handleConfirmAction,
+    savePostChanges,
 
     // Basic actions
     dismissModal,

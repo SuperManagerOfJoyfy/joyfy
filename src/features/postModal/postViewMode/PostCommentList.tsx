@@ -4,7 +4,7 @@ type Props = {
   comments: Comment[]
 }
 
-export const CommentList = ({ comments }: Props) => {
+export const PostCommentList = ({ comments }: Props) => {
   return (
     <>
       {comments.map((comment) => (

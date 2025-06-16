@@ -1,10 +1,10 @@
 'use client'
 
-import { formatNumberToSixDigits, timeAgo } from '@/features/main/utils'
-import { Post } from '@/features/post/types/postTypes'
-import { Avatar, Button, Card, ImageSlider, Typography } from '@/shared/ui'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { formatNumberToSixDigits, timeAgo } from '@/features/main/utils'
+import { Post } from '@/features/post/types/postTypes'
+import { Avatar, Button, Card, DateStamp, ImageSlider, Typography } from '@/shared/ui'
 import { useState } from 'react'
 import { PublicPostModal } from '../publicPostModal'
 import s from './publicPosts.module.scss'
@@ -82,9 +82,7 @@ export const PublicPosts = ({ count, posts }: Props) => {
                 </div>
 
                 <div className={s.time}>
-                  <Typography className={s.text} variant="body2">
-                    {timeAgo(post.createdAt)}
-                  </Typography>
+                  <DateStamp date={post.createdAt} />
                 </div>
 
                 <div className={clsx(s.description, isExpanded && s.expanded)}>

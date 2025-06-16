@@ -2,9 +2,9 @@
   width: 100%;
   overflow-x: auto;
   margin-bottom: 36px;
-  flex: 1;
   border: 1px solid var(--color-dark-500);
   border-radius: 2px;
+  box-sizing: border-box;
 }
 
 .table {
@@ -21,7 +21,7 @@
       font-weight: var(--font-weight-semibold);
       font-size: 14px;
       color: var(--color-light-100);
-      border-bottom: 1px solid var(--color-dark-500);
+      position: relative;
       white-space: nowrap;
 
       &:first-child {
@@ -37,15 +37,36 @@
       &:nth-child(3) {
         text-align: right;
       }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: var(--color-dark-500);
+      }
     }
   }
 
   tbody {
     tr {
       transition: background-color 0.2s ease;
+      position: relative;
 
       &:hover {
         background-color: var(--color-light-100);
+      }
+
+      &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: var(--color-dark-500);
       }
 
       td {
@@ -53,7 +74,6 @@
         font-size: 14px;
         color: var(--color-dark-500);
         white-space: nowrap;
-        border-bottom: 1px solid var(--color-dark-500);
 
         &:first-child {
           padding-left: 24px;
@@ -68,10 +88,6 @@
           font-variant-numeric: tabular-nums;
         }
       }
-
-      &:last-child td {
-        border-bottom: none;
-      }
     }
   }
 }
@@ -83,6 +99,10 @@
 
       th {
         color: var(--color-light-100);
+
+        &::after {
+          background-color: var(--color-dark-500);
+        }
       }
     }
 
@@ -92,9 +112,12 @@
           background-color: var(--color-dark-500);
         }
 
+        &:not(:last-child)::after {
+          background-color: var(--color-dark-500);
+        }
+
         td {
           color: var(--color-light-100);
-          border-bottom: 1px solid var(--color-dark-500);
           font-weight: var(--font-weight-regular);
         }
       }
