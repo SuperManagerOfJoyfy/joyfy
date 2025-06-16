@@ -9,19 +9,24 @@ import {
   price,
   SubscriptionCard,
 } from '@/features/profile/ui/management'
-import { PaymentType, SubscriptionType, useCreatePaymentMutation, useGetMyPaymentsQuery } from '@/features/profile/api'
+import {
+  AccountType,
+  PaymentType,
+  SubscriptionType,
+  useCreatePaymentMutation,
+  useGetCurrentSubscriptionQuery,
+} from '@/features/profile/api'
 import { useSearchParams } from 'next/navigation'
 
 export const Management = () => {
-  const [type, setType] = useState('Personal')
+  const [type, setType] = useState<AccountType>('Personal')
   const [typeSubscription, setTypeSubscription] = useState<SubscriptionType>(SubscriptionType.DAY)
   const [paymentType, setPaymentType] = useState<PaymentType>(PaymentType.STRIPE)
   const [showModal, setShowModal] = useState(false)
   const [initialStep, setInitialStep] = useState<'success' | 'error' | undefined>()
 
   const searchParams = useSearchParams()
-
-  const { data: currentSubscription } = useGetMyPaymentsQuery()
+  const { data: currentSubscription } = useGetCurrentSubscriptionQuery()
   const [pay] = useCreatePaymentMutation()
 
   useEffect(() => {
@@ -44,14 +49,14 @@ export const Management = () => {
   }, [searchParams])
 
   useEffect(() => {
-    if (Array.isArray(currentSubscription) && currentSubscription?.length) {
+    if (currentSubscription) {
       setType('Business')
     }
   }, [currentSubscription])
 
   if (!currentSubscription) return null
 
-  const subscriptions = !!currentSubscription.length
+  const subscriptions = !!currentSubscription
 
   const handlePay = async () => {
     try {
