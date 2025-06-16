@@ -2,6 +2,7 @@ import { Post } from '@/features/post/types/postTypes'
 
 import { ImageSlider, Modal } from '@/shared/ui'
 import { PublicPostContent } from './PublicPostContent'
+
 import s from './PublicPostModal.module.scss'
 
 type Props = {
