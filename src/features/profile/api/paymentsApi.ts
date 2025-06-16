@@ -1,17 +1,23 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { PaymentRecord } from './paymentsApi.types'
+import { CreatePaymentRequest, PaymentRecord } from './paymentsApi.types'
 
 export const paymentsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
     getMyPayments: builder.query<PaymentRecord[], void>({
       query: () => ({
         url: '/subscriptions/my-payments',
-        method: 'GET',
       }),
       providesTags: ['Payments'],
+    }),
+    createPayment: builder.mutation<{ url: string }, CreatePaymentRequest>({
+      query: (body) => ({
+        body,
+        url: '/subscriptions',
+        method: 'POST',
+      }),
     }),
   }),
   overrideExisting: true,
 })
 
-export const { useGetMyPaymentsQuery } = paymentsApi
+export const { useGetMyPaymentsQuery, useCreatePaymentMutation } = paymentsApi

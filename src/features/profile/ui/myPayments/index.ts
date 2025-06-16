@@ -1,1 +1,1 @@
-export * from './MyPayments'
+export * from './ui'

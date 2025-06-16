@@ -96,7 +96,7 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
   const dismissModal = () => {
     const newParams = new URLSearchParams(searchParams.toString())
     newParams.delete('postId')
-    router.push(`?${newParams.toString()}`)
+    router.push(`?${newParams.toString()}`, { scroll: false })
   }
 
   // Dropdown actions

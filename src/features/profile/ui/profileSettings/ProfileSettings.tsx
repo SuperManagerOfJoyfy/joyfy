@@ -7,9 +7,10 @@ import { Tabs } from '@/shared/ui'
 import { Tab } from '@/shared/ui/tabs'
 import { GeneralInformation } from '../generalInformation/GeneralInformation'
 import { PATH } from '@/shared/config/routes'
+import { MyPayments } from '../myPayments'
 
 import s from './ProfileSettings.module.scss'
-import { MyPayments } from '../myPayments/MyPayments'
+import { Management } from '@/features/profile/ui/management/Management'
 
 type ProfileSettingsProps = {
   activePart: string
@@ -51,7 +52,7 @@ const renderTabContent = (activePart: string) => {
     case 'devices':
       return <ComingSoonPlaceholder feature="Devices settings" />
     case 'management':
-      return <ComingSoonPlaceholder feature="Account management" />
+      return <Management />
     case 'payments':
       return <MyPayments />
     default:
