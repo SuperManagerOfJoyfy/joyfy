@@ -1,13 +1,8 @@
-import Link from 'next/link'
+import { User } from '@/entities/user/types/userTypes'
 import { Avatar } from '@/shared/ui'
-import s from './UserCard.module.scss'
 import clsx from 'clsx'
-
-export type User = {
-  id: number
-  userName: string
-  avatar?: string
-}
+import Link from 'next/link'
+import s from './UserCard.module.scss'
 
 type Props = {
   user: User
