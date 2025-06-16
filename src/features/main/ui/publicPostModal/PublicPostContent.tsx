@@ -6,7 +6,7 @@ import { DateStamp, Scroll, Separator } from '@/shared/ui'
 import { PostItem } from '@/entities/post/ui/postItem'
 import { PostCommentList } from '@/features/postModal/postViewMode'
 import { Comment } from '@/entities/comment'
-import s from './publicPostModal.module.scss'
+import s from './PublicPostModal.module.scss'
 
 type Props = {
   post: Post
