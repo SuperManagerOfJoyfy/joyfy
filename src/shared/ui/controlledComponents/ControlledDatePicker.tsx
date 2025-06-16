@@ -1,3 +1,5 @@
+'use client'
+
 import { Controller, Control } from 'react-hook-form'
 import { DatePicker } from '../datePicker/DatePicker'
 import { formatDateToString, parseDateString } from '@/shared/utils/dateFunctions'
