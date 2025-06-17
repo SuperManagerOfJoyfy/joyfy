@@ -1,11 +1,12 @@
 import { Metadata } from 'next'
+import { ReactNode, Suspense } from 'react'
+
 import { ReduxProvider } from './providers/ReduxProvider'
 import MainLayout from './MainLayout'
+import { Loader, ToastSnackbar } from '@/shared/ui'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/globals.css'
-import { ToastSnackbar } from '@/shared/ui/toastSnackbar/ToastSnackbar'
-import { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
@@ -25,7 +26,9 @@ export default function RootLayout({
       <body>
         <ReduxProvider>
           <ToastSnackbar />
-          <MainLayout>{children}</MainLayout>
+          <Suspense fallback={<Loader />}>
+            <MainLayout>{children}</MainLayout>
+          </Suspense>
         </ReduxProvider>
       </body>
     </html>

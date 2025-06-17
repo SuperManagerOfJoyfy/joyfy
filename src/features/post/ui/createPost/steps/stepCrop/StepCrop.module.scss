@@ -1,0 +1,358 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+.cropContainer {
+  width: 100%;
+  height: 80vh;
+  max-height: 600px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.imageSlider {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  img {
+    object-fit: contain;
+  }
+}
+
+.controlsWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  z-index: 10;
+}
+
+.expandedControl {
+  position: absolute;
+  bottom: 50px;
+  left: 11px;
+  background: var(--color-dark-500);
+  padding: 12px;
+  max-width: 320px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+
+  .container {
+    padding: 10px;
+  }
+
+  &.right {
+    padding: 0;
+    max-width: 530px;
+    left: unset;
+    right: 0;
+  }
+
+  &.show {
+    opacity: 1;
+    background: var(--color-dark-500);
+    pointer-events: auto;
+  }
+}
+
+.expandedControl {
+  position: absolute;
+  bottom: 50px;
+  left: 11px;
+  background: var(--color-dark-500);
+  padding: 12px;
+  max-width: 320px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+
+  .container {
+    padding: 10px;
+  }
+
+  &.right {
+    padding: 0;
+    max-width: 530px;
+    left: unset;
+    right: 0;
+  }
+
+  &.show {
+    opacity: 1;
+    background: var(--color-dark-500);
+    pointer-events: auto;
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: transparent;
+  border-radius: 8px;
+}
+
+.controlContainer {
+  display: flex;
+  gap: 36px;
+}
+
+.controlItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.controlButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  background-color: inherit;
+  border: none;
+  color: var(--color-light-100);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.iconSquare {
+  width: 36px;
+  height: 36px;
+  background: var(--color-dark-500);
+  opacity: 0.8;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.iconSquare svg {
+  transition: fill 0.3s ease;
+  stroke: var(--color-light-100);
+}
+.iconSquare svg {
+  stroke: var(--color-light-100);
+  transition: stroke 0.2s ease;
+}
+
+.controlButton:not(.active):hover .iconSquare svg {
+  stroke: var(--color-light-100);
+}
+
+.controlButton.active .iconSquare svg {
+  stroke: var(--color-accent-500);
+}
+
+.expandedControl {
+  position: absolute;
+  bottom: 50px;
+  left: 11px;
+  background: var(--color-dark-500);
+  padding: 12px;
+  max-width: 320px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+
+  .container {
+    padding: 10px;
+  }
+
+  &.right {
+    padding: 0;
+    max-width: 530px;
+    left: unset;
+    right: 0;
+  }
+
+  &.show {
+    opacity: 1;
+    background: var(--color-dark-500);
+    pointer-events: auto;
+  }
+}
+
+.zoomSlider {
+  width: 100%;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 2px;
+  width: 100px;
+  height: 2px;
+  background: var(--color-light-100);
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-light-100);
+    cursor: pointer;
+    border: 2px solid var(--color-accent-500);
+  }
+
+  &::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-light-100);
+    cursor: pointer;
+    border: 2px solid var(--color-accent-500);
+  }
+}
+
+.aspectRatioOption {
+  color: var(--color-light-900);
+  background-color: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+
+  svg {
+    flex-shrink: 0;
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  &:hover {
+    color: var(--color-light-100);
+  }
+
+  &.active {
+    color: var(--color-light-100);
+  }
+}
+
+.buttonSelect {
+  display: flex;
+  min-width: 130px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.controlButton .iconSquare svg {
+  stroke: var(--color-light-100);
+  transition: stroke 0.2s ease;
+}
+
+.controlButton:hover .iconSquare svg {
+  stroke: var(--color-accent-500);
+}
+
+.controlButton.active .iconSquare {
+  border: 1px solid var(--color-accent-500);
+  background: var(--color-dark-500);
+}
+
+.controlButton.active .iconSquare svg {
+  stroke: var(--color-accent-500);
+}
+
+.addPhotoImgContainer {
+  position: relative;
+  opacity: 1 !important;
+  min-width: 80px;
+  width: 80px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-dark-500);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.addPhotoImgContainerBtn {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--color-dark-500);
+  opacity: 0.8;
+  top: 2px;
+  right: 2px;
+  z-index: 2;
+  padding: 0;
+}
+
+.addPhotoImgContainerBtn:hover {
+  background: var(--color-dark-300);
+}
+
+.addPhotoImgContainerBtn svg {
+  stroke: var(--color-light-100);
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.miniUploader {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.miniButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--color-dark-300);
+}
+
+.imageCounter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--color-light-100);
+  font-weight: var(--font-weight-bold);
+  font-size: 16px;
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+}

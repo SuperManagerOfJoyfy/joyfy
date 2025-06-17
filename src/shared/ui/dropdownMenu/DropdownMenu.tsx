@@ -18,12 +18,9 @@ export const DropdownMenu = forwardRef<ComponentRef<typeof RadixDropdownMenu.Tri
         <RadixDropdownMenu.Trigger className={s.trigger} asChild={typeof trigger !== 'string'} ref={ref}>
           {trigger}
         </RadixDropdownMenu.Trigger>
-
-        <RadixDropdownMenu.Portal>
-          <RadixDropdownMenu.Content align={align} className={s.content} sideOffset={sideOffset}>
-            {children}
-          </RadixDropdownMenu.Content>
-        </RadixDropdownMenu.Portal>
+        <RadixDropdownMenu.Content align={align} className={s.content} sideOffset={sideOffset}>
+          {children}
+        </RadixDropdownMenu.Content>
       </RadixDropdownMenu.Root>
     )
   }

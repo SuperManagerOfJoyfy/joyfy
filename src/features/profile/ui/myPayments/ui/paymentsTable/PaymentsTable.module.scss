@@ -1,0 +1,149 @@
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 36px;
+  border: 1px solid var(--color-dark-500);
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead {
+    background-color: var(--color-dark-500);
+
+    th {
+      padding: 12px 36px;
+      text-align: left;
+      font-weight: var(--font-weight-semibold);
+      font-size: 14px;
+      color: var(--color-light-100);
+      position: relative;
+      white-space: nowrap;
+
+      &:first-child {
+        padding-left: 24px;
+        border-top-left-radius: 2px;
+      }
+
+      &:last-child {
+        border-top-right-radius: 2px;
+        padding-right: 126px;
+      }
+
+      &:nth-child(3) {
+        text-align: right;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: var(--color-dark-500);
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color 0.2s ease;
+      position: relative;
+
+      &:hover {
+        background-color: var(--color-light-100);
+      }
+
+      &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: var(--color-dark-500);
+      }
+
+      td {
+        padding: 12px 36px;
+        font-size: 14px;
+        color: var(--color-dark-500);
+        white-space: nowrap;
+
+        &:first-child {
+          padding-left: 24px;
+        }
+
+        &:last-child {
+          padding-right: 126px;
+        }
+
+        &:nth-child(3) {
+          text-align: right;
+          font-variant-numeric: tabular-nums;
+        }
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .table {
+    thead {
+      background-color: var(--color-dark-500);
+
+      th {
+        color: var(--color-light-100);
+
+        &::after {
+          background-color: var(--color-dark-500);
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          background-color: var(--color-dark-500);
+        }
+
+        &:not(:last-child)::after {
+          background-color: var(--color-dark-500);
+        }
+
+        td {
+          color: var(--color-light-100);
+          font-weight: var(--font-weight-regular);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .table {
+    font-size: 12px;
+
+    thead th,
+    tbody td {
+      padding: 12px 8px;
+
+      &:first-child {
+        padding-left: 16px;
+      }
+
+      &:last-child {
+        padding-right: 16px;
+      }
+    }
+
+    tbody td {
+      font-weight: var(--font-weight-regular);
+    }
+  }
+}

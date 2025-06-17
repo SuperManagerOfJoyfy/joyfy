@@ -1,0 +1,17 @@
+.editForm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px;
+}
+
+.userCard {
+  margin-bottom: 24px;
+}
+
+.actionButtons {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

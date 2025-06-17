@@ -1,0 +1,32 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  img {
+    margin-top: 72px;
+  }
+}
+
+.infoTextContainer {
+  max-width: 300px;
+  text-align: center;
+}
+
+.description {
+  max-width: 295px;
+  text-align: center;
+}
+
+.imageContainer {
+  text-align: center;
+  img {
+    max-width: 100%;
+    object-fit: contain;
+  }
+}

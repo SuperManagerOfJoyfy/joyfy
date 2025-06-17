@@ -75,7 +75,11 @@ export const authApi = joyfyApi.injectEndpoints({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled
-          localStorage.removeItem('accessToken')
+
+          LocalStorage.removeToken()
+          // localStorage.removeItem('lightBackground')
+          // localStorage.removeItem('textColor')
+
           dispatch(authApi.util.resetApiState())
         } catch (error) {
           console.error('Logout failed:', error)
@@ -125,6 +129,13 @@ export const authApi = joyfyApi.injectEndpoints({
         },
       }),
     }),
+    //удаление юзера по id для тестирования
+    deleteUser: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `/users/profile/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
@@ -140,4 +151,5 @@ export const {
   useRefreshTokenMutation,
   useLazyGetMeQuery,
   useGoogleLoginMutation,
+  useDeleteUserMutation,
 } = authApi
