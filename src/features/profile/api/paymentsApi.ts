@@ -13,6 +13,10 @@ export const paymentsApi = joyfyApi.injectEndpoints({
       query: () => ({
         url: 'subscriptions/current-payment-subscriptions',
       }),
+      transformResponse: (response: CurrentSubscription) => ({
+        ...response,
+        accountType: 'Personal',
+      }),
       providesTags: ['Subscription'],
     }),
     createPayment: builder.mutation<{ url: string }, CreatePaymentRequest>({

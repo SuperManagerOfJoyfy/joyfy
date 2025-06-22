@@ -8,6 +8,8 @@ export type PaymentRecord = {
   paymentType: PaymentType
 }
 
+export type AccountType = 'Personal' | 'Business'
+
 export type CurrentSubscription = {
   data: {
     userId: number
@@ -17,6 +19,7 @@ export type CurrentSubscription = {
     autoRenewal: boolean
   }[]
   hasAutoRenewal: boolean
+  accountType?: AccountType
 }
 
 export type CreatePaymentRequest = {
@@ -25,8 +28,6 @@ export type CreatePaymentRequest = {
   amount: number
   baseUrl: string
 }
-
-export type AccountType = 'Personal' | 'Business'
 
 export enum SubscriptionType {
   MONTHLY = 'MONTHLY',

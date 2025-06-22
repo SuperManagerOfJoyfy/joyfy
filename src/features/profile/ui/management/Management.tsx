@@ -11,15 +11,17 @@ import {
 } from '@/features/profile/ui/management'
 import {
   AccountType,
+  CurrentSubscription,
+  paymentsApi,
   PaymentType,
   SubscriptionType,
   useCreatePaymentMutation,
   useGetCurrentSubscriptionQuery,
 } from '@/features/profile/api'
 import { useSearchParams } from 'next/navigation'
+import { useAppDispatch } from '@/app/store/store'
 
 export const Management = () => {
-  const [type, setType] = useState<AccountType>('Personal')
   const [typeSubscription, setTypeSubscription] = useState<SubscriptionType>(SubscriptionType.DAY)
   const [paymentType, setPaymentType] = useState<PaymentType>(PaymentType.STRIPE)
   const [showModal, setShowModal] = useState(false)
@@ -28,6 +30,17 @@ export const Management = () => {
   const searchParams = useSearchParams()
   const { data: currentSubscription } = useGetCurrentSubscriptionQuery()
   const [pay] = useCreatePaymentMutation()
+  const dispatch = useAppDispatch()
+
+  const type = currentSubscription?.accountType ?? 'Personal'
+
+  const updateAccountType = (newType: AccountType) => {
+    dispatch(
+      paymentsApi.util.updateQueryData('getCurrentSubscription', undefined, (draft: CurrentSubscription) => {
+        draft.accountType = newType
+      })
+    )
+  }
 
   useEffect(() => {
     const successParam = searchParams.get('success')
@@ -50,7 +63,7 @@ export const Management = () => {
 
   useEffect(() => {
     if (currentSubscription) {
-      setType('Business')
+      updateAccountType('Business')
     }
   }, [currentSubscription])
 
@@ -84,8 +97,8 @@ export const Management = () => {
     <>
       <PaymentModal open={showModal} onOpenChange={setShowModal} handleSubmit={handlePay} initialStep={initialStep} />
       <div className={s.management}>
-        {subscriptions && <SubscriptionCard subscription={currentSubscription} changeAccountType={setType} />}
-        <AccountTypeSelector value={type} onChange={setType} />
+        {subscriptions && <SubscriptionCard subscription={currentSubscription} changeAccountType={updateAccountType} />}
+        <AccountTypeSelector value={type} onChange={updateAccountType} />
         {type === 'Business' && (
           <BusinessSubscription
             subscription={typeSubscription}
