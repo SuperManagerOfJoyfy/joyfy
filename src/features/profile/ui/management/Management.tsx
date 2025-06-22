@@ -84,7 +84,7 @@ export const Management = () => {
     <>
       <PaymentModal open={showModal} onOpenChange={setShowModal} handleSubmit={handlePay} initialStep={initialStep} />
       <div className={s.management}>
-        {subscriptions && <SubscriptionCard subscription={currentSubscription} />}
+        {subscriptions && <SubscriptionCard subscription={currentSubscription} changeAccountType={setType} />}
         <AccountTypeSelector value={type} onChange={setType} />
         {type === 'Business' && (
           <BusinessSubscription

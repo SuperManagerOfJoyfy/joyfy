@@ -1,21 +1,39 @@
 import { Card, Checkbox, Typography } from '@/shared/ui'
 import s from './subscriptionCard.module.scss'
-import { AccountType, CurrentSubscription, useCancelAutoRenewalMutation } from '@/features/profile/api'
+import {
+  AccountType,
+  CurrentSubscription,
+  useCancelAutoRenewalMutation,
+  useRenewAutoRenewalMutation,
+} from '@/features/profile/api'
 import { toast } from 'react-toastify'
 
 type Props = {
   subscription: CurrentSubscription
+  changeAccountType: (type: AccountType) => void
 }
 
-export const SubscriptionCard = ({ subscription }: Props) => {
-  const [cancelSubscription] = useCancelAutoRenewalMutation()
+export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => {
+  const [cancelAutoRenewal] = useCancelAutoRenewalMutation()
+  const [renewAutoRenewal] = useRenewAutoRenewalMutation()
 
   const onCheckedChangeHandler = async () => {
-    try {
-      await cancelSubscription()
-      toast.success('Brawo!')
-    } catch (error: any) {
-      toast.error(error)
+    if (subscription.hasAutoRenewal) {
+      try {
+        await cancelAutoRenewal()
+        changeAccountType('Personal')
+        toast.success('You successfully cancel auto renewal subscription!')
+      } catch (error: any) {
+        toast.error(error)
+      }
+    } else {
+      try {
+        await renewAutoRenewal()
+        changeAccountType('Business')
+        toast.success('You successfully renew auto renewal subscription!')
+      } catch (error: any) {
+        toast.error(error)
+      }
     }
   }
 

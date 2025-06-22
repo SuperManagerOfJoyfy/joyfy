@@ -29,6 +29,13 @@ export const paymentsApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Subscription'],
     }),
+    renewAutoRenewal: builder.mutation<void, void>({
+      query: () => ({
+        url: '/subscriptions/renew-auto-renewal',
+        method: 'POST',
+      }),
+      invalidatesTags: ['Subscription'],
+    }),
   }),
   overrideExisting: true,
 })
@@ -38,4 +45,5 @@ export const {
   useCreatePaymentMutation,
   useGetCurrentSubscriptionQuery,
   useCancelAutoRenewalMutation,
+  useRenewAutoRenewalMutation,
 } = paymentsApi
