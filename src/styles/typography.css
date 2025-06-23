@@ -1,5 +1,6 @@
 :root {
   --font-family-primary: 'Inter', sans-serif;
+  --font-family-third: 'Roboto', sans-serif;
 
   /* line heights*/
   --line-height-s: 16px;

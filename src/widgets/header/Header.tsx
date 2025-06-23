@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image, { StaticImageData } from 'next/image'
-import { IoNotificationsOutline } from 'react-icons/io5'
 import { Button, SelectBox, SelectItem } from '@/shared/ui'
 import { PATH } from '@/shared/config/routes'
 import Letters from '../../../public/logo/letters.png'
@@ -12,6 +11,8 @@ import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import flagRussia from './assets/flagRussia.png'
 import s from './Header.module.scss'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { NotificationsContainer } from '@/features/notifications/ui/notificationsContainer/NotificationsContainer'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -37,7 +38,6 @@ const AuthActions = () => (
 )
 
 export const Header = () => {
-  const [notificationCount] = useState(3)
   const { data: user, isLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
 
@@ -56,12 +56,10 @@ export const Header = () => {
         </Link>
         <div className={s.actions}>
           <div className={s.notificationContainer}>
-            {user && (
-              <div className={s.notifications}>
-                <IoNotificationsOutline />
-                {notificationCount !== 0 && <span className={s.number}>{notificationCount}</span>}
-              </div>
-            )}
+            <NotificationsContainer
+              accessToken={user ? (LocalStorage.getToken() ?? undefined) : undefined}
+              className={s.notifications}
+            />
           </div>
 
           <SelectBox className={s.selector} placeholder="Choose language">
