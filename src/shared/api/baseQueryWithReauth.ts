@@ -40,6 +40,7 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
   const isAuthMeRequest = typeof args !== 'string' && args.url === '/auth/me'
   const isRefreshEndpoint = typeof args !== 'string' && args.url === '/auth/update-tokens' && args.method === 'POST'
   const isLoginEndpoint = typeof args !== 'string' && args.url === '/auth/login' && args.method === 'POST'
+  const isGoogleLoginEndpoint = typeof args !== 'string' && args.url === '/auth/google/login' && args.method === 'POST'
 
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : ''
 
@@ -52,9 +53,11 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
       PATH.AUTH.TERMS_OF_SERVICE,
       PATH.AUTH.EMAIL_CONFIRMED,
       PATH.USER.PROFILE,
+      PATH.AUTH.GOOGLE,
+      PATH.AUTH.GITHUB,
     ].includes(currentPath) || currentPath.startsWith(PATH.USER.PROFILE)
 
-  if (isLoginEndpoint) {
+  if (isLoginEndpoint || isGoogleLoginEndpoint) {
     const result = await baseQuery(args, api, extraOptions)
     handleErrors(api, result)
     return result
