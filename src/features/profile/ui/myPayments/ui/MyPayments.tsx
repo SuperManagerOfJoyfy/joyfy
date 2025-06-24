@@ -58,7 +58,7 @@ export const MyPayments = () => {
   if (!paginationData.hasData) {
     return (
       <div className={s.container}>
-        <div className={s.empty}>No payments found.</div>
+        <div className={s.empty}>No payments found</div>
       </div>
     )
   }
