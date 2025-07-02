@@ -6,9 +6,9 @@ import { postsApi, useLazyGetPostsQuery } from '@/features/post/api/postsApi'
 import { GetPostsResponse } from '@/features/post/api/postsApi.types'
 import { Post } from '@/features/post/types/postTypes'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useDebounce } from './useDebounce'
+import { useDebounce } from '@/shared/hooks/useDebounce'
 
 type Props = {
   initialPostsData: GetPostsResponse

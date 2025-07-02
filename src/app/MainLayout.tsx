@@ -2,7 +2,6 @@
 
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { clsx } from 'clsx'
 
 import { Loader } from '@/shared/ui/loader/Loader'
 import { useGetMeQuery } from '@/features/auth/api/authApi'

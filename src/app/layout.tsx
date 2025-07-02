@@ -7,6 +7,7 @@ import { Loader, ToastSnackbar } from '@/shared/ui'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/globals.css'
+import { SocketProvider } from '@/features/notifications/context/SocketContext'
 
 export const metadata: Metadata = {
   title: 'Joyfy',
@@ -25,10 +26,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReduxProvider>
-          <ToastSnackbar />
-          <Suspense fallback={<Loader />}>
-            <MainLayout>{children}</MainLayout>
-          </Suspense>
+          <SocketProvider>
+            <ToastSnackbar />
+            <Suspense fallback={<Loader />}>
+              <MainLayout>{children}</MainLayout>
+            </Suspense>
+          </SocketProvider>
         </ReduxProvider>
       </body>
     </html>

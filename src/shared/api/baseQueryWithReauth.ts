@@ -4,6 +4,7 @@ import { PATH } from '../config/routes'
 import { handleErrors } from '@/shared/utils/handleErrors/handleErrors'
 import LocalStorage from '../utils/localStorage/localStorage'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
+import { socket } from '@/shared/utils/socket/socket'
 
 const mutex = new Mutex()
 let lastRefreshResult: boolean | null = null
@@ -88,6 +89,13 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 
           const data = refreshResult.data as { accessToken: string }
           LocalStorage.setToken(data.accessToken)
+
+          socket.io.opts.query = { accessToken: data.accessToken }
+
+          if (socket.connected) {
+            socket.disconnect()
+          }
+          socket.connect()
 
           result = await baseQuery(args, api, extraOptions)
         } else {

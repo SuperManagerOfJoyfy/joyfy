@@ -5,6 +5,9 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-dark-300) transparent;
+
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -19,6 +22,31 @@ html {
   input:-webkit-autofill:disabled {
     -webkit-text-fill-color: #4c4c4c !important; /* Text color for disabled input with autofill */
   }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-dark-300) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: inherit;
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-dark-300);
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-light-900);
 }
 
 *,
