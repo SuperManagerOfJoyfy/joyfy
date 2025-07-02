@@ -1,0 +1,71 @@
+.notificationsContainer {
+  position: relative;
+}
+
+.bellButton {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+  }
+}
+
+.bellIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-light-100);
+  transition: color 0.2s ease;
+
+  .bellButton:hover & {
+    color: var(--color-accent-500);
+  }
+}
+
+.badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  min-width: 18px;
+  height: 18px;
+  background: var(--color-danger-500);
+  color: var(--color-light-100);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--color-dark-900);
+}
+
+.hasUnread {
+  .bellIcon {
+    color: var(--color-accent-500);
+  }
+}
+
+.isOpen {
+  .bellIcon {
+    color: var(--color-accent-500);
+  }
+}

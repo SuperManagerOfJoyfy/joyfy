@@ -20,7 +20,7 @@
       border: none;
       border-bottom: 2px solid var(--color-dark-100);
       color: var(--color-dark-100);
-      font-weight: 600;
+      font-weight: var(--font-weight-semibold);
       line-height: 24px;
       transition:
         background-color 0.2s ease,

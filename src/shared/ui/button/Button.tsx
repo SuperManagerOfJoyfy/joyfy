@@ -1,13 +1,11 @@
-import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
+import { ComponentPropsWithoutRef, ElementType, ReactNode, forwardRef, Ref } from 'react'
 import { clsx } from 'clsx'
 import s from './Button.module.scss'
 
 const buttonVariant = ['primary', 'secondary', 'outline', 'text', 'link', 'icon', 'clean'] as const
-
 type ButtonVariant = (typeof buttonVariant)[number]
 
 const buttonSize = ['small', 'medium', 'large'] as const
-
 type ButtonSize = (typeof buttonSize)[number]
 
 type ButtonProps<T extends ElementType = 'button'> = {
@@ -22,7 +20,7 @@ type ButtonProps<T extends ElementType = 'button'> = {
   noPadding?: boolean
 } & ComponentPropsWithoutRef<T>
 
-export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) => {
+export const Button = forwardRef(<T extends ElementType = 'button'>(props: ButtonProps<T>, ref: Ref<any>) => {
   const {
     as: Component = 'button',
     variant = 'primary',
@@ -47,10 +45,12 @@ export const Button = <T extends ElementType = 'button'>(props: ButtonProps<T>) 
   )
 
   return (
-    <Component className={classNames} {...rest}>
+    <Component ref={ref} className={classNames} {...rest}>
       {startIcon && <span className={s.startIcon}>{startIcon}</span>}
       {children}
       {endIcon && <span className={s.endIcon}>{endIcon}</span>}
     </Component>
   )
-}
+})
+
+Button.displayName = 'Button'
