@@ -106,7 +106,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
   return (
     <>
       {<PostsGrid posts={posts} onPostClick={openPostModal} />}
-      {hasMore && (
+      {hasMore && posts.length > 0 && (
         <div ref={loaderRef}>
           <Loader reduced />
         </div>

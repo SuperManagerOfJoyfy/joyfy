@@ -8,6 +8,7 @@ import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { CreatePost } from '@/features/post/ui'
 import { LogoutModal } from '@/features/auth/ui'
 import { Header, createSidebarItems, Sidebar } from '@/widgets'
+import { PATH } from '@/shared/config/routes'
 
 import s from '../styles/layout.module.scss'
 
@@ -43,6 +44,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
   const showLoader = pendingPath && pathname !== pendingPath
+  const hideHeader = pathname === PATH.AUTH.GOOGLE
 
   useEffect(() => {
     if (pathname === pendingPath) {
@@ -66,7 +68,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   return (
     <div className={s.layoutWrapper}>
-      <Header />
+      {!hideHeader && <Header />}
       <div className={s.containerLayout}>
         {!isLoading && user && (
           <div className={s.sidebarContainer}>

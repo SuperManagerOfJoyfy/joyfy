@@ -120,14 +120,28 @@ export const authApi = joyfyApi.injectEndpoints({
     }),
 
     googleLogin: builder.mutation<LoginResponse, GoogleLoginRequest>({
-      query: (body) => ({
-        url: '/auth/google/login',
-        method: 'POST',
-        body: {
-          code: body.code,
-          redirectUrl: body.redirectUrl,
-        },
-      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          if (!data?.accessToken) {
+            console.error('No access token received')
+          }
+          LocalStorage.setToken(data.accessToken)
+          dispatch(authApi.util.invalidateTags(['User']))
+        } catch (error) {
+          console.error('Google login failed:', error)
+        }
+      },
+      query: (body) => {
+        return {
+          url: '/auth/google/login',
+          method: 'POST',
+          body: {
+            code: body.code,
+            redirectUrl: body.redirectUrl,
+          },
+        }
+      },
     }),
     //удаление юзера по id для тестирования
     deleteUser: builder.mutation<void, number>({
