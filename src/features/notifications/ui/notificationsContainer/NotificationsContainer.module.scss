@@ -1,62 +1,71 @@
-.container {
+.notificationsContainer {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-family-third);
 }
 
 .bellButton {
   position: relative;
-  background: none;
-  border: none;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
   transition: all 0.2s ease;
-  color: rgba(255, 255, 255, 0.8);
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--color-light-100);
-
-    .icon {
-      transform: scale(1.1);
-    }
-  }
-
-  &.active {
-    background-color: rgba(73, 123, 255, 0.1);
-    color: #497bff;
+    transform: scale(1.05);
+    opacity: 0.8;
   }
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(73, 123, 255, 0.3);
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
   }
 }
 
-.icon {
+.bellIcon {
   width: 24px;
   height: 24px;
-  transition: transform 0.2s ease;
+  color: var(--color-light-100);
+  transition: color 0.2s ease;
+
+  .bellButton:hover & {
+    color: var(--color-accent-500);
+  }
 }
 
 .badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  background-color: #ff4d4f;
-  color: white;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 5px;
-  border-radius: 12px;
-  line-height: 1;
+  top: 0px;
+  right: 0px;
   min-width: 18px;
   height: 18px;
+  background: var(--color-danger-500);
+  color: var(--color-light-100);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 0 2px #000;
-  pointer-events: none;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--color-dark-900);
+}
+
+.hasUnread {
+  .bellIcon {
+    color: var(--color-accent-500);
+  }
+}
+
+.isOpen {
+  .bellIcon {
+    color: var(--color-accent-500);
+  }
 }

@@ -1,5 +1,6 @@
 export type Notification = {
   id: number
+  clientId: string
   message: string
   isRead: boolean
   createdAt: string

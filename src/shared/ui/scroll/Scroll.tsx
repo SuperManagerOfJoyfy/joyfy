@@ -7,7 +7,7 @@ type Props = React.ComponentPropsWithoutRef<typeof ScrollArea.Root> & {
   children: React.ReactNode
   className?: string
   onScroll?: React.UIEventHandler<HTMLDivElement>
-  scrollRef?: RefObject<HTMLDivElement>
+  scrollRef?: RefObject<HTMLDivElement | null>
 }
 
 export const Scroll = ({ children, className, onScroll, scrollRef }: Props) => {

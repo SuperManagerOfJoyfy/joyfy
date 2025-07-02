@@ -11,8 +11,7 @@ import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import flagRussia from './assets/flagRussia.png'
 import s from './Header.module.scss'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { NotificationsContainer } from '@/features/notifications/ui/notificationsContainer/NotificationsContainer'
-import LocalStorage from '@/shared/utils/localStorage/localStorage'
+import { NotificationsContainer } from '@/features/notifications/ui'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -56,10 +55,7 @@ export const Header = () => {
         </Link>
         <div className={s.actions}>
           <div className={s.notificationContainer}>
-            <NotificationsContainer
-              accessToken={user ? (LocalStorage.getToken() ?? undefined) : undefined}
-              className={s.notifications}
-            />
+            <NotificationsContainer />
           </div>
 
           <SelectBox className={s.selector} placeholder="Choose language">

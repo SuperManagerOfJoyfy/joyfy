@@ -1,7 +1,8 @@
 import { IoTrashOutline } from 'react-icons/io5'
 import clsx from 'clsx'
+import { MouseEvent } from 'react'
 
-import { DateStamp } from '@/shared/ui'
+import { Button, DateStamp } from '@/shared/ui'
 import { Notification } from '@/features/notifications/api/notificationsApi.types'
 
 import s from './NotificationItem.module.scss'
@@ -14,7 +15,7 @@ type NotificationItemProps = {
 }
 
 export const NotificationItem = ({ notification, onDelete, onMarkAsRead, className }: NotificationItemProps) => {
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleDelete = (e: MouseEvent) => {
     e.stopPropagation()
     onDelete?.(notification.id)
   }
@@ -25,43 +26,31 @@ export const NotificationItem = ({ notification, onDelete, onMarkAsRead, classNa
     }
   }
 
-  const parseNotificationMessage = () => {
-    const message = notification.message || ''
-
-    const marker = 'New notification:'
-
-    if (message.includes(marker)) {
-      const splitMessage = message.split(marker)
-      return {
-        title: 'New notification',
-        subtitle: splitMessage[1]?.trim() || '',
-        isNew: true,
-      }
-    }
-
-    return {
-      title: message,
-      subtitle: '',
-      isNew: false,
-    }
-  }
-
-  const { title, subtitle, isNew } = parseNotificationMessage()
+  const title = notification.message || ''
 
   return (
     <div className={clsx(s.notificationItem, !notification.isRead && s.unread, className)} onClick={handleClick}>
       <div className={s.content}>
         <div className={s.header}>
-          <span className={clsx(s.title, isNew && s.newTitle)}>
+          <div className={clsx(s.title, !notification.isRead && s.newTitle)}>
+            {!notification.isRead && (
+              <div className={s.newContainer}>
+                <span className={s.newNot}>New notification!</span>
+                <span className={s.newBadge}>New</span>
+              </div>
+            )}
             {title}
-            {isNew && <span className={s.newBadge}>New</span>}
-          </span>
-          <button className={s.deleteButton} onClick={handleDelete} aria-label="Delete notification" title="Delete">
+          </div>
+          <Button
+            variant={'icon'}
+            className={s.deleteButton}
+            onClick={handleDelete}
+            aria-label="Delete notification"
+            title="Delete"
+          >
             <IoTrashOutline />
-          </button>
+          </Button>
         </div>
-
-        {subtitle && <div className={s.subtitle}>{subtitle}</div>}
 
         <DateStamp date={notification.createdAt} className={s.date} />
       </div>

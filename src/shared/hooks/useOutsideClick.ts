@@ -13,33 +13,38 @@ export function useOutsideClick<T extends HTMLElement>(
 ): {
   ref: React.RefObject<T | null>
 } {
-  const { enabled = true, capture = true } = options
+  const { enabled = true, capture = false } = options
   const ref = useRef<T | null>(null)
+  const handlerRef = useRef(handler)
+
+  useEffect(() => {
+    handlerRef.current = handler
+  }, [handler])
 
   useEffect(() => {
     if (!enabled) return
 
     const listener = (event: Event) => {
       const target = event.target as Node
-      if (!ref.current || ref.current.contains(target)) {
+
+      if (!ref.current || !target) {
         return
       }
 
-      handler(event)
+      if (!ref.current.contains(target)) {
+        handlerRef.current(event)
+      }
     }
 
-    const eventNames = ['mousedown', 'touchstart']
-
-    eventNames.forEach((eventName) => {
-      document.addEventListener(eventName, listener, { capture })
-    })
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('mousedown', listener, capture)
+    }, 0)
 
     return () => {
-      eventNames.forEach((eventName) => {
-        document.removeEventListener(eventName, listener, { capture })
-      })
+      clearTimeout(timeoutId)
+      document.removeEventListener('mousedown', listener, capture)
     }
-  }, [handler, enabled, capture])
+  }, [enabled, capture])
 
   return { ref }
 }

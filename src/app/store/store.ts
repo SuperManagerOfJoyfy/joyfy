@@ -8,7 +8,7 @@ import notificationsReducer from '@/features/notifications/store/notificationsSl
 export const store = configureStore({
   reducer: {
     [joyfyApi.reducerPath]: joyfyApi.reducer,
-    [notificationsApi.reducerPath]: notificationsApi.reducer,
+    // [notificationsApi.reducerPath]: notificationsApi.reducer,
     notifications: notificationsReducer,
   },
 

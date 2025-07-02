@@ -2,96 +2,23 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Notification } from '@/features/notifications/api/notificationsApi.types'
 
 type NotificationsState = {
-  unreadCount: number
-  notifications: Notification[]
   isPopupOpen: boolean
-  hasMore: boolean
-  loading: boolean
-  error: string | null
+  realtimeNotifications: Notification[]
+  unreadCount: number
+  lastUpdated: number | null
 }
 
 const initialState: NotificationsState = {
-  unreadCount: 0,
-  notifications: [],
   isPopupOpen: false,
-  hasMore: true,
-  loading: false,
-  error: null,
-}
-
-// Helper function to remove duplicates
-const removeDuplicates = (notifications: Notification[]): Notification[] => {
-  const seen = new Set<number>()
-  return notifications.filter((notification) => {
-    if (seen.has(notification.id)) {
-      return false
-    }
-    seen.add(notification.id)
-    return true
-  })
-}
-
-// Helper function to calculate unread count
-const calculateUnreadCount = (notifications: Notification[]): number => {
-  return notifications.filter((notification) => !notification.isRead).length
+  realtimeNotifications: [],
+  unreadCount: 0,
+  lastUpdated: null,
 }
 
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    setUnreadCount: (state, action: PayloadAction<number>) => {
-      state.unreadCount = action.payload
-    },
-
-    incrementUnreadCount: (state) => {
-      state.unreadCount += 1
-    },
-
-    decrementUnreadCount: (state, action: PayloadAction<number>) => {
-      state.unreadCount = Math.max(0, state.unreadCount - action.payload)
-    },
-
-    addNotification: (state, action: PayloadAction<Notification>) => {
-      const existingIndex = state.notifications.findIndex((n) => n.id === action.payload.id)
-
-      if (existingIndex === -1) {
-        state.notifications.unshift(action.payload)
-      } else {
-        state.notifications[existingIndex] = action.payload
-      }
-
-      state.unreadCount = calculateUnreadCount(state.notifications)
-    },
-
-    setNotifications: (state, action: PayloadAction<Notification[]>) => {
-      state.notifications = removeDuplicates(action.payload)
-      state.unreadCount = calculateUnreadCount(state.notifications)
-    },
-
-    appendNotifications: (state, action: PayloadAction<Notification[]>) => {
-      const combined = [...state.notifications, ...action.payload]
-      state.notifications = removeDuplicates(combined)
-      state.unreadCount = calculateUnreadCount(state.notifications)
-    },
-
-    markAsRead: (state, action: PayloadAction<number[]>) => {
-      const idsToMark = action.payload
-
-      state.notifications.forEach((notification) => {
-        if (idsToMark.includes(notification.id)) {
-          notification.isRead = true
-        }
-      })
-
-      state.unreadCount = calculateUnreadCount(state.notifications)
-    },
-
-    deleteNotification: (state, action: PayloadAction<number>) => {
-      state.notifications = state.notifications.filter((n) => n.id !== action.payload)
-      state.unreadCount = calculateUnreadCount(state.notifications)
-    },
-
     togglePopup: (state) => {
       state.isPopupOpen = !state.isPopupOpen
     },
@@ -100,54 +27,101 @@ const notificationsSlice = createSlice({
       state.isPopupOpen = false
     },
 
-    openPopup: (state) => {
-      state.isPopupOpen = true
+    setUnreadCount: (state, action: PayloadAction<number>) => {
+      const newCount = action.payload
+      const now = Date.now()
+
+      if (state.unreadCount !== newCount) {
+        state.unreadCount = newCount
+        state.lastUpdated = now
+      }
     },
 
-    setHasMore: (state, action: PayloadAction<boolean>) => {
-      state.hasMore = action.payload
+    incrementUnreadCount: (state) => {
+      state.unreadCount += 1
+      state.lastUpdated = Date.now()
     },
 
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload
+    decrementUnreadCount: (state, action: PayloadAction<number>) => {
+      const decrementBy = action.payload
+      state.unreadCount = Math.max(0, state.unreadCount - decrementBy)
+      state.lastUpdated = Date.now()
     },
 
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload
+    addRealtimeNotification: (state, action: PayloadAction<Notification>) => {
+      const newNotification = action.payload
+
+      const exists = state.realtimeNotifications.some((n) => {
+        return (
+          n.id === newNotification.id ||
+          (Math.abs(new Date(n.createdAt).getTime() - new Date(newNotification.createdAt).getTime()) < 1000 &&
+            n.message === newNotification.message)
+        )
+      })
+
+      console.log('[Redux] Adding realtime notification:', {
+        notification: newNotification,
+        exists,
+        currentCount: state.realtimeNotifications.length,
+      })
+
+      if (!exists) {
+        state.realtimeNotifications.unshift(newNotification)
+        if (!newNotification.isRead) {
+          state.unreadCount += 1
+          state.lastUpdated = Date.now()
+        }
+      }
     },
 
-    clearNotifications: (state) => {
-      state.notifications = []
-      state.hasMore = true
-      state.unreadCount = 0
+    clearRealtimeNotifications: (state) => {
+      state.realtimeNotifications = []
     },
 
-    resetNotificationsOnOpen: (state) => {
-      state.notifications = []
-      state.hasMore = true
-      state.loading = false
-      state.error = null
+    markAsReadLocally: (state, action: PayloadAction<number[]>) => {
+      const idsToMark = action.payload
+      let markedCount = 0
+
+      state.realtimeNotifications.forEach((notification) => {
+        if (idsToMark.includes(notification.id) && !notification.isRead) {
+          notification.isRead = true
+          markedCount++
+        }
+      })
+
+      if (markedCount > 0) {
+        state.unreadCount = Math.max(0, state.unreadCount - markedCount)
+        state.lastUpdated = Date.now()
+      }
+    },
+
+    deleteLocally: (state, action: PayloadAction<number>) => {
+      const notificationToDelete = state.realtimeNotifications.find((n) => n.id === action.payload)
+      state.realtimeNotifications = state.realtimeNotifications.filter((n) => n.id !== action.payload)
+
+      if (notificationToDelete && !notificationToDelete.isRead) {
+        state.unreadCount = Math.max(0, state.unreadCount - 1)
+        state.lastUpdated = Date.now()
+      }
+    },
+
+    resetNotifications: (state) => {
+      return initialState
     },
   },
 })
 
 export const {
+  togglePopup,
+  closePopup,
   setUnreadCount,
   incrementUnreadCount,
   decrementUnreadCount,
-  addNotification,
-  setNotifications,
-  appendNotifications,
-  markAsRead,
-  deleteNotification,
-  togglePopup,
-  closePopup,
-  openPopup,
-  setHasMore,
-  setLoading,
-  setError,
-  clearNotifications,
-  resetNotificationsOnOpen,
+  addRealtimeNotification,
+  clearRealtimeNotifications,
+  markAsReadLocally,
+  deleteLocally,
+  resetNotifications,
 } = notificationsSlice.actions
 
 export default notificationsSlice.reducer

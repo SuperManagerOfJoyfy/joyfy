@@ -1,98 +1,77 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect } from 'react'
 import { io, Socket } from 'socket.io-client'
+import { useDispatch } from 'react-redux'
+
 import { WS_EVENT_PATH } from '@/features/notifications/api/notificationsApi.types'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
+import { Notification } from '@/features/notifications/api/notificationsApi.types'
+import { addRealtimeNotification } from '../store/notificationsSlice'
 
-type UseNotificationWebSocketProps = {
-  accessToken?: string
-  onNotificationReceived?: (notification: any) => void
-  onError?: (error: any) => void
-}
+let globalSocket: Socket | null = null
 
-export const useNotificationWebSocket = ({
-  accessToken,
-  onNotificationReceived,
-  onError,
-}: UseNotificationWebSocketProps) => {
-  const socketRef = useRef<Socket | null>(null)
-  const reconnectionTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+export const useNotificationWebSocket = () => {
+  const dispatch = useDispatch()
 
-  const connect = useCallback(() => {
-    if (!accessToken) return
+  const disconnect = () => {
+    if (globalSocket) {
+      console.log('[WebSocket] disconnect()')
+      globalSocket.disconnect()
+      globalSocket = null
+    }
+  }
 
-    if (socketRef.current) {
-      socketRef.current.disconnect()
+  const connect = (accessToken: string) => {
+    if (globalSocket) {
+      console.log('[WebSocket] socket already exists, skipping connect')
+      return
     }
 
-    const queryParams = {
-      query: {
-        accessToken,
-      },
-    }
+    console.log('[WebSocket] connect() with token:', accessToken)
 
-    try {
-      socketRef.current = io('https://inctagram.work', queryParams)
+    const socket = io('https://inctagram.work', {
+      query: { accessToken },
+      transports: ['websocket'],
+    })
 
-      socketRef.current.on('connect', () => {
-        console.log('WebSocket connected')
-      })
+    globalSocket = socket
 
-      socketRef.current.on('disconnect', (reason) => {
-        console.log('WebSocket disconnected:', reason)
+    socket.on('connect', () => {
+      console.log('[WebSocket] connected')
+    })
 
-        if (reason !== 'io client disconnect' && accessToken) {
-          reconnectionTimeoutRef.current = setTimeout(() => {
-            connect()
-          }, 3000)
-        }
-      })
-      socketRef.current.on(WS_EVENT_PATH.NOTIFICATIONS, (notification) => {
-        console.log('Received notification:', notification)
-        onNotificationReceived?.(notification)
-      })
+    socket.on('disconnect', (reason) => {
+      console.log('[WebSocket] disconnected:', reason)
+      globalSocket = null
+    })
 
-      socketRef.current.on(WS_EVENT_PATH.ERROR, (error) => {
-        console.error('WebSocket error:', error)
-        onError?.(error)
-      })
+    socket.on('connect_error', (error) => {
+      console.error('[WebSocket] connect_error:', error)
+      globalSocket = null
+    })
 
-      socketRef.current.on('connect_error', (error) => {
-        console.error('Connection error:', error)
-        onError?.(error)
-      })
-    } catch (error) {
-      console.error('Failed to create WebSocket connection:', error)
-      onError?.(error)
-    }
-  }, [accessToken, onNotificationReceived, onError])
+    socket.on(WS_EVENT_PATH.NOTIFICATIONS, (notification: Partial<Notification>) => {
+      console.log('🔔 New notification received:', notification)
 
-  const disconnect = useCallback(() => {
-    if (reconnectionTimeoutRef.current) {
-      clearTimeout(reconnectionTimeoutRef.current)
-      reconnectionTimeoutRef.current = null
-    }
+      const completeNotification: Notification = {
+        id: notification.id!,
+        message: notification.message!,
+        isRead: notification.isRead!,
+        createdAt: notification.createdAt || new Date().toISOString(),
+        clientId: notification.clientId!,
+      }
 
-    if (socketRef.current) {
-      socketRef.current.disconnect()
-      socketRef.current = null
-    }
-  }, [])
+      dispatch(addRealtimeNotification(completeNotification))
+    })
+  }
 
   useEffect(() => {
-    if (accessToken) {
-      connect()
-    } else {
-      disconnect()
-    }
+    const token = LocalStorage.getToken()
+    if (!token) return
+
+    connect(token)
 
     return () => {
       disconnect()
     }
-  }, [accessToken, connect, disconnect])
-
-  return {
-    socket: socketRef.current,
-    connect,
-    disconnect,
-    isConnected: socketRef.current?.connected ?? false,
-  }
+  }, [])
 }

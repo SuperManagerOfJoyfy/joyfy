@@ -1,92 +1,89 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, MouseEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { IoNotificationsOutline } from 'react-icons/io5'
 import clsx from 'clsx'
 
-import {
-  togglePopup,
-  closePopup,
-  addNotification,
-  setError,
-  incrementUnreadCount,
-} from '@/features/notifications/store/notificationsSlice'
+import { togglePopup, closePopup, setUnreadCount } from '@/features/notifications/store/notificationsSlice'
 import { RootState } from '@/app/store/store'
 import { useNotificationWebSocket } from '../../hooks/useNotificationWebSocket'
 import { NotificationsPopup } from '../notificationsPopup/NotificationsPopup'
 import { Button } from '@/shared/ui'
+import { useGetNotificationsQuery } from '../../api/notificationsApi'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 import s from './NotificationsContainer.module.scss'
-import { Notification } from '../../api/notificationsApi.types'
 
-type NotificationsContainerProps = {
-  accessToken?: string
-  className?: string
-}
-
-export const NotificationsContainer = ({ accessToken, className }: NotificationsContainerProps) => {
-  if (!accessToken) return null
-
+export const NotificationsContainer = () => {
   const dispatch = useDispatch()
   const bellRef = useRef<HTMLElement | null>(null)
-
   const { unreadCount, isPopupOpen } = useSelector((state: RootState) => state.notifications)
 
-  const handleNotificationReceived = (notification: Notification) => {
-    dispatch(addNotification(notification))
-    if (!notification.isRead && !isPopupOpen) {
-      dispatch(incrementUnreadCount())
+  const accessToken = LocalStorage.getToken()
+
+  const { data: unreadCountData, refetch } = useGetNotificationsQuery(
+    { pageSize: 1 },
+    {
+      skip: !accessToken,
+      refetchOnMountOrArgChange: true,
     }
-  }
-
-  const handleWebSocketError = (error: Error) => {
-    console.error('WebSocket error:', error)
-    dispatch(setError(error.message || 'WebSocket connection error'))
-  }
-
-  const { isConnected } = useNotificationWebSocket({
-    accessToken,
-    onNotificationReceived: handleNotificationReceived,
-    onError: handleWebSocketError,
-  })
+  )
 
   useEffect(() => {
-    const onEscKey = (e: KeyboardEvent) => {
+    if (unreadCountData?.notReadCount !== undefined && unreadCountData.notReadCount !== unreadCount) {
+      dispatch(setUnreadCount(unreadCountData.notReadCount))
+    }
+  }, [unreadCountData?.notReadCount, dispatch, unreadCount])
+
+  useNotificationWebSocket()
+
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isPopupOpen) {
         dispatch(closePopup())
       }
     }
 
-    document.addEventListener('keydown', onEscKey)
-    return () => document.removeEventListener('keydown', onEscKey)
+    document.addEventListener('keydown', handleEscapeKey)
+    return () => document.removeEventListener('keydown', handleEscapeKey)
   }, [isPopupOpen, dispatch])
 
-  const label = unreadCount > 0 ? `Notifications (${unreadCount} unread)` : 'Notifications'
+  const handleBellMouseDown = (e: MouseEvent) => {
+    e.preventDefault()
+    if (!isPopupOpen) {
+      refetch()
+    }
+    dispatch(togglePopup())
+  }
+
+  const handlePopupClose = () => dispatch(closePopup())
+
+  const formatUnreadCount = () => (unreadCount > 99 ? '99+' : unreadCount.toString())
+  const accessibilityLabel = unreadCount > 0 ? `Notifications (${unreadCount} unread)` : 'Notifications'
+
+  if (!accessToken) return null
 
   return (
-    <div className={clsx(s.notificationsContainer, className)}>
+    <div className={s.notificationsContainer}>
       <Button
         variant="icon"
         ref={bellRef}
         className={clsx(s.bellButton, {
           [s.hasUnread]: unreadCount > 0,
+          [s.isOpen]: isPopupOpen,
         })}
-        onClick={() => dispatch(togglePopup())}
-        aria-label={label}
-        title={label}
+        onMouseDown={handleBellMouseDown}
+        aria-label={accessibilityLabel}
+        title={accessibilityLabel}
       >
         <IoNotificationsOutline className={s.bellIcon} />
-        {unreadCount > 0 && <span className={s.badge}>{unreadCount > 99 ? '99+' : unreadCount}</span>}
+        {unreadCount > 0 && (
+          <span className={s.badge} aria-label={`${unreadCount} unread notifications`}>
+            {formatUnreadCount()}
+          </span>
+        )}
       </Button>
 
-      <div
-        className={clsx(s.connectionStatus, {
-          [s.connected]: isConnected,
-        })}
-      />
-
-      {isPopupOpen && (
-        <NotificationsPopup isOpen={isPopupOpen} onClose={() => dispatch(closePopup())} anchorRef={bellRef} />
-      )}
+      {isPopupOpen && <NotificationsPopup isOpen={isPopupOpen} onClose={handlePopupClose} anchorRef={bellRef} />}
     </div>
   )
 }
