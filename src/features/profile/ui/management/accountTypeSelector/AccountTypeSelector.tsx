@@ -1,10 +1,11 @@
 import { Card, RadioGroup, Typography } from '@/shared/ui'
 import s from './accountTypeSelector.module.scss'
 import { typeOptions } from '@/features/profile/ui/management'
+import { AccountType } from '@/features/profile/api'
 
 type Props = {
   value: string
-  onChange: (val: string) => void
+  onChange: (type: AccountType) => void
 }
 
 export const AccountTypeSelector = ({ value, onChange }: Props) => {

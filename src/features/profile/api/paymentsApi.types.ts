@@ -8,6 +8,20 @@ export type PaymentRecord = {
   paymentType: PaymentType
 }
 
+export type AccountType = 'Personal' | 'Business'
+
+export type CurrentSubscription = {
+  data: {
+    userId: number
+    subscriptionId: string
+    dateOfPayment: string
+    endDateOfSubscription: string
+    autoRenewal: boolean
+  }[]
+  hasAutoRenewal: boolean
+  accountType: AccountType
+}
+
 export type CreatePaymentRequest = {
   typeSubscription: SubscriptionType
   paymentType: PaymentType
