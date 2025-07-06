@@ -9,20 +9,36 @@ import {
   price,
   SubscriptionCard,
 } from '@/features/profile/ui/management'
-import { PaymentType, SubscriptionType, useCreatePaymentMutation, useGetMyPaymentsQuery } from '@/features/profile/api'
+import {
+  AccountType,
+  CurrentSubscription,
+  paymentsApi,
+  PaymentType,
+  SubscriptionType,
+  useCreatePaymentMutation,
+  useGetCurrentSubscriptionQuery,
+} from '@/features/profile/api'
 import { useSearchParams } from 'next/navigation'
+import { useAppDispatch } from '@/app/store/store'
 
 export const Management = () => {
-  const [type, setType] = useState('Personal')
   const [typeSubscription, setTypeSubscription] = useState<SubscriptionType>(SubscriptionType.DAY)
   const [paymentType, setPaymentType] = useState<PaymentType>(PaymentType.STRIPE)
   const [showModal, setShowModal] = useState(false)
   const [initialStep, setInitialStep] = useState<'success' | 'error' | undefined>()
 
   const searchParams = useSearchParams()
-
-  const { data: currentSubscription } = useGetMyPaymentsQuery()
+  const { data: currentSubscription } = useGetCurrentSubscriptionQuery()
   const [pay] = useCreatePaymentMutation()
+  const dispatch = useAppDispatch()
+
+  const updateAccountType = (newType: AccountType) => {
+    dispatch(
+      paymentsApi.util.updateQueryData('getCurrentSubscription', undefined, (draft: CurrentSubscription) => {
+        draft.accountType = newType
+      })
+    )
+  }
 
   useEffect(() => {
     const successParam = searchParams.get('success')
@@ -43,15 +59,9 @@ export const Management = () => {
     }
   }, [searchParams])
 
-  useEffect(() => {
-    if (Array.isArray(currentSubscription) && currentSubscription?.length) {
-      setType('Business')
-    }
-  }, [currentSubscription])
-
   if (!currentSubscription) return null
 
-  const subscriptions = !!currentSubscription.length
+  const areSubscriptions = !!currentSubscription.data.length
 
   const handlePay = async () => {
     try {
@@ -79,13 +89,15 @@ export const Management = () => {
     <>
       <PaymentModal open={showModal} onOpenChange={setShowModal} handleSubmit={handlePay} initialStep={initialStep} />
       <div className={s.management}>
-        {subscriptions && <SubscriptionCard subscription={currentSubscription} />}
-        <AccountTypeSelector value={type} onChange={setType} />
-        {type === 'Business' && (
+        {areSubscriptions && (
+          <SubscriptionCard subscription={currentSubscription} changeAccountType={updateAccountType} />
+        )}
+        <AccountTypeSelector value={currentSubscription.accountType} onChange={updateAccountType} />
+        {currentSubscription.accountType === 'Business' && (
           <BusinessSubscription
             subscription={typeSubscription}
             onChange={setTypeSubscription}
-            current={subscriptions}
+            current={areSubscriptions}
             onOpenModal={() => setShowModal(true)}
             setPaymentType={setPaymentType}
           />

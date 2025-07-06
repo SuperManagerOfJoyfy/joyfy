@@ -1,5 +1,5 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { CreatePaymentRequest, PaymentRecord } from './paymentsApi.types'
+import { CreatePaymentRequest, CurrentSubscription, PaymentRecord } from './paymentsApi.types'
 
 export const paymentsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,6 +9,16 @@ export const paymentsApi = joyfyApi.injectEndpoints({
       }),
       providesTags: ['Payments'],
     }),
+    getCurrentSubscription: builder.query<CurrentSubscription, void>({
+      query: () => ({
+        url: 'subscriptions/current-payment-subscriptions',
+      }),
+      transformResponse: (response: CurrentSubscription) => ({
+        ...response,
+        accountType: response.data.length ? 'Business' : 'Personal',
+      }),
+      providesTags: ['Subscription'],
+    }),
     createPayment: builder.mutation<{ url: string }, CreatePaymentRequest>({
       query: (body) => ({
         body,
@@ -16,8 +26,28 @@ export const paymentsApi = joyfyApi.injectEndpoints({
         method: 'POST',
       }),
     }),
+    cancelAutoRenewal: builder.mutation<void, void>({
+      query: () => ({
+        url: '/subscriptions/canceled-auto-renewal',
+        method: 'POST',
+      }),
+      invalidatesTags: ['Subscription'],
+    }),
+    renewAutoRenewal: builder.mutation<void, void>({
+      query: () => ({
+        url: '/subscriptions/renew-auto-renewal',
+        method: 'POST',
+      }),
+      invalidatesTags: ['Subscription'],
+    }),
   }),
   overrideExisting: true,
 })
 
-export const { useGetMyPaymentsQuery, useCreatePaymentMutation } = paymentsApi
+export const {
+  useGetMyPaymentsQuery,
+  useCreatePaymentMutation,
+  useGetCurrentSubscriptionQuery,
+  useCancelAutoRenewalMutation,
+  useRenewAutoRenewalMutation,
+} = paymentsApi

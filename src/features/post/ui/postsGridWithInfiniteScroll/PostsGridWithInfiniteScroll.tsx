@@ -6,7 +6,7 @@ import { postsApi, useLazyGetPostsQuery } from '@/features/post/api/postsApi'
 import { GetPostsResponse } from '@/features/post/api/postsApi.types'
 import { Post } from '@/features/post/types/postTypes'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useDebounce } from './useDebounce'
 
@@ -106,7 +106,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
   return (
     <>
       {<PostsGrid posts={posts} onPostClick={openPostModal} />}
-      {hasMore && (
+      {hasMore && posts.length > 0 && (
         <div ref={loaderRef}>
           <Loader reduced />
         </div>

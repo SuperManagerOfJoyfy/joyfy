@@ -1,12 +1,10 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { ReactNode, useEffect, useMemo, useState } from 'react'
 
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { LogoutModal } from '@/features/auth/ui'
-import { CreatePost } from '@/features/post/ui'
-import { Loader } from '@/shared/ui/loader/Loader'
+import { PATH } from '@/shared/config/routes'
 import { createSidebarItems, Header, Sidebar } from '@/widgets'
 
 import s from '../styles/layout.module.scss'
@@ -43,6 +41,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
   const showLoader = pendingPath && pathname !== pendingPath
+  const hideHeader = pathname === PATH.AUTH.GOOGLE
 
   useEffect(() => {
     if (pathname === pendingPath) {
@@ -66,7 +65,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   return (
     <div className={s.layoutWrapper}>
-      <Header />
+      {!hideHeader && <Header />}
       <div className={s.containerLayout}>
         {!isLoading && user && (
           <div className={s.sidebarContainer}>
