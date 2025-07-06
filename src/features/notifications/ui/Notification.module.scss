@@ -1,0 +1,36 @@
+.notificationWrapper {
+  padding: 12px 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.tag {
+  color: var(--color-accent-500);
+  font-weight: var(--font-weight-regular);
+}
+
+.actionsArea {
+  display: flex;
+  gap: 6px;
+}
+
+.listWrapper {
+  padding: 12px;
+}
+
+.listHeader {
+  padding: 0 12px 12px 0;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: var(--color-light-700);
+}
+
+.loader {
+  margin-top: 8px;
+}

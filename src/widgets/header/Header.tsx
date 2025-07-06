@@ -1,17 +1,21 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image, { StaticImageData } from 'next/image'
-import { IoNotificationsOutline } from 'react-icons/io5'
-import { Button, SelectBox, SelectItem } from '@/shared/ui'
+import { useEffect, useState } from 'react'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { NotificationsList } from '@/features/notifications/ui'
+import { useNotificationsData } from '@/features/notifications/hooks/useNotificationsData'
+
 import { PATH } from '@/shared/config/routes'
+import { Button, DropdownMenu, SelectBox, SelectItem } from '@/shared/ui'
+import { DropdownMenuArrow } from '@/shared/ui/dropdownMenu'
+import { IoNotificationsOutline } from 'react-icons/io5'
 import Letters from '../../../public/logo/letters.png'
 import Logo from '../../../public/logo/logo.png'
-import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import flagRussia from './assets/flagRussia.png'
+import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import s from './Header.module.scss'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -37,9 +41,11 @@ const AuthActions = () => (
 )
 
 export const Header = () => {
-  const [notificationCount] = useState(3)
   const { data: user, isLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
+
+  const notifications = useNotificationsData()
+  const notReadCount = notifications?.notReadCount ?? 0
 
   useEffect(() => {
     if (!isLoading) {
@@ -58,8 +64,12 @@ export const Header = () => {
           <div className={s.notificationContainer}>
             {user && (
               <div className={s.notifications}>
-                <IoNotificationsOutline />
-                {notificationCount !== 0 && <span className={s.number}>{notificationCount}</span>}
+                <DropdownMenu trigger={<IoNotificationsOutline />} contentClassName={s.dropdown}>
+                  <DropdownMenuArrow />
+                  <NotificationsList />
+                </DropdownMenu>
+
+                {notReadCount !== 0 && <span className={s.number}>{notReadCount}</span>}
               </div>
             )}
           </div>

@@ -1,14 +1,13 @@
 'use client'
 
-import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { clsx } from 'clsx'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 
-import { Loader } from '@/shared/ui/loader/Loader'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { CreatePost } from '@/features/post/ui'
 import { LogoutModal } from '@/features/auth/ui'
-import { Header, createSidebarItems, Sidebar } from '@/widgets'
+import { CreatePost } from '@/features/post/ui'
+import { Loader } from '@/shared/ui/loader/Loader'
+import { createSidebarItems, Header, Sidebar } from '@/widgets'
 
 import s from '../styles/layout.module.scss'
 
