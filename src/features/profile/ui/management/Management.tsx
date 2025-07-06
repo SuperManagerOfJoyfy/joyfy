@@ -32,8 +32,6 @@ export const Management = () => {
   const [pay] = useCreatePaymentMutation()
   const dispatch = useAppDispatch()
 
-  const type = currentSubscription?.accountType ?? 'Personal'
-
   const updateAccountType = (newType: AccountType) => {
     dispatch(
       paymentsApi.util.updateQueryData('getCurrentSubscription', undefined, (draft: CurrentSubscription) => {
@@ -61,15 +59,9 @@ export const Management = () => {
     }
   }, [searchParams])
 
-  useEffect(() => {
-    if (currentSubscription) {
-      updateAccountType('Business')
-    }
-  }, [currentSubscription])
-
   if (!currentSubscription) return null
 
-  const subscriptions = !!currentSubscription
+  const areSubscriptions = !!currentSubscription.data.length
 
   const handlePay = async () => {
     try {
@@ -97,13 +89,15 @@ export const Management = () => {
     <>
       <PaymentModal open={showModal} onOpenChange={setShowModal} handleSubmit={handlePay} initialStep={initialStep} />
       <div className={s.management}>
-        {subscriptions && <SubscriptionCard subscription={currentSubscription} changeAccountType={updateAccountType} />}
-        <AccountTypeSelector value={type} onChange={updateAccountType} />
-        {type === 'Business' && (
+        {areSubscriptions && (
+          <SubscriptionCard subscription={currentSubscription} changeAccountType={updateAccountType} />
+        )}
+        <AccountTypeSelector value={currentSubscription.accountType} onChange={updateAccountType} />
+        {currentSubscription.accountType === 'Business' && (
           <BusinessSubscription
             subscription={typeSubscription}
             onChange={setTypeSubscription}
-            current={subscriptions}
+            current={areSubscriptions}
             onOpenModal={() => setShowModal(true)}
             setPaymentType={setPaymentType}
           />

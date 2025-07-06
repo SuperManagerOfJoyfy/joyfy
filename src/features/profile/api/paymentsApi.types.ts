@@ -19,7 +19,7 @@ export type CurrentSubscription = {
     autoRenewal: boolean
   }[]
   hasAutoRenewal: boolean
-  accountType?: AccountType
+  accountType: AccountType
 }
 
 export type CreatePaymentRequest = {

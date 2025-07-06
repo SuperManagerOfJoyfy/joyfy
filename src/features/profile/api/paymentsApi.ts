@@ -15,7 +15,7 @@ export const paymentsApi = joyfyApi.injectEndpoints({
       }),
       transformResponse: (response: CurrentSubscription) => ({
         ...response,
-        accountType: 'Personal',
+        accountType: response.data.length ? 'Business' : 'Personal',
       }),
       providesTags: ['Subscription'],
     }),
