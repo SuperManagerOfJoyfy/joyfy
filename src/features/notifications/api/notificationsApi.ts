@@ -1,5 +1,5 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { NotificationsRequest, NotificationsResponse } from './notificationsApiTypes'
+import { NotificationsRequest, NotificationsResponse } from './notificationsApi.types'
 
 export const notificationsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({

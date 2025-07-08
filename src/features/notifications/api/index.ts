@@ -1,2 +1,2 @@
 export * from './notificationsApi'
-export * from './notificationsApiTypes'
+export * from './notificationsApi.types'

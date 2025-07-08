@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
 import { useAppDispatch } from '@/app/store/store'
 import { getSocket } from '@/shared/config/socket'
-import { notificationsApi } from '../api'
-import { NotificationItemType } from '../api/notificationsApiTypes'
 import { WS_EVENT_PATH } from '@/shared/constants'
+import { useEffect } from 'react'
+import { notificationsApi } from '../api'
+import { NotificationItemType } from '../api/notificationsApi.types'
 
 export const useNotificationsSocket = () => {
   const dispatch = useAppDispatch()

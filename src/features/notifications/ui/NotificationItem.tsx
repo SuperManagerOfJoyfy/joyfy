@@ -1,8 +1,8 @@
 'use client'
 
-import { RiDeleteBin6Line } from 'react-icons/ri'
 import { DateStamp, Typography } from '@/shared/ui'
-import { NotificationItemType } from '../api/notificationsApiTypes'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+import { NotificationItemType } from '../api/notificationsApi.types'
 
 import s from './Notification.module.scss'
 
