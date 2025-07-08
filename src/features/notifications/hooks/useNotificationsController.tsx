@@ -43,9 +43,6 @@ export const useNotificationsController = () => {
     }
   }, [notificationsData, fetchMore])
 
-  console.log('items:', notificationsData?.items?.length)
-  console.log('totalCount:', notificationsData?.totalCount)
-
   return {
     notifications,
     notReadCount,
