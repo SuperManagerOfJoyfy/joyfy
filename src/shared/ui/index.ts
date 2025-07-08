@@ -17,6 +17,7 @@ export { DropdownMenu, DropdownMenuItem } from './dropdownMenu'
 
 export { Form } from './form'
 export { ImageSlider } from './imageSlider'
+export { ArrowIcon } from './icons'
 export { Loader } from './loader'
 export { Modal } from './modal'
 export { Pagination } from './pagination'

@@ -12,3 +12,11 @@ export type NotificationItemType = {
   isRead: boolean
   createdAt: string
 }
+
+export type NotificationsRequest = {
+  cursor?: number
+  sortBy?: string
+  isRead?: boolean
+  pageSize?: number
+  sortDirection?: 'asc' | 'desc'
+}

@@ -8,6 +8,9 @@ import { PATH } from '@/shared/config/routes'
 import { createSidebarItems, Header, Sidebar } from '@/widgets'
 
 import s from '../styles/layout.module.scss'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
+import { Loader } from '@/shared/ui'
+import { CreatePost } from '@/features/post/ui'
 
 type MainLayoutProps = {
   children: ReactNode

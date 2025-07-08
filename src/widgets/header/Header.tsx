@@ -1,16 +1,13 @@
 'use client'
 
-import Link from 'next/link'
-import Image, { StaticImageData } from 'next/image'
-import { useEffect, useState } from 'react'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { NotificationsList } from '@/features/notifications/ui'
-import { useNotificationsData } from '@/features/notifications/hooks/useNotificationsData'
+import Image, { StaticImageData } from 'next/image'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
+import { NotificationsPopover } from '@/features/notifications/ui/NotificationsPopover'
 import { PATH } from '@/shared/config/routes'
-import { Button, DropdownMenu, SelectBox, SelectItem } from '@/shared/ui'
-import { DropdownMenuArrow } from '@/shared/ui/dropdownMenu'
-import { IoNotificationsOutline } from 'react-icons/io5'
+import { Button, SelectBox, SelectItem } from '@/shared/ui'
 import Letters from '../../../public/logo/letters.png'
 import Logo from '../../../public/logo/logo.png'
 import flagRussia from './assets/flagRussia.png'
@@ -44,9 +41,6 @@ export const Header = () => {
   const { data: user, isLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
 
-  const notifications = useNotificationsData()
-  const notReadCount = notifications?.notReadCount ?? 0
-
   useEffect(() => {
     if (!isLoading) {
       setShowButtons(!user)
@@ -61,18 +55,7 @@ export const Header = () => {
           <Image src={Letters} alt="logo" height={20} />
         </Link>
         <div className={s.actions}>
-          <div className={s.notificationContainer}>
-            {user && (
-              <div className={s.notifications}>
-                <DropdownMenu trigger={<IoNotificationsOutline />} contentClassName={s.dropdown}>
-                  <DropdownMenuArrow />
-                  <NotificationsList />
-                </DropdownMenu>
-
-                {notReadCount !== 0 && <span className={s.number}>{notReadCount}</span>}
-              </div>
-            )}
-          </div>
+          <div className={s.notificationContainer}>{user && <NotificationsPopover />}</div>
 
           <SelectBox className={s.selector} placeholder="Choose language">
             <SelectItem value="English">

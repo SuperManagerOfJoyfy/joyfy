@@ -1,24 +1,19 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { NotificationsResponse } from './notificationsApiTypes'
+import { NotificationsRequest, NotificationsResponse } from './notificationsApiTypes'
 
 export const notificationsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getNotifications: builder.query<NotificationsResponse, { cursor?: string; pageSize?: number } | void>({
-      query: (arg) => {
-        const cursor = arg?.cursor ?? ''
-        const pageSize = arg?.pageSize ?? 12
-        return { url: `notifications/${cursor ?? ''}`, params: { pageSize } }
+    getNotifications: builder.query<NotificationsResponse, NotificationsRequest>({
+      query: ({ cursor, sortBy = 'createdAt', isRead, pageSize = 10, sortDirection = 'desc' }) => {
+        return { url: `notifications/${cursor ?? ''}`, params: { sortBy, isRead, pageSize, sortDirection } }
       },
 
-      serializeQueryArgs: () => 'notifications',
+      serializeQueryArgs: ({ endpointName }) => endpointName,
 
-      merge: (currentCache, newResponse) => {
-        const existingIds = new Set(currentCache.items.map((n) => n.id))
-        const newItems = newResponse.items.filter((n) => !existingIds.has(n.id))
-        return {
-          ...newResponse,
-          items: [...currentCache.items, ...newItems],
-        }
+      merge: (currentCache, newItems) => {
+        currentCache.items.push(...newItems.items.filter((i) => !currentCache.items.some((c) => c.id === i.id)))
+        currentCache.totalCount = newItems.totalCount
+        currentCache.notReadCount = newItems.notReadCount
       },
 
       forceRefetch({ currentArg, previousArg }) {
@@ -42,7 +37,7 @@ export const notificationsApi = joyfyApi.injectEndpoints({
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
         // Optimistically update the cache
         const patchResult = dispatch(
-          notificationsApi.util.updateQueryData('getNotifications', undefined, (draft) => {
+          notificationsApi.util.updateQueryData('getNotifications', { pageSize: 10 }, (draft) => {
             draft.items = draft.items.filter((n) => n.id !== id)
           })
         )
@@ -65,14 +60,16 @@ export const notificationsApi = joyfyApi.injectEndpoints({
         method: 'PUT',
         body: { ids },
       }),
+
       async onQueryStarted(ids, { dispatch, queryFulfilled }) {
         // Optimistic update: mark selected notifications as read
         const patchResult = dispatch(
-          notificationsApi.util.updateQueryData('getNotifications', { cursor: undefined }, (draft) => {
+          notificationsApi.util.updateQueryData('getNotifications', {}, (draft) => {
             draft.items.forEach((item) => {
               if (ids.includes(item.id)) item.isRead = true
             })
-            draft.notReadCount = draft.items.filter((item) => !item.isRead).length
+
+            draft.notReadCount = Math.max(0, (draft.notReadCount || 0) - (Array.isArray(ids) ? ids.length : 1))
           })
         )
 
@@ -82,12 +79,15 @@ export const notificationsApi = joyfyApi.injectEndpoints({
           patchResult.undo()
         }
       },
-      invalidatesTags: (result, error, ids) => [
-        ...ids.map((id) => ({ type: 'Notifications' as const, id })),
-        { type: 'Notifications', id: 'LIST' },
-      ],
+
+      invalidatesTags: [{ type: 'Notifications', id: 'LIST' }],
     }),
   }),
 })
 
-export const { useGetNotificationsQuery, useDeleteNotificationMutation, useMarkAsReadMutation } = notificationsApi
+export const {
+  useGetNotificationsQuery,
+  useLazyGetNotificationsQuery,
+  useDeleteNotificationMutation,
+  useMarkAsReadMutation,
+} = notificationsApi
