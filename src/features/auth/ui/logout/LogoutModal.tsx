@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { useLogoutMutation } from '@/features/auth/api/authApi'
 import { MESSAGES } from '@/shared/config/messages'
 import { ConfirmModal } from '@/shared/ui/confirmModal/ConfirmModal'
+import { closeSocket } from '@/shared/config/socket'
 
 type Props = {
   email?: string
@@ -19,6 +20,7 @@ export const LogoutModal = ({ open, onOpenLogoutModalHandler, email }: Props) =>
   const onLogoutButtonClickHandler = async () => {
     try {
       await logout().unwrap()
+      closeSocket() // close ws socket connection on logout
       router.push(PATH.AUTH.LOGIN)
       toast.success(MESSAGES.AUTH.LOGOUT_SUCCESS)
     } catch (error: any) {

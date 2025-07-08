@@ -1,17 +1,18 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 import Image, { StaticImageData } from 'next/image'
-import { IoNotificationsOutline } from 'react-icons/io5'
-import { Button, SelectBox, SelectItem } from '@/shared/ui'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+import { NotificationsPopover } from '@/features/notifications/ui/NotificationsPopover'
 import { PATH } from '@/shared/config/routes'
+import { Button, SelectBox, SelectItem } from '@/shared/ui'
 import Letters from '../../../public/logo/letters.png'
 import Logo from '../../../public/logo/logo.png'
-import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import flagRussia from './assets/flagRussia.png'
+import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import s from './Header.module.scss'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -37,7 +38,6 @@ const AuthActions = () => (
 )
 
 export const Header = () => {
-  const [notificationCount] = useState(3)
   const { data: user, isLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
 
@@ -55,14 +55,7 @@ export const Header = () => {
           <Image src={Letters} alt="logo" height={20} />
         </Link>
         <div className={s.actions}>
-          <div className={s.notificationContainer}>
-            {user && (
-              <div className={s.notifications}>
-                <IoNotificationsOutline />
-                {notificationCount !== 0 && <span className={s.number}>{notificationCount}</span>}
-              </div>
-            )}
-          </div>
+          <div className={s.notificationContainer}>{user && <NotificationsPopover />}</div>
 
           <SelectBox className={s.selector} placeholder="Choose language">
             <SelectItem value="English">

@@ -1,4 +1,6 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
+import { clearToken, setToken } from '../model/authSlice'
 import {
   ConfirmEmailRequest,
   EmailInputDto,
@@ -11,7 +13,6 @@ import {
   RefreshTokenResponse,
   RegisterRequest,
 } from './authApi.types'
-import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 export const authApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -50,6 +51,7 @@ export const authApi = joyfyApi.injectEndpoints({
           if (!data) return
 
           LocalStorage.setToken(data.accessToken)
+          dispatch(setToken(data.accessToken)) //store token in Redux
 
           // Invalidate any cached data related to the 'User' tag to trigger a refetch
           dispatch(authApi.util.invalidateTags(['User']))
@@ -77,9 +79,9 @@ export const authApi = joyfyApi.injectEndpoints({
           await queryFulfilled
 
           LocalStorage.removeToken()
-          // localStorage.removeItem('lightBackground')
-          // localStorage.removeItem('textColor')
 
+          // Clear token from Redux store
+          dispatch(clearToken())
           dispatch(authApi.util.resetApiState())
         } catch (error) {
           console.error('Logout failed:', error)

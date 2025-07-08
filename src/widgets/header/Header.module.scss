@@ -50,28 +50,6 @@
   align-items: center;
 }
 
-.notifications {
-  position: relative;
-  display: flex;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.number {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  top: -2px;
-  right: -2px;
-  background-color: var(--color-danger-500);
-  font-size: 10px;
-  line-height: 8px;
-}
-
 .selector {
   align-items: center;
   width: 160px !important;
@@ -94,4 +72,9 @@
 .authActions {
   display: flex;
   align-items: center;
+}
+
+.dropdown {
+  width: 350px;
+  height: 400px;
 }
