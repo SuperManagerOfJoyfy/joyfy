@@ -9,7 +9,7 @@ import { NotificationsLoader } from './NotificationsLoader'
 import s from './Notification.module.scss'
 
 export const NotificationsPopover = () => {
-  const { notifications, notReadCount, isLoadingMore, onMarkAsRead, hasMore, handleFetchMore, deleteNotification } =
+  const { notifications, notReadCount, isLoadingMore, onMarkAsRead, hasMore, handleFetchMore, onDeleteNotification } =
     useNotificationsController()
 
   return (
@@ -40,7 +40,7 @@ export const NotificationsPopover = () => {
           <Scroll className={s.scroll}>
             {notifications.map((n) => (
               <React.Fragment key={n.id}>
-                <NotificationItem notification={n} onDelete={() => deleteNotification(n.id)} />
+                <NotificationItem notification={n} onDelete={() => onDeleteNotification(n.id)} />
                 <Separator />
               </React.Fragment>
             ))}

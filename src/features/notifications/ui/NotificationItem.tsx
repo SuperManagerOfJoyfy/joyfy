@@ -9,7 +9,6 @@ import s from './Notification.module.scss'
 type Props = {
   notification: NotificationItemType
   onDelete: () => void
-  // onMarkAsRead: () => void
 }
 
 export const NotificationItem = ({ notification, onDelete }: Props) => {
