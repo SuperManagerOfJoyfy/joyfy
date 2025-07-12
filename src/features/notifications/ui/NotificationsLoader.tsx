@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver'
 import s from './Notification.module.scss'
