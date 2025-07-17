@@ -52,7 +52,7 @@ export const DeviceInfoCard = ({ deviceId, ip, lastActive, osName, currentDevice
   }
 
   return (
-    <Card className={s.card} key={deviceId}>
+    <Card className={s.card}>
       <div className={s.deviceInfo}>
         <div>
           <Icon className={s.deviceIcon} />

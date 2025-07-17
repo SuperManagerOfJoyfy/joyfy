@@ -52,6 +52,7 @@ export const Devices = () => {
         </Typography>
         {devices?.others.map(({ ip, deviceId, lastActive, osName }) => (
           <DeviceInfoCard
+            key={deviceId}
             deviceId={deviceId}
             ip={ip}
             lastActive={lastActive}
