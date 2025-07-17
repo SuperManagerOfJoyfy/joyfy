@@ -1,10 +1,10 @@
 export type DeviceInfo = {
   deviceId: number
   ip: string
-  lastActive: string // ISO дата в виде строки
+  lastActive: string
   browserName: string
   browserVersion: string
-  deviceName: string
+  deviceName?: string
   osName: string
   osVersion: string
   deviceType: string

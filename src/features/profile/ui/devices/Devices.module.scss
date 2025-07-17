@@ -1,30 +1,99 @@
 .card {
-  margin-top: 6px;
-  padding: 12px 24px;
+  margin: 12px 0;
+  padding: 14px 10px;
+}
 
-  .dateWrapper {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    gap: 45px;
-
-    .label {
-      color: var(--color-light-900);
-    }
-
-    .value {
-      margin-top: 10px;
-    }
-  }
+.deviceInfo {
+  display: flex;
+  flex-direction: row;
 }
 
 .title {
-  margin-top: 30px;
+  padding: 10px;
 }
+
+.browserName {
+  color: var(--color-light-100);
+  padding-bottom: 13px;
+  padding-top: 10px;
+}
+
+.osName {
+  color: var(--color-light-100);
+  padding-bottom: 13px;
+  padding-top: 10px;
+}
+
+.label {
+  color: var(--color-light-100);
+  padding-bottom: 5px;
+}
+
 .terminateButtonContainer {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   margin-top: 24px;
   margin-bottom: 18px;
+}
+
+.deviceIcon {
+  height: 40px;
+  width: 40px;
+  margin: 12px;
+}
+
+.logOutButtonBlock {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.logOutButton {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-light-100);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 171%;
+  font-weight: var(--font-weight-medium);
+
+  &:hover:not(.sidebarLink--disabled) {
+    color: var(--color-accent-100);
+
+    .icon {
+      color: var(--color-accent-100);
+    }
+  }
+
+  &.active {
+    color: var(--color-accent-500);
+
+    .icon {
+      color: var(--color-accent-500);
+      font-size: 22px;
+    }
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    color: var(--color-dark-100);
+    pointer-events: none;
+
+    .icon {
+      color: var(--color-dark-100);
+    }
+
+    .title {
+      color: var(--color-dark-100);
+    }
+  }
+}
+
+.logOutIcon {
+  height: 20px;
+  width: 20px;
+  margin: 5px;
 }
