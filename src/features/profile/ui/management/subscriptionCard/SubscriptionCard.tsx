@@ -17,6 +17,8 @@ export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => 
   const [cancelAutoRenewal] = useCancelAutoRenewalMutation()
   const [renewAutoRenewal] = useRenewAutoRenewalMutation()
 
+  const lastActive = subscription.data[subscription.data.length - 1]
+
   const onCheckedChangeHandler = async () => {
     if (subscription.hasAutoRenewal) {
       try {
@@ -50,11 +52,9 @@ export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => 
               Expire at
             </Typography>
 
-            {subscription.data.map(({ subscriptionId, endDateOfSubscription }) => (
-              <Typography className={s.value} variant="body2" fontWeight="bold" key={subscriptionId}>
-                {new Date(endDateOfSubscription).toLocaleDateString('pl-PL')}
-              </Typography>
-            ))}
+            <Typography className={s.value} variant="body2" fontWeight="bold">
+              {new Date(lastActive.endDateOfSubscription).toLocaleDateString('pl-PL')}
+            </Typography>
           </div>
 
           <div>
@@ -62,11 +62,13 @@ export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => 
               Next payment
             </Typography>
 
-            {subscription.data.map(({ subscriptionId, dateOfPayment }) => (
-              <Typography className={s.value} variant="body2" fontWeight="bold" key={subscriptionId}>
-                {new Date(dateOfPayment).toLocaleDateString('pl-PL')}
+            {subscription.hasAutoRenewal && (
+              <Typography className={s.value} variant="body2" fontWeight="bold">
+                {new Date(
+                  new Date(lastActive.endDateOfSubscription).getTime() + 24 * 60 * 60 * 1000
+                ).toLocaleDateString('pl-PL')}
               </Typography>
-            ))}
+            )}
           </div>
         </div>
       </Card>
