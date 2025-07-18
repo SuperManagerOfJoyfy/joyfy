@@ -1,12 +1,10 @@
 import { Post } from '@/features/post/types/postTypes'
 import { Scroll, Separator } from '@/shared/ui'
-
-import { Comment } from '@/entities/comment'
-import { PostCommentList } from './PostCommentList'
-
 import { PostItem } from '@/entities/post/ui/postItem'
 import { PostContentHeader } from './PostContentHeader'
 import { PostFooter } from './PostFooter'
+import { PostCommentList } from '@/features/comments/ui'
+
 import s from './PostViewMode.module.scss'
 
 type Props = {
@@ -20,10 +18,6 @@ type Props = {
 }
 
 export const PostContent = ({ post, isOwnPost, isFollowing, onEdit, onDelete, onFollowToggle, onCopyLink }: Props) => {
-  //TODO: add GetCommentsByPostIdQuery
-  // const { data: comments = [], isLoading } = useGetCommentsByPostIdQuery(post.id)
-  const comments: Comment[] = []
-
   return (
     <>
       <PostContentHeader
@@ -35,15 +29,17 @@ export const PostContent = ({ post, isOwnPost, isFollowing, onEdit, onDelete, on
         onFollowToggle={onFollowToggle}
         onCopyLink={onCopyLink}
       />
+
       <Separator />
 
       <Scroll className={s.scrollArea}>
         <PostItem post={post} />
-        <PostCommentList comments={comments} />
+        <PostCommentList postId={post.id} />
       </Scroll>
 
       <Separator />
-      <PostFooter />
+
+      <PostFooter postId={post.id} createdAt={post.createdAt} />
     </>
   )
 }

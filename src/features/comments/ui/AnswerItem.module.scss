@@ -1,0 +1,35 @@
+@import 'src/features/comments/styles/commentStyles.scss';
+
+.answerWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: 36px;
+  padding: 8px 0;
+}
+
+.answerContent {
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  padding-right: 24px;
+}
+
+.answerMeta {
+  @extend .sharedMetaStyles;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+  margin-left: 20px;
+}
+
+.replyForm {
+  margin-top: 8px;
+  margin-left: 20px;
+}
+
+.replyActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}

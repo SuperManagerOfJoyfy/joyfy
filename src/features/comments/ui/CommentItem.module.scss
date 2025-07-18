@@ -1,0 +1,54 @@
+@import 'src/features/comments/styles/commentStyles.scss';
+
+.commentWrapper {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-s);
+  padding: 18px 24px 0 24px;
+  gap: 8px;
+  max-width: 480px;
+}
+
+.commentBody {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.commentContent {
+  display: flex;
+  position: relative;
+  padding-right: 24px;
+}
+
+.commentMeta {
+  @extend .sharedMetaStyles;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 40px;
+}
+
+.answerActions {
+  @extend .sharedMetaStyles;
+  margin-left: 55px;
+}
+
+.viewAnswers {
+  @extend .replyButton;
+}
+
+.answers {
+  margin-top: 8px;
+}
+
+.replyForm {
+  margin-top: 8px;
+  margin-left: 40px;
+}
+
+.replyActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}

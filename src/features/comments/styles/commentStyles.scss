@@ -1,0 +1,45 @@
+.sharedMetaStyles {
+  font-size: var(--font-size-xs);
+  color: var(--color-light-900);
+}
+
+.likeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.heartIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-light-100);
+  transition: color 0.2s ease;
+
+  &.liked {
+    color: var(--color-danger-500) !important;
+  }
+}
+
+.replyButton {
+  @extend .sharedMetaStyles;
+  font-weight: var(--font-weight-semibold);
+  padding: 0;
+  height: var(--line-height-m);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

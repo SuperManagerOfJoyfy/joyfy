@@ -43,25 +43,6 @@
   padding-left: 24px;
 }
 
-.commentForm {
-  display: flex;
-  height: 60px;
-  align-items: center;
-  flex-shrink: 0;
-  overflow: hidden;
-  padding: 4px 0 4px 12px;
-  justify-content: space-between;
-
-  .commentInput {
-    width: 350px;
-    border: none;
-    background-color: transparent;
-    font-size: var(--font-size-s);
-    line-height: 1.4;
-
-    &:hover,
-    &:focus {
-      background-color: transparent;
-    }
-  }
+.stickyFooter {
+  margin-top: auto;
 }
