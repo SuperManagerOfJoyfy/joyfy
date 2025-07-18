@@ -93,7 +93,6 @@ export const DisabledItem: Story = {
         title: 'Log Out',
         icon: <FiLogOut />,
         className: 'customItem',
-        onClick: () => console.log('Logging out...'),
       },
     ],
   },
