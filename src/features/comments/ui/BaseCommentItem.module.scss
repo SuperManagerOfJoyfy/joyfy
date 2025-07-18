@@ -1,0 +1,36 @@
+@import 'src/features/comments/styles/commentStyles.scss';
+
+.commentContent {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.iconWrapper {
+  position: absolute;
+  top: 16px;
+  right: 0;
+  z-index: 1;
+}
+
+.likeButton {
+  @extend .likeButton;
+}
+
+.heartIcon {
+  @extend .heartIcon;
+}
+
+.replyButton {
+  @extend .replyButton;
+}
+
+.metaInfo {
+  @extend .sharedMetaStyles;
+}
+
+.likes {
+  font-weight: 600;
+  font-size: 11px;
+}

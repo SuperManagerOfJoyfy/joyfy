@@ -1,22 +1,25 @@
-import { PostLikes } from '@/entities/post/ui/postLikes/ui/PostLikes'
 import { useGetPostLikesQuery } from '@/features/post/api'
+import { PostReactions } from './PostReactions'
+import { PostLikes } from '@/entities/post/ui/postLikes/ui/PostLikes'
 import { DateStamp, Separator } from '@/shared/ui'
 
-import { usePostModalContext } from '../context/PostModalContext'
-import { PostCommentForm } from './PostCommentForm'
-import { PostReactions } from './PostReactions'
+import { PostCommentForm } from '@/features/comments/ui/PostCommentForm'
+
 import s from './PostViewMode.module.scss'
 
-export const PostFooter = () => {
-  const { postId, currentPost } = usePostModalContext()
-  const { createdAt } = currentPost
+type PostFooterProps = {
+  postId: number
+  createdAt: string
+}
 
+export const PostFooter = ({ postId, createdAt }: PostFooterProps) => {
   const { data: likes } = useGetPostLikesQuery(postId)
+
   const users = likes?.items ?? []
   const count = likes?.totalCount ?? 0
 
   return (
-    <>
+    <div className={s.stickyFooter}>
       <PostReactions />
 
       {count > 0 && <PostLikes users={users} count={count} className={s.postLikes} />}
@@ -25,7 +28,7 @@ export const PostFooter = () => {
 
       <Separator />
 
-      <PostCommentForm />
-    </>
+      <PostCommentForm postId={postId} />
+    </div>
   )
 }

@@ -1,11 +1,11 @@
 import { UserCard } from '@/entities/user'
-import { PostLikes } from '@/entities/post/ui/postLikes/ui/PostLikes'
 import { Post } from '@/features/post/types/postTypes'
-import { useGetPostLikesQuery } from '@/features/post/api'
-import { DateStamp, Scroll, Separator } from '@/shared/ui'
+// import { useGetPostLikesQuery } from '@/features/post/api'
+import { Scroll, Separator } from '@/shared/ui'
 import { PostItem } from '@/entities/post/ui/postItem'
-import { PostCommentList } from '@/features/postModal/postViewMode'
-import { Comment } from '@/entities/comment'
+import { PostCommentList } from '@/features/comments/ui/PostCommentList'
+import { PostFooter } from '@/features/postModal/postViewMode'
+
 import s from './PublicPostModal.module.scss'
 
 type Props = {
@@ -14,19 +14,17 @@ type Props = {
 
 export const PublicPostContent = ({ post }: Props) => {
   const { id: postId, ownerId, userName, avatarOwner, createdAt } = post
+
   const user = {
     id: ownerId,
     userName,
     avatar: avatarOwner,
   }
 
-  const { data: likes } = useGetPostLikesQuery(postId)
-  const users = likes?.items ?? []
-  const count = likes?.totalCount ?? 0
+  // const { data: likes } = useGetPostLikesQuery(postId)
 
-  //TODO: add GetCommentsByPostIdQuery
-  // const { data: comments = [], isLoading } = useGetCommentsByPostIdQuery(post.id)
-  const comments: Comment[] = []
+  // const users = likes?.items ?? []
+  // const count = likes?.totalCount ?? 0
 
   return (
     <div className={s.contentWrapper}>
@@ -38,16 +36,12 @@ export const PublicPostContent = ({ post }: Props) => {
 
       <Scroll className={s.scroll}>
         <PostItem post={post} />
-        <PostCommentList comments={comments} />
+        <PostCommentList postId={post.id} />
       </Scroll>
 
       <Separator />
 
-      <div className={s.footer}>
-        {count > 0 && <PostLikes users={users} count={count} />}
-
-        <DateStamp date={createdAt} />
-      </div>
+      <PostFooter postId={postId} createdAt={createdAt} />
     </div>
   )
 }

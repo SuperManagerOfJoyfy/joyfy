@@ -60,7 +60,7 @@ export type GoogleLoginRequest = {
   code: string
 }
 
-export interface GithubLoginRequest {
+export type GithubLoginRequest = {
   redirectUrl: string
 }
 
