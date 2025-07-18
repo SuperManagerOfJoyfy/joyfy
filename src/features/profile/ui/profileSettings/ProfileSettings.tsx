@@ -11,6 +11,7 @@ import { MyPayments } from '../myPayments'
 
 import s from './ProfileSettings.module.scss'
 import { Management } from '@/features/profile/ui/management/Management'
+import { Devices } from '@/features/profile/ui/devices/Devices'
 
 type ProfileSettingsProps = {
   activePart: string
@@ -41,16 +42,12 @@ const SETTINGS_TABS = [
 
 type SettingsTabValue = (typeof SETTINGS_TABS)[number]['value']
 
-const ComingSoonPlaceholder = ({ feature }: { feature: string }) => (
-  <div className={s.comingSoon}>{feature} - Coming soon</div>
-)
-
 const renderTabContent = (activePart: string) => {
   switch (activePart as SettingsTabValue) {
     case 'info':
       return <GeneralInformation />
     case 'devices':
-      return <ComingSoonPlaceholder feature="Devices settings" />
+      return <Devices />
     case 'management':
       return <Management />
     case 'payments':

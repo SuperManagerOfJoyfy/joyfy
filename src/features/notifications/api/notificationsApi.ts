@@ -4,8 +4,8 @@ import { NotificationsRequest, NotificationsResponse } from './notificationsApi.
 export const notificationsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
     getNotifications: builder.query<NotificationsResponse, NotificationsRequest>({
-      query: ({ cursor, sortBy = 'createdAt', isRead, pageSize = 10, sortDirection = 'desc' }) => {
-        return { url: `notifications/${cursor ?? ''}`, params: { sortBy, isRead, pageSize, sortDirection } }
+      query: ({ cursor }) => {
+        return { url: `notifications/${cursor ?? ''}` }
       },
 
       serializeQueryArgs: ({ endpointName }) => endpointName,
@@ -35,23 +35,29 @@ export const notificationsApi = joyfyApi.injectEndpoints({
         method: 'DELETE',
       }),
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
-        // Optimistically update the cache
+        // Update the main cache entry (cursor: undefined)
         const patchResult = dispatch(
-          notificationsApi.util.updateQueryData('getNotifications', { pageSize: 10 }, (draft) => {
-            draft.items = draft.items.filter((n) => n.id !== id)
+          notificationsApi.util.updateQueryData('getNotifications', { cursor: undefined }, (draft) => {
+            const itemIndex = draft.items.findIndex((n) => n.id === id)
+            if (itemIndex !== -1) {
+              const deletedItem = draft.items[itemIndex]
+              draft.items.splice(itemIndex, 1)
+              draft.totalCount = Math.max(0, draft.totalCount - 1)
+
+              // Also update notReadCount if the deleted item was unread
+              if (deletedItem && !deletedItem.isRead) {
+                draft.notReadCount = Math.max(0, draft.notReadCount - 1)
+              }
+            }
           })
         )
 
         try {
           await queryFulfilled
-        } catch {
+        } catch (error) {
           patchResult.undo()
         }
       },
-      invalidatesTags: (_result, _error, id) => [
-        { type: 'Notifications', id },
-        { type: 'Notifications', id: 'LIST' },
-      ],
     }),
 
     markAsRead: builder.mutation<void, number[]>({

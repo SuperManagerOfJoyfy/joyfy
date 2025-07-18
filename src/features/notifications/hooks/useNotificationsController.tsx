@@ -1,3 +1,4 @@
+'use client'
 import { RootState, useAppDispatch } from '@/app/store/store'
 import { useCallback, useMemo } from 'react'
 import { useStore } from 'react-redux'
@@ -11,20 +12,21 @@ import {
 
 export const useNotificationsController = () => {
   const store = useStore<RootState>()
-  const dispatch = useAppDispatch()
   const { data: notificationsData } = useGetNotificationsQuery({ cursor: undefined })
   const [fetchMore, { isFetching: isLoadingMore }] = useLazyGetNotificationsQuery()
   const [deleteNotification] = useDeleteNotificationMutation()
   const [markAsRead] = useMarkAsReadMutation()
 
-  const notifications = useMemo(() => notificationsData?.items || [], [notificationsData?.items])
+  const notifications = useMemo(() => {
+    const items = notificationsData?.items || []
+
+    // Sort manually (newest first)
+    return [...items].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  }, [notificationsData?.items])
 
   const notReadCount = useMemo(() => notificationsData?.notReadCount || 0, [notificationsData?.notReadCount])
 
   const hasMore = notificationsData ? notifications.length < notificationsData.totalCount : false
-
-  console.log('items:', notifications.length)
-  console.log('totalCount:', notificationsData?.totalCount)
 
   const onMarkAsRead = () => {
     const state = store.getState()
@@ -40,13 +42,9 @@ export const useNotificationsController = () => {
   const onDeleteNotification = async (id: number) => {
     try {
       await deleteNotification(id).unwrap()
-      dispatch(
-        notificationsApi.util.updateQueryData('getNotifications', {}, (draft) => {
-          draft.items = draft.items.filter((n) => n.id !== id)
-          draft.totalCount -= 1
-        })
-      )
-    } catch {}
+    } catch (err) {
+      console.error('Error deleting notification:', err)
+    }
   }
 
   const handleFetchMore = useCallback(async () => {

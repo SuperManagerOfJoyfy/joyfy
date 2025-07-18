@@ -15,6 +15,7 @@ export const joyfyApi = createApi({
     'Payments',
     'Notifications',
     'Comment',
+    'Devices',
   ],
   endpoints: () => ({}),
 })
