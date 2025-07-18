@@ -5,11 +5,12 @@ import s from './textArea.module.scss'
 export type TextAreaProps = {
   label?: string
   error?: string
+  wrapperClassName?: string
   textAreaClassName?: string
 } & ComponentProps<'textarea'>
 
 export const TextArea = (props: TextAreaProps) => {
-  const { label, error, className, textAreaClassName, ...rest } = props
+  const { label, error, className, textAreaClassName, wrapperClassName, ...rest } = props
 
   const id = useId()
 
@@ -19,8 +20,8 @@ export const TextArea = (props: TextAreaProps) => {
         {label}
       </label>
 
-      <div className={clsx(s.wrapper, error && s.error, textAreaClassName)}>
-        <textarea className={s.textArea} data-value={rest.value && 'true'} id={id} {...rest} />
+      <div className={clsx(s.wrapper, error && s.error, wrapperClassName)}>
+        <textarea className={clsx(s.textArea, textAreaClassName)} data-value={rest.value && 'true'} id={id} {...rest} />
       </div>
 
       <span className={s.errorText}>{error}</span>

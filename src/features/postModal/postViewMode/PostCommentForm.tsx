@@ -4,7 +4,7 @@ import s from './PostViewMode.module.scss'
 export const PostCommentForm = () => {
   return (
     <div className={s.commentForm}>
-      <TextArea placeholder="Add a Comment..." textAreaClassName={s.commentInput} />
+      <TextArea placeholder="Add a Comment..." textAreaClassName={s.commentInput} wrapperClassName={s.inputWrapper} />
       <Button variant="text">Publish</Button>
     </div>
   )
