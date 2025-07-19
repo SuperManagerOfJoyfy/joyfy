@@ -1,12 +1,10 @@
-'use client'
-
 import { AuthGuard } from '@/features/auth/ui'
-import { Typography } from '@/shared/ui'
+import { Messenger } from '@/features/messenger/ui'
 
-export default function Messenger() {
+export default function Page() {
   return (
     <AuthGuard requireAuth>
-      <Typography variant="h1">Messenger Page</Typography>
+      <Messenger />
     </AuthGuard>
   )
 }

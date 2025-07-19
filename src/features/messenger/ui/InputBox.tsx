@@ -3,7 +3,7 @@ import s from './Messenger.module.scss'
 
 export const InputBox = () => {
   return (
-    <div className={s.messageForm}>
+    <div className={s.inputBox}>
       <TextArea placeholder="Type message..." textAreaClassName={s.messageInput} wrapperClassName={s.inputWrapper} />
       <Button variant="text" className={s.inputButton}>
         Send message
