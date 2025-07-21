@@ -1,6 +1,7 @@
 import {
   CreatePostRequest,
   GetPostsResponse,
+  LikesRequest,
   PostsQueryParams,
   UploadImageResponse,
 } from '@/features/post/api/postsApi.types'
@@ -113,6 +114,15 @@ export const postsApi = joyfyApi.injectEndpoints({
       }),
       providesTags: (result, error, postId) => [{ type: 'PostLikes', id: postId }],
     }),
+
+    createPostLike: builder.mutation<void, LikesRequest>({
+      query: ({ likeStatus, postId }) => ({
+        url: `posts/${postId}/like-status`,
+        body: { likeStatus },
+        method: 'PUT',
+      }),
+      invalidatesTags: (result, error, { postId }) => [{ type: 'PostLikes', id: postId }],
+    }),
   }),
 })
 
@@ -125,4 +135,5 @@ export const {
   useDeletePostMutation,
   useEditPostMutation,
   useGetPostLikesQuery,
+  useCreatePostLikeMutation,
 } = postsApi
