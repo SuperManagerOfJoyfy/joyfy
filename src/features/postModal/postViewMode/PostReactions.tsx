@@ -14,7 +14,7 @@ export const PostReactions = ({ myLike, changeLikeStatus }: Props) => {
       <div className={s.icons}>
         <div className={s.leftIcons}>
           {myLike ? (
-            <FaHeart type="button" onClick={() => changeLikeStatus(Likes.DISLIKE)} className={s.redHeart} />
+            <FaHeart type="button" onClick={() => changeLikeStatus(Likes.NONE)} className={s.redHeart} />
           ) : (
             <FaRegHeart type="button" onClick={() => changeLikeStatus(Likes.LIKE)} className={s.icon} />
           )}
