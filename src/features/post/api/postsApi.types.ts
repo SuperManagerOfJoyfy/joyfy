@@ -31,3 +31,14 @@ export type UploadImageResponse = {
     uploadId: string
   }[]
 }
+
+export type LikesRequest = {
+  postId: number
+  likeStatus: Likes
+}
+
+export enum Likes {
+  NONE = 'NONE',
+  LIKE = 'LIKE',
+  DISLIKE = 'DISLIKE',
+}
