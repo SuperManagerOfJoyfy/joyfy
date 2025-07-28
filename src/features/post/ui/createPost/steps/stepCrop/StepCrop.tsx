@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo, useCallback, memo } from 'react'
 
 import { ImageSlider } from '@/shared/ui/imageSlider'
+import { Loader } from '@/shared/ui'
 import { usePostContext } from '../../providers/PostContext'
 import { ImageControls } from './imageControls/ImageControls'
 
@@ -12,29 +13,48 @@ type StepCropProps = {
   onNavigateBack?: () => void
 }
 
-export const StepCrop = ({ onNavigateBack }: StepCropProps) => {
+const ImageSliderMemo = memo(ImageSlider)
+const ImageControlsMemo = memo(ImageControls)
+
+export const StepCrop = memo(({ onNavigateBack }: StepCropProps) => {
   const { imagePreviews, imagesEditData, currentImageIdx, images, setCurrentImageIndex } = usePostContext()
 
-  const handleSlideChange = (index: number) => {
-    setCurrentImageIndex(index)
-  }
+  const handleSlideChange = useCallback(
+    (index: number) => {
+      setCurrentImageIndex(index)
+    },
+    [setCurrentImageIndex]
+  )
 
-  const previewImages = imagePreviews.map((src, index) => ({
-    src,
-    alt: `Preview ${index + 1}`,
-  }))
+  const previewImages = useMemo(
+    () =>
+      imagePreviews.map((src, index) => ({
+        src,
+        alt: `Preview ${index + 1}`,
+      })),
+    [imagePreviews]
+  )
+
+  const hasImages = images.length > 0
+  const hasPreviews = imagePreviews.length > 0
+  const hasCurrentEditData = Boolean(imagesEditData[currentImageIdx])
+  const isLoading = hasImages && !hasPreviews
 
   useEffect(() => {
-    if (imagePreviews.length === 0 && onNavigateBack) {
+    if (!hasPreviews && !isLoading && onNavigateBack) {
       onNavigateBack()
     }
-  }, [imagePreviews.length, onNavigateBack])
+  }, [hasPreviews, isLoading, onNavigateBack])
+
+  if (isLoading) {
+    return <Loader message="Loading images..." />
+  }
 
   return (
     <div className={s.container}>
       <div className={s.cropContainer}>
-        {previewImages.length > 0 && (
-          <ImageSlider
+        {hasPreviews && (
+          <ImageSliderMemo
             images={previewImages}
             initialSlide={currentImageIdx}
             onSlideChange={handleSlideChange}
@@ -44,11 +64,11 @@ export const StepCrop = ({ onNavigateBack }: StepCropProps) => {
         )}
       </div>
 
-      {imagesEditData[currentImageIdx] && (
+      {hasCurrentEditData && (
         <div className={s.controlsWrapper}>
-          <ImageControls />
+          <ImageControlsMemo />
         </div>
       )}
     </div>
   )
-}
+})
