@@ -35,6 +35,24 @@ export type UserProfile = {
   createdAt: string
 }
 
+export type UserProfileWithFollowers = {
+  id: number
+  userName: string
+  firstName: string
+  lastName: string
+  city: string
+  country: string
+  region: string
+  dateOfBirth: string
+  aboutMe: string
+  avatars: AvatarType[]
+  isFollowing: boolean
+  isFollowedBy: boolean
+  followingCount: number
+  followersCount: number
+  publicationsCount: number
+}
+
 export type UploadedAvatarResponse = {
   avatars: AvatarType[]
 }
