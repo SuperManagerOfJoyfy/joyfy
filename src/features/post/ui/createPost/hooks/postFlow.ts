@@ -2,8 +2,12 @@ import { ModalFlow } from '@/features/imageFlow/types'
 import { StepUpload } from '@/features/imageFlow/ui'
 import { StepCrop, StepDescription, StepFilters } from '@/features/post/ui/createPost/steps'
 
-export const createPostFlow = (): ModalFlow => ({
-  steps: ['upload', 'crop', 'filter', 'description'],
+const steps = ['upload', 'crop', 'filter', 'description'] as const
+
+export type Step = (typeof steps)[number]
+
+export const createPostFlow = (): ModalFlow<Step> => ({
+  steps: [...steps],
   components: {
     upload: StepUpload,
     crop: StepCrop,
