@@ -1,19 +1,21 @@
-import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState, useRef, useCallback } from 'react'
 
 import { useCreatePostMutation, useUploadImageMutation } from '@/features/post/api/postsApi'
-import { ASPECT_RATIOS, AspectRatioType, FilterType, IMAGE_FILTERS } from '@/features/post/types/postTypes'
-
-export type ImageItem = {
-  id: string
-  src: string
-  originalSrc?: string
-}
-
-export type ImageEditData = {
-  scale: number
-  imageFilter: FilterType
-  aspectRatio: AspectRatioType
-}
+import { IMAGE_FILTERS } from '@/features/post/types/postTypes'
+import {
+  POST_CONSTANTS,
+  cleanupObjectUrls,
+  createObjectUrlSafe,
+  calculateAspectRatio,
+  calculateCanvasDimensions,
+  calculateCropParams,
+  canvasToBlob,
+  drawImageToCanvas,
+  ImageEditData,
+  ImageItem,
+} from './utils'
+import { useDraftManager } from '../hooks/useDraftManager'
+import { createNewImages, reindexImageData } from './utils'
 
 type PostContextType = {
   images: ImageItem[]
@@ -21,6 +23,8 @@ type PostContextType = {
   imagesBlob: Record<number, Blob>
   imagePreviews: string[]
   description: string
+  hasDraft: boolean
+  isDraftLoading: boolean
   setCurrentImageIndex: (idx: number) => void
   setDescription: (description: string) => void
   setImageEditData: (imageEditData: Partial<ImageEditData>) => void
@@ -29,6 +33,9 @@ type PostContextType = {
   removeImage: (idx: number) => void
   clearAll: () => void
   publishPost: () => Promise<void>
+  saveDraft: () => Promise<void>
+  loadDraft: () => Promise<void>
+  deleteDraft: () => Promise<void>
   currentImageIdx: number
   resetToOriginal: (idx?: number) => void
 }
@@ -42,168 +49,138 @@ export const usePostContext = () => {
 }
 
 export const PostContextProvider = ({ children, userId }: { children: ReactNode; userId: number }) => {
+  // States
   const [currentImageIdx, setCurrentImageIdx] = useState<number>(0)
   const [images, setImages] = useState<ImageItem[]>([])
   const [imagesEditData, setImagesEditData] = useState<ImageEditData[]>([])
   const [imagePreviews, setImagesPreview] = useState<string[]>([])
   const [description, setDescription] = useState('')
+
+  // Refs
   const workCanvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'))
   const displayCanvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'))
   const imagesBlob = useRef<Record<number, Blob>>({})
   const originalImages = useRef<Record<number, string>>({})
 
+  // API
   const [uploadImage] = useUploadImageMutation()
   const [createPost] = useCreatePostMutation()
 
-  const getAspectRatio = (aspect: string) => {
-    if (aspect === 'original') {
-      return 0
-    }
-    const [w, h] = aspect.split(':').map(Number)
-    return w / h
-  }
+  // Draft manager
+  const {
+    hasDraft,
+    isDraftLoading,
+    loadDraft: loadDraftFromStorage,
+    saveDraft: saveDraftToStorage,
+    deleteDraft: deleteDraftFromStorage,
+  } = useDraftManager({ userId })
 
+  // Process current image with effects
   useEffect(() => {
-    if (!images || images.length === 0 || currentImageIdx >= images.length) return
+    if (!images?.length || currentImageIdx >= images.length) return
 
-    const img = new Image()
-    img.src = images[currentImageIdx].src
+    const processImage = async () => {
+      const img = new Image()
+      img.src = images[currentImageIdx].src
 
-    img.onload = () => {
-      const displayCanvas = displayCanvasRef.current
-      const displayCtx = displayCanvas.getContext('2d')
-      const workCanvas = workCanvasRef.current
-      const workCtx = workCanvas.getContext('2d')
+      try {
+        await new Promise((resolve, reject) => {
+          img.onload = resolve
+          img.onerror = reject
+        })
 
-      if (!displayCtx || !workCtx || !img || !imagesEditData[currentImageIdx]) return
+        const currentEditData = imagesEditData[currentImageIdx]
+        if (!currentEditData) return
 
-      let aspectRatioValue: number
-      const currentAspectRatio = imagesEditData[currentImageIdx].aspectRatio
+        const aspectRatio = calculateAspectRatio(currentEditData.aspectRatio, img.width, img.height)
+        const isOriginalAspect = currentEditData.aspectRatio === 'original'
+        const crop = calculateCropParams(img.width, img.height, aspectRatio, isOriginalAspect)
+        const canvasDims = calculateCanvasDimensions(aspectRatio, isOriginalAspect)
 
-      if (currentAspectRatio === 'original') {
-        aspectRatioValue = img.width / img.height
-      } else {
-        aspectRatioValue = getAspectRatio(currentAspectRatio)
-      }
+        // Setup work canvas
+        const workCanvas = workCanvasRef.current
+        workCanvas.width = canvasDims.width
+        workCanvas.height = canvasDims.height
 
-      const iw = img.width
-      const ih = img.height
-      const imageRatio = iw / ih
+        drawImageToCanvas({
+          image: img,
+          crop,
+          canvas: workCanvas,
+          scale: currentEditData.scale,
+          filter: IMAGE_FILTERS[currentEditData.imageFilter] || 'none',
+        })
 
-      let cropX = 0,
-        cropY = 0,
-        cropW = iw,
-        cropH = ih
+        // Setup preview canvas
+        const displayCanvas = displayCanvasRef.current
+        const previewW = POST_CONSTANTS.CANVAS.PREVIEW_WIDTH
+        const previewH = isOriginalAspect ? previewW / (img.width / img.height) : previewW / aspectRatio
 
-      if (currentAspectRatio !== 'original') {
-        if (imageRatio > aspectRatioValue) {
-          cropW = ih * aspectRatioValue
-          cropX = (iw - cropW) / 2
-        } else {
-          cropH = iw / aspectRatioValue
-          cropY = (ih - cropH) / 2
-        }
-      }
+        displayCanvas.width = Math.max(previewW, POST_CONSTANTS.CANVAS.MIN_DIMENSION)
+        displayCanvas.height = Math.max(previewH, POST_CONSTANTS.CANVAS.MIN_DIMENSION)
 
-      const baseW = Math.max(1000, 1)
-      const baseH = currentAspectRatio === 'original' ? baseW / imageRatio : baseW / aspectRatioValue
+        const displayCtx = displayCanvas.getContext('2d')
+        if (!displayCtx) return
 
-      workCanvas.width = baseW
-      workCanvas.height = Math.max(baseH, 1)
+        displayCtx.clearRect(0, 0, previewW, previewH)
+        displayCtx.drawImage(workCanvas, 0, 0, previewW, previewH)
 
-      workCtx.clearRect(0, 0, baseW, baseH)
-      workCtx.filter = IMAGE_FILTERS[imagesEditData[currentImageIdx].imageFilter] || 'none'
-
-      const scaledW = baseW * imagesEditData[currentImageIdx].scale
-      const scaledH = baseH * imagesEditData[currentImageIdx].scale
-      const offsetX = (baseW - scaledW) / 2
-      const offsetY = (baseH - scaledH) / 2
-
-      if (img.complete && img.naturalWidth > 0) {
-        workCtx.filter = IMAGE_FILTERS[imagesEditData[currentImageIdx].imageFilter] || 'none'
-        workCtx.drawImage(img, cropX, cropY, cropW, cropH, offsetX, offsetY, scaledW, scaledH)
-      } else {
-        console.error('Image not ready for drawing')
-        return
-      }
-
-      const previewW = 500
-      const previewH = currentAspectRatio === 'original' ? previewW / imageRatio : previewW / aspectRatioValue
-
-      displayCanvas.width = Math.max(previewW, 1)
-      displayCanvas.height = Math.max(previewH, 1)
-
-      displayCtx.clearRect(0, 0, previewW, previewH)
-      displayCtx.drawImage(workCanvas, 0, 0, previewW, previewH)
-
-      displayCanvas.toBlob(
-        (blob) => {
-          if (blob) {
-            imagesBlob.current[currentImageIdx] = blob
-            const dataUrl = URL.createObjectURL(blob)
-
-            setImagesPreview((prev) => prev.map((item, i) => (i === currentImageIdx ? dataUrl : item)))
-          }
-        },
-        'image/jpeg',
-        0.95
-      )
+        // Create blob and update preview
+        const blob = await canvasToBlob(displayCanvas)
+        imagesBlob.current[currentImageIdx] = blob
+        const dataUrl = createObjectUrlSafe(blob)
+        setImagesPreview((prev) => prev.map((item, i) => (i === currentImageIdx ? dataUrl : item)))
+      } catch (error) {}
     }
+
+    processImage()
   }, [images, currentImageIdx, imagesEditData])
 
-  const addImage = (files: File[]) => {
-    const blobs = files.map((file) => new Blob([file]))
+  const addImage = useCallback(
+    (files: File[]) => {
+      const { newImages, blobsRecord, originalsRecord, newPreviews, newEditData } = createNewImages(
+        files,
+        images.length
+      )
 
-    const newImagesData = files.map((file, idx) => {
-      const objectUrl = URL.createObjectURL(file)
-      originalImages.current[idx + images.length] = objectUrl
-      return {
-        src: objectUrl,
-        id: (idx + images.length).toString(),
-        originalSrc: objectUrl,
+      Object.assign(imagesBlob.current, blobsRecord)
+      Object.assign(originalImages.current, originalsRecord)
+
+      setImages((prev) => [...prev, ...newImages])
+      setImagesPreview((prev) => [...prev, ...newPreviews])
+      setImagesEditData((prev) => [...prev, ...newEditData])
+    },
+    [images.length]
+  )
+
+  const removeImage = useCallback(
+    (idx: number) => {
+      const { updatedBlobs, updatedOriginals } = reindexImageData(imagesBlob.current, originalImages.current, idx)
+
+      imagesBlob.current = updatedBlobs
+      originalImages.current = updatedOriginals
+
+      const newImages = images.filter((_, i) => i !== idx)
+      const newPreviews = imagePreviews.filter((_, i) => i !== idx)
+      const newEditData = imagesEditData.filter((_, i) => i !== idx)
+
+      setImages(newImages)
+      setImagesPreview(newPreviews)
+      setImagesEditData(newEditData)
+
+      const newCurrentIndex = Math.max(0, Math.min(idx, newImages.length - 1))
+      setCurrentImageIdx(newCurrentIndex)
+
+      if (newImages.length === 0) {
+        setCurrentImageIdx(0)
       }
-    })
+    },
+    [images, imagePreviews, imagesEditData]
+  )
 
-    blobs.forEach((item, idx) => (imagesBlob.current[idx + images.length] = item))
+  const clearAll = useCallback(() => {
+    cleanupObjectUrls(imagePreviews)
+    cleanupObjectUrls(Object.values(originalImages.current))
 
-    setImagesPreview((prev) => [...prev, ...files.map((file) => URL.createObjectURL(file))])
-    setImages((prev) => [...prev, ...newImagesData])
-    setImagesEditData((prev) => [
-      ...prev,
-      ...files.map(() => {
-        const result: ImageEditData = { scale: 1, aspectRatio: ASPECT_RATIOS[0], imageFilter: 'Normal' }
-        return result
-      }),
-    ])
-  }
-
-  const getImage = (idx: number) => images?.[idx]
-
-  const removeImage = (idx: number) => {
-    delete imagesBlob.current[idx]
-    delete originalImages.current[idx]
-
-    const updatedBlobs: Record<number, Blob> = {}
-    const updatedOriginals: Record<number, string> = {}
-
-    Object.entries(imagesBlob.current).forEach(([key, blob], i) => {
-      updatedBlobs[i] = blob
-    })
-
-    Object.entries(originalImages.current).forEach(([key, src], i) => {
-      updatedOriginals[i] = src
-    })
-
-    imagesBlob.current = updatedBlobs
-    originalImages.current = updatedOriginals
-
-    setImagesPreview((prev) => prev.filter((_, i) => i !== idx))
-    setImages((prev) => prev.filter((_, i) => i !== idx))
-    setImagesEditData((prev) => prev.filter((_, i) => i !== idx))
-    setCurrentImageIdx((prev) => Math.max(0, Math.min(prev, imagePreviews.length - 2)))
-  }
-
-  const clearAll = () => {
     setImages([])
     setImagesEditData([])
     setImagesPreview([])
@@ -211,30 +188,69 @@ export const PostContextProvider = ({ children, userId }: { children: ReactNode;
     setCurrentImageIdx(0)
     imagesBlob.current = {}
     originalImages.current = {}
-  }
+  }, [imagePreviews])
 
-  const handleChangeImageData = (imageEditData: Partial<ImageEditData>) => {
-    setImagesEditData((prev) => prev.map((item, i) => (i === currentImageIdx ? { ...item, ...imageEditData } : item)))
-  }
+  const getImage = useCallback((idx: number) => images?.[idx], [images])
 
-  const resetToOriginal = (idx?: number) => {
-    const imageIdx = idx !== undefined ? idx : currentImageIdx
+  const setImageEditData = useCallback(
+    (imageEditData: Partial<ImageEditData>) => {
+      setImagesEditData((prev) => prev.map((item, i) => (i === currentImageIdx ? { ...item, ...imageEditData } : item)))
+    },
+    [currentImageIdx]
+  )
 
-    if (!images[imageIdx] || !originalImages.current[imageIdx]) return
+  const resetToOriginal = useCallback(
+    (idx?: number) => {
+      const imageIdx = idx ?? currentImageIdx
+      const originalSrc = originalImages.current[imageIdx]
 
-    setImages((prev) =>
-      prev.map((img, i) => (i === imageIdx ? { ...img, src: originalImages.current[imageIdx] } : img))
-    )
+      if (!images[imageIdx] || !originalSrc) return
 
-    setImagesEditData((prev) =>
-      prev.map((data, i) => (i === imageIdx ? { scale: 1, aspectRatio: 'original', imageFilter: 'Normal' } : data))
-    )
-  }
+      setImages((prev) => prev.map((img, i) => (i === imageIdx ? { ...img, src: originalSrc } : img)))
 
-  const publishPost = async () => {
+      setImagesEditData((prev) =>
+        prev.map((data, i) => (i === imageIdx ? { scale: 1, aspectRatio: 'original', imageFilter: 'Normal' } : data))
+      )
+    },
+    [currentImageIdx, images]
+  )
+
+  const loadDraft = useCallback(async () => {
+    const draftResult = await loadDraftFromStorage()
+    if (!draftResult) return
+
+    clearAll()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    imagesBlob.current = draftResult.blobsRecord
+    originalImages.current = draftResult.originalsRecord
+
+    setImages(draftResult.images)
+    setImagesEditData(draftResult.imagesEditData)
+    setImagesPreview(draftResult.imagePreviews)
+    setDescription(draftResult.description)
+    setCurrentImageIdx(0)
+  }, [loadDraftFromStorage, clearAll])
+
+  const saveDraft = useCallback(async () => {
+    await saveDraftToStorage({
+      images,
+      imagesEditData,
+      imagePreviews,
+      description,
+      imagesBlob: imagesBlob.current,
+    })
+  }, [saveDraftToStorage, images, imagesEditData, imagePreviews, description])
+
+  const deleteDraft = useCallback(async () => {
+    await deleteDraftFromStorage()
+  }, [deleteDraftFromStorage])
+
+  const publishPost = useCallback(async () => {
     try {
       const formData = new FormData()
-      Object.values(imagesBlob.current).forEach((blob, idx) => formData.append('file', blob))
+      Object.values(imagesBlob.current).forEach((blob) => formData.append('file', blob))
+
       const uploadImagesData = await uploadImage(formData).unwrap()
       const imageIds = uploadImagesData.images.map(({ uploadId }) => ({ uploadId }))
 
@@ -243,10 +259,13 @@ export const PostContextProvider = ({ children, userId }: { children: ReactNode;
         childrenMetadata: imageIds,
         userId,
       }).unwrap()
+
+      if (hasDraft) await deleteDraft()
+      clearAll()
     } catch (err) {
       console.error('Error publishing post:', err)
     }
-  }
+  }, [uploadImage, createPost, description, userId, hasDraft, deleteDraft, clearAll])
 
   return (
     <PostContext.Provider
@@ -256,14 +275,19 @@ export const PostContextProvider = ({ children, userId }: { children: ReactNode;
         imagesEditData,
         imagesBlob: imagesBlob.current,
         imagePreviews,
+        hasDraft,
+        isDraftLoading,
         setDescription,
         addImage,
         getImage,
         removeImage,
         clearAll,
         setCurrentImageIndex: setCurrentImageIdx,
-        setImageEditData: handleChangeImageData,
+        setImageEditData,
         publishPost,
+        saveDraft,
+        loadDraft,
+        deleteDraft,
         currentImageIdx,
         resetToOriginal,
       }}

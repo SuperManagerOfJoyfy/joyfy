@@ -10,13 +10,13 @@ import { ImageControls } from './imageControls/ImageControls'
 import s from './StepCrop.module.scss'
 
 type StepCropProps = {
-  onNavigateBack?: () => void
+  jumpToStep?: (step: string) => void
 }
 
 const ImageSliderMemo = memo(ImageSlider)
 const ImageControlsMemo = memo(ImageControls)
 
-export const StepCrop = memo(({ onNavigateBack }: StepCropProps) => {
+export const StepCrop = memo(({ jumpToStep }: StepCropProps) => {
   const { imagePreviews, imagesEditData, currentImageIdx, images, setCurrentImageIndex } = usePostContext()
 
   const handleSlideChange = useCallback(
@@ -41,10 +41,10 @@ export const StepCrop = memo(({ onNavigateBack }: StepCropProps) => {
   const isLoading = hasImages && !hasPreviews
 
   useEffect(() => {
-    if (!hasPreviews && !isLoading && onNavigateBack) {
-      onNavigateBack()
+    if (images.length === 0 && jumpToStep) {
+      jumpToStep('upload')
     }
-  }, [hasPreviews, isLoading, onNavigateBack])
+  }, [images.length, jumpToStep])
 
   if (isLoading) {
     return <Loader message="Loading images..." />
