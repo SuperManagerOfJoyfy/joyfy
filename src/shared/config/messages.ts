@@ -5,7 +5,8 @@ export const MESSAGES = {
   },
   POST: {
     POST_PUBLISHED: 'Post successfully published!',
-    POST_DRAFT: 'Draft saved',
+    POST_DRAFT: 'Draft saved successfully',
+    POST_DRAFT_LOAD: 'Draft loaded',
     POST_DISCARDED: 'Draft discarded',
   },
   PROFILE: {
