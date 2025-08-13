@@ -1,5 +1,5 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { PublicUserProfile, UploadedAvatarResponse, UserProfile } from './profileApi.types'
+import { PublicUserProfile, UploadedAvatarResponse, UserProfile, UserProfileWithFollowers } from './profileApi.types'
 
 export const profileApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,6 +16,30 @@ export const profileApi = joyfyApi.injectEndpoints({
         method: 'GET',
       }),
       providesTags: (result, error, profileId) => [{ type: 'Profile', id: profileId }],
+    }),
+    getUserProfileWithFollowers: builder.query<UserProfileWithFollowers, string>({
+      query: (userName) => ({
+        url: `/users/${userName}`,
+        method: 'GET',
+      }),
+      providesTags: ['Profile'],
+    }),
+    followUserById: builder.mutation<void, number>({
+      query: (userId) => ({
+        method: 'POST',
+        url: 'users/following',
+        body: {
+          selectedUserId: userId,
+        },
+      }),
+      invalidatesTags: ['Profile'],
+    }),
+    unfollowUserById: builder.mutation<void, number>({
+      query: (userId) => ({
+        method: 'DELETE',
+        url: `users/follower/${userId}`,
+      }),
+      invalidatesTags: ['Profile'],
     }),
     updateUserProfile: builder.mutation<void, Partial<UserProfile>>({
       query: (profileData) => ({
@@ -51,4 +75,7 @@ export const {
   useUpdateUserProfileMutation,
   useUploadProfileAvatarMutation,
   useDeleteProfileAvatarMutation,
+  useGetUserProfileWithFollowersQuery,
+  useFollowUserByIdMutation,
+  useUnfollowUserByIdMutation,
 } = profileApi

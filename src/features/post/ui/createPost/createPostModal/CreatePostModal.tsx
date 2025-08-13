@@ -1,7 +1,7 @@
+import { useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
 
-import { createPostFlow } from '@/features/post/ui/createPost/hooks/postFlow'
+import { createPostFlow, Step } from '@/features/post/ui/createPost/hooks/postFlow'
 import { CreateItemModal } from '@/features/imageFlow/ui/createItemModal/CreateItemModal'
 import { MESSAGES } from '@/shared/config/messages'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
@@ -17,11 +17,34 @@ type CreatePostModalProps = {
 }
 
 const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
-  const { images, publishPost, addImage, description, clearAll } = usePostContext()
+  const {
+    images,
+    publishPost,
+    addImage,
+    description,
+    clearAll,
+    saveDraft,
+    loadDraft,
+    deleteDraft,
+    hasDraft,
+    isDraftLoading,
+  } = usePostContext()
+
   const [isPublishing, setIsPublishing] = useState(false)
   const [showCloseModal, setShowCloseModal] = useState(false)
+  const [isSavingDraft, setIsSavingDraft] = useState(false)
+  const [isLoadingDraft, setIsLoadingDraft] = useState(false)
+  const [modalKey, setModalKey] = useState(0)
 
   const postFlow = createPostFlow()
+
+  const hasUnsavedChanges = useCallback(() => {
+    return images.length > 0 || description.trim().length > 0
+  }, [images.length, description])
+
+  const getInitialStep = useCallback((): Step => {
+    return images.length > 0 ? 'crop' : 'upload'
+  }, [images.length])
 
   const handlePublishPost = async () => {
     setIsPublishing(true)
@@ -30,68 +53,74 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
       toast.success(MESSAGES.POST.POST_PUBLISHED)
       onClose(ECreatePostCloseModal.redirectToProfile)
     } catch (error) {
-      console.error('Publish error:', error)
     } finally {
       setIsPublishing(false)
     }
   }
 
-  const handleAddImage = (files: File[]) => {
-    addImage(files)
-  }
+  const handleLoadDraft = async () => {
+    if (isDraftLoading || isLoadingDraft) return
 
-  const handleModalClose = () => {
-    if (!hasUnsavedChanges()) {
-      onClose(ECreatePostCloseModal.default)
-      return
+    setIsLoadingDraft(true)
+    try {
+      await loadDraft()
+      setModalKey((prev) => prev + 1)
+    } finally {
+      setIsLoadingDraft(false)
     }
-
-    setShowCloseModal(true)
   }
 
-  const handleCloseConfirm = (saveDraft: boolean) => {
+  const handleModalClose = useCallback(() => {
+    hasUnsavedChanges() ? setShowCloseModal(true) : handleImmediateClose()
+  }, [hasUnsavedChanges])
+
+  const handleImmediateClose = useCallback(() => {
+    onClose(ECreatePostCloseModal.default)
+  }, [onClose])
+
+  const handleCloseModalCancel = useCallback(() => {
+    setShowCloseModal(false)
+  }, [])
+
+  const handleCloseConfirm = async (saveDraftOption: boolean) => {
     setShowCloseModal(false)
 
-    if (saveDraft) {
-      toast.info(MESSAGES.POST.POST_DRAFT)
-      onClose(ECreatePostCloseModal.redirectToHome)
+    if (saveDraftOption) {
+      setIsSavingDraft(true)
+      try {
+        await saveDraft()
+        toast.success(MESSAGES.POST.POST_DRAFT)
+        onClose(ECreatePostCloseModal.redirectToHome)
+      } finally {
+        setIsSavingDraft(false)
+      }
     } else {
-      clearAll()
-      toast.info(MESSAGES.POST.POST_DISCARDED)
-      onClose(ECreatePostCloseModal.default)
+      try {
+        if (hasDraft) await deleteDraft()
+        clearAll()
+        toast.info(MESSAGES.POST.POST_DISCARDED)
+      } finally {
+        onClose(ECreatePostCloseModal.default)
+      }
     }
   }
-
-  const handleCloseModalCancel = () => {
-    setShowCloseModal(false)
-  }
-
-  const hasUnsavedChanges = () => images.length > 0
 
   const stepProps = {
     upload: {
-      onFilesSelected: handleAddImage,
+      onFilesSelected: addImage,
       placeholder: 'Drag and drop your image here or click to browse',
       dragPlaceholder: 'Drop the image here',
       primaryButtonText: 'Select from Computer',
-      showDraftButton: true,
-      draftButtonText: 'Open Draft',
-      onDraftClick: () => {
-        toast.info('Draft functionality is limited. Files would need to be stored on the server to be restored.')
-      },
-    },
-    crop: {
-      onNavigateBack: clearAll,
-    },
-    filter: {
-      onNavigateBack: () => {},
+      showDraftButton: hasDraft && images.length === 0,
+      draftButtonText: isLoadingDraft ? 'Loading Draft...' : 'Open Draft',
+      onDraftClick: handleLoadDraft,
+      draftButtonDisabled: isDraftLoading || isLoadingDraft,
     },
     description: {
       user,
       disabled: isPublishing,
-      onNavigateBack: () => {},
       getValidationState: () => ({
-        isValid: description?.length > 0,
+        isValid: description?.trim().length > 0,
         isProcessing: isPublishing,
       }),
     },
@@ -100,25 +129,29 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
   return (
     <>
       <CreateItemModal
+        key={modalKey}
         open={open}
         onClose={handleModalClose}
         flow={postFlow}
-        initialStep="upload"
+        initialStep={getInitialStep()}
         onComplete={handlePublishPost}
         useBuiltInConfirmModal={false}
         hasUnsavedChanges={hasUnsavedChanges}
         stepProps={stepProps}
       />
-
-      <ClosePostModal open={showCloseModal} onClose={handleCloseModalCancel} onConfirm={handleCloseConfirm} />
+      <ClosePostModal
+        open={showCloseModal}
+        onClose={handleCloseModalCancel}
+        onConfirm={handleCloseConfirm}
+        hasContent={hasUnsavedChanges()}
+        isSaving={isSavingDraft}
+      />
     </>
   )
 }
 
-export const CreatePostModal = (props: CreatePostModalProps) => {
-  return (
-    <PostContextProvider userId={props.user.id}>
-      <CreatePostModalContent {...props} />
-    </PostContextProvider>
-  )
-}
+export const CreatePostModal = (props: CreatePostModalProps) => (
+  <PostContextProvider userId={props.user.id}>
+    <CreatePostModalContent {...props} />
+  </PostContextProvider>
+)
