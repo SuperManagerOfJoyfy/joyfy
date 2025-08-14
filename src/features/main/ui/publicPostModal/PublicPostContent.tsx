@@ -1,4 +1,4 @@
-import { UserCard } from '@/entities/user'
+import { UserCard } from '@/shared/user'
 import { Post } from '@/features/post/types/postTypes'
 // import { useGetPostLikesQuery } from '@/features/post/api'
 import { Scroll, Separator } from '@/shared/ui'

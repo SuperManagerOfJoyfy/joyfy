@@ -2,8 +2,9 @@
 
 import { ChangeEvent } from 'react'
 
-import { UserCard } from '@/entities/user'
-import { User } from '@/entities/user/types/userTypes'
+import { UserCard } from '@/shared/user'
+import { User } from '@/shared/user/types/userTypes'
+
 import { usePostContext } from '@/features/post/ui/createPost/providers'
 import { ImageSlider } from '@/shared/ui/imageSlider'
 

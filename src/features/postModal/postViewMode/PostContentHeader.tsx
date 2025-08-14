@@ -1,7 +1,7 @@
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { DropdownMenu } from '@/shared/ui'
 import { PostDropdownMenuItems } from './PostDropdownMenuItems'
-import { UserCard } from '@/entities/user'
+import { UserCard } from '@/shared/user'
 import { Post } from '@/features/post/types/postTypes'
 
 import s from './PostViewMode.module.scss'

@@ -90,7 +90,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
                   Follow
                 </Button>
               )}
-              <Button as={Link} href={`${PATH.USER.MESSENGER}?part=info`} variant="secondary">
+              <Button as={Link} href={`${PATH.USER.MESSENGER}/${userProfile.id}`} variant="secondary">
                 Send Message
               </Button>
             </div>

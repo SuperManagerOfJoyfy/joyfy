@@ -3,12 +3,12 @@
 import { ReactNode } from 'react'
 import clsx from 'clsx'
 
-import { UserCard } from '@/entities/user'
 import { MetaInfo } from './MetaInfo'
 import { Button } from '@/shared/ui'
 import { CommentLikeButton } from './CommentLikeButton'
 
 import s from './BaseCommentItem.module.scss'
+import { UserCard } from '@/shared/user'
 
 type BaseCommentItemProps = {
   id: number
