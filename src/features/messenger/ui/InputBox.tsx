@@ -1,5 +1,5 @@
 import { Button, TextArea } from '@/shared/ui'
-import s from './Messenger.module.scss'
+import s from './InputBox.module.scss'
 
 export const InputBox = () => {
   return (

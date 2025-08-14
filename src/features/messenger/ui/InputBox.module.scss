@@ -1,0 +1,27 @@
+.inputBox {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding-left: 6px;
+
+  .inputWrapper {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+
+    &:hover,
+    &:focus-within {
+      background-color: transparent !important;
+    }
+
+    .messageInput {
+      font-size: var(--font-size-s);
+      line-height: 1.4;
+      background-color: transparent;
+    }
+  }
+}

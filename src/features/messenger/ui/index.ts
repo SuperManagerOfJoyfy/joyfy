@@ -1,2 +1,5 @@
 export * from './InputBox'
-export * from './Messenger'
+export * from './ChatList'
+export * from './ChatArea'
+export * from './SearchInput'
+export * from './MessageBubble'

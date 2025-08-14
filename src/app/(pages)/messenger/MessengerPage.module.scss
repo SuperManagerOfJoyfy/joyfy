@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 290px;
+  background-color: var(--color-dark-300);
+  border-radius: 8px;
+}
