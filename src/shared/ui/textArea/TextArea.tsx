@@ -15,16 +15,18 @@ export const TextArea = (props: TextAreaProps) => {
   const id = useId()
 
   return (
-    <div className={clsx(s.textAreaContainer, className)}>
-      <label className={s.label} htmlFor={id} aria-disabled={rest.disabled}>
-        {label}
-      </label>
+    <div className={clsx(s.container, className)}>
+      {label && (
+        <label className={s.label} htmlFor={id} aria-disabled={rest.disabled}>
+          {label}
+        </label>
+      )}
 
       <div className={clsx(s.wrapper, error && s.error, wrapperClassName)}>
-        <textarea className={clsx(s.textArea, textAreaClassName)} data-value={rest.value && 'true'} id={id} {...rest} />
+        <textarea id={id} className={clsx(s.textArea, textAreaClassName)} data-value={!!rest.value} {...rest} />
       </div>
 
-      <span className={s.errorText}>{error}</span>
+      {error && <span className={s.errorText}>{error}</span>}
     </div>
   )
 }
