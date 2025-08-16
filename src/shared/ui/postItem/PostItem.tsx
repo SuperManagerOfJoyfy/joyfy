@@ -1,6 +1,6 @@
 import { Post } from '@/features/post/types/postTypes'
 import { DateStamp } from '@/shared/ui'
-import { UserCard } from '@/shared/user'
+import { UserCard } from '@/shared/ui/userCard'
 
 import s from './PostItem.module.scss'
 

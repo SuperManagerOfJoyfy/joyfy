@@ -1,9 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { UserCard } from '@/shared/user'
-import { User } from '@/shared/user/types/userTypes'
-import { Button, PublicationDescription } from '@/shared/ui'
+import { Button, PublicationDescription, UserCard } from '@/shared/ui'
+import { User } from '@/shared/ui/userCard'
 
 import s from './PostEditForm.module.scss'
 

@@ -1,9 +1,8 @@
+import { PostCommentList } from '@/features/comments/ui'
 import { Post } from '@/features/post/types/postTypes'
-import { Scroll, Separator } from '@/shared/ui'
-import { PostItem } from '@/entities/post/ui/postItem'
+import { PostItem, Scroll, Separator } from '@/shared/ui'
 import { PostContentHeader } from './PostContentHeader'
 import { PostFooter } from './PostFooter'
-import { PostCommentList } from '@/features/comments/ui'
 
 import s from './PostViewMode.module.scss'
 
