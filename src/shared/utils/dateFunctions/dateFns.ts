@@ -1,4 +1,14 @@
-import { differenceInYears, format, formatDistanceToNow, isValid, parse, parseISO, subDays } from 'date-fns'
+import {
+  differenceInDays,
+  differenceInYears,
+  format,
+  formatDistanceToNow,
+  isToday,
+  isValid,
+  parse,
+  parseISO,
+  subDays,
+} from 'date-fns'
 
 // --- Shared helpers ---
 
@@ -42,4 +52,17 @@ export const calculateAge = (dateStr: string): boolean => {
   const parsed = parseDateString(dateStr)
   if (!parsed) return false
   return differenceInYears(new Date(), parsed) >= 13
+}
+
+export const formatChatTimestamp = (dateStr: string): string => {
+  const date = parseISO(dateStr)
+  if (isToday(date)) {
+    return format(date, 'HH:mm') // 24hr format
+  }
+  const daysDiff = differenceInDays(new Date(), date)
+
+  if (daysDiff < 2) {
+    return format(date, 'EEE') // Day of week, e.g. Mon, Tue
+  }
+  return format(date, 'd MMM') // e.g., 28 Sep
 }
