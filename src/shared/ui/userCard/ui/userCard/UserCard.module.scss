@@ -42,3 +42,19 @@
   display: flex;
   flex-direction: column;
 }
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.childrenText {
+  color: var(--color-light-900);
+  font-size: var(--font-size-xs);
+}
+
+.timeStamp {
+  color: var(--color-light-900);
+  font-size: var(--font-size-xs);
+}
