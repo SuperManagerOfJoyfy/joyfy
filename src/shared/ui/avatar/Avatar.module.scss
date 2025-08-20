@@ -46,6 +46,15 @@
     }
   }
 
+  &[data-size='regular'] {
+    height: 48px;
+    min-width: 48px;
+
+    .avatarFallback {
+      font-size: 20px;
+    }
+  }
+
   &[data-size='large'] {
     height: 204px;
     min-width: 204px;

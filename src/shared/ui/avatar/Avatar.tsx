@@ -7,7 +7,7 @@ import { useGenerateColor } from '@/shared/ui/avatar/hooks/useGenerateColor'
 type Props = {
   avatar?: string
   name?: string
-  size?: 'small' | 'medium' | 'large'
+  size?: 'small' | 'medium' | 'large' | 'regular'
 } & ComponentProps<typeof AvatarRadix.Root>
 
 export const Avatar = ({ avatar, className, name = 'User', size = 'medium', ...rest }: Props) => {
