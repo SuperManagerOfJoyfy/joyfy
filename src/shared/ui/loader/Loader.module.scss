@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  gap: 12px;
   overflow: hidden;
 }
 
@@ -17,6 +16,7 @@
 }
 
 .message {
+  margin-top: 12px;
   font-size: 14px;
   color: var(--color-light-100);
   text-align: center;
@@ -38,6 +38,10 @@
   &.reduced {
     width: 30px;
     height: 30px;
+  }
+  &.embedded {
+    width: 15px;
+    height: 15px;
   }
 }
 

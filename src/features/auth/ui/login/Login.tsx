@@ -1,3 +1,5 @@
+'use client'
+
 import { Form, Typography } from '@/shared/ui'
 import { Card } from '@/shared/ui/card'
 import clsx from 'clsx'

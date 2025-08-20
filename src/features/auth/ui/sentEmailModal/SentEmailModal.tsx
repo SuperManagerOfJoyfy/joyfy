@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Modal, Typography } from '@/shared/ui'
 import React, { useEffect, useState } from 'react'
 
