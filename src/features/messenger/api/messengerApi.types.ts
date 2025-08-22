@@ -20,7 +20,7 @@ export type MessageItem = {
   avatars: AvatarType[]
 }
 
-export type BaseMessageByUser = {
+export type ChatMessagesResponse = {
   pageSize: number
   totalCount: number
   notReadCount: number

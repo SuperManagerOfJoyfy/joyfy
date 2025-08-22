@@ -1,6 +1,6 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
 import LocalStorage from '@/shared/utils/localStorage/localStorage'
-import { clearToken, setToken } from '../model/authSlice'
+import { clearToken, setCurrentUser, setToken } from '../model/authSlice'
 import {
   ConfirmEmailRequest,
   EmailInputDto,
@@ -13,6 +13,7 @@ import {
   RefreshTokenResponse,
   RegisterRequest,
 } from './authApi.types'
+import { closeSocket } from '@/shared/config/socket'
 
 export const authApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -56,8 +57,12 @@ export const authApi = joyfyApi.injectEndpoints({
           // Invalidate any cached data related to the 'User' tag to trigger a refetch
           dispatch(authApi.util.invalidateTags(['User']))
 
-          // Dispatch the `getMe` endpoint to fetch user information after login
-          dispatch(authApi.endpoints.getMe.initiate())
+          // Dispatch the `getMe` endpoint to fetch user information after login and set current user into Redux
+          const meResult = await dispatch(authApi.endpoints.getMe.initiate())
+
+          if ('data' in meResult && meResult.data) {
+            dispatch(setCurrentUser(meResult.data))
+          }
         } catch (error) {
           console.error('Login failed:', error)
         }
@@ -79,6 +84,7 @@ export const authApi = joyfyApi.injectEndpoints({
           await queryFulfilled
 
           LocalStorage.removeToken()
+          closeSocket() //disconnect socket
 
           // Clear token from Redux store
           dispatch(clearToken())
@@ -129,6 +135,12 @@ export const authApi = joyfyApi.injectEndpoints({
             console.error('No access token received')
           }
           LocalStorage.setToken(data.accessToken)
+          dispatch(setToken(data.accessToken))
+
+          const meResult = await dispatch(authApi.endpoints.getMe.initiate())
+          if ('data' in meResult && meResult.data) {
+            dispatch(setCurrentUser(meResult.data))
+          }
           dispatch(authApi.util.invalidateTags(['User']))
         } catch (error) {
           console.error('Google login failed:', error)

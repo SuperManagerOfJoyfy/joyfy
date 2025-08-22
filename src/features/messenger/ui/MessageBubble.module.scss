@@ -4,13 +4,14 @@
   margin-bottom: 8px;
 }
 
-.partner {
+.receiver {
   flex-direction: row;
   justify-content: flex-start;
+  align-items: flex-end;
+  gap: 8px;
 }
 
-.owner {
-  flex-direction: row-reverse;
+.sender {
   justify-content: flex-end;
 }
 
@@ -22,43 +23,39 @@
 
 .bubble {
   max-width: 60%;
-  padding: 16px 8px;
-  border-radius: 16px;
-  font-size: 15px;
-  position: relative;
+  padding: 2px 8px;
+  border-radius: 8px;
   word-break: break-word;
 }
 
 .receiverBubble {
   background: #333333;
-  margin-left: 4px;
 }
 
 .senderBubble {
   background: #234e99;
-  margin-right: 4px;
-}
-
-.message {
-  display: block;
 }
 
 .footer {
   display: flex;
+  align-items: center;
   gap: 4px;
-  align-items: flex-end;
-  margin-top: 4px;
+  justify-content: flex-end;
 }
 
 .timestamp {
   display: block;
-  font-size: 11px;
-  margin-top: 4px;
+  font-size: var(--font-size-xs);
   text-align: right;
-  .receiverTimestamp {
-    color: var(--color-light-900);
-  }
-  .senderTimestamp {
-    color: var(--color-accent-100);
-  }
+}
+
+.receiverTimestamp {
+  color: var(--color-light-900);
+}
+.senderTimestamp {
+  color: var(--color-accent-100);
+}
+
+.statusIcon {
+  color: var(--color-accent-100);
 }

@@ -1,6 +1,6 @@
 import clsx from 'clsx'
-import { RiCheckDoubleLine } from 'react-icons/ri'
-import { Avatar } from '@/shared/ui'
+import { IoCheckmarkDone, IoCheckmark } from 'react-icons/io5'
+import { Avatar, Typography } from '@/shared/ui'
 import { formatChatTimestamp } from '@/shared/utils/dateFunctions'
 import { MessageStatus } from '../api/messengerApi.types'
 import s from './MessageBubble.module.scss'
@@ -19,10 +19,14 @@ export const MessageBubble = ({ message, isSender, userName, avatar, timestamp, 
     <div className={clsx(s.bubbleRow, isSender ? s.sender : s.receiver)}>
       {!isSender && <Avatar avatar={avatar} name={userName} size="small" />}
       <div className={clsx(s.bubble, isSender ? s.senderBubble : s.receiverBubble)}>
-        <span className={s.message}>{message}</span>
+        <Typography variant="body2">{message}</Typography>
+
         <div className={s.footer}>
-          <span className={isSender ? s.senderTimestamp : s.receiverTimestamp}>{formatChatTimestamp(timestamp)}</span>
-          {status === 'READ' && <RiCheckDoubleLine className={s.readIcon} />}
+          <span className={clsx(s.timestamp, isSender ? s.senderTimestamp : s.receiverTimestamp)}>
+            {formatChatTimestamp(timestamp)}
+          </span>
+
+          {isSender && <div className={s.statusIcon}>{status === 'READ' ? <IoCheckmarkDone /> : <IoCheckmark />}</div>}
         </div>
       </div>
     </div>

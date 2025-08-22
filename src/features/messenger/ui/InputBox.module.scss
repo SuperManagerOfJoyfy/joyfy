@@ -15,7 +15,7 @@
 
     &:hover,
     &:focus-within {
-      background-color: transparent !important;
+      background-color: transparent;
     }
 
     .messageInput {
@@ -23,5 +23,27 @@
       line-height: 1.4;
       background-color: transparent;
     }
+  }
+}
+
+.iconsWrapper {
+  display: flex;
+  margin-right: 12px;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  color: var(--color-light-100);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--color-dark-500);
   }
 }

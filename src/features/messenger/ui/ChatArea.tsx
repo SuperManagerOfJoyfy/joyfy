@@ -4,6 +4,7 @@ import { MessageItemByUser, useGetChatMessagesQuery } from '../api'
 import s from './ChatArea.module.scss'
 import { InputBox } from './InputBox'
 import { MessageBubble } from './MessageBubble'
+import { Scroll } from '@/shared/ui'
 
 type Props = {
   selectedUser: User
@@ -22,30 +23,36 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
       <header className={s.chatHeader}>
         <UserCard user={selectedUser} />
       </header>
+
       <div className={s.chatBody}>
-        {chatMessages?.items.length ? (
-          chatMessages.items.map((message: MessageItemByUser) => {
-            const { id, messageText, createdAt, status } = message
-            const isSender = message.ownerId !== +dialoguePartnerId
-            return (
-              <MessageBubble
-                key={id}
-                message={messageText}
-                isSender={isSender}
-                userName={selectedUser.userName}
-                avatar={selectedUser.avatar}
-                timestamp={createdAt}
-                status={status}
-              />
-            )
-          })
-        ) : (
-          <div className={s.noMessages}>No messages yet</div>
-        )}
+        <Scroll>
+          {chatMessages?.items.length ? (
+            [...chatMessages.items]
+              .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+              .map((message: MessageItemByUser) => {
+                const { id, messageText, createdAt, status } = message
+                const isSender = message.ownerId !== +dialoguePartnerId
+
+                return (
+                  <MessageBubble
+                    key={id}
+                    message={messageText}
+                    isSender={isSender}
+                    userName={selectedUser.userName}
+                    avatar={selectedUser.avatar}
+                    timestamp={createdAt}
+                    status={status}
+                  />
+                )
+              })
+          ) : (
+            <div className={s.noMessages}>No messages yet</div>
+          )}
+        </Scroll>
       </div>
 
       <footer className={s.chatFooter}>
-        <InputBox />
+        <InputBox dialoguePartnerId={dialoguePartnerId} />
       </footer>
     </div>
   )

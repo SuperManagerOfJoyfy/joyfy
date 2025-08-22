@@ -8,7 +8,7 @@ export default async function ChatPage({ params }: Props) {
 
   const userProfile = await fetchUserProfile(dialoguePartnerId)
 
-  const user = { id: userProfile.id, userName: userProfile.userName, avatars: userProfile.avatars }
+  const user = { id: userProfile.id, userName: userProfile.userName, avatar: userProfile.avatars?.[0]?.url }
 
   return <ChatArea selectedUser={user} dialoguePartnerId={dialoguePartnerId} />
 }

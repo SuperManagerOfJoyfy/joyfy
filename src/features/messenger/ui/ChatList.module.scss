@@ -1,0 +1,9 @@
+.chatItem {
+  padding: 8px;
+  border-bottom: 1px solid var(--color-dark-300);
+  cursor: pointer;
+  list-style: none;
+}
+.selected {
+  background-color: var(--color-dark-300);
+}
