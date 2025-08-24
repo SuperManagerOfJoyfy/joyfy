@@ -1,5 +1,5 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { BaseMessage, ChatMessagesResponse, MessageItemByUser } from './messengerApi.types'
+import { BaseMessage, ChatMessagesResponse, MessageItemByUser, MessageStatus } from './messengerApi.types'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
 import { selectCurrentUserId } from '@/features/auth/model/authSlice'
@@ -7,14 +7,14 @@ import { store } from '@/app/store/store'
 
 export const messengerApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
-  endpoints: (bulder) => ({
-    getChatList: bulder.query<BaseMessage, void>({
+  endpoints: (builder) => ({
+    getChatList: builder.query<BaseMessage, void>({
       query: () => ({
         url: '/messenger',
       }),
     }),
 
-    getChatMessages: bulder.query<ChatMessagesResponse, string>({
+    getChatMessages: builder.query<ChatMessagesResponse, string>({
       query: (dialoguePartnerId) => ({
         url: `/messenger/${dialoguePartnerId}`,
       }),
@@ -54,6 +54,12 @@ export const messengerApi = joyfyApi.injectEndpoints({
           if (message.receiverId === currentUserId) {
             socket.emit('acknowledge', { message, receiverId: currentUserId })
           }
+          // Automatically mark this message as read since user is viewing the chat
+          socket.emit(WS_EVENT_PATH.MESSAGE_SEND, {
+            messageIds: [message.id],
+            dialoguePartnerId,
+          })
+
           // Also add message to cache
           updateCachedData((draft) => {
             const exists = draft.items.some((m) => m.id === message.id)
@@ -80,7 +86,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
       },
     }),
 
-    deleteMessage: bulder.mutation<void, { messageId: number; dialoguePartnerId: string }>({
+    deleteMessage: builder.mutation<void, { messageId: number; dialoguePartnerId: string }>({
       query: ({ messageId }) => ({
         url: `/messenger/${messageId}`,
         method: 'DELETE',
@@ -101,7 +107,38 @@ export const messengerApi = joyfyApi.injectEndpoints({
         }
       },
     }),
+
+    updateMessageStatus: builder.mutation<void, { ids: number[]; dialoguePartnerId: string }>({
+      query: ({ ids }) => ({
+        url: '/messenger',
+        method: 'PUT',
+        body: { ids },
+      }),
+
+      async onQueryStarted({ ids, dialoguePartnerId }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          messengerApi.util.updateQueryData('getChatMessages', dialoguePartnerId, (draft) => {
+            draft.items.forEach((item) => {
+              if (ids.includes(item.id)) {
+                item.status = MessageStatus.READ
+              }
+            })
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetChatListQuery, useGetChatMessagesQuery, useDeleteMessageMutation } = messengerApi
+export const {
+  useGetChatListQuery,
+  useGetChatMessagesQuery,
+  useDeleteMessageMutation,
+  useUpdateMessageStatusMutation,
+} = messengerApi

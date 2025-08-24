@@ -34,13 +34,15 @@ export const MessageBubble = ({ id, message, isSender, userName, avatar, timesta
             {formatChatTimestamp(timestamp)}
           </span>
 
-          {isSender && <div className={s.statusIcon}>{status === 'READ' ? <IoCheckmarkDone /> : <IoCheckmark />}</div>}
+          {isSender && (
+            <div className={s.statusIcon}>{status === MessageStatus.READ ? <IoCheckmarkDone /> : <IoCheckmark />}</div>
+          )}
         </div>
       </div>
     </div>
   )
 
-  // Only open context menu if it's a sender's message
+  // Only open context menu if it's own message
   if (isSender) {
     return (
       <ContextMenu.Root>

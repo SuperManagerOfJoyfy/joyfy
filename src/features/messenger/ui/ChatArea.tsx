@@ -1,12 +1,19 @@
 'use client'
 import { User, UserCard } from '@/shared/ui/userCard'
-import { MessageItemByUser, useDeleteMessageMutation, useGetChatMessagesQuery } from '../api'
+import {
+  MessageItemByUser,
+  MessageStatus,
+  useDeleteMessageMutation,
+  useGetChatMessagesQuery,
+  useUpdateMessageStatusMutation,
+} from '../api'
 import s from './ChatArea.module.scss'
 import { InputBox } from './InputBox'
 import { MessageBubble } from './MessageBubble'
 import { Scroll } from '@/shared/ui'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
+import { useEffect } from 'react'
 
 type Props = {
   selectedUser: User
@@ -16,6 +23,19 @@ type Props = {
 export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
   const { data: chatMessages, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
   const [deleteMessage] = useDeleteMessageMutation()
+  const [updateMessageStatus] = useUpdateMessageStatusMutation()
+
+  useEffect(() => {
+    if (chatMessages?.items) {
+      const unreadMessagesIds = chatMessages.items
+        .filter((m) => m.status !== MessageStatus.READ && m.ownerId === +dialoguePartnerId) // mark messages from other user as read
+        .map((m) => m.id)
+
+      if (unreadMessagesIds.length > 0) {
+        updateMessageStatus({ ids: unreadMessagesIds, dialoguePartnerId })
+      }
+    }
+  }, [chatMessages, dialoguePartnerId, updateMessageStatus])
 
   const handleDelete = async (messageId: number) => {
     try {
