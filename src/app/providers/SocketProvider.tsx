@@ -5,13 +5,14 @@ import { useSelector } from 'react-redux'
 import { selectToken } from '@/features/auth/model/authSlice'
 
 import { closeSocket, connectSocket } from '@/shared/config/socket'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 export const SocketProvider = () => {
   const token = useSelector(selectToken)
   const tokenRef = useRef<string | null>(null)
 
   useEffect(() => {
-    if (!token || token === tokenRef.current) return
+    if (!token) return
     tokenRef.current = token
 
     const socket = connectSocket(token)
@@ -27,7 +28,12 @@ export const SocketProvider = () => {
       console.log('[socket] disconnected:', reason)
     })
 
-    return () => closeSocket()
+    return () => {
+      socket.off('connect')
+      socket.off('connect_error')
+      socket.off('disconnect')
+      tokenRef.current = null
+    }
   }, [token])
 
   return null

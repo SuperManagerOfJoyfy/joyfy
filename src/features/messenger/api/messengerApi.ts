@@ -63,15 +63,45 @@ export const messengerApi = joyfyApi.injectEndpoints({
           })
         }
 
+        const handleDeleteMessage = (messageId: number) => {
+          updateCachedData((draft) => {
+            draft.items = draft.items.filter((m) => m.id !== messageId)
+          })
+        }
+
         socket.on(WS_EVENT_PATH.RECEIVE_MESSAGE, handleReceiveMessage)
         socket.on(WS_EVENT_PATH.MESSAGE_SEND, handleMessageSend)
+        socket.on(WS_EVENT_PATH.MESSAGE_DELETED, handleDeleteMessage)
 
         await cacheEntryRemoved
         socket.off(WS_EVENT_PATH.RECEIVE_MESSAGE, handleReceiveMessage)
         socket.off(WS_EVENT_PATH.MESSAGE_SEND, handleMessageSend)
+        socket.off(WS_EVENT_PATH.MESSAGE_DELETED, handleDeleteMessage)
+      },
+    }),
+
+    deleteMessage: bulder.mutation<void, { messageId: number; dialoguePartnerId: string }>({
+      query: ({ messageId }) => ({
+        url: `/messenger/${messageId}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted({ messageId, dialoguePartnerId }, { dispatch, queryFulfilled }) {
+        // Update all chat message caches
+        const patchResults = dispatch(
+          messengerApi.util.updateQueryData('getChatMessages', dialoguePartnerId, (draft) => {
+            if (draft?.items) {
+              draft.items = draft.items.filter((m) => m.id !== messageId)
+            }
+          })
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResults.undo()
+        }
       },
     }),
   }),
 })
 
-export const { useGetChatListQuery, useGetChatMessagesQuery } = messengerApi
+export const { useGetChatListQuery, useGetChatMessagesQuery, useDeleteMessageMutation } = messengerApi

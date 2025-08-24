@@ -59,3 +59,27 @@
 .statusIcon {
   color: var(--color-accent-100);
 }
+
+.contextMenuContent {
+  background: var(--color-dark-700);
+  border: 1px solid var(--color-dark-300);
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35);
+  z-index: 1000;
+}
+
+.contextMenuItem {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  &:hover {
+    background: var(--color-dark-500);
+    outline: none;
+  }
+}

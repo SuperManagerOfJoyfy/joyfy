@@ -1,10 +1,12 @@
 'use client'
 import { User, UserCard } from '@/shared/ui/userCard'
-import { MessageItemByUser, useGetChatMessagesQuery } from '../api'
+import { MessageItemByUser, useDeleteMessageMutation, useGetChatMessagesQuery } from '../api'
 import s from './ChatArea.module.scss'
 import { InputBox } from './InputBox'
 import { MessageBubble } from './MessageBubble'
 import { Scroll } from '@/shared/ui'
+import { getSocket } from '@/shared/config/socket'
+import { WS_EVENT_PATH } from '@/shared/constants'
 
 type Props = {
   selectedUser: User
@@ -13,6 +15,19 @@ type Props = {
 
 export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
   const { data: chatMessages, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
+  const [deleteMessage] = useDeleteMessageMutation()
+
+  const handleDelete = async (messageId: number) => {
+    try {
+      await deleteMessage({ messageId, dialoguePartnerId }).unwrap()
+      const socket = getSocket()
+      if (socket) {
+        socket.emit(WS_EVENT_PATH.MESSAGE_DELETED, { messageId })
+      }
+    } catch (error) {
+      console.error('Failed to delete message:', error)
+    }
+  }
 
   if (isLoading) {
     return <div className={s.loading}>Loading messages...</div>
@@ -36,12 +51,15 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
                 return (
                   <MessageBubble
                     key={id}
+                    id={id}
                     message={messageText}
                     isSender={isSender}
                     userName={selectedUser.userName}
                     avatar={selectedUser.avatar}
                     timestamp={createdAt}
                     status={status}
+                    // onEdit={handleEdit}
+                    onDelete={handleDelete}
                   />
                 )
               })
