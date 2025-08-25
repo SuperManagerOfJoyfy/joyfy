@@ -1,10 +1,9 @@
 import React from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import { IoCheckmarkDoneOutline, IoNotificationsOutline } from 'react-icons/io5'
-import { ArrowIcon, Button, Loader, Scroll, Separator, Typography } from '@/shared/ui'
+import { ArrowIcon, Button, LazyLoader, Loader, Scroll, Separator, Typography } from '@/shared/ui'
 import { useNotificationsController } from '../hooks'
 import { NotificationItem } from './NotificationItem'
-import { NotificationsLoader } from './NotificationsLoader'
 
 import s from './Notification.module.scss'
 
@@ -45,7 +44,7 @@ export const NotificationsPopover = () => {
               </React.Fragment>
             ))}
 
-            <NotificationsLoader onLoadMore={handleFetchMore} hasMore={hasMore} />
+            <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} />
             {hasMore && isLoadingMore ? <Loader reduced /> : null}
           </Scroll>
 

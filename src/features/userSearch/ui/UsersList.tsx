@@ -1,7 +1,7 @@
-import { Loader, Typography } from '@/shared/ui'
+import { LazyLoader, Loader, Typography } from '@/shared/ui'
 import s from './UsersList.module.scss'
 import { UserItem } from '@/features/userSearch/api/usersApi.types'
-import { NotificationsLoader } from '@/features/notifications/ui'
+
 import { User } from '@/features/userSearch/ui/User'
 import { RootState, useAppDispatch } from '@/app/store/store'
 import { useSelector } from 'react-redux'
@@ -29,7 +29,7 @@ export const UsersList = ({ users, handleFetchMore, hasMore, isFetching }: Props
           {users.map((user) => (
             <User user={user} handleRequestClick={handleRequestClick} key={user.id} />
           ))}
-          <NotificationsLoader onLoadMore={handleFetchMore} hasMore={hasMore} />
+          <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} />
           <div className={s.loaderContainer}> {hasMore && isFetching ? <Loader reduced /> : null}</div>
         </div>
       ) : (

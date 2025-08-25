@@ -1,8 +1,15 @@
-import { useEffect, useRef } from 'react'
-import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver'
-import s from './Notification.module.scss'
+'use client'
 
-export const NotificationsLoader = ({ onLoadMore, hasMore }: { onLoadMore: () => Promise<void>; hasMore: boolean }) => {
+import { useEffect, useRef } from 'react'
+import { useIntersectionObserver } from '@/shared/hooks'
+import s from './LazyLoader.module.scss'
+
+type Props = {
+  onLoadMore: () => Promise<void>
+  hasMore: boolean
+}
+
+export const LazyLoader = ({ onLoadMore, hasMore }: Props) => {
   const isLoadingRef = useRef(false)
   const [loaderRef, isLoaderVisible] = useIntersectionObserver<HTMLDivElement>({
     threshold: 0,
