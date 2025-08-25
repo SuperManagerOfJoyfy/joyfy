@@ -38,11 +38,14 @@ export const timeAgo = (date: string | Date): string => {
 
 export const formatReadableDate = (date: string | Date): string => {
   const d = typeof date === 'string' ? new Date(date) : date
+  if (!isValid(d)) return ''
   return format(d, 'MMMM d, yyyy') // e.g., May 14, 1981
 }
 
 export const formatSmartDate = (dateStr: string): string => {
+  if (!dateStr) return ''
   const date = parseISO(dateStr)
+  if (!isValid(date)) return ''
   const recent = subDays(new Date(), 2)
 
   return date > recent ? timeAgo(date) : formatReadableDate(date)
@@ -56,10 +59,11 @@ export const calculateAge = (dateStr: string): boolean => {
 
 export const formatChatTimestamp = (dateStr: string): string => {
   const date = parseISO(dateStr)
-  if (isToday(date)) {
+  const daysDiff = differenceInDays(new Date(), date)
+
+  if (daysDiff < 1) {
     return format(date, 'HH:mm') // 24hr format
   }
-  const daysDiff = differenceInDays(new Date(), date)
 
   if (daysDiff < 2) {
     return format(date, 'EEE') // Day of week, e.g. Mon, Tue

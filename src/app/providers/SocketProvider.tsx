@@ -12,7 +12,7 @@ export const SocketProvider = () => {
   const tokenRef = useRef<string | null>(null)
 
   useEffect(() => {
-    if (!token) return
+    if (!token || token === 'null' || token === tokenRef.current) return
     tokenRef.current = token
 
     const socket = connectSocket(token)
@@ -26,6 +26,15 @@ export const SocketProvider = () => {
 
     socket.on('disconnect', (reason) => {
       console.log('[socket] disconnected:', reason)
+
+      const newToken = LocalStorage.getToken()
+      if (newToken) {
+        socket.io.opts.query = { accessToken: newToken }
+      }
+
+      if (reason === 'io server disconnect') {
+        socket.connect()
+      }
     })
 
     return () => {

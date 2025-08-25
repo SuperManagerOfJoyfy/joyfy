@@ -65,7 +65,7 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
             [...chatMessages.items]
               .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
               .map((message: MessageItemByUser) => {
-                const { id, messageText, createdAt, status } = message
+                const { id, messageText, createdAt, status, updatedAt } = message
                 const isSender = message.ownerId !== +dialoguePartnerId
 
                 return (
@@ -76,7 +76,8 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
                     isSender={isSender}
                     userName={selectedUser.userName}
                     avatar={selectedUser.avatar}
-                    timestamp={createdAt}
+                    createdAt={createdAt}
+                    updatedAt={updatedAt}
                     status={status}
                     // onEdit={handleEdit}
                     onDelete={handleDelete}

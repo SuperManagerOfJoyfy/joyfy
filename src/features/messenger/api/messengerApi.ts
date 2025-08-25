@@ -27,6 +27,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
 
         const state = store.getState()
         const currentUserId = selectCurrentUserId(state)
+        console.log(currentUserId)
 
         const handleReceiveMessage = (message: MessageItemByUser) => {
           updateCachedData((draft) => {
@@ -54,11 +55,6 @@ export const messengerApi = joyfyApi.injectEndpoints({
           if (message.receiverId === currentUserId) {
             socket.emit('acknowledge', { message, receiverId: currentUserId })
           }
-          // Automatically mark this message as read since user is viewing the chat
-          socket.emit(WS_EVENT_PATH.MESSAGE_SEND, {
-            messageIds: [message.id],
-            dialoguePartnerId,
-          })
 
           // Also add message to cache
           updateCachedData((draft) => {
@@ -75,14 +71,26 @@ export const messengerApi = joyfyApi.injectEndpoints({
           })
         }
 
+        const handleUpdateMessage = (updatedMessage: MessageItemByUser) => {
+          updateCachedData((draft) => {
+            const idx = draft.items.findIndex((m) => m.id === updatedMessage.id)
+
+            if (idx !== -1) {
+              draft.items[idx] = { ...draft.items[idx], ...updatedMessage }
+            }
+          })
+        }
+
         socket.on(WS_EVENT_PATH.RECEIVE_MESSAGE, handleReceiveMessage)
         socket.on(WS_EVENT_PATH.MESSAGE_SEND, handleMessageSend)
         socket.on(WS_EVENT_PATH.MESSAGE_DELETED, handleDeleteMessage)
+        socket.on(WS_EVENT_PATH.UPDATE_MESSAGE, handleUpdateMessage)
 
         await cacheEntryRemoved
         socket.off(WS_EVENT_PATH.RECEIVE_MESSAGE, handleReceiveMessage)
         socket.off(WS_EVENT_PATH.MESSAGE_SEND, handleMessageSend)
         socket.off(WS_EVENT_PATH.MESSAGE_DELETED, handleDeleteMessage)
+        socket.off(WS_EVENT_PATH.UPDATE_MESSAGE, handleUpdateMessage)
       },
     }),
 
