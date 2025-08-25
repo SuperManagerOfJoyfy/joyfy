@@ -1,0 +1,44 @@
+.usersList {
+  margin-top: 24px;
+}
+
+.user {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.userData {
+  a {
+    color: var(--color-light-100);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-m);
+    line-height: 24px;
+  }
+  p {
+    color: var(--color-light-900);
+  }
+}
+
+.loaderContainer {
+  height: 42px;
+}
+
+.emptyList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 200px;
+  color: var(--color-light-900);
+}
+
+.recentWrapper {
+  margin-top: 30px;
+  & > p {
+    margin-bottom: 18px;
+  }
+}
