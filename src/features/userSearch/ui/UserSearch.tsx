@@ -1,7 +1,7 @@
 'use client'
 
-import { useSearchUser } from '@/features/userSearch/model/useSearchUser'
-import { UsersList } from '@/features/userSearch/ui/UsersList'
+import { useSearchUser } from '@/features/userSearch/utils/hooks/useSearchUser'
+import { UsersList } from '@/features/userSearch/ui/usersList/UsersList'
 import { PATH } from '@/shared/config/routes'
 import { TextField } from '@/shared/ui'
 

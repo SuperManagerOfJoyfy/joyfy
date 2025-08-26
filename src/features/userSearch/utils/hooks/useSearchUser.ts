@@ -1,4 +1,5 @@
-import { useLazySearchUserByNameQuery } from '@/features/userSearch/api/usersApi'
+import { useAppDispatch } from '@/app/store/store'
+import { useLazySearchUserByNameQuery, usersApi } from '@/features/userSearch/api/usersApi'
 import { PATH } from '@/shared/config/routes'
 import { useDebounce } from '@/shared/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -11,7 +12,7 @@ export const useSearchUser = ({ path }: { path: string }) => {
   const [searchValue, setSearchValue] = useState(initialSearch)
   const [searchUser, { data, isFetching }] = useLazySearchUserByNameQuery()
   const users = data ? data?.items : []
-
+  const dispatch = useAppDispatch()
   useEffect(() => {
     if (initialSearch) {
       searchUser({ search: initialSearch, cursor: 0 })
@@ -19,9 +20,11 @@ export const useSearchUser = ({ path }: { path: string }) => {
   }, [initialSearch, searchUser])
 
   const debouncedSearhByName = useDebounce((value: string) => {
-    searchUser({ search: value, cursor: 0 })
-
-    router.replace(value ? `${path}?search=${encodeURI(value)}` : `${PATH.USER.SEARCH}`)
+    console.log('search', searchValue)
+    if (value.trim() !== '') {
+      searchUser({ search: value, cursor: 0 })
+      router.replace(value ? `${path}?search=${encodeURI(value)}` : `${PATH.USER.SEARCH}`)
+    }
   }, 300)
 
   const hasMore = data ? users.length < data.totalCount : false

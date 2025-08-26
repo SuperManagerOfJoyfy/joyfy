@@ -1,17 +1,11 @@
-type Avatar = {
-  url: string
-  width: number
-  height: number
-  fileSize: number
-  createdAt: string
-}
+import { AvatarType } from '@/features/profile/api'
 
 export type UserItem = {
   id: number
   userName: string
   firstName: string
   lastName: string
-  avatars: Avatar[]
+  avatars: AvatarType[]
   createdAt: string
 }
 
