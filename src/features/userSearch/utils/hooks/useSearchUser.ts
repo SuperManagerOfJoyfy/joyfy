@@ -10,7 +10,7 @@ export const useSearchUser = ({ path }: { path: string }) => {
   const initialSearch = searchParams.get('search') ?? ''
   const [searchValue, setSearchValue] = useState(initialSearch)
   const [searchUser, { data, isFetching }] = useLazySearchUserByNameQuery()
-  const users = data ? data?.items : []
+  const users = data && searchValue.trim() !== '' ? data?.items : []
   const dispatch = useAppDispatch()
   useEffect(() => {
     if (initialSearch) {
@@ -19,11 +19,10 @@ export const useSearchUser = ({ path }: { path: string }) => {
   }, [initialSearch, searchUser])
 
   const debouncedSearhByName = useDebounce((value: string) => {
-    console.log('search', searchValue)
     if (value.trim() !== '') {
       searchUser({ search: value, cursor: 0 })
-      router.replace(value ? `${path}?search=${encodeURI(value)}` : `${path}`)
     }
+    router.replace(value ? `${path}?search=${encodeURI(value)}` : `${path}`)
   }, 300)
 
   const hasMore = data ? users.length < data.totalCount : false
