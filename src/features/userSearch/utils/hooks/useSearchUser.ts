@@ -1,6 +1,5 @@
 import { useAppDispatch } from '@/app/store/store'
 import { useLazySearchUserByNameQuery, usersApi } from '@/features/userSearch/api/usersApi'
-import { PATH } from '@/shared/config/routes'
 import { useDebounce } from '@/shared/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
@@ -23,7 +22,7 @@ export const useSearchUser = ({ path }: { path: string }) => {
     console.log('search', searchValue)
     if (value.trim() !== '') {
       searchUser({ search: value, cursor: 0 })
-      router.replace(value ? `${path}?search=${encodeURI(value)}` : `${PATH.USER.SEARCH}`)
+      router.replace(value ? `${path}?search=${encodeURI(value)}` : `${path}`)
     }
   }, 300)
 
