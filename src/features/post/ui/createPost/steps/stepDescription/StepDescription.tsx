@@ -1,13 +1,11 @@
 'use client'
 
 import { ChangeEvent } from 'react'
+import { ImageSlider, PublicationDescription, UserCard } from '@/shared/ui'
+import { User } from '@/shared/ui/userCard/types/userCard.types'
 
-import { UserCard } from '@/entities/user'
-import { User } from '@/entities/user/types/userTypes'
 import { usePostContext } from '@/features/post/ui/createPost/providers'
-import { ImageSlider } from '@/shared/ui/imageSlider'
 
-import { PublicationDescription } from '@/shared/ui'
 import s from './StepDescription.module.scss'
 
 type StepDescriptionProps = {

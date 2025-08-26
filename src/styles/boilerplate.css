@@ -53,15 +53,5 @@ body {
   font-family: var(--font-family-primary), sans-serif;
   line-height: var(--line-height-m);
   color: var(--color-light-100);
-
   background-color: var(--color-dark-900);
-  /* min-height: 100vh; */
-}
-
-.container {
-  max-width: 980px;
-  width: 100%;
-  margin: 24px auto 0 auto;
-  display: flex;
-  flex-direction: column;
 }

@@ -1,15 +1,15 @@
 'use client'
 
+import { SocialLinks } from '@/features/auth/ui/socialLinks'
+import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
+import { PATH } from '@/shared/config/routes'
 import { Form, Typography } from '@/shared/ui'
 import { Card } from '@/shared/ui/card'
 import clsx from 'clsx'
-import { SocialLinks } from '@/features/auth/ui/socialLinks'
-import { z } from 'zod'
-import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
 import Link from 'next/link'
 import { useState } from 'react'
+import { z } from 'zod'
 import s from './login.module.scss'
-import { PATH } from '@/shared/config/routes'
 
 const loginSchema = z.object({
   email: EmailSchema,

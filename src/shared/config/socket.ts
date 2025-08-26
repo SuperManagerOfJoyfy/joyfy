@@ -10,6 +10,8 @@ export const connectSocket = (token: string): Socket => {
         accessToken: token,
       },
       transports: ['websocket'],
+      reconnection: true,
+      reconnectionDelay: 1000,
     })
   }
   return socket

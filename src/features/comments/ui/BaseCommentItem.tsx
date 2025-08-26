@@ -1,12 +1,11 @@
 'use client'
 
-import { ReactNode } from 'react'
 import clsx from 'clsx'
+import { ReactNode } from 'react'
 
-import { UserCard } from '@/entities/user'
-import { MetaInfo } from './MetaInfo'
-import { Button } from '@/shared/ui'
+import { Button, UserCard } from '@/shared/ui'
 import { CommentLikeButton } from './CommentLikeButton'
+import { MetaInfo } from './MetaInfo'
 
 import s from './BaseCommentItem.module.scss'
 

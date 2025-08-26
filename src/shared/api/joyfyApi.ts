@@ -7,6 +7,7 @@ export const joyfyApi = createApi({
   tagTypes: [
     'Auth',
     'User',
+    'Users',
     'Posts',
     'Profile',
     'Post',

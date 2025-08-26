@@ -4,38 +4,42 @@ import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { selectToken } from '@/features/auth/model/authSlice'
 
-import { connectSocket } from '@/shared/config/socket'
-import { WS_EVENT_PATH } from '@/shared/constants'
-import { useNotificationsSocket } from '@/features/notifications/hooks'
+import { closeSocket, connectSocket } from '@/shared/config/socket'
+import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 export const SocketProvider = () => {
   const token = useSelector(selectToken)
-
   const tokenRef = useRef<string | null>(null)
 
-  useNotificationsSocket()
-
   useEffect(() => {
-    if (!token || token === tokenRef.current) return
+    if (!token || token === 'null' || token === tokenRef.current) return
     tokenRef.current = token
 
     const socket = connectSocket(token)
 
     socket.on('connect', () => {
-      console.log('[socket] connected:', socket?.id)
+      console.log('[socket] connected:', socket.id)
+    })
+    socket.on('connect_error', (err) => {
+      console.error('[socket] connect_error:', err)
     })
 
-    socket.on(WS_EVENT_PATH.ERROR, (err) => {
-      console.error('[socket] error:', err)
-    })
+    socket.on('disconnect', (reason) => {
+      console.log('[socket] disconnected:', reason)
 
-    socket.on('disconnect', () => {
-      console.log('Socket disconnected')
+      const newToken = LocalStorage.getToken()
+      if (newToken) {
+        socket.io.opts.query = { accessToken: newToken }
+      }
+
+      if (reason === 'io server disconnect') {
+        socket.connect()
+      }
     })
 
     return () => {
       socket.off('connect')
-      socket.off(WS_EVENT_PATH.ERROR)
+      socket.off('connect_error')
       socket.off('disconnect')
       tokenRef.current = null
     }

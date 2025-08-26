@@ -1,10 +1,7 @@
-import { UserCard } from '@/entities/user'
 import { Post } from '@/features/post/types/postTypes'
-// import { useGetPostLikesQuery } from '@/features/post/api'
-import { Scroll, Separator } from '@/shared/ui'
-import { PostItem } from '@/entities/post/ui/postItem'
 import { PostCommentList } from '@/features/comments/ui/PostCommentList'
 import { PostFooter } from '@/features/postModal/postViewMode'
+import { Scroll, Separator, PostItem, UserCard } from '@/shared/ui'
 
 import s from './PublicPostModal.module.scss'
 

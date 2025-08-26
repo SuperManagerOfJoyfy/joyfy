@@ -1,0 +1,49 @@
+.inputBox {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding-left: 6px;
+
+  .inputWrapper {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+
+    &:hover,
+    &:focus-within {
+      background-color: transparent;
+    }
+
+    .messageInput {
+      font-size: var(--font-size-s);
+      line-height: 1.4;
+      background-color: transparent;
+    }
+  }
+}
+
+.iconsWrapper {
+  display: flex;
+  margin-right: 12px;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  color: var(--color-light-100);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--color-dark-500);
+  }
+}

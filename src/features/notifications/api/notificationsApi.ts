@@ -1,5 +1,7 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { NotificationsRequest, NotificationsResponse } from './notificationsApi.types'
+import { NotificationItemType, NotificationsRequest, NotificationsResponse } from './notificationsApi.types'
+import { getSocket } from '@/shared/config/socket'
+import { WS_EVENT_PATH } from '@/shared/constants'
 
 export const notificationsApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -27,6 +29,27 @@ export const notificationsApi = joyfyApi.injectEndpoints({
               { type: 'Notifications', id: 'LIST' },
             ]
           : [{ type: 'Notifications', id: 'LIST' }],
+
+      async onCacheEntryAdded(arg, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
+        await cacheDataLoaded
+        const socket = getSocket()
+        if (!socket) return
+
+        const handleNotification = (notification: NotificationItemType) => {
+          updateCachedData((draft) => {
+            const exists = draft.items.some((item) => item.id === notification.id)
+            if (!exists) {
+              draft.items.unshift(notification)
+              draft.totalCount += 1
+              if (!notification.isRead) draft.notReadCount += 1
+            }
+          })
+        }
+
+        socket.on(WS_EVENT_PATH.NOTIFICATIONS, handleNotification)
+        await cacheEntryRemoved
+        socket.off(WS_EVENT_PATH.NOTIFICATIONS, handleNotification)
+      },
     }),
 
     deleteNotification: builder.mutation<void, number>({

@@ -50,3 +50,32 @@
 .stickyFooter {
   margin-top: auto;
 }
+
+.commentForm {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding-top: 6px;
+
+  .inputWrapper {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: none;
+    background-color: transparent !important;
+
+    &:hover,
+    &:focus-within {
+      background-color: transparent !important;
+      border: none;
+    }
+
+    .commentInput {
+      background-color: transparent !important;
+      font-size: var(--font-size-s);
+      line-height: 1.4;
+    }
+  }
+}

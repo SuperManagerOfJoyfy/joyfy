@@ -1,12 +1,9 @@
-'use client'
+import s from './MessengerPage.module.scss'
 
-import { AuthGuard } from '@/features/auth/ui'
-import { Typography } from '@/shared/ui'
-
-export default function Messenger() {
+export default function Page() {
   return (
-    <AuthGuard requireAuth>
-      <Typography variant="h1">Messenger Page</Typography>
-    </AuthGuard>
+    <div className={s.container}>
+      <p className={s.banner}>Choose who you would like to talk to</p>
+    </div>
   )
 }

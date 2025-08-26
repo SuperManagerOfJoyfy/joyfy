@@ -1,67 +1,68 @@
-.textAreaContainer {
+.container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 
-  .label {
+.label {
+  color: var(--color-light-900);
+  font-size: var(--font-size-s);
+
+  &[aria-disabled='true'] {
+    color: var(--color-dark-100);
+  }
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  background: var(--color-dark-500);
+  border: 1px solid var(--color-dark-100);
+  border-radius: 2px;
+  transition: background 0.2s ease;
+
+  &:focus-within {
+    border-color: var(--color-accent-500);
+  }
+
+  &.error {
+    border-color: var(--color-danger-500);
+  }
+
+  &:hover {
+    background: var(--color-dark-300);
+  }
+
+  &[data-disabled='true'] {
+    background: var(--color-dark-500);
+  }
+
+  &[data-has-value='true'] {
+    border: 1px solid var(--color-light-100);
+  }
+}
+
+.textArea {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  width: 100%;
+  padding: 6px 12px;
+  resize: none;
+
+  &::placeholder {
     color: var(--color-light-900);
     font-size: var(--font-size-s);
-
-    &[aria-disabled='true'] {
-      color: var(--color-dark-100);
-    }
   }
 
-  .wrapper {
-    width: 100%;
-    background: var(--color-dark-500);
-    border: 1px solid var(--color-dark-100);
-    border-radius: 2px;
-
-    transition: background 0.2s ease;
-
-    .textArea {
-      border: none;
-      outline: none;
-      background-color: transparent;
-      width: 100%;
-
-      padding: 6px 12px;
-      resize: none;
-
-      &::placeholder {
-        color: var(--color-light-900);
-        font-size: var(--font-size-s);
-      }
-
-      &[disabled] {
-        &::placeholder {
-          color: var(--color-dark-100);
-        }
-      }
-    }
-
-    &:has(.textArea[data-value='true']) {
-      border: 1px solid var(--color-light-100);
-    }
-
-    &:focus-within {
-      border-color: var(--color-accent-500);
-    }
-
-    &.error {
-      border-color: var(--color-danger-500);
-    }
-
-    &:hover {
-      background: var(--color-dark-300);
-    }
-
-    &:has(.textArea[disabled]) {
-      background: var(--color-dark-500);
-    }
+  &:disabled::placeholder {
+    color: var(--color-dark-100);
   }
+}
 
-  .errorText {
-    position: absolute;
-    color: var(--color-danger-500);
-  }
+.errorText {
+  position: absolute;
+  bottom: -16px; /* Adjust if needed */
+  color: var(--color-danger-500);
 }

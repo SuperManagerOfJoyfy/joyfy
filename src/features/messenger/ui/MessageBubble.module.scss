@@ -1,0 +1,100 @@
+.bubbleRow {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+
+.receiver {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.sender {
+  justify-content: flex-end;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+
+.bubble {
+  max-width: 60%;
+  padding: 2px 8px;
+  border-radius: 8px;
+  word-break: break-word;
+}
+
+.receiverBubble {
+  background: #333333;
+}
+
+.senderBubble {
+  background: #234e99;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.timestamp {
+  display: block;
+  font-size: var(--font-size-xs);
+  text-align: right;
+}
+
+.receiverTimestamp {
+  color: var(--color-light-900);
+}
+.senderTimestamp {
+  color: var(--color-accent-100);
+}
+
+.statusIcon {
+  color: var(--color-accent-100);
+}
+
+.contextMenuContent {
+  background: var(--color-dark-700);
+  border: 1px solid var(--color-dark-300);
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35);
+  z-index: 1000;
+}
+
+.contextMenuItem {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  &:hover {
+    background: var(--color-dark-500);
+    outline: none;
+  }
+}
+
+.editInput {
+  background-color: var(--color-dark-500);
+  border: var(--color-dark-300);
+  font-size: var(--font-size-s);
+  padding: 4px;
+  border-radius: 4px;
+  width: 100%;
+  word-wrap: break-word;
+
+  :focus {
+    border: 1px solid var(--color-accent-500);
+    outline: none;
+  }
+}
