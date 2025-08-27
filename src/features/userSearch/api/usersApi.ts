@@ -31,6 +31,7 @@ export const usersApi = joyfyApi.injectEndpoints({
       },
 
       keepUnusedDataFor: 600,
+      providesTags: ['UserSearch'],
     }),
   }),
 })
