@@ -62,28 +62,25 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
       <div className={s.chatBody}>
         <Scroll>
           {chatMessages?.items.length ? (
-            [...chatMessages.items]
-              .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-              .map((message: MessageItemByUser) => {
-                const { id, messageText, createdAt, status, updatedAt } = message
-                const isSender = message.ownerId !== +dialoguePartnerId
+            [...chatMessages.items].map((message: MessageItemByUser) => {
+              const { id, messageText, createdAt, status, updatedAt } = message
+              const isSender = message.ownerId !== +dialoguePartnerId
 
-                return (
-                  <MessageBubble
-                    key={id}
-                    id={id}
-                    message={messageText}
-                    isSender={isSender}
-                    userName={selectedUser.userName}
-                    avatar={selectedUser.avatar}
-                    createdAt={createdAt}
-                    updatedAt={updatedAt}
-                    status={status}
-                    // onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                )
-              })
+              return (
+                <MessageBubble
+                  key={id}
+                  id={id}
+                  originalMessage={messageText}
+                  isSender={isSender}
+                  userName={selectedUser.userName}
+                  avatar={selectedUser.avatar}
+                  createdAt={createdAt}
+                  updatedAt={updatedAt}
+                  status={status}
+                  onDelete={handleDelete}
+                />
+              )
+            })
           ) : (
             <div className={s.noMessages}>No messages yet</div>
           )}

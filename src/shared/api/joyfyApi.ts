@@ -18,6 +18,7 @@ export const joyfyApi = createApi({
     'Comment',
     'Devices',
     'UserSearch',
+    'ChatList',
   ],
   endpoints: () => ({}),
 })

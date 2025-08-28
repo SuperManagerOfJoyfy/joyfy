@@ -1,18 +1,18 @@
 'use client'
+import { useState } from 'react'
 import clsx from 'clsx'
+import * as ContextMenu from '@radix-ui/react-context-menu'
 import { IoCheckmarkDone, IoCheckmark } from 'react-icons/io5'
 import { BiEditAlt, BiTrash } from 'react-icons/bi'
-import * as ContextMenu from '@radix-ui/react-context-menu'
 import { Avatar, Typography } from '@/shared/ui'
 import { formatChatTimestamp } from '@/shared/utils/dateFunctions'
 import { MessageStatus } from '../api/messengerApi.types'
-import s from './MessageBubble.module.scss'
-import { useState } from 'react'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
+import s from './MessageBubble.module.scss'
 
 type Props = {
-  message: string
+  originalMessage: string
   id: number
   isSender: boolean
   avatar?: string
@@ -25,16 +25,15 @@ type Props = {
 
 export const MessageBubble = ({
   id,
-  message,
+  originalMessage,
   isSender,
   userName,
   avatar,
   createdAt,
-  updatedAt = '',
   status,
   onDelete,
 }: Props) => {
-  const [messageText, setMessageText] = useState(message)
+  const [messageText, setMessageText] = useState(originalMessage)
   const [edit, setEdit] = useState(false)
 
   const handleEditMessage = (id: number, messageText: string) => {
@@ -59,7 +58,7 @@ export const MessageBubble = ({
       setEdit(false) // save and exit edit mode
     }
     if (e.key == 'Escape') {
-      setMessageText(message) // reset to original
+      setMessageText(originalMessage) // reset to original
       setEdit(false)
     }
   }

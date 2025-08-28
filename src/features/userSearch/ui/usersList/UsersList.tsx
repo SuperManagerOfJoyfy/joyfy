@@ -1,7 +1,6 @@
 import { LazyLoader, Loader, Typography } from '@/shared/ui'
 import s from './UsersList.module.scss'
 import { UserItem } from '@/features/userSearch/api/usersApi.types'
-
 import { User } from '@/features/userSearch/ui/usersList/User'
 import { useRecentRequests } from '@/features/userSearch/utils/hooks/useRecentRequests'
 
