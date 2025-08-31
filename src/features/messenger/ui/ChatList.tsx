@@ -8,7 +8,7 @@ import { modifyMessage } from '../utils'
 import s from './ChatList.module.scss'
 
 export const ChatList = () => {
-  const { data: chatList, isLoading, refetch } = useGetChatListQuery()
+  const { data: chatList, isLoading } = useGetChatListQuery()
   const { data: currentUser } = useGetMeQuery()
 
   const router = useRouter()

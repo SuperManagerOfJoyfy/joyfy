@@ -11,7 +11,7 @@ type Props = {
   handleFetchMore: () => Promise<void>
 }
 
-export const UsersList = ({ users, handleFetchMore, hasMore, isFetching }: Props) => {
+export const UsersList = ({ users, handleFetchMore, hasMore }: Props) => {
   const { recentRequests, addRequest } = useRecentRequests()
 
   return (
@@ -21,8 +21,7 @@ export const UsersList = ({ users, handleFetchMore, hasMore, isFetching }: Props
           {users.map((user) => (
             <User user={user} handleRequestClick={addRequest} key={user.id} />
           ))}
-          <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} />
-          <div className={s.loaderContainer}> {hasMore && isFetching ? <Loader reduced /> : null}</div>
+          <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching />
         </div>
       ) : (
         <div className={s.recentWrapper}>

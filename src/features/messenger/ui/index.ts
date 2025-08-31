@@ -1,5 +1,5 @@
 export * from './InputBox'
 export * from './ChatList'
 export * from './ChatArea'
-export * from './SearchInput'
 export * from './MessageBubble'
+export * from './Sidebar'

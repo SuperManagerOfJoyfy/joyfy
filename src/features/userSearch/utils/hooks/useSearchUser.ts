@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/app/store/store'
-import { useLazySearchUserByNameQuery, usersApi } from '@/features/userSearch/api/usersApi'
+import { useLazySearchUserByNameQuery } from '@/features/userSearch/api/usersApi'
 import { useDebounce } from '@/shared/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
@@ -11,12 +11,14 @@ export const useSearchUser = ({ path }: { path: string }) => {
   const [searchValue, setSearchValue] = useState(initialSearch)
   const [searchUser, { data, isFetching }] = useLazySearchUserByNameQuery()
   const users = data && searchValue.trim() !== '' ? data?.items : []
-  const dispatch = useAppDispatch()
+
   useEffect(() => {
     if (initialSearch) {
       searchUser({ search: initialSearch, cursor: 0 })
     }
   }, [initialSearch, searchUser])
+
+  const clearSearch = () => setSearchValue('')
 
   const debouncedSearhByName = useDebounce((value: string) => {
     if (value.trim() !== '') {
@@ -46,5 +48,5 @@ export const useSearchUser = ({ path }: { path: string }) => {
     debouncedSearhByName(e.currentTarget.value)
   }
 
-  return { searchValue, users, handleChangeValue, isFetching, hasMore, handleFetchMore }
+  return { searchValue, users, handleChangeValue, isFetching, hasMore, handleFetchMore, clearSearch }
 }

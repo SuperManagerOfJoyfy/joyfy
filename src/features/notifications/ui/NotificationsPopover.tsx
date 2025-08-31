@@ -44,8 +44,7 @@ export const NotificationsPopover = () => {
               </React.Fragment>
             ))}
 
-            <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} />
-            {hasMore && isLoadingMore ? <Loader reduced /> : null}
+            <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching />
           </Scroll>
 
           <Popover.Arrow asChild>
