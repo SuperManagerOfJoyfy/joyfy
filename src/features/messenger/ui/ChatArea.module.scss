@@ -14,9 +14,14 @@
 }
 
 .chatBody {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
-  padding: 16px;
+  padding: 12px;
+  border-radius: 0;
 }
 
 .chatFooter {
@@ -27,4 +32,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.scrollArea {
+  height: 100%;
+  width: 100%;
 }

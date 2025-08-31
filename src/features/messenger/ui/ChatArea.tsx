@@ -13,7 +13,7 @@ import { MessageBubble } from './MessageBubble'
 import { Scroll } from '@/shared/ui'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 type Props = {
   selectedUser: User
@@ -24,6 +24,14 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
   const { data: chatMessages, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
   const [deleteMessage] = useDeleteMessageMutation()
   const [updateMessageStatus] = useUpdateMessageStatusMutation()
+
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [chatMessages?.items?.length])
 
   useEffect(() => {
     if (chatMessages?.items) {
@@ -59,8 +67,8 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
         <UserCard user={selectedUser} />
       </header>
 
-      <div className={s.chatBody}>
-        <Scroll>
+      <Scroll className={s.scrollArea} ref={scrollRef}>
+        <div className={s.chatBody}>
           {chatMessages?.items.length ? (
             [...chatMessages.items].map((message: MessageItemByUser) => {
               const { id, messageText, createdAt, status, updatedAt } = message
@@ -84,8 +92,8 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
           ) : (
             <div className={s.noMessages}>No messages yet</div>
           )}
-        </Scroll>
-      </div>
+        </div>
+      </Scroll>
 
       <footer className={s.chatFooter}>
         <InputBox dialoguePartnerId={dialoguePartnerId} />
