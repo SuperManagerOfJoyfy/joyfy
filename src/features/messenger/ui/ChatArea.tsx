@@ -5,12 +5,13 @@ import {
   MessageStatus,
   useDeleteMessageMutation,
   useGetChatMessagesQuery,
+  useLazyGetOlderMessagesQuery,
   useUpdateMessageStatusMutation,
 } from '../api'
 import s from './ChatArea.module.scss'
 import { InputBox } from './InputBox'
 import { MessageBubble } from './MessageBubble'
-import { Scroll } from '@/shared/ui'
+import { LazyLoader, Scroll } from '@/shared/ui'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
 import { useEffect, useRef } from 'react'
@@ -22,6 +23,7 @@ type Props = {
 
 export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
   const { data: chatMessages, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
+  const [trigger, { data: olderMessages, isFetching: isLoadingMore }] = useLazyGetOlderMessagesQuery()
   const [deleteMessage] = useDeleteMessageMutation()
   const [updateMessageStatus] = useUpdateMessageStatusMutation()
 
@@ -44,6 +46,16 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
       }
     }
   }, [chatMessages, dialoguePartnerId, updateMessageStatus])
+
+  const hasMore = chatMessages ? chatMessages.items.length < chatMessages.totalCount : false
+
+  const loadOlder = async () => {
+    if (isLoadingMore) return
+    if (!chatMessages || chatMessages.items.length === 0) return
+
+    const oldestMessagesId = chatMessages.items[0].id
+    await trigger({ dialoguePartnerId, cursor: oldestMessagesId })
+  }
 
   const handleDelete = async (messageId: number) => {
     try {
@@ -69,6 +81,7 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
 
       <Scroll className={s.scrollArea} ref={scrollRef}>
         <div className={s.chatBody}>
+          <LazyLoader onLoadMore={loadOlder} hasMore={hasMore} isFetching={isLoadingMore} />
           {chatMessages?.items.length ? (
             [...chatMessages.items].map((message: MessageItemByUser) => {
               const { id, messageText, createdAt, status, updatedAt } = message

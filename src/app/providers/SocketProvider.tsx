@@ -9,11 +9,12 @@ import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 export const SocketProvider = () => {
   const token = useSelector(selectToken)
-  const tokenRef = useRef<string | null>(null)
 
   useEffect(() => {
-    if (!token || token === 'null' || token === tokenRef.current) return
-    tokenRef.current = token
+    if (!token) {
+      closeSocket()
+      return
+    }
 
     const socket = connectSocket(token)
 
@@ -26,22 +27,10 @@ export const SocketProvider = () => {
 
     socket.on('disconnect', (reason) => {
       console.log('[socket] disconnected:', reason)
-
-      const newToken = LocalStorage.getToken()
-      if (newToken) {
-        socket.io.opts.query = { accessToken: newToken }
-      }
-
-      if (reason === 'io server disconnect') {
-        socket.connect()
-      }
     })
 
     return () => {
-      socket.off('connect')
-      socket.off('connect_error')
-      socket.off('disconnect')
-      tokenRef.current = null
+      closeSocket()
     }
   }, [token])
 

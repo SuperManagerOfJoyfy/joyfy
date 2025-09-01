@@ -27,6 +27,12 @@ export type ChatMessagesResponse = {
   items: MessageItemByUser[]
 }
 
+export type ChatMessagesRequest = {
+  dialoguePartnerId: string
+  cursor?: number
+  pageSize?: number
+}
+
 export type MessageItemByUser = Omit<MessageItem, 'userName' | 'avatars'>
 
 export enum MessageStatus {

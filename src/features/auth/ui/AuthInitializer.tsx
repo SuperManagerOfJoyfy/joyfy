@@ -5,6 +5,7 @@ import { useAppDispatch } from '@/app/store/store'
 import { clearToken, setCurrentUser, setToken } from '../model/authSlice'
 import LocalStorage from '@/shared/utils/localStorage/localStorage'
 import { authApi } from '../api/authApi'
+import { closeSocket, connectSocket } from '@/shared/config/socket'
 
 export const AuthInitializer = () => {
   const dispatch = useAppDispatch()
@@ -27,6 +28,7 @@ export const AuthInitializer = () => {
           // Token might be invalid, clear it
           LocalStorage.removeToken()
           dispatch(clearToken())
+          closeSocket()
         }
       }
     }

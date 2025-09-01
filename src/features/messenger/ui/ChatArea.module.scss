@@ -6,7 +6,7 @@
 }
 
 .chatHeader {
-  height: 70px;
+  height: 89px;
   display: flex;
   padding-left: 12px;
   background-color: var(--color-dark-500);
@@ -36,4 +36,10 @@
 .scrollArea {
   height: 100%;
   width: 100%;
+}
+.loading {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

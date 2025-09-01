@@ -1,5 +1,11 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { BaseMessage, ChatMessagesResponse, MessageItemByUser, MessageStatus } from './messengerApi.types'
+import {
+  BaseMessage,
+  ChatMessagesRequest,
+  ChatMessagesResponse,
+  MessageItemByUser,
+  MessageStatus,
+} from './messengerApi.types'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
 import { selectCurrentUserId } from '@/features/auth/model/authSlice'
@@ -88,6 +94,51 @@ export const messengerApi = joyfyApi.injectEndpoints({
       },
     }),
 
+    getOlderMessages: builder.query<ChatMessagesResponse, ChatMessagesRequest>({
+      query: ({ dialoguePartnerId, cursor, pageSize = 12 }) => ({
+        url: `/messenger/${dialoguePartnerId}`,
+        params: cursor ? { cursor, pageSize } : { pageSize },
+      }),
+
+      async onQueryStarted({ dialoguePartnerId }, { dispatch, queryFulfilled }) {
+        try {
+          const { data: newMessages } = await queryFulfilled
+          dispatch(
+            messengerApi.util.updateQueryData('getChatMessages', dialoguePartnerId, (draft) => {
+              // Prepend older messages at the top
+              const uniqueNewItems = newMessages.items.filter(
+                (msg) => !draft.items.some((existing) => existing.id === msg.id)
+              )
+              draft.items = [...uniqueNewItems.reverse(), ...draft.items]
+              draft.totalCount = newMessages.totalCount
+              draft.notReadCount = newMessages.notReadCount
+            })
+          )
+        } catch (e) {
+          console.error('Error fetching older messages', e)
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.cursor !== previousArg?.cursor
+      },
+      // transformResponse: (response: ChatMessagesResponse)=> ({
+      //   ...response,
+      //   items: response.items.reverse()
+      // })
+      // serializeQueryArgs: ({ endpointName }) => endpointName,
+      // merge: (currentCache, newData) => {
+      //   const newItems = newData.items.filter((msg) => !currentCache.items.some((existing) => existing.id === msg.id))
+      //   currentCache.items = [...newItems.reverse(), ...currentCache.items]
+      //   currentCache.totalCount = newData.totalCount
+      //   currentCache.notReadCount = newData.notReadCount
+      //   currentCache.pageSize = newData.pageSize
+      // },
+
+      // forceRefetch({ currentArg, previousArg }) {
+      //   return currentArg?.cursor !== previousArg?.cursor
+      // },
+    }),
+
     deleteMessage: builder.mutation<void, { messageId: number; dialoguePartnerId: string }>({
       query: ({ messageId }) => ({
         url: `/messenger/${messageId}`,
@@ -159,4 +210,5 @@ export const {
   useGetChatMessagesQuery,
   useDeleteMessageMutation,
   useUpdateMessageStatusMutation,
+  useLazyGetOlderMessagesQuery,
 } = messengerApi
