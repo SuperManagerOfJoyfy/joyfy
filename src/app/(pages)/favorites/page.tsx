@@ -1,12 +1,5 @@
-'use client'
+import { Favorites } from '@/features/favorites/ui/Favorites'
 
-import { AuthGuard } from '@/features/auth/ui'
-import { Typography } from '@/shared/ui'
-
-export default function Favorites() {
-  return (
-    <AuthGuard requireAuth>
-      <Typography variant="h1">Favorites Page</Typography>
-    </AuthGuard>
-  )
+export default function Page() {
+  return <Favorites />
 }
