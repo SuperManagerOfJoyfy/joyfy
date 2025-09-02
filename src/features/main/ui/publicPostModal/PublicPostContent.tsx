@@ -38,7 +38,7 @@ export const PublicPostContent = ({ post }: Props) => {
 
       <Separator />
 
-      <PostFooter postId={postId} createdAt={createdAt} />
+      <PostFooter createdAt={createdAt} post={post} />
     </div>
   )
 }

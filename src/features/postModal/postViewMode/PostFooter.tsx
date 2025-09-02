@@ -2,19 +2,19 @@ import { Likes, useCreatePostLikeMutation, useGetPostLikesQuery } from '@/featur
 import { PostReactions } from './PostReactions'
 import { PostLikes } from '@/entities/post/ui/postLikes/ui/PostLikes'
 import { DateStamp, Separator } from '@/shared/ui'
-
 import { PostCommentForm } from '@/features/comments/ui/PostCommentForm'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { Post } from '@/features/post/types/postTypes'
 
 import s from './PostViewMode.module.scss'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 type PostFooterProps = {
-  postId: number
   createdAt: string
+  post: Post
 }
 
-export const PostFooter = ({ postId, createdAt }: PostFooterProps) => {
-  const { data: likes } = useGetPostLikesQuery(postId)
+export const PostFooter = ({ createdAt, post }: PostFooterProps) => {
+  const { data: likes } = useGetPostLikesQuery(post.id)
   const { data: me } = useGetMeQuery()
   const [like] = useCreatePostLikeMutation()
 
@@ -26,7 +26,7 @@ export const PostFooter = ({ postId, createdAt }: PostFooterProps) => {
   const changeLikeStatus = async (action: Likes) => {
     try {
       if (me) {
-        await like({ postId, likeStatus: action })
+        await like({ postId: post.id, likeStatus: action })
       } else {
         alert('You are not logged in')
       }
@@ -35,7 +35,7 @@ export const PostFooter = ({ postId, createdAt }: PostFooterProps) => {
 
   return (
     <div className={s.stickyFooter}>
-      <PostReactions myLike={myLike} changeLikeStatus={changeLikeStatus} />
+      <PostReactions myLike={myLike} changeLikeStatus={changeLikeStatus} post={post} />
 
       {count > 0 && <PostLikes users={users} count={count} className={s.postLikes} />}
 
@@ -43,7 +43,7 @@ export const PostFooter = ({ postId, createdAt }: PostFooterProps) => {
 
       <Separator />
 
-      <PostCommentForm postId={postId} />
+      <PostCommentForm postId={post.id} />
     </div>
   )
 }
