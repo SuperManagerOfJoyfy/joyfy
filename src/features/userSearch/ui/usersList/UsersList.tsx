@@ -1,7 +1,6 @@
-import { Loader, Typography } from '@/shared/ui'
+import { LazyLoader, Loader, Typography } from '@/shared/ui'
 import s from './UsersList.module.scss'
 import { UserItem } from '@/features/userSearch/api/usersApi.types'
-import { NotificationsLoader } from '@/features/notifications/ui'
 import { User } from '@/features/userSearch/ui/usersList/User'
 import { useRecentRequests } from '@/features/userSearch/utils/hooks/useRecentRequests'
 
@@ -12,7 +11,7 @@ type Props = {
   handleFetchMore: () => Promise<void>
 }
 
-export const UsersList = ({ users, handleFetchMore, hasMore, isFetching }: Props) => {
+export const UsersList = ({ users, handleFetchMore, hasMore }: Props) => {
   const { recentRequests, addRequest } = useRecentRequests()
 
   return (
@@ -22,8 +21,7 @@ export const UsersList = ({ users, handleFetchMore, hasMore, isFetching }: Props
           {users.map((user) => (
             <User user={user} handleRequestClick={addRequest} key={user.id} />
           ))}
-          <NotificationsLoader onLoadMore={handleFetchMore} hasMore={hasMore} />
-          <div className={s.loaderContainer}> {hasMore && isFetching ? <Loader reduced /> : null}</div>
+          <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching />
         </div>
       ) : (
         <div className={s.recentWrapper}>

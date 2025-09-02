@@ -5,15 +5,16 @@ import {
   MessageStatus,
   useDeleteMessageMutation,
   useGetChatMessagesQuery,
+  useLazyGetOlderMessagesQuery,
   useUpdateMessageStatusMutation,
 } from '../api'
 import s from './ChatArea.module.scss'
 import { InputBox } from './InputBox'
 import { MessageBubble } from './MessageBubble'
-import { Scroll } from '@/shared/ui'
+import { LazyLoader, Scroll } from '@/shared/ui'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 type Props = {
   selectedUser: User
@@ -22,8 +23,17 @@ type Props = {
 
 export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
   const { data: chatMessages, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
+  const [trigger, { data: olderMessages, isFetching: isLoadingMore }] = useLazyGetOlderMessagesQuery()
   const [deleteMessage] = useDeleteMessageMutation()
   const [updateMessageStatus] = useUpdateMessageStatusMutation()
+
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [chatMessages?.items?.length])
 
   useEffect(() => {
     if (chatMessages?.items) {
@@ -36,6 +46,16 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
       }
     }
   }, [chatMessages, dialoguePartnerId, updateMessageStatus])
+
+  const hasMore = chatMessages ? chatMessages.items.length < chatMessages.totalCount : false
+
+  const loadOlder = async () => {
+    if (isLoadingMore) return
+    if (!chatMessages || chatMessages.items.length === 0) return
+
+    const oldestMessagesId = chatMessages.items[0].id
+    await trigger({ dialoguePartnerId, cursor: oldestMessagesId })
+  }
 
   const handleDelete = async (messageId: number) => {
     try {
@@ -59,36 +79,34 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
         <UserCard user={selectedUser} />
       </header>
 
-      <div className={s.chatBody}>
-        <Scroll>
+      <Scroll className={s.scrollArea} ref={scrollRef}>
+        <div className={s.chatBody}>
+          <LazyLoader onLoadMore={loadOlder} hasMore={hasMore} isFetching={isLoadingMore} />
           {chatMessages?.items.length ? (
-            [...chatMessages.items]
-              .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-              .map((message: MessageItemByUser) => {
-                const { id, messageText, createdAt, status, updatedAt } = message
-                const isSender = message.ownerId !== +dialoguePartnerId
+            [...chatMessages.items].map((message: MessageItemByUser) => {
+              const { id, messageText, createdAt, status, updatedAt } = message
+              const isSender = message.ownerId !== +dialoguePartnerId
 
-                return (
-                  <MessageBubble
-                    key={id}
-                    id={id}
-                    message={messageText}
-                    isSender={isSender}
-                    userName={selectedUser.userName}
-                    avatar={selectedUser.avatar}
-                    createdAt={createdAt}
-                    updatedAt={updatedAt}
-                    status={status}
-                    // onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                )
-              })
+              return (
+                <MessageBubble
+                  key={id}
+                  id={id}
+                  originalMessage={messageText}
+                  isSender={isSender}
+                  userName={selectedUser.userName}
+                  avatar={selectedUser.avatar}
+                  createdAt={createdAt}
+                  updatedAt={updatedAt}
+                  status={status}
+                  onDelete={handleDelete}
+                />
+              )
+            })
           ) : (
             <div className={s.noMessages}>No messages yet</div>
           )}
-        </Scroll>
-      </div>
+        </div>
+      </Scroll>
 
       <footer className={s.chatFooter}>
         <InputBox dialoguePartnerId={dialoguePartnerId} />

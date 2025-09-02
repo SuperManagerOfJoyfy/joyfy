@@ -1,0 +1,14 @@
+.usersPickerList {
+  background-color: var(--color-dark-900);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 12px 12px;
+}
+
+.userItem {
+  cursor: pointer;
+  margin-bottom: 10px;
+}

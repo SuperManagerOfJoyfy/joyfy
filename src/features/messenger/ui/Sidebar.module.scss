@@ -1,0 +1,22 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 30%;
+  min-width: 300px;
+  border-right: 1px solid var(--color-dark-300);
+  position: relative;
+}
+
+.searchBox {
+  height: 70px;
+  padding: 18px 12px;
+  background-color: var(--color-dark-500);
+  border-bottom: 1px solid var(--color-dark-300);
+  position: relative;
+}
+
+.usersPickerList {
+  top: 70px; // height of searchBox
+  height: calc(100% - 70px);
+}

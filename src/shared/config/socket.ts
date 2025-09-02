@@ -4,16 +4,16 @@ let socket: Socket | null = null
 
 // Create and return the socket singleton
 export const connectSocket = (token: string): Socket => {
-  if (!socket) {
-    socket = io('https://inctagram.work', {
-      query: {
-        accessToken: token,
-      },
-      transports: ['websocket'],
-      reconnection: true,
-      reconnectionDelay: 1000,
-    })
+  if (socket) {
+    socket.disconnect()
+    socket = null
   }
+  socket = io('https://inctagram.work', {
+    query: {
+      accessToken: token,
+    },
+    transports: ['websocket'],
+  })
   return socket
 }
 
