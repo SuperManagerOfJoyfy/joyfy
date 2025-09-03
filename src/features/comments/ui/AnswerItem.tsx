@@ -17,11 +17,10 @@ type UserPreview = {
 type AnswerItemProps = {
   answer: Answer
   commentId: number
-  parentUser?: UserPreview
   postId: number
 }
 
-export const AnswerItem = ({ answer, commentId, parentUser, postId }: AnswerItemProps) => {
+export const AnswerItem = ({ answer, commentId, postId }: AnswerItemProps) => {
   const [showReplyForm, setShowReplyForm] = useState(false)
 
   const {
@@ -30,13 +29,13 @@ export const AnswerItem = ({ answer, commentId, parentUser, postId }: AnswerItem
     isLiked,
     content,
     likeCount,
-    from: { id: userId, userName, avatar },
+    from: { id: userId, username, avatars },
   } = answer
 
   const user: UserPreview = {
     id: userId,
-    userName: userName || parentUser?.userName || '',
-    avatar: avatar || parentUser?.avatar || '',
+    userName: username || '',
+    avatar: avatars?.[0]?.url || '',
   }
 
   const toggleReplyForm = () => setShowReplyForm((prev) => !prev)
