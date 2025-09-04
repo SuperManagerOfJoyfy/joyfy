@@ -1,5 +1,3 @@
-import { User } from '@/entities/user/types/userTypes'
-
 export type CommentAuthor = {
   id: number
   username: string
@@ -20,13 +18,12 @@ export type Comment = {
 export type Answer = {
   id: number
   commentId?: number
-  from: User
+  from: CommentAuthor
   content: string
   createdAt: string
   likeCount: number
   isLiked: boolean
 }
-
 export type LikeStatus = 'LIKE' | 'DISLIKE' | 'NONE'
 
 type PaginatedResponse<T> = {
