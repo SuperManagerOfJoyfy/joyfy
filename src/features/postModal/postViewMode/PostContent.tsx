@@ -38,7 +38,7 @@ export const PostContent = ({ post, isOwnPost, isFollowing, onEdit, onDelete, on
 
       <Separator />
 
-      <PostFooter postId={post.id} createdAt={post.createdAt} />
+      <PostFooter createdAt={post.createdAt} post={post} />
     </>
   )
 }

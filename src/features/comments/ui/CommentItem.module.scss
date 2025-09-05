@@ -43,12 +43,9 @@
 }
 
 .replyForm {
-  margin-top: 8px;
-  margin-left: 40px;
+  @extend .replyForm;
 }
 
 .replyActions {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
+  @extend .replyActions;
 }

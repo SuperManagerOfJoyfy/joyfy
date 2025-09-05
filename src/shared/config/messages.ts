@@ -13,4 +13,8 @@ export const MESSAGES = {
     SETTINGS_SUCCESS: 'Your settings are saved',
     SETTINGS_ERROR: 'Error! Server is not available',
   },
+  FAVORITES: {
+    FAVORITES_ADD: 'Post added to favorites',
+    FAVORITES_DELETE: 'Post removed from favorites',
+  },
 }

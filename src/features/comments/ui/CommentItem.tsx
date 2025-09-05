@@ -59,7 +59,7 @@ export const CommentItem = ({ comment, postId }: CommentItemProps) => {
         {showAnswers && answersData?.items && (
           <div className={s.answers}>
             {answersData.items.map((answer) => (
-              <AnswerItem key={answer.id} answer={answer} commentId={commentId} parentUser={user} postId={postId} />
+              <AnswerItem key={answer.id} answer={answer} commentId={commentId} postId={postId} />
             ))}
           </div>
         )}
