@@ -1,5 +1,9 @@
 'use client'
+import { useEffect, useRef } from 'react'
 import { User, UserCard } from '@/shared/ui/userCard'
+import { LazyLoader, Loader, Scroll } from '@/shared/ui'
+import { InputBox } from './InputBox'
+import { MessageBubble } from './MessageBubble'
 import {
   MessageItemByUser,
   MessageStatus,
@@ -8,13 +12,9 @@ import {
   useLazyGetOlderMessagesQuery,
   useUpdateMessageStatusMutation,
 } from '../api'
-import s from './ChatArea.module.scss'
-import { InputBox } from './InputBox'
-import { MessageBubble } from './MessageBubble'
-import { LazyLoader, Scroll } from '@/shared/ui'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
-import { useEffect, useRef } from 'react'
+import s from './ChatArea.module.scss'
 
 type Props = {
   selectedUser: User
@@ -23,15 +23,17 @@ type Props = {
 
 export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
   const { data: chatMessages, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
-  const [trigger, { data: olderMessages, isFetching: isLoadingMore }] = useLazyGetOlderMessagesQuery()
+  const [trigger, { isFetching: isLoadingMore }] = useLazyGetOlderMessagesQuery()
   const [deleteMessage] = useDeleteMessageMutation()
   const [updateMessageStatus] = useUpdateMessageStatusMutation()
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    const scroll = scrollRef.current
+    if (!scroll || !chatMessages?.items?.length) return
+    if (scroll) {
+      scroll.scrollTop = scroll.scrollHeight
     }
   }, [chatMessages?.items?.length])
 
@@ -53,8 +55,18 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
     if (isLoadingMore) return
     if (!chatMessages || chatMessages.items.length === 0) return
 
+    const scroll = scrollRef.current
+    const prevScrollHeight = scroll?.scrollHeight ?? 0
+    const prevScrollTop = scroll?.scrollTop ?? 0
+
     const oldestMessagesId = chatMessages.items[0].id
     await trigger({ dialoguePartnerId, cursor: oldestMessagesId })
+
+    requestAnimationFrame(() => {
+      if (!scroll) return
+      const newScrollHeight = scroll.scrollHeight
+      scroll.scrollTop = newScrollHeight - prevScrollHeight + prevScrollTop
+    })
   }
 
   const handleDelete = async (messageId: number) => {
@@ -70,7 +82,7 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
   }
 
   if (isLoading) {
-    return <div className={s.loading}>Loading messages...</div>
+    return <Loader />
   }
 
   return (
