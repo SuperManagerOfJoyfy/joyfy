@@ -1,23 +1,25 @@
 'use client'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { Loader, UserCard } from '@/shared/ui'
-import clsx from 'clsx'
+import { Loader } from '@/shared/ui'
 import { useParams, useRouter } from 'next/navigation'
-import { useGetChatListQuery } from '../api'
-import { modifyMessage } from '../utils'
-import s from './ChatList.module.scss'
+import { useGetChatListQuery, useLazyGetChatListQuery } from '../api'
+
+import { PATH } from '@/shared/config/routes'
+import { ChatItem } from './ChatItem'
 
 export const ChatList = () => {
-  const { data: chatList, isLoading } = useGetChatListQuery()
+  const { data: chatList, isLoading } = useGetChatListQuery({ cursor: undefined })
+  const [fetchMore, { isFetching: isLoadingMore }] = useLazyGetChatListQuery()
   const { data: currentUser } = useGetMeQuery()
 
   const router = useRouter()
   const params = useParams()
-  const selectedId = params?.dialoguePartnerId
+  const rawSelectedId = params?.dialoguePartnerId
+  const selectedId = Array.isArray(rawSelectedId) ? rawSelectedId[0] : rawSelectedId
 
   const handleSelect = (dialoguePartnerId: number) => {
     const idStr = dialoguePartnerId.toString()
-    router.push(`/messenger/${idStr}`)
+    router.push(`${PATH.USER.MESSENGER}/${idStr}`)
   }
 
   return (
@@ -25,29 +27,15 @@ export const ChatList = () => {
       {isLoading ? (
         <Loader reduced />
       ) : (
-        chatList?.items.map((chat) => {
-          const user = { id: chat.ownerId, userName: chat.userName, avatar: chat.avatars?.[0]?.url || '' }
-
-          const displayText = modifyMessage({
-            text: chat.messageText,
-            ownerId: chat.ownerId,
-            currentUserId: currentUser?.userId ?? -1,
-          })
-
-          const dialoguePartnerId = chat.ownerId === currentUser?.userId ? chat.receiverId : chat.ownerId
-
-          return (
-            <li
-              key={chat.id}
-              className={clsx(s.chatItem, selectedId === chat.receiverId.toString() && s.selected)}
-              onClick={() => handleSelect(dialoguePartnerId)}
-            >
-              <UserCard layout="stacked" user={user} date={chat.createdAt}>
-                {displayText}
-              </UserCard>
-            </li>
-          )
-        })
+        chatList?.items.map((chat) => (
+          <ChatItem
+            key={chat.id}
+            chat={chat}
+            currentUser={currentUser}
+            selectedId={selectedId}
+            onSelect={handleSelect}
+          />
+        ))
       )}
     </ul>
   )
