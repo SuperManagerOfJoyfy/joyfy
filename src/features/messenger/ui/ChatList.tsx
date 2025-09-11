@@ -1,15 +1,15 @@
 'use client'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { Loader } from '@/shared/ui'
+import { Loader, Scroll } from '@/shared/ui'
 import { useParams, useRouter } from 'next/navigation'
-import { useGetChatListQuery, useLazyGetChatListQuery } from '../api'
+import { useGetChatListQuery } from '../api'
 
 import { PATH } from '@/shared/config/routes'
 import { ChatItem } from './ChatItem'
 
 export const ChatList = () => {
-  const { data: chatList, isLoading } = useGetChatListQuery({ cursor: undefined })
-  const [fetchMore, { isFetching: isLoadingMore }] = useLazyGetChatListQuery()
+  const { data: chatList, isLoading } = useGetChatListQuery()
+
   const { data: currentUser } = useGetMeQuery()
 
   const router = useRouter()
@@ -23,7 +23,7 @@ export const ChatList = () => {
   }
 
   return (
-    <ul>
+    <Scroll>
       {isLoading ? (
         <Loader reduced />
       ) : (
@@ -37,6 +37,6 @@ export const ChatList = () => {
           />
         ))
       )}
-    </ul>
+    </Scroll>
   )
 }

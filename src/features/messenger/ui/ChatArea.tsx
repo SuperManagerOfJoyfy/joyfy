@@ -5,7 +5,7 @@ import { LazyLoader, Loader, Scroll } from '@/shared/ui'
 import { InputBox } from './InputBox'
 import { MessageBubble } from './MessageBubble'
 import {
-  MessageItemByUser,
+  MessageItem,
   MessageStatus,
   useDeleteMessageMutation,
   useGetChatMessagesQuery,
@@ -95,7 +95,7 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
         <div className={s.chatBody}>
           <LazyLoader onLoadMore={loadOlder} hasMore={hasMore} isFetching={isLoadingMore} />
           {chatMessages?.items.length ? (
-            [...chatMessages.items].map((message: MessageItemByUser) => {
+            [...chatMessages.items].map((message: MessageItem) => {
               const { id, messageText, createdAt, status, updatedAt } = message
               const isSender = message.ownerId !== +dialoguePartnerId
 

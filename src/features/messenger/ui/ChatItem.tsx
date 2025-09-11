@@ -1,12 +1,12 @@
 import clsx from 'clsx'
 import { UserCard } from '@/shared/ui'
-import { MessageItem } from '../api'
+import { ChatItem as ChatItemType } from '../api'
 import { MeResponse } from '@/features/auth/api/authApi.types'
 import { modifyMessage } from '../utils'
 import s from './ChatItem.module.scss'
 
 type Props = {
-  chat: MessageItem
+  chat: ChatItemType
   currentUser?: MeResponse
   selectedId?: string
   onSelect: (dialoguePartnerId: number) => void

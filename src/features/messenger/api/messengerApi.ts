@@ -1,11 +1,5 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import {
-  BaseMessage,
-  ChatMessagesRequest,
-  ChatMessagesResponse,
-  MessageItemByUser,
-  MessageStatus,
-} from './messengerApi.types'
+import { ChatResponse, MessageRequest, MessageResponse, MessageItem, MessageStatus } from './messengerApi.types'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
 import { selectCurrentUserId } from '@/features/auth/model/authSlice'
@@ -14,20 +8,20 @@ import { store } from '@/app/store/store'
 export const messengerApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getChatList: builder.query<BaseMessage, void>({
+    getChatList: builder.query<ChatResponse, void>({
       query: () => ({
         url: '/messenger',
       }),
       providesTags: ['ChatList'],
     }),
 
-    getChatMessages: builder.query<ChatMessagesResponse, string>({
+    getChatMessages: builder.query<MessageResponse, string>({
       query: (dialoguePartnerId) => ({
         url: `/messenger/${dialoguePartnerId}`,
         invalidatesTags: ['ChatList'],
       }),
       // display latest messages last
-      transformResponse: (response: ChatMessagesResponse) => ({
+      transformResponse: (response: MessageResponse) => ({
         ...response,
         items: response.items.reverse(),
       }),
@@ -42,7 +36,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
 
         await cacheDataLoaded
 
-        const handleReceiveMessage = (message: MessageItemByUser) => {
+        const handleReceiveMessage = (message: MessageItem) => {
           updateCachedData((draft) => {
             const idx = draft.items.findIndex((m) => m.id === message.id)
             const isCurrentChat =
@@ -73,7 +67,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
           })
         }
 
-        const handleUpdateMessage = (updatedMessage: MessageItemByUser) => {
+        const handleUpdateMessage = (updatedMessage: MessageItem) => {
           updateCachedData((draft) => {
             const idx = draft.items.findIndex((m) => m.id === updatedMessage.id)
 
@@ -94,7 +88,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
       },
     }),
 
-    getOlderMessages: builder.query<ChatMessagesResponse, ChatMessagesRequest>({
+    getOlderMessages: builder.query<MessageResponse, MessageRequest>({
       query: ({ dialoguePartnerId, cursor, pageSize = 12 }) => ({
         url: `/messenger/${dialoguePartnerId}`,
         params: cursor ? { cursor, pageSize } : { pageSize },
@@ -121,22 +115,6 @@ export const messengerApi = joyfyApi.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg?.cursor !== previousArg?.cursor
       },
-      // transformResponse: (response: ChatMessagesResponse)=> ({
-      //   ...response,
-      //   items: response.items.reverse()
-      // })
-      // serializeQueryArgs: ({ endpointName }) => endpointName,
-      // merge: (currentCache, newData) => {
-      //   const newItems = newData.items.filter((msg) => !currentCache.items.some((existing) => existing.id === msg.id))
-      //   currentCache.items = [...newItems.reverse(), ...currentCache.items]
-      //   currentCache.totalCount = newData.totalCount
-      //   currentCache.notReadCount = newData.notReadCount
-      //   currentCache.pageSize = newData.pageSize
-      // },
-
-      // forceRefetch({ currentArg, previousArg }) {
-      //   return currentArg?.cursor !== previousArg?.cursor
-      // },
     }),
 
     deleteMessage: builder.mutation<void, { messageId: number; dialoguePartnerId: string }>({
