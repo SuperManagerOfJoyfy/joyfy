@@ -13,19 +13,33 @@ type Props = {
   className?: string
 }
 
-export const UserPickerList = ({ users, onUserSelect, hasMore, handleFetchMore, searchValue, className }: Props) => {
+export const UserPickerList = ({
+  users,
+  onUserSelect,
+  hasMore,
+  handleFetchMore,
+  searchValue,
+  className,
+  isFetching,
+}: Props) => {
   return (
     <div className={clsx(s.usersPickerList, className)}>
-      {users.length > 0
-        ? users.map((u) => {
-            const user = { id: u.id, userName: u.userName, avatar: u.avatars?.[0]?.url || '' }
-            return (
-              <div key={u.id} className={s.userItem} onClick={() => onUserSelect(u)}>
-                <UserCard user={user} />
-              </div>
-            )
-          })
-        : searchValue.trim() !== '' && <Typography>No users found</Typography>}
+      {!users.length && !isFetching && searchValue.trim() !== '' ? (
+        <Typography>No users found</Typography>
+      ) : (
+        users.map((u) => {
+          const user = {
+            id: u.id,
+            userName: u.userName,
+            avatar: u.avatars?.[0]?.url || '',
+          }
+          return (
+            <div key={u.id} className={s.userItem} onClick={() => onUserSelect(u)}>
+              <UserCard user={user} />
+            </div>
+          )
+        })
+      )}
       <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching />
     </div>
   )
