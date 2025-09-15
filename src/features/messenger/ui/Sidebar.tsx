@@ -18,7 +18,7 @@ export const Sidebar = () => {
   const router = useRouter()
 
   const handleSelectUser = (user: UserItem) => {
-    router.push(`/messenger/${user.id}`)
+    router.push(`${PATH.USER.MESSENGER}/${user.id}`)
     clearSearch()
     setPickerOpen(false)
   }

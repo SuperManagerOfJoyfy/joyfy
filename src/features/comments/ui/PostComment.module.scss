@@ -4,19 +4,26 @@
   align-items: center;
   flex-shrink: 0;
   overflow: hidden;
-  padding: 4px 0 4px 12px;
-  justify-content: space-between;
+  padding-top: 6px;
+  padding-left: 2px;
 
-  .commentInput {
-    width: 350px;
+  .inputWrapper {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
     border: none;
     background-color: transparent;
-    font-size: var(--font-size-s);
-    line-height: 1.4;
 
     &:hover,
-    &:focus {
+    &:focus-within {
       background-color: transparent;
+      border: none;
+    }
+
+    .commentInput {
+      background-color: transparent;
+      font-size: var(--font-size-s);
+      line-height: 1.4;
     }
   }
 }

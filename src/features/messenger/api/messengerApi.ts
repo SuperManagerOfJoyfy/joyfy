@@ -1,10 +1,11 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
 import {
-  BaseMessage,
-  ChatMessagesRequest,
-  ChatMessagesResponse,
-  MessageItemByUser,
+  ChatResponse,
+  MessageRequest,
+  MessageResponse,
+  MessageItem,
   MessageStatus,
+  ChatItem,
 } from './messengerApi.types'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
@@ -14,20 +15,67 @@ import { store } from '@/app/store/store'
 export const messengerApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getChatList: builder.query<BaseMessage, void>({
-      query: () => ({
+    // getChatList: builder.query<ChatResponse, void>({
+    //   query: () => ({
+    //     url: '/messenger',
+    //   }),
+    //   providesTags: ['ChatList'],
+    // }),
+
+    getChatList: builder.query<ChatResponse, { cursor?: number; pageSize?: number }>({
+      query: ({ cursor, pageSize = 12 } = {}) => ({
         url: '/messenger',
+        params: cursor ? { cursor, pageSize } : { pageSize },
       }),
       providesTags: ['ChatList'],
+
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+
+      merge: (currentCache, newData) => {
+        // Map key: conversationKey
+        const chatMap = new Map<string, ChatItem>()
+
+        // Helper to get a unique key for a conversation
+        const getConversationKey = (chat: ChatItem) =>
+          [Math.min(chat.ownerId, chat.receiverId), Math.max(chat.ownerId, chat.receiverId)].join('-')
+
+        // Add existing chats
+        currentCache.items.forEach((chat) => {
+          const key = getConversationKey(chat)
+
+          if (!chatMap.has(key) || new Date(chat.updatedAt) > new Date(chatMap.get(key)!.updatedAt)) {
+            chatMap.set(key, chat)
+          }
+        })
+
+        // Add/replace with new chats if newer
+        newData.items.forEach((newChat) => {
+          const key = getConversationKey(newChat)
+          if (!chatMap.has(key) || new Date(newChat.updatedAt) > new Date(chatMap.get(key)!.updatedAt)) {
+            chatMap.set(key, newChat)
+          }
+        })
+
+        // Convert back to array and sort by updatedAt descending
+        currentCache.items = Array.from(chatMap.values()).sort(
+          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        )
+        currentCache.totalCount = newData.totalCount
+        currentCache.notReadCount = newData.notReadCount
+        currentCache.pageSize = newData.pageSize
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.cursor !== previousArg?.cursor
+      },
     }),
 
-    getChatMessages: builder.query<ChatMessagesResponse, string>({
+    getChatMessages: builder.query<MessageResponse, string>({
       query: (dialoguePartnerId) => ({
         url: `/messenger/${dialoguePartnerId}`,
         invalidatesTags: ['ChatList'],
       }),
       // display latest messages last
-      transformResponse: (response: ChatMessagesResponse) => ({
+      transformResponse: (response: MessageResponse) => ({
         ...response,
         items: response.items.reverse(),
       }),
@@ -42,7 +90,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
 
         await cacheDataLoaded
 
-        const handleReceiveMessage = (message: MessageItemByUser) => {
+        const handleReceiveMessage = (message: MessageItem) => {
           updateCachedData((draft) => {
             const idx = draft.items.findIndex((m) => m.id === message.id)
             const isCurrentChat =
@@ -73,7 +121,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
           })
         }
 
-        const handleUpdateMessage = (updatedMessage: MessageItemByUser) => {
+        const handleUpdateMessage = (updatedMessage: MessageItem) => {
           updateCachedData((draft) => {
             const idx = draft.items.findIndex((m) => m.id === updatedMessage.id)
 
@@ -94,7 +142,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
       },
     }),
 
-    getOlderMessages: builder.query<ChatMessagesResponse, ChatMessagesRequest>({
+    getOlderMessages: builder.query<MessageResponse, MessageRequest>({
       query: ({ dialoguePartnerId, cursor, pageSize = 12 }) => ({
         url: `/messenger/${dialoguePartnerId}`,
         params: cursor ? { cursor, pageSize } : { pageSize },
@@ -121,22 +169,6 @@ export const messengerApi = joyfyApi.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg?.cursor !== previousArg?.cursor
       },
-      // transformResponse: (response: ChatMessagesResponse)=> ({
-      //   ...response,
-      //   items: response.items.reverse()
-      // })
-      // serializeQueryArgs: ({ endpointName }) => endpointName,
-      // merge: (currentCache, newData) => {
-      //   const newItems = newData.items.filter((msg) => !currentCache.items.some((existing) => existing.id === msg.id))
-      //   currentCache.items = [...newItems.reverse(), ...currentCache.items]
-      //   currentCache.totalCount = newData.totalCount
-      //   currentCache.notReadCount = newData.notReadCount
-      //   currentCache.pageSize = newData.pageSize
-      // },
-
-      // forceRefetch({ currentArg, previousArg }) {
-      //   return currentArg?.cursor !== previousArg?.cursor
-      // },
     }),
 
     deleteMessage: builder.mutation<void, { messageId: number; dialoguePartnerId: string }>({
@@ -163,7 +195,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
 
           if (remainingItems.length === 0) {
             dispatch(
-              messengerApi.util.updateQueryData('getChatList', undefined, (chatDraft) => {
+              messengerApi.util.updateQueryData('getChatList', { cursor: undefined }, (chatDraft) => {
                 chatDraft.items = chatDraft.items.filter(
                   (m) => m.ownerId !== +dialoguePartnerId && m.receiverId !== +dialoguePartnerId
                 )
@@ -211,4 +243,5 @@ export const {
   useDeleteMessageMutation,
   useUpdateMessageStatusMutation,
   useLazyGetOlderMessagesQuery,
+  useLazyGetChatListQuery,
 } = messengerApi
