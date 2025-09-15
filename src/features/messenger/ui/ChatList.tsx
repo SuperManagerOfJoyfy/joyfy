@@ -1,21 +1,39 @@
 'use client'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
-import { Loader, Scroll } from '@/shared/ui'
+import { LazyLoader, Loader, Scroll } from '@/shared/ui'
 import { useParams, useRouter } from 'next/navigation'
-import { useGetChatListQuery } from '../api'
+import { useGetChatListQuery, useLazyGetChatListQuery } from '../api'
 
 import { PATH } from '@/shared/config/routes'
 import { ChatItem } from './ChatItem'
+import { useCallback } from 'react'
 
 export const ChatList = () => {
-  const { data: chatList, isLoading } = useGetChatListQuery()
-
   const { data: currentUser } = useGetMeQuery()
+  const { data: chatData, isLoading } = useGetChatListQuery({ cursor: undefined })
+  const [fetchMoreChats, { isFetching: isLoadingMore }] = useLazyGetChatListQuery()
 
   const router = useRouter()
   const params = useParams()
   const rawSelectedId = params?.dialoguePartnerId
   const selectedId = Array.isArray(rawSelectedId) ? rawSelectedId[0] : rawSelectedId
+
+  const chatList = chatData?.items || []
+  const hasMore = chatData ? chatList.length < chatData.totalCount : false
+
+  const handleFetchMore = useCallback(async () => {
+    if (isLoadingMore) return
+    const lastId = chatList.at(-1)?.id
+
+    if (lastId) {
+      try {
+        const res = await fetchMoreChats({ cursor: lastId }).unwrap()
+        console.log('fetched more', res)
+      } catch (err) {
+        console.error('Error loading more notifications:', err)
+      }
+    }
+  }, [chatList, fetchMoreChats])
 
   const handleSelect = (dialoguePartnerId: number) => {
     const idStr = dialoguePartnerId.toString()
@@ -27,7 +45,7 @@ export const ChatList = () => {
       {isLoading ? (
         <Loader reduced />
       ) : (
-        chatList?.items.map((chat) => (
+        chatList.map((chat) => (
           <ChatItem
             key={chat.id}
             chat={chat}
@@ -37,6 +55,7 @@ export const ChatList = () => {
           />
         ))
       )}
+      <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching />
     </Scroll>
   )
 }
