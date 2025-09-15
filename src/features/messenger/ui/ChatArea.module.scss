@@ -15,25 +15,25 @@
 
 .chatBody {
   flex: 1 1 auto;
-  min-height: 0;
-  height: 100%;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   padding: 12px;
-  border-radius: 0;
+  height: 100%;
+}
+
+.noMessages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.scrollArea {
+  height: 100%;
+  width: 100%;
 }
 
 .chatFooter {
   border-top: 1px solid var(--color-dark-300);
-}
-.noMessages {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.scrollArea {
-  height: 100%;
-  width: 100%;
 }

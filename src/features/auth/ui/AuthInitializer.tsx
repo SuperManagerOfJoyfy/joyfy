@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useAppDispatch } from '@/app/store/store'
-import { clearToken, setCurrentUser, setToken } from '../model/authSlice'
+import { closeSocket } from '@/shared/config/socket'
 import LocalStorage from '@/shared/utils/localStorage/localStorage'
+import { useEffect } from 'react'
 import { authApi } from '../api/authApi'
-import { closeSocket, connectSocket } from '@/shared/config/socket'
+import { clearToken, setCurrentUser, setToken } from '../model/authSlice'
 
 export const AuthInitializer = () => {
   const dispatch = useAppDispatch()
