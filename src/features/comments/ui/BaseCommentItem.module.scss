@@ -1,4 +1,4 @@
-@import 'src/features/comments/styles/commentStyles.scss';
+@use 'src/features/comments/styles/commentStyles.scss' as *;
 
 .commentContent {
   max-width: 100%;
@@ -15,19 +15,19 @@
 }
 
 .likeButton {
-  @extend .likeButton;
+  @extend %likeButton;
 }
 
 .heartIcon {
-  @extend .heartIcon;
+  @extend %heartIcon;
 }
 
 .replyButton {
-  @extend .replyButton;
+  @extend %replyButton;
 }
 
 .metaInfo {
-  @extend .sharedMetaStyles;
+  @extend %sharedMetaStyles;
 }
 
 .likes {

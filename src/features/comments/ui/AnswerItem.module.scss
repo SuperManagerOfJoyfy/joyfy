@@ -1,4 +1,4 @@
-@import 'src/features/comments/styles/commentStyles.scss';
+@use 'src/features/comments/styles/commentStyles.scss' as *;
 
 .answerWrapper {
   display: flex;
@@ -15,7 +15,7 @@
 }
 
 .answerMeta {
-  @extend .sharedMetaStyles;
+  @extend %sharedMetaStyles;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -24,9 +24,9 @@
 }
 
 .replyForm {
-  @extend .replyForm;
+  @extend %replyForm;
 }
 
 .replyActions {
-  @extend .replyActions;
+  @extend %replyActions;
 }
