@@ -56,10 +56,10 @@ export const ReplyForm = ({ postId, commentId, onCancel, className, actionsClass
         disabled={isSubmitting}
       />
       <div className={actionsClassName}>
-        <Button variant="text" onClick={onCancel} noPadding disabled={isSubmitting}>
+        <Button variant="text" onClick={onCancel} noPadding disabled={isSubmitting} className="replyButton">
           Cancel
         </Button>
-        <Button variant="text" onClick={handleSubmit} disabled={isDisabled} noPadding>
+        <Button variant="text" onClick={handleSubmit} disabled={isDisabled} noPadding className="replyButton">
           {isSubmitting ? 'Publishing...' : 'Publish'}
         </Button>
       </div>

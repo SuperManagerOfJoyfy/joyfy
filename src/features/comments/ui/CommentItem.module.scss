@@ -48,4 +48,8 @@
 
 .replyActions {
   @extend %replyActions;
+  button {
+    @extend %replyButton;
+    color: var(--color-accent-500);
+  }
 }
