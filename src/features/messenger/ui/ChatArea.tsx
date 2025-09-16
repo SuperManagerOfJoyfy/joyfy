@@ -1,20 +1,11 @@
 'use client'
+import { LazyLoader, Loader, Scroll } from '@/shared/ui'
 import { User, UserCard } from '@/shared/ui/userCard'
-import {
-  MessageItemByUser,
-  MessageStatus,
-  useDeleteMessageMutation,
-  useGetChatMessagesQuery,
-  useLazyGetOlderMessagesQuery,
-  useUpdateMessageStatusMutation,
-} from '../api'
-import s from './ChatArea.module.scss'
+import { MessageItem } from '../api'
+import { useMessengerController } from '../hooks/useMessengerController'
 import { InputBox } from './InputBox'
 import { MessageBubble } from './MessageBubble'
-import { LazyLoader, Scroll } from '@/shared/ui'
-import { getSocket } from '@/shared/config/socket'
-import { WS_EVENT_PATH } from '@/shared/constants'
-import { useEffect, useRef } from 'react'
+import s from './ChatArea.module.scss'
 
 type Props = {
   selectedUser: User
@@ -22,55 +13,11 @@ type Props = {
 }
 
 export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
-  const { data: chatMessages, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
-  const [trigger, { data: olderMessages, isFetching: isLoadingMore }] = useLazyGetOlderMessagesQuery()
-  const [deleteMessage] = useDeleteMessageMutation()
-  const [updateMessageStatus] = useUpdateMessageStatusMutation()
-
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [chatMessages?.items?.length])
-
-  useEffect(() => {
-    if (chatMessages?.items) {
-      const unreadMessagesIds = chatMessages.items
-        .filter((m) => m.status !== MessageStatus.READ && m.ownerId === +dialoguePartnerId) // mark messages from other user as read
-        .map((m) => m.id)
-
-      if (unreadMessagesIds.length > 0) {
-        updateMessageStatus({ ids: unreadMessagesIds, dialoguePartnerId })
-      }
-    }
-  }, [chatMessages, dialoguePartnerId, updateMessageStatus])
-
-  const hasMore = chatMessages ? chatMessages.items.length < chatMessages.totalCount : false
-
-  const loadOlder = async () => {
-    if (isLoadingMore) return
-    if (!chatMessages || chatMessages.items.length === 0) return
-
-    const oldestMessagesId = chatMessages.items[0].id
-    await trigger({ dialoguePartnerId, cursor: oldestMessagesId })
-  }
-
-  const handleDelete = async (messageId: number) => {
-    try {
-      await deleteMessage({ messageId, dialoguePartnerId }).unwrap()
-      const socket = getSocket()
-      if (socket) {
-        socket.emit(WS_EVENT_PATH.MESSAGE_DELETED, { messageId })
-      }
-    } catch (error) {
-      console.error('Failed to delete message:', error)
-    }
-  }
+  const { chatMessages, handleDelete, loadOlderMessages, isLoading, hasMore, isLoadingMore, scrollRef } =
+    useMessengerController(dialoguePartnerId)
 
   if (isLoading) {
-    return <div className={s.loading}>Loading messages...</div>
+    return <Loader />
   }
 
   return (
@@ -81,9 +28,9 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
 
       <Scroll className={s.scrollArea} ref={scrollRef}>
         <div className={s.chatBody}>
-          <LazyLoader onLoadMore={loadOlder} hasMore={hasMore} isFetching={isLoadingMore} />
-          {chatMessages?.items.length ? (
-            [...chatMessages.items].map((message: MessageItemByUser) => {
+          <LazyLoader onLoadMore={loadOlderMessages} hasMore={hasMore} isFetching={isLoadingMore} />
+          {chatMessages.length ? (
+            chatMessages.map((message: MessageItem) => {
               const { id, messageText, createdAt, status, updatedAt } = message
               const isSender = message.ownerId !== +dialoguePartnerId
 

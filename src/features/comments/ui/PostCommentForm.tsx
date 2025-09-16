@@ -45,6 +45,7 @@ export const PostCommentForm = ({ postId }: PostCommentFormProps) => {
       <TextArea
         placeholder="Add a Comment..."
         textAreaClassName={s.commentInput}
+        wrapperClassName={s.inputWrapper}
         value={content}
         onChange={(e) => setContent(e.target.value)}
         onKeyPress={handleKeyPress}

@@ -1,13 +1,13 @@
 import { AvatarType } from '@/features/profile/api'
 
-export type BaseMessage = {
+export type ChatResponse = {
   pageSize: number
   totalCount: number
   notReadCount: number
-  items: MessageItem[]
+  items: ChatItem[]
 }
 
-export type MessageItem = {
+export type ChatItem = {
   id: number
   ownerId: number
   receiverId: number
@@ -20,20 +20,20 @@ export type MessageItem = {
   avatars: AvatarType[]
 }
 
-export type ChatMessagesResponse = {
+export type MessageResponse = {
   pageSize: number
   totalCount: number
   notReadCount: number
-  items: MessageItemByUser[]
+  items: MessageItem[]
 }
 
-export type ChatMessagesRequest = {
+export type MessageRequest = {
   dialoguePartnerId: string
   cursor?: number
   pageSize?: number
 }
 
-export type MessageItemByUser = Omit<MessageItem, 'userName' | 'avatars'>
+export type MessageItem = Omit<ChatItem, 'userName' | 'avatars'>
 
 export enum MessageStatus {
   SENT = 'SENT',

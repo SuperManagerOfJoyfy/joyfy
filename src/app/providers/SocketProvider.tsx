@@ -1,11 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
 import { selectToken } from '@/features/auth/model/authSlice'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 import { closeSocket, connectSocket } from '@/shared/config/socket'
-import LocalStorage from '@/shared/utils/localStorage/localStorage'
 
 export const SocketProvider = () => {
   const token = useSelector(selectToken)

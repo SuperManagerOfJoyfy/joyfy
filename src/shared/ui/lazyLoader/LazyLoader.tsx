@@ -30,7 +30,7 @@ export const LazyLoader = ({ onLoadMore, hasMore, isFetching }: Props) => {
   return (
     <>
       <div ref={loaderRef} style={{ height: 1 }} className={s.loader} />
-      <div> {hasMore && isFetching ? <Loader reduced /> : null}</div>
+      {hasMore && isFetching ? <Loader reduced /> : null}
     </>
   )
 }
