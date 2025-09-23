@@ -7,6 +7,7 @@ import { useGetChatListQuery, useLazyGetChatListQuery } from '../api'
 import { PATH } from '@/shared/config/routes'
 import { ChatItem } from './ChatItem'
 import { useCallback } from 'react'
+import s from './Sidebar.module.scss'
 
 export const ChatList = () => {
   const { data: currentUser } = useGetMeQuery()
@@ -43,7 +44,7 @@ export const ChatList = () => {
   return (
     <Scroll>
       {isLoading ? (
-        <Loader reduced />
+        <Loader reduced className={s.loader} />
       ) : (
         chatList.map((chat) => (
           <ChatItem
@@ -55,7 +56,7 @@ export const ChatList = () => {
           />
         ))
       )}
-      <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching />
+      <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching={isLoadingMore} />
     </Scroll>
   )
 }

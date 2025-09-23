@@ -28,7 +28,8 @@
 }
 
 .inline,
-.stacked {
+.stacked,
+.withDate {
   align-items: flex-start;
 
   .userName {
@@ -38,7 +39,8 @@
   }
 }
 
-.stacked .textBlock {
+.stacked .textBlock,
+.withDate .textBlock {
   display: flex;
   flex-direction: column;
 }
