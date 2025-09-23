@@ -8,12 +8,13 @@ type LoaderProps = {
   fullScreen?: boolean
   reduced?: boolean
   embedded?: boolean
+  className?: string
 }
 
-export const Loader = ({ message = '', fullScreen = true, reduced, embedded }: LoaderProps) => {
+export const Loader = ({ message = '', fullScreen = true, reduced, embedded, className }: LoaderProps) => {
   return (
     <div className={fullScreen ? s.fullscreen : s.inline} role="status" aria-busy="true">
-      <div className={clsx(s.loaderWrapper, reduced && s.reduced, embedded && s.embedded)}>
+      <div className={clsx(s.loaderWrapper, reduced && s.reduced, embedded && s.embedded, className)}>
         <svg className={s.loaderSvg} viewBox="0 0 50 50">
           <defs>
             <linearGradient id="loaderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
