@@ -1,0 +1,53 @@
+{
+  "header": {
+    "login": "Log in",
+    "signup": "Sign up",
+    "chooseLanguage": "Choose language"
+  },
+  "sidebar": {
+    "home": "Home",
+    "create": "Create",
+    "myProfile": "My Profile",
+    "messenger": "Messenger",
+    "search": "Search",
+    "statistics": "Statistics",
+    "favorites": "Favorites",
+    "logout": "Log Out",
+    "usersList": "Users list",
+    "paymentsList": "Payments list",
+    "postsList": "Posts list"
+  },
+  "languages": {
+    "english": "English",
+    "russian": "Russian"
+  },
+  "auth": {
+    "signup": {
+      "title": "Sign Up",
+      "button": "Sign Up",
+      "footerQuestion": "Do you have an account?",
+      "footerLink": "Sign In",
+      "fields": {
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirmation": "Confirm password",
+        "agreePrefix": "I agree to the",
+        "terms": "Terms of Service",
+        "and": "and",
+        "privacy": "Privacy Policy"
+      }
+    },
+    "login": {
+      "title": "Sign In",
+      "button": "Sign In",
+      "fields": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "forgotPassword": "Forgot Password",
+      "footerQuestion": "Don't have an account?",
+      "footerLink": "Sign Up"
+    }
+  }
+}

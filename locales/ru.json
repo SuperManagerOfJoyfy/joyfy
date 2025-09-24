@@ -1,0 +1,53 @@
+{
+  "header": {
+    "login": "Войти",
+    "signup": "Регистрация",
+    "chooseLanguage": "Выберите язык"
+  },
+  "sidebar": {
+    "home": "Главная",
+    "create": "Создать",
+    "myProfile": "Мой профиль",
+    "messenger": "Сообщения",
+    "search": "Поиск",
+    "statistics": "Статистика",
+    "favorites": "Избранное",
+    "logout": "Выйти",
+    "usersList": "Список пользователей",
+    "paymentsList": "Список платежей",
+    "postsList": "Список постов"
+  },
+  "languages": {
+    "english": "Английский",
+    "russian": "Русский"
+  },
+  "auth": {
+    "signup": {
+      "title": "Регистрация",
+      "button": "Зарегистрироваться",
+      "footerQuestion": "У вас уже есть аккаунт?",
+      "footerLink": "Войти",
+      "fields": {
+        "username": "Имя пользователя",
+        "email": "Электронная почта",
+        "password": "Пароль",
+        "passwordConfirmation": "Подтвердите пароль",
+        "agreePrefix": "Я соглашаюсь с",
+        "terms": "Правилами использования",
+        "and": "и",
+        "privacy": "Политикой конфиденциальности"
+      }
+    },
+    "login": {
+      "title": "Войти",
+      "button": "Войти",
+      "fields": {
+        "email": "Электронная почта",
+        "password": "Пароль"
+      },
+      "forgotPassword": "Забыли пароль?",
+      "footerQuestion": "У вас нет аккаунта?",
+      "footerLink": "Регистрация"
+    }
+  }
+}
