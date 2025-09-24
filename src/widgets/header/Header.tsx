@@ -7,12 +7,13 @@ import { useEffect, useState } from 'react'
 
 import { NotificationsPopover } from '@/features/notifications/ui/NotificationsPopover'
 import { PATH } from '@/shared/config/routes'
-import { Button, SelectBox, SelectItem } from '@/shared/ui'
+import { Button, SelectBox, SelectItem, UserCard } from '@/shared/ui'
 import Letters from '../../../public/logo/letters.png'
 import Logo from '../../../public/logo/logo.png'
 import flagRussia from './assets/flagRussia.png'
 import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import s from './Header.module.scss'
+import { useGetUserProfileQuery } from '@/features/profile/api'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -38,14 +39,24 @@ const AuthActions = () => (
 )
 
 export const Header = () => {
-  const { data: user, isLoading } = useGetMeQuery()
+  const { data: me, isLoading: isMeLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
+  const { data: profile, isLoading: isProfileLoading } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
 
   useEffect(() => {
-    if (!isLoading) {
-      setShowButtons(!user)
+    if (!isMeLoading) {
+      setShowButtons(!me)
     }
-  }, [isLoading, user])
+  }, [isMeLoading, me])
+
+  const currentUser =
+    me && profile
+      ? {
+          id: me.userId,
+          userName: me.userName,
+          avatar: profile.avatars?.[0]?.url ?? '',
+        }
+      : null
 
   return (
     <header className={s.header}>
@@ -55,7 +66,8 @@ export const Header = () => {
           <Image src={Letters} alt="logo" height={20} />
         </Link>
         <div className={s.actions}>
-          <div className={s.notificationContainer}>{user && <NotificationsPopover />}</div>
+          {currentUser && <UserCard user={currentUser} />}
+          <div className={s.notificationContainer}>{me && <NotificationsPopover />}</div>
 
           <SelectBox className={s.selector} placeholder="Choose language">
             <SelectItem value="English">
@@ -66,7 +78,7 @@ export const Header = () => {
             </SelectItem>
           </SelectBox>
 
-          <div className={s.authActions}>{showButtons && !user && <AuthActions />}</div>
+          <div className={s.authActions}>{showButtons && !me && <AuthActions />}</div>
         </div>
       </div>
     </header>

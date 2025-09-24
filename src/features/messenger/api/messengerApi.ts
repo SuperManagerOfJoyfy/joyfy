@@ -15,13 +15,6 @@ import { store } from '@/app/store/store'
 export const messengerApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    // getChatList: builder.query<ChatResponse, void>({
-    //   query: () => ({
-    //     url: '/messenger',
-    //   }),
-    //   providesTags: ['ChatList'],
-    // }),
-
     getChatList: builder.query<ChatResponse, { cursor?: number; pageSize?: number }>({
       query: ({ cursor, pageSize = 12 } = {}) => ({
         url: '/messenger',
@@ -86,7 +79,6 @@ export const messengerApi = joyfyApi.injectEndpoints({
         if (!socket) return
 
         const currentUserId = selectCurrentUserId(store.getState())
-        console.log(currentUserId)
 
         await cacheDataLoaded
 
