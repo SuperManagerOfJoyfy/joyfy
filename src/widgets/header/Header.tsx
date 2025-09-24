@@ -14,6 +14,7 @@ import flagRussia from './assets/flagRussia.png'
 import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import s from './Header.module.scss'
 import { useGetUserProfileQuery } from '@/features/profile/api'
+import { useSocket } from '@/shared/config/useSocket'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -41,13 +42,15 @@ const AuthActions = () => (
 export const Header = () => {
   const { data: me, isLoading: isMeLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
-  const { data: profile, isLoading: isProfileLoading } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
+  const { data: profile } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
 
   useEffect(() => {
     if (!isMeLoading) {
       setShowButtons(!me)
     }
   }, [isMeLoading, me])
+
+  useSocket()
 
   const currentUser =
     me && profile
