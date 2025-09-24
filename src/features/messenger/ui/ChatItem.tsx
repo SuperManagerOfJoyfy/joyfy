@@ -29,7 +29,7 @@ export const ChatItem = ({ chat, currentUser, selectedId, onSelect }: Props) => 
       className={clsx(s.chatItem, selectedId === chat.receiverId.toString() && s.selected)}
       onClick={() => onSelect(dialoguePartnerId)}
     >
-      <UserCard layout="stacked" user={user} date={chat.createdAt}>
+      <UserCard layout="withDate" user={user} date={chat.createdAt}>
         {displayText}
       </UserCard>
     </li>

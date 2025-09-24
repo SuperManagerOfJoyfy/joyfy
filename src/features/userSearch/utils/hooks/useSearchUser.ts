@@ -1,4 +1,3 @@
-import { useAppDispatch } from '@/app/store/store'
 import { useLazySearchUserByNameQuery } from '@/features/userSearch/api/usersApi'
 import { useDebounce } from '@/shared/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
