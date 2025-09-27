@@ -1,7 +1,7 @@
 import React from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import { IoCheckmarkDoneOutline, IoNotificationsOutline } from 'react-icons/io5'
-import { ArrowIcon, Button, LazyLoader, Loader, Scroll, Separator, Typography } from '@/shared/ui'
+import { ArrowIcon, Button, LazyLoader, Scroll, Separator, Typography } from '@/shared/ui'
 import { useNotificationsController } from '../hooks'
 import { NotificationItem } from './NotificationItem'
 

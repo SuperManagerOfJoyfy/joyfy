@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useRef, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { IoMicOutline } from 'react-icons/io5'
 import { PiImageSquare } from 'react-icons/pi'
 import { Button, TextArea } from '@/shared/ui'
