@@ -1,12 +1,13 @@
 'use client'
-import { UserItem } from '@/features/userSearch/api/usersApi.types'
-import { useSearchUser } from '@/features/userSearch/utils/hooks/useSearchUser'
-import { PATH } from '@/shared/config/routes'
+
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { UserPickerList } from '@/features/userSearch/ui/usersList/UserPickerList'
+import { UserItem } from '@/features/userSearch/api'
+import { TextField, UserCard } from '@/shared/ui'
 import { ChatList } from './ChatList'
-import { TextField } from '@/shared/ui'
+import { BaseUserList } from '@/features/userSearch/ui'
+import { useSearchUser } from '@/features/userSearch/utils/hooks'
+import { PATH } from '@/shared/config/routes'
 import s from './Sidebar.module.scss'
 
 export const Sidebar = () => {
@@ -22,6 +23,9 @@ export const Sidebar = () => {
     clearSearch()
     setPickerOpen(false)
   }
+
+  const searching = searchValue.trim() !== ''
+
   return (
     <aside className={s.sidebar}>
       <div className={s.searchBox}>
@@ -33,18 +37,31 @@ export const Sidebar = () => {
           isLoading={isFetching}
         />
       </div>
-      {searchValue.trim() !== '' && (
-        <UserPickerList
-          users={users}
-          searchValue={searchValue}
-          isFetching={isFetching}
-          handleFetchMore={handleFetchMore}
-          hasMore={hasMore}
-          onUserSelect={handleSelectUser}
-          className={s.usersPickerList}
-        />
-      )}
-      <ChatList />
+
+      <div className={s.body}>
+        {searching ? (
+          <BaseUserList
+            className={s.usersList}
+            users={users}
+            searchValue={searchValue}
+            isFetching={isFetching}
+            onLoadMore={handleFetchMore}
+            hasMore={hasMore}
+            onSelect={handleSelectUser}
+            renderUser={(u) => (
+              <UserCard
+                layout="stacked"
+                className={s.userCard}
+                user={{ id: u.id, userName: u.userName, avatar: u.avatars?.[0]?.url || '' }}
+              >
+                {`${u.firstName || ''} ${u.lastName || ''}`}
+              </UserCard>
+            )}
+          />
+        ) : (
+          <ChatList />
+        )}
+      </div>
     </aside>
   )
 }

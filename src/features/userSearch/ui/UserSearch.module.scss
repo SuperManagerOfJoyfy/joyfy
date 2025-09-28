@@ -1,5 +1,13 @@
+.userSearch {
+  display: flex;
+  margin-top: 12px;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+}
+
 .usersList {
-  margin-top: 24px;
+  padding: 24px 0 12px 12px;
 }
 
 .user {
@@ -41,4 +49,5 @@
   & > p {
     margin-bottom: 18px;
   }
+  padding-left: 6px;
 }

@@ -1,7 +1,7 @@
-import { AvatarUser } from '@/entities/user/types/userTypes'
 import { AvatarGroup, Typography } from '@/shared/ui'
 import s from './PostLikes.module.scss'
 import clsx from 'clsx'
+import { AvatarUser } from '@/shared/ui/userCard'
 
 type Props = {
   users: AvatarUser[]

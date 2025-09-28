@@ -2,7 +2,7 @@
 
 import { DateStamp, Typography } from '@/shared/ui'
 import { RiDeleteBin6Line } from 'react-icons/ri'
-import { NotificationItemType } from '../api/notificationsApi.types'
+import { NotificationItemType } from '@/features/notifications/api'
 
 import s from './Notification.module.scss'
 

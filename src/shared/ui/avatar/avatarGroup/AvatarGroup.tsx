@@ -1,7 +1,6 @@
 import { Avatar } from '@/shared/ui'
-
 import s from './AvatarGroup.module.scss'
-import { AvatarUser } from '@/entities/user/types/userTypes'
+import { AvatarUser } from '@/shared/ui/userCard'
 
 type Props = {
   users: AvatarUser[]
