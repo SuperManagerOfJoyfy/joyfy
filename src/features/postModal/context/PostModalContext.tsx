@@ -10,6 +10,9 @@ import { Post } from '@/features/post/types/postTypes'
 import { usePostDropdownMenuActions } from '../hooks'
 import { toast } from 'react-toastify'
 import { extractMessage, isFetchBaseQueryError } from '@/shared/utils/handleErrors/handleErrors'
+import { UserProfileType } from '../ui'
+import { UserProfileWithFollowers } from '@/features/profile/api/profileApi.types'
+import { useGetUserProfileWithFollowersQuery } from '@/features/profile/api/profileApi'
 
 export type ConfirmAction = 'delete' | 'cancelEdit' | null
 
@@ -24,7 +27,7 @@ type PostModalContextValue = {
   isUpdating: boolean
 
   // Data
-  user: MeResponse | undefined
+  me: MeResponse | undefined
   currentPost: Post
   initialPost: Post
   postId: number
@@ -51,7 +54,7 @@ type PostModalContextValue = {
 type PostModalProviderProps = {
   children: ReactNode
   initialPost: Post
-  userId: number
+  userProfile: UserProfileType
 }
 
 const PostModalContext = createContext<PostModalContextValue | null>(null)
@@ -62,7 +65,7 @@ export const usePostModalContext = () => {
   return context
 }
 
-export const PostModalContextProvider = ({ initialPost, userId, children }: PostModalProviderProps) => {
+export const PostModalContextProvider = ({ initialPost, userProfile, children }: PostModalProviderProps) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -75,9 +78,12 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
   const [skipQuery, setSkipQuery] = useState(true)
 
   // Data fetching
-  const { data: user } = useGetMeQuery()
+  const { data: me } = useGetMeQuery()
   const { data: post } = useGetPostByIdQuery(postId, { skip: skipQuery })
   const [editPost, { isLoading: isUpdating }] = useEditPostMutation()
+  const { data: userWithFollowers = {} as UserProfileWithFollowers } = useGetUserProfileWithFollowersQuery(
+    userProfile.userName
+  )
 
   // Initialize post data in cache
   useEffect(() => {
@@ -89,8 +95,8 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
 
   // Derived state
   const currentPost = post || initialPost
-  const isOwnPost = currentPost?.ownerId === user?.userId
-  const isFollowing = false // TODO: Add condition
+  const isOwnPost = currentPost?.ownerId === me?.userId
+  const isFollowing = userWithFollowers.isFollowing
 
   // Basic actions
   const dismissModal = () => {
@@ -101,7 +107,7 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
 
   // Dropdown actions
   const { handleEdit, handleDelete, handleFollowToggle, handleCopyLink } = usePostDropdownMenuActions({
-    userId,
+    userId: userProfile.userId,
     postId: postId || 0,
     ownerId: currentPost?.ownerId ?? 0,
     isFollowing,
@@ -171,7 +177,7 @@ export const PostModalContextProvider = ({ initialPost, userId, children }: Post
     isUpdating,
 
     // Data
-    user,
+    me,
     currentPost,
     postId,
     isOwnPost,
