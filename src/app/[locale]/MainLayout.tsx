@@ -1,16 +1,18 @@
 'use client'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from '@/i18n/navigation'
+import { useSearchParams } from 'next/navigation'
 
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { LogoutModal } from '@/features/auth/ui'
 import { PATH } from '@/shared/config/routes'
 import { createSidebarItems, Header, Sidebar } from '@/widgets'
-
-import s from '../styles/layout.module.scss'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { Loader } from '@/shared/ui'
 import { CreatePost } from '@/features/post/ui'
+import { useTranslations } from 'next-intl'
+
+import s from '../../styles/layout.module.scss'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -28,23 +30,29 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [isAppInitialized, setIsAppInitialized] = useState(false)
 
   const onOpenLogoutModalHandler = (value = true) => setIsModalOpen(value)
+  const tSidebar = useTranslations('sidebar')
 
   const sidebarItems = useMemo(
     () =>
-      createSidebarItems('user', user?.userId, {
-        onOpenLogoutModalHandler,
-        onCreatePost: () => {
-          const current = new URLSearchParams(searchParams.toString())
-          current.set('action', 'create')
-          window.history.pushState(null, '', `?${current.toString()}`)
+      createSidebarItems(
+        'user',
+        user?.userId,
+        {
+          onOpenLogoutModalHandler,
+          onCreatePost: () => {
+            const current = new URLSearchParams(searchParams.toString())
+            current.set('action', 'create')
+            window.history.pushState(null, '', `?${current.toString()}`)
+          },
         },
-      }),
-    [onOpenLogoutModalHandler, user?.userId, pathname, router, searchParams]
+        tSidebar
+      ),
+    [onOpenLogoutModalHandler, user?.userId, pathname, router, searchParams, tSidebar]
   )
 
   const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
   const showLoader = pendingPath && pathname !== pendingPath
-  const hideHeader = pathname === PATH.AUTH.GOOGLE
+  const hideHeader = pathname.includes('/auth/google')
 
   useEffect(() => {
     if (pathname === pendingPath) {
@@ -76,7 +84,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
               items={sidebarItems}
               activePath={pendingPath || fullPath}
               onItemClick={(item) => {
-                if (item.path) setPendingPath(item.path)
+                if (item.path) {
+                  router.push(item.path)
+                }
               }}
             />
             <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} email={user?.email} />

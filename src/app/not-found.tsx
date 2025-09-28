@@ -5,8 +5,11 @@ import { Button, Typography } from '@/shared/ui'
 import { PATH } from '@/shared/config/routes'
 
 import s from '../styles/notFound.module.scss'
+import { useTranslations } from 'next-intl'
 
 export default function NotFound() {
+  const t = useTranslations('notFound')
+
   return (
     <div className={s.container}>
       <svg width="0" height="0" className={s.svg}>
@@ -28,15 +31,13 @@ export default function NotFound() {
         </div>
 
         <Typography variant="h2" className={s.subtitle}>
-          Page Not Found
+          {t('title')}
         </Typography>
 
-        <Typography className={s.description}>
-          Oops! The page you're looking for doesn't exist or has been moved.
-        </Typography>
+        <Typography className={s.description}>{t('description')}</Typography>
 
         <Button as={Link} href={PATH.ROOT} className={s.button}>
-          Go to Homepage
+          {t('button')}
         </Button>
       </div>
     </div>

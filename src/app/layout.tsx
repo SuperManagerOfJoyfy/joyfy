@@ -1,40 +1,28 @@
-import { Metadata } from 'next'
-import { ReactNode, Suspense } from 'react'
+import type { ReactNode } from 'react'
 
-import { ReduxProvider } from './providers/ReduxProvider'
-import MainLayout from './MainLayout'
-import { Loader, ToastSnackbar } from '@/shared/ui'
-
-import 'react-toastify/dist/ReactToastify.css'
-import '@/styles/globals.css'
-import { SocketProvider } from './providers/SocketProvider'
-import { AuthInitializer } from '@/features/auth/ui/AuthInitializer'
-
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Joyfy',
   description: 'Platform for sharing and discovering visual stories',
-  icons: {
-    icon: '/fav.svg',
-  },
+  icons: { icon: '/fav.svg' },
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+type RootLayoutProps = {
   children: ReactNode
-}>) {
+  params?: Promise<{ locale?: string }>
+}
+
+export default async function RootLayout({ children, params }: RootLayoutProps) {
+  let locale = 'en'
+  if (params) {
+    try {
+      const resolvedParams = await params
+      locale = resolvedParams.locale || 'en'
+    } catch {}
+  }
+
   return (
-    <html lang="en">
-      <body>
-        <ReduxProvider>
-          <ToastSnackbar />
-          <AuthInitializer />
-          <SocketProvider />
-          <Suspense fallback={<Loader />}>
-            <MainLayout>{children}</MainLayout>
-          </Suspense>
-        </ReduxProvider>
-      </body>
+    <html lang={locale}>
+      <body>{children}</body>
     </html>
   )
 }

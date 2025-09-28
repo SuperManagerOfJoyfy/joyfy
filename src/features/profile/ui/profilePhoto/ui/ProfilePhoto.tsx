@@ -6,8 +6,11 @@ import { IoImageOutline } from 'react-icons/io5'
 import { toast } from 'react-toastify'
 import Image from 'next/image'
 import { AvatarModal } from './avatarModal'
+import { useTranslations } from 'next-intl'
 
 export const ProfilePhoto = () => {
+  const t = useTranslations('profilePhoto')
+
   const [openAddPhotoModal, setOpenAddPhotoModal] = useState(false)
   const [confirmRemoveModalOpen, setConfirmRemoveModalOpen] = useState(false)
   const { data: userData, isLoading: isProfileLoading } = useGetUserProfileQuery()
@@ -20,7 +23,7 @@ export const ProfilePhoto = () => {
   const confirmRemoveAvatar = async () => {
     try {
       await deleteProfileAvatar().unwrap()
-      toast.success('Avatar is successfully deleted')
+      toast.success(t('deleteSuccess'))
     } catch (error) {}
   }
 
@@ -30,7 +33,7 @@ export const ProfilePhoto = () => {
         <div className={s.avatarGroup}>
           {userAvatar ? (
             <>
-              <Image src={userAvatar} width={204} height={204} className={s.avatar} alt="avatar" />
+              <Image src={userAvatar} width={204} height={204} className={s.avatar} alt={t('avatarAlt')} />
               <div className={s.removeButton}>
                 <button disabled={isDeleteLoading} onClick={() => setConfirmRemoveModalOpen(true)}>
                   ✕
@@ -44,15 +47,15 @@ export const ProfilePhoto = () => {
           )}
         </div>
         <Button disabled={isDeleteLoading} variant="outline" onClick={() => setOpenAddPhotoModal(true)}>
-          Add a Profile Photo
+          {t('addButton')}
         </Button>
 
         <AvatarModal open={openAddPhotoModal} onClose={() => setOpenAddPhotoModal(false)} />
       </div>
 
       <ConfirmModal
-        title={'Delete Photo'}
-        description={'Are you sure you want to delete the photo?'}
+        title={t('deleteTitle')}
+        description={t('deleteQuestion')}
         isOpen={confirmRemoveModalOpen}
         setIsOpen={() => setConfirmRemoveModalOpen(false)}
         onConfirm={confirmRemoveAvatar}

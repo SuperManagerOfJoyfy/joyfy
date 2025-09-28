@@ -3,10 +3,10 @@
 import { Login } from '@/features/auth/ui'
 import { useGetMeQuery, useLoginMutation } from '@/features/auth/api/authApi'
 import { LoginFormValues } from '@/features/auth/ui/login'
-import { useRouter } from 'next/navigation'
 import { PATH } from '@/shared/config/routes'
 import { useState } from 'react'
-import { Loader } from '@/shared/ui/loader/Loader'
+import { useRouter } from '@/i18n/navigation'
+import { Loader } from '@/shared/ui'
 
 const Page = () => {
   const [login, { isLoading }] = useLoginMutation()

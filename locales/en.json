@@ -49,5 +49,201 @@
       "footerQuestion": "Don't have an account?",
       "footerLink": "Sign Up"
     }
+  },
+  "dashboard": {
+    "registeredUsers": "Registered users",
+    "showMore": "Show more",
+    "hide": "Hide"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Oops! The page you're looking for doesn't exist or has been moved.",
+    "button": "Go to Homepage"
+  },
+  "verifyEmail": {
+    "title": "Verify Email"
+  },
+  "statistics": {
+    "title": "Statistics Page"
+  },
+  "profileSettings": {
+    "tabs": {
+      "info": "General Information",
+      "devices": "Devices",
+      "management": "Account Management",
+      "payments": "My Payments"
+    }
+  },
+  "profilePhoto": {
+    "addButton": "Add a Profile Photo",
+    "deleteTitle": "Delete Photo",
+    "deleteQuestion": "Are you sure you want to delete the photo?",
+    "deleteSuccess": "Avatar has been deleted",
+    "avatarAlt": "avatar"
+  },
+  "profileInfoForm": {
+    "labels": {
+      "username": "Username",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "dateOfBirth": "Date of Birth",
+      "country": "Select your country",
+      "city": "Select your city",
+      "aboutMe": "About Me"
+    },
+    "errors": {
+      "age13": "You must be at least 13 years old. See our {privacyPolicy}."
+    },
+    "buttons": {
+      "save": "Save changes"
+    },
+    "links": {
+      "privacy": "Privacy Policy"
+    }
+  },
+  "devices": {
+    "currentTitle": "Current device",
+    "terminateOthers": "Terminate all other sessions",
+    "activeTitle": "Active sessions",
+    "toast": {
+      "terminated": "Successfully terminated from all other sessions",
+      "error": "Something went wrong. Please try again."
+    },
+    "emptyOthers": "No other active sessions"
+  },
+  "paymentModal": {
+    "title": "Create payment",
+    "initial": {
+      "text": "Auto-renewal will be enabled with this payment. You can disable it anytime in your profile settings.",
+      "agree": "I agree*",
+      "ok": "OK"
+    },
+    "success": {
+      "text": "Payment was successful!",
+      "button": "Ok"
+    },
+    "error": {
+      "text": "Transaction failed. Please, write to support",
+      "button": "Back to payment"
+    }
+  },
+  "subscriptionCard": {
+    "title": "Current Subscription:",
+    "expire": "Expire at",
+    "nextPayment": "Next payment",
+    "toast": {
+      "cancel": "You successfully cancel auto renewal subscription!",
+      "renew": "You successfully renew auto renewal subscription!"
+    },
+    "autoRenewal": "Auto-Renewal"
+  },
+  "accountTypeSelector": {
+    "title": "Account type:"
+  },
+  "businessSubscription": {
+    "change": "Change your subscription:",
+    "costs": "Your subscription costs:",
+    "or": "Or",
+    "ariaPaypal": "Pay with PayPal",
+    "ariaStripe": "Pay with Stripe"
+  },
+  "myPayments": {
+    "loading": "Loading payments...",
+    "error": "Error loading payments. Please try again.",
+    "empty": "No payments found"
+  },
+  "paymentsTable": {
+    "headers": {
+      "dateOfPayment": "Date of Payment",
+      "endDateOfSubscription": "End date of subscription",
+      "price": "Price",
+      "subscriptionType": "Subscription Type",
+      "paymentType": "Payment Type"
+    }
+  },
+  "pagination": {
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "show": "Show",
+    "onPage": "on page"
+  },
+  "favorites": {
+    "title": "Favorites ({count})",
+    "empty": "No saved posts yet. Start saving posts by clicking the bookmark icon!"
+  },
+  "logoutModal": {
+    "title": "Log Out",
+    "description": "Do you really want to log out of your account?{email}"
+  },
+  "confirm": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "userSearch": {
+    "placeholder": "Search"
+  },
+  "userProfile": {
+    "settings": "Profile Settings",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "sendMessage": "Send Message",
+    "stats": {
+      "following": "Following",
+      "followers": "Followers",
+      "publications": "Publications"
+    },
+    "verifiedAlt": "verified"
+  },
+  "postModal": {
+    "editTitle": "Edit Post"
+  },
+  "postEditForm": {
+    "cancel": "Cancel",
+    "save": "Save Changes"
+  },
+  "createPost": {
+    "upload": {
+      "placeholder": "Drag and drop your image here or click to browse",
+      "dragPlaceholder": "Drop the image here",
+      "primaryButton": "Select from Computer",
+      "openDraft": "Open Draft",
+      "loadingDraft": "Loading Draft..."
+    }
+  },
+  "closePostModal": {
+    "title": "Close",
+    "confirm": "Do you really want to close the creation of a publication?",
+    "warning": "If you close, everything will be deleted.",
+    "buttons": {
+      "discard": "Discard",
+      "discardAria": "Discard the publication creation",
+      "saveDraft": "Save draft",
+      "saveDraftAria": "Save the publication as draft",
+      "saving": "Saving..."
+    }
+  },
+  "messages": {
+    "auth": {
+      "logoutSuccess": "You have been logged out",
+      "logoutError": "JWT accessToken is missing, expired or incorrect"
+    },
+    "post": {
+      "published": "Post successfully published!",
+      "draftSaved": "Draft saved successfully",
+      "draftLoaded": "Draft loaded",
+      "discarded": "Draft discarded"
+    },
+    "profile": {
+      "settingsSuccess": "Your settings are saved",
+      "settingsError": "Error! Server is not available"
+    },
+    "favorites": {
+      "added": "Post added to favorites",
+      "removed": "Post removed from favorites"
+    }
+  },
+  "infoPage": {
+    "backToSignup": "Back to Sign Up",
+    "privacyPolicyTitle": "Privacy Policy"
   }
 }

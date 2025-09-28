@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 import { PATH } from '@/shared/config/routes'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { ProfileSettings } from '@/features/profile/ui'
+import { useRouter } from '@/i18n/navigation'
 
 const SettingsPage = () => {
   const router = useRouter()

@@ -1,12 +1,13 @@
 'use client'
 
 import { PATH } from '@/shared/config/routes'
-import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useLogoutMutation } from '@/features/auth/api/authApi'
 import { MESSAGES } from '@/shared/config/messages'
 import { ConfirmModal } from '@/shared/ui/confirmModal/ConfirmModal'
 import { closeSocket } from '@/shared/config/socket'
+import { useRouter } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   email?: string
@@ -14,6 +15,8 @@ type Props = {
   onOpenLogoutModalHandler: (value: boolean) => void
 }
 export const LogoutModal = ({ open, onOpenLogoutModalHandler, email }: Props) => {
+  const t = useTranslations('logoutModal')
+
   const router = useRouter()
   const [logout] = useLogoutMutation()
 
@@ -33,7 +36,7 @@ export const LogoutModal = ({ open, onOpenLogoutModalHandler, email }: Props) =>
   return (
     <ConfirmModal
       title={'Log Out'}
-      description={`Do you really want to log out of your account? ${email}`}
+      description={t('description', { email: email ? ` ${email}` : '' })}
       isOpen={open}
       setIsOpen={onOpenLogoutModalHandler}
       onConfirm={onLogoutButtonClickHandler}

@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { Button, Checkbox, Modal, Typography } from '@/shared/ui'
 import s from './paymentModal.module.scss'
-import Loading from '@/app/loading'
+import Loading from '@/app/[locale]/loading'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   open: boolean
@@ -13,6 +14,8 @@ type Props = {
 }
 
 export const PaymentModal = ({ open, onOpenChange, handleSubmit, initialStep }: Props) => {
+  const t = useTranslations('paymentModal')
+
   const [step, setStep] = useState<'initial' | 'loading' | 'success' | 'error'>('initial')
   const [agreed, setAgreed] = useState(false)
 
@@ -24,7 +27,6 @@ export const PaymentModal = ({ open, onOpenChange, handleSubmit, initialStep }: 
 
   const handlePayment = async () => {
     setStep('loading')
-
     try {
       await handleSubmit()
     } catch {
@@ -42,19 +44,17 @@ export const PaymentModal = ({ open, onOpenChange, handleSubmit, initialStep }: 
     <Modal
       open={open}
       onOpenChange={initialStep === 'error' || initialStep === 'success' ? handleClose : onOpenChange}
-      title="Create payment"
+      title={t('title')}
     >
       <div className={s.modalWrapper}>
         {step === 'initial' && (
           <>
-            <Typography variant="body1">
-              Auto-renewal will be enabled with this payment. You can disable it anytime in your profile settings.
-            </Typography>
+            <Typography variant="body1">{t('initial.text')}</Typography>
 
             <div className={s.buttonWrapper}>
-              <Checkbox label="I agree*" checked={agreed} onCheckedChange={(agreed) => setAgreed(!!agreed)} />
+              <Checkbox label={t('initial.agree')} checked={agreed} onCheckedChange={(agreed) => setAgreed(!!agreed)} />
               <Button onClick={handlePayment} disabled={!agreed}>
-                OK
+                {t('initial.ok')}
               </Button>
             </div>
           </>
@@ -64,15 +64,15 @@ export const PaymentModal = ({ open, onOpenChange, handleSubmit, initialStep }: 
 
         {step === 'success' && (
           <>
-            <Typography variant="body1">Payment was successful!</Typography>
-            <Button onClick={handleClose}>Ok</Button>
+            <Typography variant="body1">{t('success.text')}</Typography>
+            <Button onClick={handleClose}>{t('success.button')}</Button>
           </>
         )}
 
         {step === 'error' && (
           <>
-            <Typography variant="body1">Transaction failed. Please, write to support</Typography>
-            <Button onClick={handleClose}>Back to payment</Button>
+            <Typography variant="body1">{t('error.text')}</Typography>
+            <Button onClick={handleClose}>{t('error.button')}</Button>
           </>
         )}
       </div>

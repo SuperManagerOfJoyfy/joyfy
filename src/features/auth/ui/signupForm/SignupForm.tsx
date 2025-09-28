@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import Link from 'next/link'
 import { z } from 'zod'
 import { useRegisterMutation } from '@/features/auth/api/authApi'
 import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
@@ -10,12 +9,16 @@ import { Card, Form, Typography } from '@/shared/ui'
 import { SocialLinks } from '../socialLinks'
 import { useSignupFields } from './useSignupFormFields'
 import s from './signupForm.module.scss'
+import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   onSubmitSuccess?: (email: string) => void
 }
 
 export const SignupForm = ({ onSubmitSuccess }: Props) => {
+  const t = useTranslations('auth.signup')
+
   const [isSocialLoading, setIsSocialLoading] = useState(false)
   const [signup, { isLoading }] = useRegisterMutation()
   const disableAll = isSocialLoading || isLoading
@@ -38,13 +41,13 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
   return (
     <Card className={s.card}>
       <Typography as="h1" variant="h1" className={s.title}>
-        Sign Up
+        {t('title')}
       </Typography>
 
       <SocialLinks isDisabled={disableAll} onStartLoading={() => setIsSocialLoading(true)} />
 
       <Form
-        btnText="Sign Up"
+        btnText={t('title')}
         fields={fields}
         schema={SignupSchema}
         onSubmit={handleSignupSubmit}
@@ -52,14 +55,14 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
       />
 
       <div className={s.footer}>
-        <Typography>Do you have an account?</Typography>
+        <Typography>{t('footerQuestion')}</Typography>
         {disableAll ? (
           <span className={`${s.link} ${s.disabledLink}`} aria-disabled="true">
-            Sign In
+            {t('footerLink')}
           </span>
         ) : (
           <Link href={PATH.AUTH.LOGIN} className={s.link}>
-            Sign In
+            {t('footerLink')}
           </Link>
         )}
       </div>

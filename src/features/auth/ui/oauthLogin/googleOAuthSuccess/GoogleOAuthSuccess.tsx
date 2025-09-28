@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { PATH } from '@/shared/config/routes'
 import { useGoogleLoginMutation, useLazyGetMeQuery } from '@/features/auth/api/authApi'
 import { toast } from 'react-toastify'
 import { Loader } from '@/shared/ui/loader/Loader'
+import { useRouter } from '@/i18n/navigation'
 
 export const GoogleOAuthSuccess = () => {
   const router = useRouter()

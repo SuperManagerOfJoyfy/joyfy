@@ -6,7 +6,6 @@ import { Button, Typography } from '@/shared/ui'
 import verifiedBudget from '../../../../../public/verifiedBudget.svg'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { PublicUserProfile, UserProfileWithFollowers } from '@/features/profile/api/profileApi.types'
-import Link from 'next/link'
 import { PATH } from '@/shared/config/routes'
 import { Avatar } from '@/shared/ui/avatar/Avatar'
 import {
@@ -15,6 +14,8 @@ import {
   useUnfollowUserByIdMutation,
 } from '@/features/profile/api'
 import { MeResponse } from '@/features/auth/api/authApi.types'
+import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 type StatItemProps = {
   value: number
@@ -34,6 +35,8 @@ const StatItem = ({ value, label }: StatItemProps) => (
 деструктуризацию userProfile чтобы не было путаницы в нейминге*/
 
 export const UserProfile = (userProfile: PublicUserProfile) => {
+  const t = useTranslations('userProfile')
+
   const { data: me = {} as MeResponse } = useGetMeQuery()
   const { data: user = {} as UserProfileWithFollowers } = useGetUserProfileWithFollowersQuery(userProfile.userName)
   const [followById, { isLoading: followIsLoading }] = useFollowUserByIdMutation()
@@ -62,7 +65,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
           </div>
           {me.userId === userProfile.id && (
             <Button as={Link} href={`${PATH.USER.SETTINGS}?part=info`} variant="secondary">
-              Profile Settings
+              {t('settings')}
             </Button>
           )}
           {me.userId !== userProfile.id && (
@@ -76,7 +79,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
                   }}
                   disabled={unfollowIsLoading}
                 >
-                  Unfollow
+                  {t('unfollow')}
                 </Button>
               ) : (
                 <Button
@@ -87,19 +90,19 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
                   }}
                   disabled={followIsLoading}
                 >
-                  Follow
+                  {t('follow')}
                 </Button>
               )}
               <Button as={Link} href={`${PATH.USER.MESSENGER}/${userProfile.id}`} variant="secondary">
-                Send Message
+                {t('sendMessage')}
               </Button>
             </div>
           )}
         </div>
         <div className={s.profileStats}>
-          <StatItem value={user.followingCount} label="Following" />
-          <StatItem value={user.followersCount} label="Followers" />
-          <StatItem value={user.publicationsCount} label="Publications" />
+          <StatItem value={user.followingCount} label={t('stats.following')} />
+          <StatItem value={user.followersCount} label={t('stats.followers')} />
+          <StatItem value={user.publicationsCount} label={t('stats.publications')} />
         </div>
         <Typography className={s.profileBio}>{bioText}</Typography>
       </div>

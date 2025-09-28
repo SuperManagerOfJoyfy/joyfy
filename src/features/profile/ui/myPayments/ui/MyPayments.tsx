@@ -1,4 +1,7 @@
+'use client'
+
 import { useMemo, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 
 import { Loader, Pagination } from '@/shared/ui'
 import { useGetMyPaymentsQuery } from '@/features/profile/api'
@@ -9,6 +12,7 @@ import { PAGINATION_CONSTANTS } from '../utils'
 import s from './MyPayments.module.scss'
 
 export const MyPayments = () => {
+  const t = useTranslations('myPayments')
   const { data: payments, isLoading, error } = useGetMyPaymentsQuery()
 
   const { currentPage, itemsPerPage, setCurrentPage, setItemsPerPage } = usePaginationTable({
@@ -41,7 +45,7 @@ export const MyPayments = () => {
     return (
       <div className={s.container}>
         <div className={s.loading}>
-          <Loader message="Loading payments..." />
+          <Loader message={t('loading')} />
         </div>
       </div>
     )
@@ -50,7 +54,7 @@ export const MyPayments = () => {
   if (error) {
     return (
       <div className={s.container}>
-        <div className={s.error}>Error loading payments. Please try again.</div>
+        <div className={s.error}>{t('error')}</div>
       </div>
     )
   }
@@ -58,7 +62,7 @@ export const MyPayments = () => {
   if (!paginationData.hasData) {
     return (
       <div className={s.container}>
-        <div className={s.empty}>No payments found</div>
+        <div className={s.empty}>{t('empty')}</div>
       </div>
     )
   }

@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, Checkbox, Typography } from '@/shared/ui'
 import s from './subscriptionCard.module.scss'
 import {
@@ -7,6 +9,7 @@ import {
   useRenewAutoRenewalMutation,
 } from '@/features/profile/api'
 import { toast } from 'react-toastify'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   subscription: CurrentSubscription
@@ -14,6 +17,8 @@ type Props = {
 }
 
 export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => {
+  const t = useTranslations('subscriptionCard')
+
   const [cancelAutoRenewal] = useCancelAutoRenewalMutation()
   const [renewAutoRenewal] = useRenewAutoRenewalMutation()
 
@@ -24,7 +29,7 @@ export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => 
       try {
         await cancelAutoRenewal()
         changeAccountType('Personal')
-        toast.success('You successfully cancel auto renewal subscription!')
+        toast.success(t('toast.cancel'))
       } catch (error: any) {
         toast.error(error)
       }
@@ -32,7 +37,7 @@ export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => 
       try {
         await renewAutoRenewal()
         changeAccountType('Business')
-        toast.success('You successfully renew auto renewal subscription!')
+        toast.success(t('toast.renew'))
       } catch (error: any) {
         toast.error(error)
       }
@@ -42,14 +47,14 @@ export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => 
   return (
     <div>
       <Typography className={s.title} variant="h3">
-        Current Subscription:
+        {t('title')}
       </Typography>
 
       <Card className={s.card}>
         <div className={s.dateWrapper}>
           <div>
             <Typography className={s.label} variant="body2">
-              Expire at
+              {t('expire')}
             </Typography>
 
             <Typography className={s.value} variant="body2" fontWeight="bold">
@@ -59,7 +64,7 @@ export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => 
 
           <div>
             <Typography className={s.label} variant="body2">
-              Next payment
+              {t('nextPayment')}
             </Typography>
 
             {subscription.hasAutoRenewal && (
@@ -75,7 +80,7 @@ export const SubscriptionCard = ({ subscription, changeAccountType }: Props) => 
 
       <Checkbox
         className={s.checkbox}
-        label="Auto-Renewal"
+        label={t('autoRenewal')}
         checked={subscription.hasAutoRenewal}
         onCheckedChange={onCheckedChangeHandler}
       />
