@@ -1,11 +1,11 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
 import {
+  ChatItem,
   ChatResponse,
+  MessageItem,
   MessageRequest,
   MessageResponse,
-  MessageItem,
   MessageStatus,
-  ChatItem,
 } from './messengerApi.types'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
@@ -15,13 +15,6 @@ import { store } from '@/app/store/store'
 export const messengerApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    // getChatList: builder.query<ChatResponse, void>({
-    //   query: () => ({
-    //     url: '/messenger',
-    //   }),
-    //   providesTags: ['ChatList'],
-    // }),
-
     getChatList: builder.query<ChatResponse, { cursor?: number; pageSize?: number }>({
       query: ({ cursor, pageSize = 12 } = {}) => ({
         url: '/messenger',
@@ -86,7 +79,6 @@ export const messengerApi = joyfyApi.injectEndpoints({
         if (!socket) return
 
         const currentUserId = selectCurrentUserId(store.getState())
-        console.log(currentUserId)
 
         await cacheDataLoaded
 
@@ -100,17 +92,12 @@ export const messengerApi = joyfyApi.injectEndpoints({
             if (!isCurrentChat) return
 
             if (idx !== -1) {
-              // Update the message status and other fields if needed
               draft.items[idx] = { ...draft.items[idx], ...message }
             } else {
               // Add new message if not present
               draft.items.push(message)
               draft.totalCount += 1
-
-              // Invalidate ChatList tag to add a new chat after first message is added
-              if (draft.items.length === 1) {
-                store.dispatch(messengerApi.util.invalidateTags(['ChatList']))
-              }
+              store.dispatch(messengerApi.util.invalidateTags(['ChatList']))
             }
           })
         }

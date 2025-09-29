@@ -2,6 +2,7 @@ import pluginJs from '@eslint/js'
 import pluginReact from 'eslint-plugin-react'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+import prettierPlugin from 'eslint-plugin-prettier'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -12,12 +13,13 @@ export default [
   pluginReact.configs.flat.recommended,
   {
     plugins: {
-      prettier: require('eslint-plugin-prettier'), // Плагин для Prettier
+      prettier: prettierPlugin, // Плагин для Prettier
     },
     rules: {
       'prettier/prettier': 'error', // Ошибки при нарушении правил Prettier
       quotes: ['error', 'single'], // Использовать одинарные кавычки
       indent: ['error', 2], // Отступы в 2 пробела
+      'react/react-in-jsx-scope': 'off',
     },
     languageOptions: {
       sourceType: 'module', // Использовать модули (import/export)

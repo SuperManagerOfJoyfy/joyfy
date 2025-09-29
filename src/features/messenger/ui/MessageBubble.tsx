@@ -1,15 +1,18 @@
 'use client'
-import { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import clsx from 'clsx'
 import * as ContextMenu from '@radix-ui/react-context-menu'
-import { IoCheckmarkDone, IoCheckmark } from 'react-icons/io5'
+import { IoCheckmark, IoCheckmarkDone } from 'react-icons/io5'
 import { BiEditAlt, BiTrash } from 'react-icons/bi'
-import { Avatar, Typography } from '@/shared/ui'
+import { Avatar, TextArea, Typography } from '@/shared/ui'
 import { formatChatTimestamp } from '@/shared/utils/dateFunctions'
-import { MessageStatus } from '../api/messengerApi.types'
+import { MessageStatus, messengerApi } from '@/features/messenger/api'
 import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
 import s from './MessageBubble.module.scss'
+import Image from 'next/image'
+import { isValidUrl } from '@/features/messenger/utils'
+import { store } from '@/app/store/store'
 
 type Props = {
   originalMessage: string
@@ -36,25 +39,40 @@ export const MessageBubble = ({
   const [messageText, setMessageText] = useState(originalMessage)
   const [edit, setEdit] = useState(false)
 
-  const handleEditMessage = (id: number, messageText: string) => {
+  let text: string | undefined
+  let imageUrl: string | undefined
+
+  if (messageText.includes('|||')) {
+    const [t, img] = messageText.split('|||')
+    text = t
+    if (isValidUrl(img)) {
+      imageUrl = img
+    }
+  } else if (isValidUrl(messageText)) {
+    imageUrl = messageText
+  } else {
+    text = messageText
+  }
+
+  const handleEditMessage = (id: number, text: string) => {
     const socket = getSocket()
-    if (socket && messageText.trim()) {
+    if (socket && text.trim()) {
       socket.emit(WS_EVENT_PATH.UPDATE_MESSAGE, {
         id,
-        message: messageText,
+        message: text,
       })
     }
   }
 
   const activateEdit = () => {
     setEdit(!edit)
-    handleEditMessage(id, messageText)
+    handleEditMessage(id, text || messageText)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleEditMessage(id, messageText)
+      handleEditMessage(id, text || messageText)
       setEdit(false) // save and exit edit mode
     }
     if (e.key == 'Escape') {
@@ -68,16 +86,19 @@ export const MessageBubble = ({
       {!isSender && <Avatar avatar={avatar} name={userName} size="small" />}
       <div className={clsx(s.bubble, isSender ? s.senderBubble : s.receiverBubble)}>
         {edit ? (
-          <textarea
+          <TextArea
             className={s.editInput}
-            value={messageText}
+            value={text}
             onChange={(e) => setMessageText(e.target.value)}
             onBlur={activateEdit}
             onKeyDown={handleKeyDown}
             autoFocus
           />
         ) : (
-          <Typography variant="body2">{messageText}</Typography>
+          <Fragment>
+            {imageUrl && <Image src={imageUrl} width={360} height={360} alt="image" priority />}
+            {text && <Typography variant="body2">{text}</Typography>}
+          </Fragment>
         )}
 
         <div className={s.footer}>
@@ -92,18 +113,18 @@ export const MessageBubble = ({
       </div>
     </div>
   )
-
-  // Only open context menu if it's own message
+  // Only open context menu if its own message
   if (isSender) {
     return (
       <ContextMenu.Root>
         <ContextMenu.Trigger>{messageContent}</ContextMenu.Trigger>
-
         <ContextMenu.Portal>
           <ContextMenu.Content className={s.contextMenuContent}>
-            <ContextMenu.Item className={s.contextMenuItem} onSelect={activateEdit}>
-              <BiEditAlt /> Edit
-            </ContextMenu.Item>
+            {!imageUrl && (
+              <ContextMenu.Item className={s.contextMenuItem} onSelect={activateEdit}>
+                <BiEditAlt /> Edit
+              </ContextMenu.Item>
+            )}
             <ContextMenu.Item className={s.contextMenuItem} onSelect={() => onDelete(id)}>
               <BiTrash /> Delete
             </ContextMenu.Item>

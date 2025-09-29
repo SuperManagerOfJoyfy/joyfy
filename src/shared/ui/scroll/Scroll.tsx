@@ -1,10 +1,10 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area'
 import clsx from 'clsx'
-import { ComponentPropsWithoutRef, forwardRef } from 'react'
+import { ComponentPropsWithoutRef, forwardRef, ReactNode } from 'react'
 import s from './scroll.module.scss'
 
 type Props = {
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 } & ComponentPropsWithoutRef<typeof ScrollArea.Root>
 
@@ -23,3 +23,4 @@ export const Scroll = forwardRef<HTMLDivElement, Props>(({ children, className }
     </ScrollArea.Root>
   )
 })
+Scroll.displayName = 'Scroll'
