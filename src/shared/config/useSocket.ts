@@ -1,12 +1,10 @@
-'use client'
-
 import { selectToken } from '@/features/auth/model/authSlice'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 import { closeSocket, connectSocket } from '@/shared/config/socket'
 
-export const SocketProvider = () => {
+export const useSocket = () => {
   const token = useSelector(selectToken)
 
   useEffect(() => {
@@ -32,6 +30,4 @@ export const SocketProvider = () => {
       closeSocket()
     }
   }, [token])
-
-  return null
 }
