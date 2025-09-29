@@ -8,12 +8,15 @@ import { BaseUserList } from './BaseUserList'
 import { RecentRequests } from './RecentRequests'
 import { User } from './User'
 import s from './UserSearch.module.scss'
+import { selectCurrentUserId } from '@/features/auth/model/authSlice'
+import { useSelector } from 'react-redux'
 
 export const UserSearch = () => {
+  const userId = useSelector(selectCurrentUserId)
   const { handleChangeValue, handleFetchMore, hasMore, isFetching, searchValue, users } = useSearchUser({
     path: PATH.USER.SEARCH,
   })
-  const { recentRequests, addRequest } = useRecentRequests()
+  const { recentRequests, addRequest } = useRecentRequests(userId)
 
   return (
     <div className={s.userSearch}>

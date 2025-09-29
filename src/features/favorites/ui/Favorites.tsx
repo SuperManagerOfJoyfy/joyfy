@@ -45,7 +45,9 @@ export const Favorites = () => {
         <div className={s.posts}>
           <PostsGrid posts={favoritesPosts} onPostClick={openPostModal} />
 
-          {canShowModal && <PostModal userId={me.userId} initialPost={selectedPost!} />}
+          {canShowModal && (
+            <PostModal userProfile={{ userId: me.userId, userName: me.userName }} initialPost={selectedPost!} />
+          )}
         </div>
       )}
     </>

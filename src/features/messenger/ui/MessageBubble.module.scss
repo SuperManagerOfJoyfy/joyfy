@@ -22,18 +22,69 @@
 }
 
 .bubble {
+  border-radius: 8px;
   max-width: 60%;
   padding: 2px 8px;
-  border-radius: 8px;
   word-break: break-word;
+
+  // Text only messages
+  &.textOnly {
+    &.receiverBubble {
+      background-color: var(--color-dark-300);
+    }
+    &.senderBubble {
+      background-color: var(--color-accent-900);
+    }
+  }
+
+  // Image only messages
+  &.imageOnly {
+    background: none;
+    border-radius: 2px;
+    padding: 0;
+  }
+
+  // Image with text messages
+  &.imageWithText {
+    background: none;
+    border-radius: 2px 2px 8px 8px;
+    padding: 0;
+
+    &.receiverBubble {
+      border: 1px solid var(--color-dark-300);
+    }
+    &.senderBubble {
+      border: 1px solid var(--color-accent-900);
+    }
+  }
 }
 
-.receiverBubble {
-  background: #333333;
+.imageContainer {
+  border-radius: 2px;
+  overflow: hidden;
+
+  .picture {
+    border-radius: inherit;
+    object-fit: cover;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 360px;
+    max-height: 360px;
+  }
 }
 
-.senderBubble {
-  background: #234e99;
+.textContainer {
+  border-radius: 0 0 8px 8px;
+  padding: 4px 8px;
+
+  // Background colors for text containers
+  .receiverBubble & {
+    background-color: var(--color-dark-300);
+  }
+  .senderBubble & {
+    background-color: var(--color-accent-900);
+  }
 }
 
 .footer {
@@ -41,19 +92,45 @@
   align-items: center;
   gap: 4px;
   justify-content: flex-end;
+
+  // Footer for image only messages
+  &.imageOnlyFooter {
+    background: transparent;
+    border-radius: 0 0 2px 2px;
+    margin-top: 0;
+    padding: 4px 8px;
+
+    .timestamp {
+      color: var(--color-light-100);
+    }
+    .statusIcon {
+      color: var(--color-light-100);
+    }
+  }
+
+  // Footer for image with text (no extra styles needed, inherits from textContainer)
+  &.imageWithTextFooter {
+    // Styles are inherited from textContainer background
+  }
+
+  // Footer for text only (default styles apply)
+  &.textOnlyFooter {
+    // Default footer styles apply
+  }
 }
 
 .timestamp {
   display: block;
   font-size: var(--font-size-xs);
   text-align: right;
-}
 
-.receiverTimestamp {
-  color: var(--color-light-900);
-}
-.senderTimestamp {
-  color: var(--color-accent-100);
+  // Color variants
+  .receiver & {
+    color: var(--color-light-900);
+  }
+  .sender & {
+    color: var(--color-accent-100);
+  }
 }
 
 .statusIcon {
@@ -65,7 +142,7 @@
   border: 1px solid var(--color-dark-300);
   border-radius: 6px;
   padding: 4px;
-  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35);
+  box-shadow: 0 10px 38px -10px rgba(22, 23, 24, 0.35);
   z-index: 1000;
 }
 
@@ -86,7 +163,7 @@
 
 .editInput {
   background-color: var(--color-dark-500);
-  border: var(--color-dark-300);
+  border: 1px solid var(--color-dark-300); // Fixed: was missing border width
   font-size: var(--font-size-s);
   padding: 4px;
   border-radius: 4px;
@@ -94,13 +171,9 @@
   resize: none;
   word-wrap: break-word;
 
-  :focus {
+  &:focus {
+    // Fixed: was missing &
     border: 1px solid var(--color-accent-500);
     outline: none;
   }
-}
-.imageMessage {
-  max-width: 300px;
-  max-height: 300px;
-  border-radius: 8px;
 }

@@ -34,7 +34,7 @@ export default async function Page({ params, searchParams }: PageProps) {
     <div>
       <UserProfile {...userData} />
       <PostsGridWithInfiniteScroll userId={userData.id} initialPostsData={posts} />
-      {!!postId && <PostModal userId={userData.id} initialPost={post} />}
+      {!!postId && <PostModal userProfile={{ userId: userData.id, userName: userData.userName }} initialPost={post} />}
     </div>
   )
 }

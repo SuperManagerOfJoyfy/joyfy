@@ -7,7 +7,6 @@ import { Loader, ToastSnackbar } from '@/shared/ui'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/globals.css'
-import { SocketProvider } from './providers/SocketProvider'
 import { AuthInitializer } from '@/features/auth/ui/AuthInitializer'
 
 export const metadata: Metadata = {
@@ -29,7 +28,6 @@ export default function RootLayout({
         <ReduxProvider>
           <ToastSnackbar />
           <AuthInitializer />
-          <SocketProvider />
           <Suspense fallback={<Loader />}>
             <MainLayout>{children}</MainLayout>
           </Suspense>
