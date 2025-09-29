@@ -180,7 +180,13 @@
     "no": "Нет"
   },
   "userSearch": {
-    "placeholder": "Поиск"
+    "placeholder": "Поиск",
+    "noResults": "Пользователи не найдены",
+    "recent": {
+      "title": "Недавние запросы",
+      "emptyTitle": "Упс! Здесь пока пусто!",
+      "emptyCaption": "Недавних запросов нет"
+    }
   },
   "userProfile": {
     "settings": "Настройки профиля",
@@ -208,6 +214,12 @@
       "primaryButton": "Выбрать",
       "openDraft": "Открыть черновик",
       "loadingDraft": "Загрузка черновика..."
+    },
+    "modal": {
+      "uploadTitle": "Добавить фото",
+      "cropTitle": "Кадрирование",
+      "filterTitle": "Фильтры",
+      "descriptionTitle": "Публикация"
     }
   },
   "closePostModal": {
@@ -245,5 +257,19 @@
   "infoPage": {
     "backToSignup": "Назад к регистрации",
     "privacyPolicyTitle": "Политика конфиденциальности"
+  },
+  "messenger": {
+    "title": "Мессенджер"
+  },
+  "avatar": {
+    "modal": {
+      "uploadTitle": "Добавить фото профиля",
+      "positionTitle": "Обрезать фото профиля"
+    },
+    "upload": {
+      "placeholder": "Перетащите фото профиля сюда или нажмите, чтобы выбрать",
+      "dragPlaceholder": "Отпустите фото профиля здесь",
+      "primaryButton": "Выбрать фото"
+    }
   }
 }

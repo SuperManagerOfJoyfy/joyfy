@@ -35,7 +35,7 @@ export const LogoutModal = ({ open, onOpenLogoutModalHandler, email }: Props) =>
 
   return (
     <ConfirmModal
-      title={'Log Out'}
+      title={t('title')}
       description={t('description', { email: email ? ` ${email}` : '' })}
       isOpen={open}
       setIsOpen={onOpenLogoutModalHandler}

@@ -1,11 +1,10 @@
 import { Typography } from '@/shared/ui'
 import { AuthGuard } from '@/features/auth/ui'
 import { UserSearch } from '@/features/userSearch/ui'
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 
-export default function Search() {
-  const t = useTranslations('userSearch')
-
+export default async function Search() {
+  const t = await getTranslations('userSearch')
   return (
     <AuthGuard requireAuth>
       <Typography variant="h1">{t('placeholder')}</Typography>

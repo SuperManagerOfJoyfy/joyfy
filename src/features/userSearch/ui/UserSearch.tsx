@@ -39,6 +39,7 @@ export const UserSearch = () => {
           hasMore={hasMore}
           onLoadMore={handleFetchMore}
           searchValue={searchValue}
+          noResultsText={t('noResults')}
           renderUser={(u) => <User user={u} handleRequestClick={addRequest} />}
         />
       ) : (

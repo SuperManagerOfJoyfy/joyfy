@@ -1,13 +1,14 @@
 'use client'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { LazyLoader, Loader, Scroll } from '@/shared/ui'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useGetChatListQuery, useLazyGetChatListQuery } from '../api'
 
 import { PATH } from '@/shared/config/routes'
 import { ChatItem } from './ChatItem'
 import { useCallback } from 'react'
 import s from './Sidebar.module.scss'
+import { useRouter } from '@/i18n/navigation'
 
 export const ChatList = () => {
   const { data: currentUser } = useGetMeQuery()

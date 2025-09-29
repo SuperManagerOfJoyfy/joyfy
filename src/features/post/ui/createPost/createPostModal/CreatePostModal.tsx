@@ -41,7 +41,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
   const [isLoadingDraft, setIsLoadingDraft] = useState(false)
   const [modalKey, setModalKey] = useState(0)
 
-  const postFlow = createPostFlow()
+  const postFlow = createPostFlow(t)
 
   const hasUnsavedChanges = useCallback(() => {
     return images.length > 0 || description.trim().length > 0
