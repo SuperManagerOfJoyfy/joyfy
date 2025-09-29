@@ -1,27 +1,33 @@
 import { UserItem } from '@/features/userSearch/api/usersApi.types'
 import { useState, useEffect, useCallback } from 'react'
 
-const STORAGE_KEY = 'recentRequests'
+const STORAGE_KEY_PREFIX = 'recentRequests'
 
-function loadFromLS(): UserItem[] {
+function getStorageKey(userId?: number) {
+  return userId ? `${STORAGE_KEY_PREFIX}_${userId}` : STORAGE_KEY_PREFIX
+}
+
+function loadFromLS(userId?: number): UserItem[] {
   try {
-    const data = localStorage.getItem(STORAGE_KEY)
+    const key = getStorageKey(userId)
+    const data = localStorage.getItem(key)
     return data ? JSON.parse(data) : []
   } catch {
     return []
   }
 }
 
-function saveToLS(data: UserItem[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+function saveToLS(data: UserItem[], userId?: number) {
+  const key = getStorageKey(userId)
+  localStorage.setItem(key, JSON.stringify(data))
 }
 
-export function useRecentRequests(limit = 10) {
+export function useRecentRequests(userId?: number, limit = 10) {
   const [recentRequests, setRecentRequests] = useState<UserItem[]>([])
 
   useEffect(() => {
-    setRecentRequests(loadFromLS())
-  }, [])
+    setRecentRequests(loadFromLS(userId))
+  }, [userId])
 
   const addRequest = useCallback(
     (user: UserItem) => {
@@ -30,7 +36,7 @@ export function useRecentRequests(limit = 10) {
         if (exists) return prev
 
         const updated = [user, ...prev].slice(0, limit)
-        saveToLS(updated)
+        saveToLS(updated, userId)
         return updated
       })
     },

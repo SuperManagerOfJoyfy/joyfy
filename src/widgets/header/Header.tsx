@@ -8,13 +8,14 @@ import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { NotificationsPopover } from '@/features/notifications/ui/NotificationsPopover'
 import { PATH } from '@/shared/config/routes'
-import { Button, SelectBox, SelectItem } from '@/shared/ui'
-
+import { Button, SelectBox, SelectItem, UserCard } from '@/shared/ui'
 import Letters from '../../../public/logo/letters.png'
 import Logo from '../../../public/logo/logo.png'
 import flagRussia from './assets/flagRussia.png'
 import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import s from './Header.module.scss'
+import { useGetUserProfileQuery } from '@/features/profile/api'
+import { useSocket } from '@/shared/config/useSocket'
 
 type LanguageSelectProps = {
   flag: StaticImageData
@@ -49,11 +50,26 @@ export const Header = () => {
   const locale = useLocale() // -> 'en' | 'ru'
   const router = useRouter()
   const pathname = usePathname()
+  const { data: me, isLoading: isMeLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
+  const { data: profile } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
 
   useEffect(() => {
-    if (!isLoading) setShowButtons(!user)
-  }, [isLoading, user])
+    if (!isMeLoading) {
+      setShowButtons(!me)
+    }
+  }, [isMeLoading, me])
+
+  useSocket()
+
+  const currentUser =
+    me && profile
+      ? {
+          id: me.userId,
+          userName: me.userName,
+          avatar: profile.avatars?.[0]?.url ?? '',
+        }
+      : null
 
   const handleLanguageChange = (nextLocale: string) => {
     router.replace(pathname, { locale: nextLocale as 'en' | 'ru' })
@@ -68,7 +84,8 @@ export const Header = () => {
         </Link>
 
         <div className={s.actions}>
-          <div className={s.notificationContainer}>{user && <NotificationsPopover />}</div>
+          {currentUser && <UserCard user={currentUser} />}
+          <div className={s.notificationContainer}>{me && <NotificationsPopover />}</div>
 
           <SelectBox
             className={s.selector}
@@ -84,7 +101,7 @@ export const Header = () => {
             </SelectItem>
           </SelectBox>
 
-          <div className={s.authActions}>{showButtons && !user && <AuthActions />}</div>
+          <div className={s.authActions}>{showButtons && !me && <AuthActions />}</div>
         </div>
       </div>
     </header>

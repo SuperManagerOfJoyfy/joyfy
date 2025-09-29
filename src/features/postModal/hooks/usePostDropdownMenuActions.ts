@@ -1,4 +1,5 @@
 import { useDeletePostMutation } from '@/features/post/api/postsApi'
+import { useFollowUserByIdMutation, useUnfollowUserByIdMutation } from '@/features/profile/api'
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
 
@@ -12,6 +13,8 @@ type Props = {
 
 export const usePostDropdownMenuActions = ({ userId, postId, ownerId, isFollowing, setIsEditing }: Props) => {
   const [deletePost] = useDeletePostMutation()
+  const [followById, { isLoading: followIsLoading }] = useFollowUserByIdMutation()
+  const [unfollow, { isLoading: unfollowIsLoading }] = useUnfollowUserByIdMutation()
 
   const handleEdit = useCallback(() => {
     setIsEditing(true)
@@ -28,14 +31,14 @@ export const usePostDropdownMenuActions = ({ userId, postId, ownerId, isFollowin
 
   const handleFollowToggle = useCallback(() => {
     if (isFollowing) {
-      console.log('Unfollow')
+      unfollow(userId)
     } else {
-      console.log('Follow')
+      followById(userId)
     }
   }, [isFollowing, ownerId])
 
   const handleCopyLink = useCallback(() => {
-    navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`)
+    navigator.clipboard.writeText(window.location.href)
     toast.success('Link copied to clipboard')
   }, [postId])
 

@@ -10,6 +10,7 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       providesTags: ['Profile'],
     }),
+
     getPublicUserProfile: builder.query<PublicUserProfile, string>({
       query: (profileId) => ({
         url: `public-user/profile/${profileId}`,
@@ -17,6 +18,7 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       providesTags: (result, error, profileId) => [{ type: 'Profile', id: profileId }],
     }),
+
     getUserProfileWithFollowers: builder.query<UserProfileWithFollowers, string>({
       query: (userName) => ({
         url: `/users/${userName}`,
@@ -24,6 +26,7 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       providesTags: ['Profile'],
     }),
+
     followUserById: builder.mutation<void, number>({
       query: (userId) => ({
         method: 'POST',
@@ -34,6 +37,7 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Profile'],
     }),
+
     unfollowUserById: builder.mutation<void, number>({
       query: (userId) => ({
         method: 'DELETE',
@@ -41,6 +45,7 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Profile'],
     }),
+
     updateUserProfile: builder.mutation<void, Partial<UserProfile>>({
       query: (profileData) => ({
         url: '/users/profile',
@@ -49,6 +54,7 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Profile'],
     }),
+
     uploadProfileAvatar: builder.mutation<UploadedAvatarResponse, FormData>({
       query: (avatarData: FormData) => ({
         method: 'POST',
@@ -57,6 +63,7 @@ export const profileApi = joyfyApi.injectEndpoints({
       }),
       invalidatesTags: ['Profile'],
     }),
+
     deleteProfileAvatar: builder.mutation<void, void>({
       query: () => ({
         method: 'DELETE',

@@ -12,14 +12,16 @@ import { ConfirmationModal } from '../shared'
 import s from './PostModal.module.scss'
 import { useTranslations } from 'next-intl'
 
+export type UserProfileType = { userId: number; userName: string }
+
 type Props = {
   initialPost: Post
-  userId: number
+  userProfile: UserProfileType
 }
 
-export const PostModal = ({ initialPost, userId }: Props) => {
+export const PostModal = ({ initialPost, userProfile }: Props) => {
   return (
-    <PostModalContextProvider initialPost={initialPost} userId={userId}>
+    <PostModalContextProvider initialPost={initialPost} userProfile={userProfile}>
       <PostModalLayout />
     </PostModalContextProvider>
   )
