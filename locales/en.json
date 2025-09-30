@@ -212,7 +212,20 @@
   },
   "postEditForm": {
     "cancel": "Cancel",
-    "save": "Save Changes"
+    "save": "Save Changes",
+    "menu": {
+      "edit": "Edit Post",
+      "delete": "Delete Post",
+      "follow": "Follow",
+      "unfollow": "Unfollow",
+      "copyLink": "Copy Link"
+    },
+    "confirmDelete": "Are you sure you want to delete this post?",
+    "confirmCancel": "Are you sure you want to exit post editing? Your changes will not be saved.",
+    "updateSuccess": "Post updated successfully!",
+    "deleteSuccess": "Post deleted successfully.",
+    "deleteError": "Post cannot be deleted.",
+    "copySuccess": "Link copied to clipboard"
   },
   "createPost": {
     "upload": {
@@ -258,7 +271,8 @@
     },
     "favorites": {
       "added": "Post added to favorites",
-      "removed": "Post removed from favorites"
+      "removed": "Post removed from favorites",
+      "loginRequired": "You need to log in to use this feature"
     }
   },
   "infoPage": {
@@ -339,5 +353,33 @@
     "errorDescription": "Please try again later",
     "networkErrorTitle": "Network Error",
     "networkErrorDescription": "Could not connect to the server"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "newPrefix": "New notification!",
+    "newTag": "New",
+    "markAll": "Mark all as read",
+    "delete": "Delete"
+  },
+  "comments": {
+    "form": {
+      "placeholder": "Add a comment...",
+      "publish": "Publish",
+      "publishing": "Publishing..."
+    },
+    "reply": {
+      "placeholder": "Write an answer...",
+      "cancel": "Cancel",
+      "action": "Answer"
+    },
+    "answers": {
+      "view": "View answers ({count})",
+      "hide": "Hide answers"
+    },
+    "likes": "Like: {count}",
+    "loading": "Loading comments..."
+  },
+  "post": {
+    "notLoggedIn": "You are not logged in"
   }
 }

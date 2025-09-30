@@ -1,20 +1,22 @@
 import { ConfirmModal } from '@/shared/ui'
 import { usePostModalContext } from '../context/PostModalContext'
+import { useTranslations } from 'next-intl'
 
 export const ConfirmationModal = () => {
   const { confirmAction, setConfirmAction, handleConfirmAction } = usePostModalContext()
+  const t = useTranslations('postEditForm')
 
   const getModalContent = () => {
     switch (confirmAction) {
       case 'delete':
         return {
-          title: 'Delete Post',
-          description: 'Are you sure you want to delete this post?',
+          title: t('menu.delete'),
+          description: t('confirmDelete'),
         }
       case 'cancelEdit':
         return {
-          title: 'Cancel Editing',
-          description: 'Are you sure you want to exit post editing? Your changes will not be saved.',
+          title: t('cancel'),
+          description: t('confirmCancel'),
         }
       default:
         return { title: '', description: '' }

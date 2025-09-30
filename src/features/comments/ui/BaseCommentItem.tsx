@@ -2,10 +2,10 @@
 
 import clsx from 'clsx'
 import { ReactNode } from 'react'
-
 import { Button, UserCard } from '@/shared/ui'
 import { CommentLikeButton } from './CommentLikeButton'
 import { MetaInfo } from './MetaInfo'
+import { useTranslations } from 'next-intl'
 
 import s from './BaseCommentItem.module.scss'
 
@@ -16,11 +16,7 @@ type BaseCommentItemProps = {
   createdAt: string
   isLiked: boolean
   likeCount: number
-  user: {
-    id: number
-    userName: string
-    avatar: string
-  }
+  user: { id: number; userName: string; avatar: string }
   type: 'comment' | 'answer'
   commentId: number
   answerId?: number
@@ -31,22 +27,26 @@ type BaseCommentItemProps = {
   metaClassName?: string
 }
 
-export const BaseCommentItem = ({
-  content,
-  createdAt,
-  isLiked,
-  likeCount,
-  user,
-  type,
-  commentId,
-  answerId,
-  onReply,
-  children,
-  className,
-  contentClassName,
-  metaClassName,
-  postId,
-}: BaseCommentItemProps) => {
+export const BaseCommentItem = (props: BaseCommentItemProps) => {
+  const {
+    content,
+    createdAt,
+    isLiked,
+    likeCount,
+    user,
+    type,
+    commentId,
+    answerId,
+    onReply,
+    children,
+    className,
+    contentClassName,
+    metaClassName,
+    postId,
+  } = props
+
+  const t = useTranslations('comments')
+
   const contentClass = clsx(s.commentContent, contentClassName)
   const metaClass = clsx(s.metaInfo, metaClassName)
   const rootClass = clsx(s.commentItem, className)
@@ -73,9 +73,8 @@ export const BaseCommentItem = ({
 
       <div className={metaClass}>
         <MetaInfo createdAt={createdAt} likeCount={likeCount} className={s.metaInfo} likesClassName={s.likes} />
-
         <Button className={s.replyButton} onClick={onReply} variant="text">
-          Answer
+          {t('reply.action')}
         </Button>
       </div>
 

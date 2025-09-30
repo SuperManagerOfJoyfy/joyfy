@@ -13,6 +13,7 @@ import { extractMessage, isFetchBaseQueryError } from '@/shared/utils/handleErro
 import { UserProfileType } from '../ui'
 import { UserProfileWithFollowers } from '@/features/profile/api/profileApi.types'
 import { useGetUserProfileWithFollowersQuery } from '@/features/profile/api/profileApi'
+import { useTranslations } from 'next-intl'
 
 export type ConfirmAction = 'delete' | 'cancelEdit' | null
 
@@ -70,6 +71,7 @@ export const PostModalContextProvider = ({ initialPost, userProfile, children }:
   const router = useRouter()
   const searchParams = useSearchParams()
   const postId = Number(searchParams.get('postId'))
+  const t = useTranslations('postEditForm')
 
   // State
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
@@ -124,7 +126,7 @@ export const PostModalContextProvider = ({ initialPost, userProfile, children }:
     try {
       await editPost({ postId, description }).unwrap()
 
-      toast.success('Post updated successfully!')
+      toast.success(t('updateSuccess'))
 
       setIsEditing(false)
       setHasFormChanges(false)

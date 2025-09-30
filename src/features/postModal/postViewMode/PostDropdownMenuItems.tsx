@@ -1,6 +1,7 @@
 import { BiEditAlt, BiTrash, BiCopy } from 'react-icons/bi'
 import { RiUserUnfollowLine, RiUserFollowLine } from 'react-icons/ri'
 import { DropdownMenuItem } from '@/shared/ui'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   isOwnPost: boolean
@@ -19,14 +20,16 @@ export const PostDropdownMenuItems = ({
   onFollowToggle,
   onCopyLink,
 }: Props) => {
+  const t = useTranslations('postEditForm.menu')
+
   if (isOwnPost) {
     return (
       <>
         <DropdownMenuItem onSelect={onEdit}>
-          <BiEditAlt /> Edit Post
+          <BiEditAlt /> {t('edit')}
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={onDelete}>
-          <BiTrash /> Delete Post
+          <BiTrash /> {t('delete')}
         </DropdownMenuItem>
       </>
     )
@@ -37,16 +40,16 @@ export const PostDropdownMenuItems = ({
       <DropdownMenuItem onSelect={onFollowToggle}>
         {isFollowing ? (
           <span>
-            <RiUserUnfollowLine /> Unfollow
+            <RiUserUnfollowLine /> {t('unfollow')}
           </span>
         ) : (
           <span>
-            <RiUserFollowLine /> Follow
+            <RiUserFollowLine /> {t('follow')}
           </span>
         )}
       </DropdownMenuItem>
       <DropdownMenuItem onSelect={onCopyLink}>
-        <BiCopy /> Copy Link
+        <BiCopy /> {t('copyLink')}
       </DropdownMenuItem>
     </>
   )

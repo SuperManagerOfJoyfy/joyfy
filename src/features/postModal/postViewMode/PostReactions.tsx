@@ -11,8 +11,11 @@ import { Post } from '@/features/post/types/postTypes'
 import { favoritesUtils } from '@/features/favorites/utils/favoritesUtils'
 import { Button } from '@/shared/ui'
 import { useFavorites } from '@/features/favorites/hooks/useFavorites'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 
 import s from './PostViewMode.module.scss'
+import { PATH } from '@/shared/config/routes'
+import { useRouter } from '@/i18n/navigation'
 
 type Props = {
   myLike: boolean
@@ -21,11 +24,20 @@ type Props = {
 }
 
 export const PostReactions = ({ myLike, changeLikeStatus, post }: Props) => {
+  const { data: me } = useGetMeQuery()
+  const router = useRouter()
+
   const t = useTranslations('messages.favorites')
   const { toggleFavorite } = useFavorites()
   const isFavorite = favoritesUtils.isFavorite(post.id)
 
   const handleBookmarkClick = useCallback(() => {
+    if (!me) {
+      toast.info(t('loginRequired'))
+      router.push(PATH.AUTH.LOGIN)
+      return
+    }
+
     const result = toggleFavorite(post)
 
     if (result === 'added') {
@@ -33,11 +45,11 @@ export const PostReactions = ({ myLike, changeLikeStatus, post }: Props) => {
     } else {
       toast.success(t('removed'))
     }
-  }, [toggleFavorite, post, t])
+  }, [toggleFavorite, post, t, me])
 
   const handleLikeClick = useCallback(() => {
     changeLikeStatus(myLike ? Likes.NONE : Likes.LIKE)
-  }, [changeLikeStatus, myLike])
+  }, [changeLikeStatus, myLike, me, t])
 
   return (
     <div className={s.postReactions}>
