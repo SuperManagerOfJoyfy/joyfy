@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { LazyLoader, Scroll, Typography } from '@/shared/ui'
 import { UserItem } from '../api'
+import { useTranslations } from 'next-intl'
 import s from './BaseUserList.module.scss'
 
 type BaseUserListProps = {
@@ -25,35 +26,32 @@ export const BaseUserList = ({
   searchValue,
   onSelect,
   renderUser,
-  noResultsText = 'No users found',
+  noResultsText,
   className,
 }: BaseUserListProps) => {
+  const t = useTranslations('userSearch')
   const trimmed = searchValue.trim()
   const [allowEmpty, setAllowEmpty] = useState(false)
 
   useEffect(() => {
     setAllowEmpty(false)
-    const t = setTimeout(() => setAllowEmpty(true), 300)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setAllowEmpty(true), 300)
+    return () => clearTimeout(timer)
   }, [trimmed])
 
   const showNoResults = allowEmpty && trimmed !== '' && !isFetching && users.length === 0
+  const text = noResultsText ?? t('noResults')
 
   return (
     <div className={clsx(s.listContainer, className)}>
       <Scroll>
         {showNoResults ? (
-          <Typography className={s.noResultsText}>{noResultsText}</Typography>
+          <Typography className={s.noResultsText}>{text}</Typography>
         ) : (
           users.map((u) => {
             const content = renderUser(u)
             return (
-              <div
-                key={u.id}
-                className={s.userItem}
-                onClick={onSelect ? () => onSelect(u) : undefined}
-                //role={onSelect ? 'button' : undefined}
-              >
+              <div key={u.id} className={s.userItem} onClick={onSelect ? () => onSelect(u) : undefined}>
                 {content}
               </div>
             )
