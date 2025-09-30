@@ -1,8 +1,8 @@
-import Link from 'next/link'
 import { UserItem } from '@/features/userSearch/api/usersApi.types'
 import { Avatar, Typography } from '@/shared/ui'
 import { PATH } from '@/shared/config/routes'
 import s from './UserSearch.module.scss'
+import { Link } from '@/i18n/navigation'
 
 export const User = ({
   user,

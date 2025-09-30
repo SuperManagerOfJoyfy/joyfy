@@ -48,6 +48,12 @@
       "forgotPassword": "Забыли пароль?",
       "footerQuestion": "У вас нет аккаунта?",
       "footerLink": "Регистрация"
+    },
+    "linkExpired": {
+      "title": "Ссылка для подтверждения почты истекла",
+      "description": "Похоже, ссылка для подтверждения истекла. Не переживайте, мы можем отправить её ещё раз",
+      "button": "Отправить ссылку повторно",
+      "emailLabel": "Электронная почта"
     }
   },
   "dashboard": {
@@ -324,5 +330,14 @@
   },
   "postsGrid": {
     "noPosts": "Пока нет публикаций"
+  },
+  "emailConfirmation": {
+    "successTitle": "Поздравляем!",
+    "successDescription": "Ваш email был успешно подтверждён",
+    "successButton": "Войти",
+    "errorTitle": "Ошибка",
+    "errorDescription": "Попробуйте ещё раз позже",
+    "networkErrorTitle": "Сетевая ошибка",
+    "networkErrorDescription": "Не удалось подключиться к серверу"
   }
 }

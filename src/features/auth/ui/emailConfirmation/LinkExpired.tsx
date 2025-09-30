@@ -8,12 +8,16 @@ import { EmailFormSchema } from '@/features/auth/utils/schemas/EmailSchema'
 import { useState } from 'react'
 import { useResendEmailConfirmationMutation } from '@/features/auth/api/authApi'
 import { SentEmailModal } from '@/features/auth/ui'
+import { useTranslations } from 'next-intl'
+
 import s from './EmailConfirmation.module.scss'
 
 export const LinkExpired = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [registeredEmail, setRegisteredEmail] = useState('')
   const [resendEmail] = useResendEmailConfirmationMutation()
+
+  const t = useTranslations('auth.linkExpired')
 
   const handleSendEmailSubmit = async ({ email }: z.infer<typeof EmailFormSchema>) => {
     try {
@@ -25,15 +29,11 @@ export const LinkExpired = () => {
 
   return (
     <>
-      <EmailVerification
-        title="Email verification link expired"
-        description="Looks like the verification link has expired. Not to worry, we can send the link again"
-        imageSrc={expiredImg}
-      >
+      <EmailVerification title={t('title')} description={t('description')} imageSrc={expiredImg}>
         <div className={s.expiredForm}>
           <Form
-            btnText="Resend verification link"
-            fields={[{ name: 'email', label: 'Email' }]}
+            btnText={t('button')}
+            fields={[{ name: 'email', label: t('emailLabel') }]}
             schema={EmailFormSchema}
             onSubmit={handleSendEmailSubmit}
           />

@@ -8,9 +8,10 @@ import { PATH } from '@/shared/config/routes'
 import { Card, Form, Typography } from '@/shared/ui'
 import { SocialLinks } from '../socialLinks'
 import { useSignupFields } from './useSignupFormFields'
-import s from './signupForm.module.scss'
 import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+
+import s from './signupForm.module.scss'
 
 type Props = {
   onSubmitSuccess?: (email: string) => void
@@ -21,6 +22,9 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
 
   const [isSocialLoading, setIsSocialLoading] = useState(false)
   const [signup, { isLoading }] = useRegisterMutation()
+
+  const locale = useLocale()
+
   const disableAll = isSocialLoading || isLoading
 
   const fields = useSignupFields(disableAll)
@@ -28,7 +32,7 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
   const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
     const registerData: RegisterRequest = {
       ...data,
-      baseUrl: window.location.origin,
+      baseUrl: `${window.location.origin}/${locale}`,
     }
     try {
       await signup(registerData).unwrap()

@@ -1,13 +1,15 @@
 'use client'
 
 import clsx from 'clsx'
-import Link from 'next/link'
+
 import { formatNumberToSixDigits, timeAgo } from '@/features/main/utils'
 import { Post } from '@/features/post/types/postTypes'
 import { Avatar, Button, Card, DateStamp, ImageSlider, Typography } from '@/shared/ui'
 import { useState } from 'react'
 import { PublicPostModal } from '../publicPostModal'
 import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
+
 import s from './publicPosts.module.scss'
 
 type Props = {

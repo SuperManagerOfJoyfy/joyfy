@@ -48,6 +48,12 @@
       "forgotPassword": "Forgot Password",
       "footerQuestion": "Don't have an account?",
       "footerLink": "Sign Up"
+    },
+    "linkExpired": {
+      "title": "Email verification link expired",
+      "description": "Looks like the verification link has expired. Not to worry, we can send the link again",
+      "button": "Resend verification link",
+      "emailLabel": "Email"
     }
   },
   "dashboard": {
@@ -324,5 +330,14 @@
   },
   "postsGrid": {
     "noPosts": "There are no posts yet"
+  },
+  "emailConfirmation": {
+    "successTitle": "Congratulations!",
+    "successDescription": "Your email has been confirmed",
+    "successButton": "Sign in",
+    "errorTitle": "Error",
+    "errorDescription": "Please try again later",
+    "networkErrorTitle": "Network Error",
+    "networkErrorDescription": "Could not connect to the server"
   }
 }

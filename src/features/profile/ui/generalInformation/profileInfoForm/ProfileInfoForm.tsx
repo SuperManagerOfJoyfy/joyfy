@@ -5,13 +5,13 @@ import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/
 import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Loader, Separator } from '@/shared/ui'
 import { formatDateToString } from '@/shared/utils/dateFunctions'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
 import { FormProvider, useForm } from 'react-hook-form'
 import { CitySelect, CountrySelect } from './components'
 import s from './ProfileInfoForm.module.scss'
 import { useEffect, useMemo } from 'react'
 import { useFormHasChanges } from './hooks/useFormHasChanges'
 import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 
 type Props = {
   userInfo?: UserProfile
