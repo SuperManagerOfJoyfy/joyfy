@@ -53,7 +53,7 @@ export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
   const stepProps = {
     'avatar-upload': {
       onFilesSelected: handleFilesSelected,
-      placeholder: t('avatar.upload.placeholder'),
+      placeholder: '',
       dragPlaceholder: t('avatar.upload.dragPlaceholder'),
       primaryButtonText: t('avatar.upload.primaryButton'),
       icon: <IoImageOutline size={50} />,
@@ -64,7 +64,7 @@ export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
       largeBottomPadding: true,
     },
     'avatar-position': {
-      imageSrc: selectedImage,
+      imageSrc: selectedImage ?? undefined,
       onUpload: handleComplete,
     },
   }
