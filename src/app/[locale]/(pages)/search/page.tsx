@@ -1,13 +1,26 @@
 import { Typography } from '@/shared/ui'
 import { AuthGuard } from '@/features/auth/ui'
 import { UserSearch } from '@/features/userSearch/ui'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-export default async function Search() {
+type Props = {
+  params: Promise<{ locale: string }>
+}
+
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'ru' }]
+}
+
+export default async function Search({ params }: Props) {
+  const { locale } = await params
+
+  setRequestLocale(locale)
+
   const t = await getTranslations('userSearch')
+
   return (
     <AuthGuard requireAuth>
-      <Typography variant="h1">{t('placeholder')}</Typography>
+      <Typography variant="h1">{t('title')}</Typography>
       <UserSearch />
     </AuthGuard>
   )

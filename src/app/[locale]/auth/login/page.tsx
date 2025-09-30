@@ -1,27 +1,32 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Login } from '@/features/auth/ui'
 import { useGetMeQuery, useLoginMutation } from '@/features/auth/api/authApi'
 import { LoginFormValues } from '@/features/auth/ui/login'
 import { PATH } from '@/shared/config/routes'
-import { useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { Loader } from '@/shared/ui'
 
-const Page = () => {
-  const [login, { isLoading }] = useLoginMutation()
+export default function Page() {
   const router = useRouter()
+  const [login, { isLoading }] = useLoginMutation()
+  const { data: user, isLoading: isUserLoading } = useGetMeQuery()
+
   const [isRedirecting, setIsRedirecting] = useState(false)
 
-  const { data: user, isLoading: isUserLoading } = useGetMeQuery()
+  useEffect(() => {
+    if (!isUserLoading && user && !isRedirecting) {
+      setIsRedirecting(true)
+      router.replace(PATH.ROOT)
+    }
+  }, [user, isUserLoading, isRedirecting, router])
 
   async function handleLogin(data: LoginFormValues) {
     try {
       await login(data).unwrap()
-
       setIsRedirecting(true)
-
-      router.push(PATH.ROOT)
+      router.replace(PATH.ROOT)
     } catch (error) {
       setIsRedirecting(false)
       throw error
@@ -30,16 +35,9 @@ const Page = () => {
 
   if (isRedirecting || isUserLoading) return <Loader />
 
-  if (user) {
-    router.push(PATH.ROOT)
-    return <Loader />
-  }
-
   return (
     <div className="container">
       <Login isLoading={isLoading} onSubmit={handleLogin} />
     </div>
   )
 }
-
-export default Page

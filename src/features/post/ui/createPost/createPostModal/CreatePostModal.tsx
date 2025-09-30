@@ -5,7 +5,6 @@ import { toast } from 'react-toastify'
 
 import { createPostFlow, Step } from '@/features/post/ui/createPost/hooks/postFlow'
 import { CreateItemModal } from '@/features/imageFlow/ui/createItemModal/CreateItemModal'
-import { MESSAGES } from '@/shared/config/messages'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
 
 import { ECreatePostCloseModal } from '../CreatePost'
@@ -21,6 +20,7 @@ type CreatePostModalProps = {
 
 const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
   const t = useTranslations('createPost')
+  const tMessages = useTranslations('messages.post')
 
   const {
     images,
@@ -55,7 +55,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
     setIsPublishing(true)
     try {
       await publishPost()
-      toast.success(MESSAGES.POST.POST_PUBLISHED)
+      toast.success(tMessages('published'))
       onClose(ECreatePostCloseModal.redirectToProfile)
     } catch (error) {
     } finally {
@@ -94,7 +94,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
       setIsSavingDraft(true)
       try {
         await saveDraft()
-        toast.success(MESSAGES.POST.POST_DRAFT)
+        toast.success(tMessages('draftSaved'))
         onClose(ECreatePostCloseModal.redirectToHome)
       } finally {
         setIsSavingDraft(false)
@@ -103,7 +103,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
       try {
         if (hasDraft) await deleteDraft()
         clearAll()
-        toast.info(MESSAGES.POST.POST_DISCARDED)
+        toast.info(tMessages('discarded'))
       } finally {
         onClose(ECreatePostCloseModal.default)
       }

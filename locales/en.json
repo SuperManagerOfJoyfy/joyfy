@@ -180,6 +180,7 @@
     "no": "No"
   },
   "userSearch": {
+    "title": "Search",
     "placeholder": "Search",
     "noResults": "No users found",
     "recent": {
@@ -270,6 +271,58 @@
       "placeholder": "Drag and drop your profile photo here or click to browse",
       "dragPlaceholder": "Drop your profile photo here",
       "primaryButton": "Select Photo"
+    },
+    "uploadSuccess": "Avatar uploaded successfully",
+    "saveButton": "Save"
+  },
+  "flow": {
+    "confirm": {
+      "title": "Close",
+      "description": "Are you sure you want to exit without saving changes?"
+    },
+    "buttons": {
+      "next": "Next",
+      "publish": "Publish",
+      "publishing": "Publishing...",
+      "closeAria": "Close"
+    },
+    "steps": {
+      "upload": {
+        "title": "Add Photo"
+      },
+      "crop": {
+        "title": "Cropping"
+      },
+      "filter": {
+        "title": "Filters"
+      },
+      "description": {
+        "title": "Publication"
+      },
+      "avatarUpload": {
+        "title": "Add Profile Photo"
+      },
+      "avatarPosition": {
+        "title": "Crop Profile Photo"
+      }
+    },
+    "filters": {
+      "normal": "Normal",
+      "clarendon": "Clarendon",
+      "lark": "Lark",
+      "gingham": "Gingham",
+      "moon": "Moon",
+      "reyes": "Reyes",
+      "juno": "Juno",
+      "slumber": "Slumber",
+      "crema": "Crema"
     }
+  },
+  "publication": {
+    "descriptionLabel": "Add publication description",
+    "descriptionPlaceholder": "Your caption goes here..."
+  },
+  "postsGrid": {
+    "noPosts": "There are no posts yet"
   }
 }

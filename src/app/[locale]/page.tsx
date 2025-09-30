@@ -11,8 +11,8 @@ type PageProps = {
 export const revalidate = 60
 
 export default async function HomePage({ searchParams, params }: PageProps) {
-  const searchParam = await searchParams
   const { locale } = await params
+  const searchParam = await searchParams
   const code = searchParam?.code
 
   setRequestLocale(locale)

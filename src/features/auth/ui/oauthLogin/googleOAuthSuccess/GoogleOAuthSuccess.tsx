@@ -2,14 +2,11 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { PATH } from '@/shared/config/routes'
 import { useGoogleLoginMutation, useLazyGetMeQuery } from '@/features/auth/api/authApi'
 import { toast } from 'react-toastify'
 import { Loader } from '@/shared/ui/loader/Loader'
-import { useRouter } from '@/i18n/navigation'
 
 export const GoogleOAuthSuccess = () => {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [googleLogin] = useGoogleLoginMutation()
   const [getMe] = useLazyGetMeQuery()
@@ -18,9 +15,7 @@ export const GoogleOAuthSuccess = () => {
   const hasProcessed = useRef(false)
 
   useEffect(() => {
-    if (hasProcessed.current) {
-      return
-    }
+    if (hasProcessed.current) return
 
     async function handleGoogleLogin() {
       try {
@@ -34,7 +29,7 @@ export const GoogleOAuthSuccess = () => {
         }
 
         if (!code) {
-          throw new Error('Missing code parameter in Google authentication response')
+          throw new Error('Missing code parameter')
         }
 
         const redirectUrl = `${window.location.origin}/auth/google`
@@ -47,21 +42,24 @@ export const GoogleOAuthSuccess = () => {
         if (response?.accessToken) {
           await getMe().unwrap()
 
-          router.push(PATH.ROOT)
+          const locale = localStorage.getItem('locale') || 'en'
+          window.location.href = `/${locale}`
         } else {
           throw new Error('Invalid response from server')
         }
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Authentication processing failed'
+        const errorMessage = err instanceof Error ? err.message : 'Authentication failed'
         toast.error(errorMessage)
-        router.push(PATH.AUTH.LOGIN)
+
+        const locale = localStorage.getItem('locale') || 'en'
+        window.location.href = `/${locale}/auth/login`
       } finally {
         setIsLoading(false)
       }
     }
 
     handleGoogleLogin()
-  }, [])
+  }, [searchParams, googleLogin, getMe])
 
   if (isLoading) {
     return <Loader fullScreen message="Processing authentication..." />

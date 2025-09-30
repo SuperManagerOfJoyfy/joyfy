@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { Button, Typography } from '@/shared/ui'
+import { Link } from '@/i18n/navigation'
 
 import s from './NotFoundContent.module.scss'
 

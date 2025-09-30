@@ -2,10 +2,10 @@ import { EmailVerification } from '@/features/auth/ui/emailVerification'
 import { Button } from '@/shared/ui'
 import React from 'react'
 import infoImg from '@/features/auth/assets/images/EmailVerification/confirm.png'
-import Link from 'next/link'
 import { PATH } from '@/shared/config/routes'
 import { LinkExpired } from '@/features/auth/ui/emailConfirmation/LinkExpired'
 import s from './EmailConfirmation.module.scss'
+import { Link } from '@/i18n/navigation'
 
 export const EmailConfirmation = async ({ code }: { code: string }) => {
   try {

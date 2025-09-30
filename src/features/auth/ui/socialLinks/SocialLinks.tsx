@@ -25,6 +25,8 @@ export const SocialLinks = ({ isDisabled, onStartLoading }: SocialLinksProps) =>
     onStartLoading()
 
     const locale = getLocale()
+    localStorage.setItem('locale', locale)
+
     const redirectUrl = `${frontendOrigin}/${locale}/auth/github`
     const githubAuthUrl = `${apiBaseUrl}/auth/github/login?redirect_url=${encodeURIComponent(redirectUrl)}`
 
@@ -36,9 +38,12 @@ export const SocialLinks = ({ isDisabled, onStartLoading }: SocialLinksProps) =>
     onStartLoading()
 
     const locale = getLocale()
-    const redirectUrl = `${frontendOrigin}/${locale}/auth/google`
+    localStorage.setItem('locale', locale)
+
+    const redirectUrl = `${frontendOrigin}/auth/google`
 
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUrl)}&response_type=code&scope=email%20profile&prompt=select_account`
+
     window.location.href = googleAuthUrl
   }, [isDisabled, onStartLoading])
 

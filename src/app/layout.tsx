@@ -6,23 +6,6 @@ export const metadata = {
   icons: { icon: '/fav.svg' },
 }
 
-type RootLayoutProps = {
-  children: ReactNode
-  params?: Promise<{ locale?: string }>
-}
-
-export default async function RootLayout({ children, params }: RootLayoutProps) {
-  let locale = 'en'
-  if (params) {
-    try {
-      const resolvedParams = await params
-      locale = resolvedParams.locale || 'en'
-    } catch {}
-  }
-
-  return (
-    <html lang={locale}>
-      <body>{children}</body>
-    </html>
-  )
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return children
 }

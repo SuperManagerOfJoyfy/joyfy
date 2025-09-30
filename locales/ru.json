@@ -180,6 +180,7 @@
     "no": "Нет"
   },
   "userSearch": {
+    "title": "Поиск",
     "placeholder": "Поиск",
     "noResults": "Пользователи не найдены",
     "recent": {
@@ -270,6 +271,58 @@
       "placeholder": "Перетащите фото профиля сюда или нажмите, чтобы выбрать",
       "dragPlaceholder": "Отпустите фото профиля здесь",
       "primaryButton": "Выбрать фото"
+    },
+    "uploadSuccess": "Аватар успешно загружен",
+    "saveButton": "Сохранить"
+  },
+  "flow": {
+    "confirm": {
+      "title": "Закрыть",
+      "description": "Выйти без сохранения изменений?"
+    },
+    "buttons": {
+      "next": "Далее",
+      "publish": "Опубликовать",
+      "publishing": "Публикация...",
+      "closeAria": "Закрыть"
+    },
+    "steps": {
+      "upload": {
+        "title": "Добавить фото"
+      },
+      "crop": {
+        "title": "Кадрирование"
+      },
+      "filter": {
+        "title": "Фильтры"
+      },
+      "description": {
+        "title": "Публикация"
+      },
+      "avatarUpload": {
+        "title": "Добавить фото профиля"
+      },
+      "avatarPosition": {
+        "title": "Обрезать фото профиля"
+      }
     }
+  },
+  "filters": {
+    "normal": "Нормальный",
+    "clarendon": "Кларендон",
+    "lark": "Жаворонок",
+    "gingham": "Гингем",
+    "moon": "Луна",
+    "reyes": "Рейес",
+    "juno": "Джуно",
+    "slumber": "Дрема",
+    "crema": "Крема"
+  },
+  "publication": {
+    "descriptionLabel": "Добавьте описание публикации",
+    "descriptionPlaceholder": "Введите подпись..."
+  },
+  "postsGrid": {
+    "noPosts": "Пока нет публикаций"
   }
 }

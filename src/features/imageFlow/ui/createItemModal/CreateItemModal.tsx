@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
-
+import { useTranslations } from 'next-intl'
 import { Modal, ConfirmModal } from '@/shared/ui'
 import { ModalFlow, ModalStep, StepProps } from '../../types/modalTypes'
 import { useModalFlow } from '../../hooks/useModalFlow'
@@ -16,10 +16,7 @@ export type CreateItemModalProps = {
   onComplete?: () => void
   hasUnsavedChanges?: () => boolean
   useBuiltInConfirmModal?: boolean
-  confirmModalConfig?: {
-    title: string
-    description: string | ReactNode
-  }
+  confirmModalConfig?: { title?: string; description?: string | ReactNode }
   stepProps?: StepProps
   disabled?: boolean
 }
@@ -32,13 +29,11 @@ export const CreateItemModal = ({
   onComplete,
   hasUnsavedChanges,
   useBuiltInConfirmModal = true,
-  confirmModalConfig = {
-    title: 'Close',
-    description: 'Are you sure you want to exit without saving changes?',
-  },
+  confirmModalConfig,
   stepProps = {},
   disabled = false,
 }: CreateItemModalProps) => {
+  const tConfirm = useTranslations('flow.confirm')
   const {
     currentStep,
     isFirstStep,
@@ -63,18 +58,12 @@ export const CreateItemModal = ({
   const StepComponent = flow.components[currentStep]
 
   const handleMainModalOpenChange = (newOpen: boolean) => {
-    if (!newOpen) {
-      handleCloseAttempt()
-    }
+    if (!newOpen) handleCloseAttempt()
   }
 
   const handleBackWithCleanup = () => {
     const currentStepProps = stepProps[currentStep] || {}
-
-    if (currentStepProps.onNavigateBack) {
-      currentStepProps.onNavigateBack()
-    }
-
+    currentStepProps.onNavigateBack?.()
     handleBack()
   }
 
@@ -91,39 +80,23 @@ export const CreateItemModal = ({
 
   const isRightButtonDisabled = () => {
     if (disabled) return true
-
-    const currentStepProps = stepProps[currentStep] || {}
-
-    if (currentStepProps.getValidationState) {
-      const validationState = currentStepProps.getValidationState()
-      return !validationState.isValid || validationState.isProcessing
-    }
-
-    if (currentStepProps.disabled) return true
-
-    return false
+    const p = stepProps[currentStep] || {}
+    const v = p.getValidationState?.()
+    if (v) return !v.isValid || v.isProcessing
+    return !!p.disabled
   }
 
   const isLeftButtonDisabled = () => {
     if (disabled) return true
-
-    const currentStepProps = stepProps[currentStep] || {}
-    if (currentStepProps.getValidationState) {
-      const validationState = currentStepProps.getValidationState()
-      if (validationState.isProcessing) return true
-    }
-
+    const v = stepProps[currentStep]?.getValidationState?.()
+    if (v?.isProcessing) return true
     return isProcessing
   }
 
-  const getProcessingState = () => {
-    const currentStepProps = stepProps[currentStep] || {}
-    if (currentStepProps.getValidationState) {
-      const validationState = currentStepProps.getValidationState()
-      return validationState.isProcessing
-    }
-    return isProcessing
-  }
+  const processingState = stepProps[currentStep]?.getValidationState?.()?.isProcessing ?? isProcessing
+
+  const confirmTitle = confirmModalConfig?.title ?? tConfirm('title')
+  const confirmDescription = confirmModalConfig?.description ?? tConfirm('description')
 
   return (
     <>
@@ -148,9 +121,9 @@ export const CreateItemModal = ({
             onClose={handleCloseAttempt}
             onNext={handleNext}
             disabled={isRightButtonDisabled()}
-            isProcessing={getProcessingState()}
+            isProcessing={processingState}
             isLastStep={isLastStep}
-            isCreating={getProcessingState()}
+            isCreating={processingState}
           />
         }
       >
@@ -161,8 +134,8 @@ export const CreateItemModal = ({
         isConfirmModalOpen &&
         ReactDOM.createPortal(
           <ConfirmModal
-            title={confirmModalConfig.title}
-            description={confirmModalConfig.description}
+            title={confirmTitle}
+            description={confirmDescription}
             isOpen={isConfirmModalOpen}
             setIsOpen={() => handleConfirmClose(false)}
             onConfirm={() => handleConfirmClose(true)}
