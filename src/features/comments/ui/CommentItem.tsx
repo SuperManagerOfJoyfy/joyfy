@@ -50,7 +50,12 @@ export const CommentItem = ({ comment, postId }: CommentItemProps) => {
       >
         <div className={s.answerActions}>
           {answerCount > 0 && (
-            <Button className={s.viewAnswers} onClick={handleAnswersToggle} variant="text" aria-expanded={showAnswers}>
+            <Button
+              className={s.viewAnswers}
+              onClick={handleAnswersToggle}
+              variant="comment"
+              aria-expanded={showAnswers}
+            >
               {showAnswers ? t('answers.hide') : t('answers.view', { count: answerCount })}
             </Button>
           )}

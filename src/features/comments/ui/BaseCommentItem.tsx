@@ -73,7 +73,7 @@ export const BaseCommentItem = (props: BaseCommentItemProps) => {
 
       <div className={metaClass}>
         <MetaInfo createdAt={createdAt} likeCount={likeCount} className={s.metaInfo} likesClassName={s.likes} />
-        <Button className={s.replyButton} onClick={onReply} variant="text">
+        <Button className={s.replyButton} onClick={onReply} variant="comment">
           {t('reply.action')}
         </Button>
       </div>
