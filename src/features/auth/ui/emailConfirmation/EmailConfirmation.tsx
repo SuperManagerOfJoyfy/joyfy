@@ -1,16 +1,15 @@
-import { EmailVerification } from '@/features/auth/ui/emailVerification'
-import { Button } from '@/shared/ui'
-import React from 'react'
 import infoImg from '@/features/auth/assets/images/EmailVerification/confirm.png'
-import { PATH } from '@/shared/config/routes'
 import { LinkExpired } from '@/features/auth/ui/emailConfirmation/LinkExpired'
+import { EmailVerification } from '@/features/auth/ui/emailVerification'
 import { Link } from '@/i18n/navigation'
+import { PATH } from '@/shared/config/routes'
+import { Button } from '@/shared/ui'
 import { getTranslations } from 'next-intl/server'
 
 import s from './EmailConfirmation.module.scss'
 
 export const EmailConfirmation = async ({ code }: { code: string }) => {
-  const t = await getTranslations('emailConfirmation')
+  const t = await getTranslations('auth.emailConfirmation')
 
   try {
     const confirmRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/registration-confirmation`, {
@@ -26,7 +25,7 @@ export const EmailConfirmation = async ({ code }: { code: string }) => {
         <EmailVerification title={t('successTitle')} description={t('successDescription')} imageSrc={infoImg}>
           <div className={s.confirmWrapper}>
             <Button as={Link} fullWidth href={PATH.AUTH.LOGIN}>
-              {t('successButton')}
+              {t('signInButton')}
             </Button>
           </div>
         </EmailVerification>
