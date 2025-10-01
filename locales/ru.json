@@ -143,9 +143,6 @@
     },
     "autoRenewal": "Автопродление"
   },
-  "accountTypeSelector": {
-    "title": "Тип аккаунта:"
-  },
   "businessSubscription": {
     "change": "Измените вашу подписку:",
     "costs": "Стоимость вашей подписки:",
@@ -381,5 +378,17 @@
   },
   "post": {
     "notLoggedIn": "Вы не авторизованы"
+  },
+  "settings": {
+    "accountType": {
+      "personal": "Личный",
+      "business": "Бизнес",
+      "title": "Тип аккаунта:"
+    },
+    "subscription": {
+      "day": "$10 за 1 день",
+      "weekly": "$50 за 7 дней",
+      "monthly": "$100 за месяц"
+    }
   }
 }

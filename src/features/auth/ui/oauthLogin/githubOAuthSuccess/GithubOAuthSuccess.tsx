@@ -51,7 +51,7 @@ export const GithubOAuthSuccess = () => {
   }, [searchParams, router, triggerGetMe])
 
   if (isLoading) {
-    return <Loader fullScreen message="Processing authentication..." />
+    return <Loader fullScreen />
   }
 
   return null

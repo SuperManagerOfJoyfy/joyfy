@@ -143,9 +143,6 @@
     },
     "autoRenewal": "Auto-Renewal"
   },
-  "accountTypeSelector": {
-    "title": "Account type:"
-  },
   "businessSubscription": {
     "change": "Change your subscription:",
     "costs": "Your subscription costs:",
@@ -381,5 +378,17 @@
   },
   "post": {
     "notLoggedIn": "You are not logged in"
+  },
+  "settings": {
+    "accountType": {
+      "personal": "Personal",
+      "business": "Business",
+      "title": "Account type:"
+    },
+    "subscription": {
+      "day": "$10 per 1 Day",
+      "weekly": "$50 per 7 Days",
+      "monthly": "$100 per month"
+    }
   }
 }

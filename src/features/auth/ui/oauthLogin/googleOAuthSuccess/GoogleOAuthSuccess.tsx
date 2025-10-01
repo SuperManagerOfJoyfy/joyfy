@@ -62,7 +62,7 @@ export const GoogleOAuthSuccess = () => {
   }, [searchParams, googleLogin, getMe])
 
   if (isLoading) {
-    return <Loader fullScreen message="Processing authentication..." />
+    return <Loader fullScreen />
   }
 
   return null

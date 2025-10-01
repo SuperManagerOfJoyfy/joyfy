@@ -7,7 +7,7 @@ export const revalidate = 0
 
 export default function OauthLoginSuccessPage() {
   return (
-    <Suspense fallback={<Loader fullScreen message="Processing authentication..." />}>
+    <Suspense fallback={<Loader fullScreen />}>
       <GoogleOAuthSuccess />
     </Suspense>
   )
