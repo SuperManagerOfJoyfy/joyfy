@@ -1,29 +1,58 @@
+.inputBoxWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-height: 95px;
+}
+
 .inputBox {
   display: flex;
-  height: 60px;
-  align-items: center;
-  flex-shrink: 0;
-  overflow: hidden;
-  padding-left: 6px;
+  flex: 1;
+  flex-direction: column;
+  padding: 12px 24px;
+}
 
-  .inputWrapper {
-    flex: 1;
-    min-width: 0;
+.imagePreview {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+  margin-left: 10px;
+
+  img {
+    width: 100%;
     height: 100%;
-    border: none;
-    background-color: transparent;
-
-    &:hover,
-    &:focus-within {
-      background-color: transparent;
-    }
-
-    .messageInput {
-      font-size: var(--font-size-s);
-      line-height: 1.4;
-      background-color: transparent;
-    }
+    object-fit: cover;
+    display: block;
   }
+
+  .removeButton {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.2);
+    top: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    border: none;
+  }
+}
+
+.inputWrapper {
+  height: 100%;
+  border: none;
+  background-color: transparent;
+
+  &:hover,
+  &:focus-within {
+    background-color: transparent;
+  }
+}
+
+.messageInput {
+  font-size: var(--font-size-s);
+  line-height: 1.4;
+  background-color: transparent;
 }
 
 .iconsWrapper {
@@ -46,4 +75,10 @@
   &:hover {
     background-color: var(--color-dark-500);
   }
+}
+
+.Buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
