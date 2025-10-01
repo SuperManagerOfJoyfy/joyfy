@@ -10,6 +10,7 @@ import { PostModalHeaderMeta } from '../postViewMode'
 import { PostModalImageSlider } from './PostModalImageSlider'
 import { ConfirmationModal } from '../shared'
 import s from './PostModal.module.scss'
+import { useTranslations } from 'next-intl'
 
 export type UserProfileType = { userId: number; userName: string }
 
@@ -27,6 +28,8 @@ export const PostModal = ({ initialPost, userProfile }: Props) => {
 }
 
 const PostModalLayout = () => {
+  const t = useTranslations('postModal')
+
   const { isEditing, currentPost, handleModalClose } = usePostModalContext()
   const isOpen = !!currentPost
 
@@ -37,7 +40,7 @@ const PostModalLayout = () => {
         size="lg"
         cardPadding="none"
         onOpenChange={handleModalClose}
-        title={isEditing ? 'Edit Post' : undefined}
+        title={isEditing ? t('editTitle') : undefined}
         header="custom"
       >
         <PostModalHeaderMeta />

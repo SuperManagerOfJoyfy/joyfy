@@ -21,7 +21,7 @@ export const Avatar = ({ avatar, className, name = 'User', size = 'medium', ...r
 
   return (
     <AvatarRadix.Root className={clsx(s.avatarRoot, className)} data-size={size} {...rest}>
-      <AvatarRadix.Image alt={name} className={s.avatarImage} src={avatar} />
+      <AvatarRadix.Image alt={name} className={s.avatarImage} src={avatar || undefined} />
 
       <AvatarRadix.Fallback
         className={s.avatarFallback}

@@ -39,33 +39,36 @@ type SidebarActionHandlers = {
 export const createSidebarItems = (
   role: 'user' | 'admin',
   userId?: number,
-  handlers: SidebarActionHandlers = {}
+  handlers: SidebarActionHandlers = {},
+  t?: (key: string) => string
 ): SidebarItem[] => {
+  const translate = t || ((key: string) => key)
+
   const adminItems: SidebarItem[] = [
     {
       id: 'users',
-      title: 'Users list',
+      title: translate('usersList'),
       path: PATH.ADMIN.USERS,
       icon: <FiUsers />,
       activeIcon: <FaUsers />,
     },
     {
       id: 'stats',
-      title: 'Statistics',
+      title: translate('statistics'),
       path: PATH.ADMIN.STATISTICS,
       icon: <FiTrendingUp />,
       activeIcon: <FaChartLine />,
     },
     {
       id: 'payments',
-      title: 'Payments list',
+      title: translate('paymentsList'),
       path: PATH.ADMIN.PAYMENTS,
       icon: <FiCreditCard />,
       activeIcon: <FaCreditCard />,
     },
     {
       id: 'posts',
-      title: 'Posts list',
+      title: translate('postsList'),
       path: PATH.ADMIN.POSTS,
       icon: <FiImage />,
       activeIcon: <FaImage />,
@@ -75,14 +78,14 @@ export const createSidebarItems = (
   const userItems: SidebarItem[] = [
     {
       id: 'home',
-      title: 'Home',
+      title: translate('home'),
       path: PATH.ROOT,
       icon: <FiHome />,
       activeIcon: <FaHome />,
     },
     {
       id: 'create',
-      title: 'Create',
+      title: translate('create'),
       path: handlers.onCreatePost ? undefined : PATH.USER.CREATE,
       icon: <FiPlusCircle />,
       onClick: handlers.onCreatePost,
@@ -92,28 +95,28 @@ export const createSidebarItems = (
     },
     {
       id: 'profile',
-      title: 'My Profile',
+      title: translate('myProfile'),
       path: userId ? `${PATH.USER.PROFILE}/${userId}` : PATH.USER.PROFILE,
       icon: <FiUser />,
       activeIcon: <FaUser />,
     },
     {
       id: 'messenger',
-      title: 'Messenger',
+      title: translate('messenger'),
       path: PATH.USER.MESSENGER,
       icon: <FiMessageCircle />,
       activeIcon: <FaComments />,
     },
     {
       id: 'search',
-      title: 'Search',
+      title: translate('search'),
       path: PATH.USER.SEARCH,
       icon: <FiSearch />,
       activeIcon: <FaSearch />,
     },
     {
       id: 'statistics',
-      title: 'Statistics',
+      title: translate('statistics'),
       path: PATH.USER.STATISTICS,
       icon: <FiBarChart2 />,
       activeIcon: <FaChartBar />,
@@ -121,7 +124,7 @@ export const createSidebarItems = (
     },
     {
       id: 'favorites',
-      title: 'Favorites',
+      title: translate('favorites'),
       path: PATH.USER.FAVORITES,
       icon: <FiStar />,
       activeIcon: <FaStar />,
@@ -129,7 +132,7 @@ export const createSidebarItems = (
     },
     {
       id: 'logout',
-      title: 'Log Out',
+      title: translate('logout'),
       icon: <FiLogOut />,
       activeIcon: <FaSignOutAlt />,
       onClick: handlers.onOpenLogoutModalHandler,

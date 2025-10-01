@@ -5,10 +5,11 @@ import { ProfileInfoForm } from './profileInfoForm'
 import { ProfilePhoto } from '../profilePhoto/ui/ProfilePhoto'
 import { ProfileInfo } from '@/features/profile/utils/schema'
 import { toISOString } from '@/shared/utils/dateFunctions'
-import { MESSAGES } from '@/shared/config/messages'
+import { useTranslations } from 'next-intl'
 import s from './GeneralInformation.module.scss'
 
 export const GeneralInformation = () => {
+  const t = useTranslations('messages.profile')
   const { data: userInfo } = useGetUserProfileQuery()
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation()
 
@@ -16,9 +17,9 @@ export const GeneralInformation = () => {
     try {
       const isoDate = toISOString(data.dateOfBirth)
       await updateUserProfile({ ...data, dateOfBirth: isoDate }).unwrap()
-      toast.success(MESSAGES.PROFILE.SETTINGS_SUCCESS)
+      toast.success(t('settingsSuccess'))
     } catch (error) {
-      toast.error(MESSAGES.PROFILE.SETTINGS_ERROR)
+      toast.error(t('settingsError'))
     }
   }
 

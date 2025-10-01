@@ -109,6 +109,30 @@
   }
 }
 
+.comment {
+  @include button-base;
+  background-color: transparent;
+  color: var(--color-light-900);
+  padding: 0;
+  border: none;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  height: var(--line-height-m);
+
+  &:hover:not(:disabled) {
+    color: var(--color-light-100);
+  }
+
+  &:active:not(:disabled) {
+    color: var(--color-light-100);
+  }
+
+  &:disabled {
+    color: var(--color-light-900);
+    opacity: 0.5;
+  }
+}
+
 .link {
   @include button-base;
   background-color: transparent;

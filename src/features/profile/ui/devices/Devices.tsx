@@ -6,15 +6,18 @@ import { useGetSessionsQuery, useTerminateAllOtherSessionsMutation } from '@/fea
 import { FaChrome } from 'react-icons/fa'
 import { DeviceInfoCard } from '@/features/profile/ui/devices/DeviceInfoCard'
 import { toast } from 'react-toastify'
+import { useTranslations } from 'next-intl'
 
 export const Devices = () => {
+  const t = useTranslations('devices')
+
   const { data: devices } = useGetSessionsQuery()
   const [terminateAllOtherSessions, { isLoading }] = useTerminateAllOtherSessionsMutation()
 
   const onTerminateAllOtherSessionsButtonClickHandler = async () => {
     try {
       await terminateAllOtherSessions().unwrap()
-      toast.success('Successfully terminated from all other sessions')
+      toast.success(t('toast.terminated'))
     } catch (error: any) {
       toast.error(error)
     }
@@ -24,7 +27,7 @@ export const Devices = () => {
     <div>
       <div>
         <Typography className={s.title} variant="h3">
-          Current device
+          {t('currentTitle')}
         </Typography>
 
         <Card className={s.card}>
@@ -43,12 +46,12 @@ export const Devices = () => {
       </div>
       <div className={s.terminateButtonContainer}>
         <Button variant="outline" onClick={onTerminateAllOtherSessionsButtonClickHandler} disabled={isLoading}>
-          Terminate all other session
+          {t('terminateOthers')}
         </Button>
       </div>
       <div>
         <Typography className={s.title} variant="h3">
-          Active sessions
+          {t('activeTitle')}
         </Typography>
         {devices?.others.map(({ ip, deviceId, lastActive, osName }) => (
           <DeviceInfoCard

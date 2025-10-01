@@ -6,10 +6,11 @@ import { PATH } from '@/shared/config/routes'
 import { Form, Typography } from '@/shared/ui'
 import { Card } from '@/shared/ui/card'
 import clsx from 'clsx'
-import Link from 'next/link'
 import { useState } from 'react'
 import { z } from 'zod'
 import s from './login.module.scss'
+import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 const loginSchema = z.object({
   email: EmailSchema,
@@ -25,31 +26,36 @@ type Props = {
 export type LoginFormValues = z.infer<typeof loginSchema>
 
 export const Login = ({ className, isLoading, onSubmit }: Props) => {
+  const t = useTranslations('auth.login')
   const [isSocialLoading, setIsSocialLoading] = useState(false)
 
   const fields = [
-    { name: 'email' as const, label: 'Email', type: 'email' },
-    { name: 'password' as const, label: 'Password', type: 'password' },
+    { name: 'email' as const, label: t('fields.email'), type: 'email' },
+    { name: 'password' as const, label: t('fields.password'), type: 'password' },
   ]
 
   const additionalContent = (
     <div className={s.content}>
-      <Link href="forgot password" aria-disabled={isSocialLoading || isLoading} className={s.forgot}>
-        Forgot Password
+      <Link
+        href="/auth/new-password" // TODO
+        aria-disabled={isSocialLoading || isLoading}
+        className={s.forgot}
+      >
+        {t('forgotPassword')}
       </Link>
     </div>
   )
 
   return (
     <Card className={clsx(s.card, className)}>
-      <Typography variant="h1">Sign In</Typography>
+      <Typography variant="h1">{t('title')}</Typography>
 
       <div className={s.socialLinksWrap}>
         <SocialLinks isDisabled={isSocialLoading || isLoading} onStartLoading={() => setIsSocialLoading(true)} />
       </div>
 
       <Form
-        btnText="Sign In"
+        btnText={t('button')}
         fields={fields}
         schema={loginSchema}
         onSubmit={onSubmit}
@@ -58,11 +64,11 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
       />
 
       <Typography variant="body1" className={s.account}>
-        Don't have an account?
+        {t('footerQuestion')}
       </Typography>
 
       <Link href={PATH.AUTH.REGISTRATION} aria-disabled={isSocialLoading || isLoading} className={s.signUp}>
-        Sign Up
+        {t('footerLink')}
       </Link>
     </Card>
   )

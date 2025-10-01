@@ -1,6 +1,7 @@
 import { useLazySearchUserByNameQuery } from '@/features/userSearch/api/usersApi'
+import { useRouter } from '@/i18n/navigation'
 import { useDebounce } from '@/shared/hooks'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 export const useSearchUser = ({ path }: { path: string }) => {

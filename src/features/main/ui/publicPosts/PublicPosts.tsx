@@ -1,12 +1,15 @@
 'use client'
 
 import clsx from 'clsx'
-import Link from 'next/link'
+
 import { formatNumberToSixDigits, timeAgo } from '@/features/main/utils'
 import { Post } from '@/features/post/types/postTypes'
 import { Avatar, Button, Card, DateStamp, ImageSlider, Typography } from '@/shared/ui'
 import { useState } from 'react'
 import { PublicPostModal } from '../publicPostModal'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
+
 import s from './publicPosts.module.scss'
 
 type Props = {
@@ -15,6 +18,7 @@ type Props = {
 }
 
 export const PublicPosts = ({ count, posts }: Props) => {
+  const t = useTranslations('dashboard')
   const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({})
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [post, setPost] = useState<Post | null>(null)
@@ -36,7 +40,7 @@ export const PublicPosts = ({ count, posts }: Props) => {
       <PublicPostModal open={isModalOpen} closeModal={() => setIsModalOpen(false)} post={post} />
       <Card className={s.card}>
         <Typography as="h2" fontWeight="bold">
-          Registered users:
+          {t('registeredUsers')}
         </Typography>
 
         <div className={s.countUsersWrapper}>
@@ -93,7 +97,7 @@ export const PublicPosts = ({ count, posts }: Props) => {
                   {showButton && (
                     <Button variant="link" onClick={() => toggleExpand(post.id)} className={s.toggleBtn}>
                       <Typography as="span" variant="body2">
-                        {isExpanded ? 'Hide' : 'Show more'}
+                        {isExpanded ? t('hide') : t('showMore')}
                       </Typography>
                     </Button>
                   )}

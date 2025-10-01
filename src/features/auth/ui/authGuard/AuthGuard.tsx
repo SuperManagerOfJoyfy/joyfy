@@ -1,11 +1,11 @@
 'use client'
 
 import { ReactNode, useMemo, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { PATH } from '@/shared/config/routes'
 import s from './authGuard.module.scss'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { useRouter } from '@/i18n/navigation'
 
 type AuthGuardProps = {
   children: ReactNode

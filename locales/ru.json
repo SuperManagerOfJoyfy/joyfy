@@ -1,0 +1,394 @@
+{
+  "header": {
+    "login": "Войти",
+    "signup": "Регистрация",
+    "chooseLanguage": "Выберите язык"
+  },
+  "sidebar": {
+    "home": "Главная",
+    "create": "Создать",
+    "myProfile": "Мой профиль",
+    "messenger": "Сообщения",
+    "search": "Поиск",
+    "statistics": "Статистика",
+    "favorites": "Избранное",
+    "logout": "Выйти",
+    "usersList": "Список пользователей",
+    "paymentsList": "Список платежей",
+    "postsList": "Список постов"
+  },
+  "languages": {
+    "english": "Английский",
+    "russian": "Русский"
+  },
+  "auth": {
+    "signup": {
+      "title": "Регистрация",
+      "button": "Зарегистрироваться",
+      "footerQuestion": "У вас уже есть аккаунт?",
+      "footerLink": "Войти",
+      "fields": {
+        "username": "Имя пользователя",
+        "email": "Электронная почта",
+        "password": "Пароль",
+        "passwordConfirmation": "Подтвердите пароль",
+        "agreePrefix": "Я соглашаюсь с",
+        "terms": "Правилами использования",
+        "and": "и",
+        "privacy": "Политикой конфиденциальности"
+      }
+    },
+    "login": {
+      "title": "Войти",
+      "button": "Войти",
+      "fields": {
+        "email": "Электронная почта",
+        "password": "Пароль"
+      },
+      "forgotPassword": "Забыли пароль?",
+      "footerQuestion": "У вас нет аккаунта?",
+      "footerLink": "Регистрация"
+    },
+    "linkExpired": {
+      "title": "Ссылка для подтверждения почты истекла",
+      "description": "Похоже, ссылка для подтверждения истекла. Не переживайте, мы можем отправить её ещё раз",
+      "button": "Отправить ссылку повторно",
+      "emailLabel": "Электронная почта"
+    }
+  },
+  "dashboard": {
+    "registeredUsers": "Зарегистрированные пользователи",
+    "showMore": "Показать больше",
+    "hide": "Скрыть"
+  },
+  "notFound": {
+    "title": "Страница не найдена",
+    "description": "Упс! Страница, которую вы ищете, не существует или была перемещена.",
+    "button": "На главную"
+  },
+  "verifyEmail": {
+    "title": "Подтвердите email"
+  },
+  "statistics": {
+    "title": "Статистика"
+  },
+  "profileSettings": {
+    "tabs": {
+      "info": "Общая информация",
+      "devices": "Устройства",
+      "management": "Управление аккаунтом",
+      "payments": "Мои платежи"
+    }
+  },
+  "profilePhoto": {
+    "addButton": "Добавить фото",
+    "deleteTitle": "Удалить фото",
+    "deleteQuestion": "Вы уверены, что хотите удалить фото?",
+    "deleteSuccess": "Аватар удалён",
+    "avatarAlt": "аватар"
+  },
+  "profileInfoForm": {
+    "labels": {
+      "username": "Имя пользователя",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "dateOfBirth": "Дата рождения",
+      "country": "Выберите страну",
+      "city": "Выберите город",
+      "aboutMe": "Обо мне"
+    },
+    "errors": {
+      "age13": "Вам должно быть не менее 13 лет. См. нашу {privacyPolicy}."
+    },
+    "buttons": {
+      "save": "Сохранить изменения"
+    },
+    "links": {
+      "privacy": "Политику конфиденциальности"
+    }
+  },
+  "devices": {
+    "currentTitle": "Текущее устройство",
+    "terminateOthers": "Завершить все другие сессии",
+    "activeTitle": "Активные сессии",
+    "toast": {
+      "terminated": "Все другие сессии успешно завершены",
+      "error": "Что-то пошло не так. Попробуйте ещё раз."
+    },
+    "emptyOthers": "Других активных сессий нет"
+  },
+  "paymentModal": {
+    "title": "Создать платеж",
+    "initial": {
+      "text": "С этим платежом будет включено автопродление. Вы можете отключить его в настройках профиля в любое время.",
+      "agree": "Я согласен*",
+      "ok": "ОК"
+    },
+    "success": {
+      "text": "Платёж прошёл успешно!",
+      "button": "Ок"
+    },
+    "error": {
+      "text": "Транзакция не удалась. Пожалуйста, напишите в поддержку",
+      "button": "Назад к оплате"
+    }
+  },
+  "subscriptionCard": {
+    "title": "Текущая подписка:",
+    "expire": "Истекает",
+    "nextPayment": "Следующий платёж",
+    "toast": {
+      "cancel": "Вы успешно отменили автопродление подписки!",
+      "renew": "Вы успешно возобновили автопродление подписки!"
+    },
+    "autoRenewal": "Автопродление"
+  },
+  "businessSubscription": {
+    "change": "Измените вашу подписку:",
+    "costs": "Стоимость вашей подписки:",
+    "or": "или",
+    "ariaPaypal": "Оплатить через PayPal",
+    "ariaStripe": "Оплатить через Stripe"
+  },
+  "myPayments": {
+    "loading": "Загрузка платежей...",
+    "error": "Ошибка при загрузке платежей. Попробуйте ещё раз.",
+    "empty": "Платежи не найдены"
+  },
+  "paymentsTable": {
+    "headers": {
+      "dateOfPayment": "Дата платежа",
+      "endDateOfSubscription": "Дата окончания подписки",
+      "price": "Сумма",
+      "subscriptionType": "Тип подписки",
+      "paymentType": "Способ оплаты"
+    }
+  },
+  "pagination": {
+    "previousPage": "Предыдущая страница",
+    "nextPage": "Следующая страница",
+    "show": "Показать",
+    "onPage": "на странице"
+  },
+  "favorites": {
+    "title": "Избранное ({count})",
+    "empty": "Пока нет сохранённых постов. Начните сохранять посты, нажимая на иконку закладки!"
+  },
+  "logoutModal": {
+    "title": "Выйти",
+    "description": "Вы действительно хотите выйти из своего аккаунта?{email}"
+  },
+  "confirm": {
+    "yes": "Да",
+    "no": "Нет"
+  },
+  "userSearch": {
+    "title": "Поиск",
+    "placeholder": "Поиск",
+    "noResults": "Пользователи не найдены",
+    "recent": {
+      "title": "Недавние запросы",
+      "emptyTitle": "Упс! Здесь пока пусто!",
+      "emptyCaption": "Недавних запросов нет"
+    }
+  },
+  "userProfile": {
+    "settings": "Настройки профиля",
+    "follow": "Подписаться",
+    "unfollow": "Отписаться",
+    "sendMessage": "Написать сообщение",
+    "stats": {
+      "following": "Подписки",
+      "followers": "Подписчики",
+      "publications": "Публикации"
+    },
+    "verifiedAlt": "подтверждено"
+  },
+  "postModal": {
+    "editTitle": "Редактировать пост"
+  },
+  "postEditForm": {
+    "cancel": "Отмена",
+    "save": "Сохранить изменения",
+    "menu": {
+      "edit": "Редактировать пост",
+      "delete": "Удалить пост",
+      "follow": "Подписаться",
+      "unfollow": "Отписаться",
+      "copyLink": "Скопировать ссылку"
+    },
+    "confirmDelete": "Вы уверены, что хотите удалить этот пост?",
+    "confirmCancel": "Вы уверены, что хотите выйти из редактирования? Ваши изменения не будут сохранены.",
+    "updateSuccess": "Пост успешно обновлён!",
+    "deleteSuccess": "Пост успешно удалён.",
+    "deleteError": "Не удалось удалить пост.",
+    "copySuccess": "Ссылка скопирована в буфер обмена"
+  },
+  "createPost": {
+    "upload": {
+      "placeholder": "Перетащите изображение сюда или нажмите, чтобы выбрать",
+      "dragPlaceholder": "Отпустите изображение здесь",
+      "primaryButton": "Выбрать",
+      "openDraft": "Открыть черновик",
+      "loadingDraft": "Загрузка черновика..."
+    },
+    "modal": {
+      "uploadTitle": "Добавить фото",
+      "cropTitle": "Кадрирование",
+      "filterTitle": "Фильтры",
+      "descriptionTitle": "Публикация"
+    }
+  },
+  "closePostModal": {
+    "title": "Закрыть",
+    "confirm": "Вы действительно хотите закрыть создание публикации?",
+    "warning": "Если вы закроете, всё будет удалено.",
+    "buttons": {
+      "discard": "Удалить",
+      "discardAria": "Отменить создание публикации",
+      "saveDraft": "Сохранить",
+      "saveDraftAria": "Сохранить публикацию как черновик",
+      "saving": "Сохранение..."
+    }
+  },
+  "messages": {
+    "auth": {
+      "logoutSuccess": "Вы вышли из системы",
+      "logoutError": "JWT accessToken отсутствует, просрочен или неверен"
+    },
+    "post": {
+      "published": "Публикация успешно опубликована!",
+      "draftSaved": "Черновик успешно сохранён",
+      "draftLoaded": "Черновик загружен",
+      "discarded": "Черновик удалён"
+    },
+    "profile": {
+      "settingsSuccess": "Ваши настройки сохранены",
+      "settingsError": "Ошибка! Сервер недоступен"
+    },
+    "favorites": {
+      "added": "Публикация добавлена в избранное",
+      "removed": "Публикация удалена из избранного",
+      "loginRequired": "Вам нужно войти в систему, чтобы использовать эту функцию"
+    }
+  },
+  "infoPage": {
+    "backToSignup": "Назад к регистрации",
+    "privacyPolicyTitle": "Политика конфиденциальности"
+  },
+  "messenger": {
+    "title": "Мессенджер"
+  },
+  "avatar": {
+    "modal": {
+      "uploadTitle": "Добавить фото профиля",
+      "positionTitle": "Обрезать фото профиля"
+    },
+    "upload": {
+      "placeholder": "Перетащите фото профиля сюда или нажмите, чтобы выбрать",
+      "dragPlaceholder": "Отпустите фото профиля здесь",
+      "primaryButton": "Выбрать фото"
+    },
+    "uploadSuccess": "Аватар успешно загружен",
+    "saveButton": "Сохранить"
+  },
+  "flow": {
+    "confirm": {
+      "title": "Закрыть",
+      "description": "Выйти без сохранения изменений?"
+    },
+    "buttons": {
+      "next": "Далее",
+      "publish": "Опубликовать",
+      "publishing": "Публикация...",
+      "closeAria": "Закрыть"
+    },
+    "steps": {
+      "upload": {
+        "title": "Добавить фото"
+      },
+      "crop": {
+        "title": "Кадрирование"
+      },
+      "filter": {
+        "title": "Фильтры"
+      },
+      "description": {
+        "title": "Публикация"
+      },
+      "avatarUpload": {
+        "title": "Добавить фото профиля"
+      },
+      "avatarPosition": {
+        "title": "Обрезать фото профиля"
+      }
+    }
+  },
+  "filters": {
+    "normal": "Нормальный",
+    "clarendon": "Кларендон",
+    "lark": "Жаворонок",
+    "gingham": "Гингем",
+    "moon": "Луна",
+    "reyes": "Рейес",
+    "juno": "Джуно",
+    "slumber": "Дрема",
+    "crema": "Крема"
+  },
+  "publication": {
+    "descriptionLabel": "Добавьте описание публикации",
+    "descriptionPlaceholder": "Введите подпись..."
+  },
+  "postsGrid": {
+    "noPosts": "Пока нет публикаций"
+  },
+  "emailConfirmation": {
+    "successTitle": "Поздравляем!",
+    "successDescription": "Ваш email был успешно подтверждён",
+    "successButton": "Войти",
+    "errorTitle": "Ошибка",
+    "errorDescription": "Попробуйте ещё раз позже",
+    "networkErrorTitle": "Сетевая ошибка",
+    "networkErrorDescription": "Не удалось подключиться к серверу"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "newPrefix": "Новое уведомление!",
+    "newTag": "Новое",
+    "markAll": "Отметить всё прочитанным",
+    "delete": "Удалить"
+  },
+  "comments": {
+    "form": {
+      "placeholder": "Добавьте комментарий...",
+      "publish": "Опубликовать",
+      "publishing": "Публикуем..."
+    },
+    "reply": {
+      "placeholder": "Напишите ответ...",
+      "cancel": "Отмена",
+      "action": "Ответить"
+    },
+    "answers": {
+      "view": "Показать ответы ({count})",
+      "hide": "Скрыть ответы"
+    },
+    "likes": "Лайков: {count}",
+    "loading": "Загрузка комментариев..."
+  },
+  "post": {
+    "notLoggedIn": "Вы не авторизованы"
+  },
+  "settings": {
+    "accountType": {
+      "personal": "Личный",
+      "business": "Бизнес",
+      "title": "Тип аккаунта:"
+    },
+    "subscription": {
+      "day": "$10 за 1 день",
+      "weekly": "$50 за 7 дней",
+      "monthly": "$100 за месяц"
+    }
+  }
+}

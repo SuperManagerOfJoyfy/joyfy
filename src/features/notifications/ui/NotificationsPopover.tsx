@@ -4,10 +4,11 @@ import { IoCheckmarkDoneOutline, IoNotificationsOutline } from 'react-icons/io5'
 import { ArrowIcon, Button, LazyLoader, Scroll, Separator, Typography } from '@/shared/ui'
 import { useNotificationsController } from '../hooks'
 import { NotificationItem } from './NotificationItem'
-
+import { useTranslations } from 'next-intl'
 import s from './Notification.module.scss'
 
 export const NotificationsPopover = () => {
+  const t = useTranslations('notifications')
   const { notifications, notReadCount, isLoadingMore, onMarkAsRead, hasMore, handleFetchMore, onDeleteNotification } =
     useNotificationsController()
 
@@ -22,14 +23,14 @@ export const NotificationsPopover = () => {
         <Popover.Content className={s.popoverContent} sideOffset={15} align="end">
           <div className={s.popoverHeader}>
             <Typography variant="h3" className={s.title}>
-              Notifications
+              {t('title')}
             </Typography>
 
             <Button
               variant="icon"
               className={s.actionButton}
               onClick={onMarkAsRead}
-              title="Mark all as read"
+              title={t('markAll')}
               disabled={!notReadCount}
             >
               <IoCheckmarkDoneOutline />
@@ -44,7 +45,7 @@ export const NotificationsPopover = () => {
               </React.Fragment>
             ))}
 
-            <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching />
+            <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching={isLoadingMore} />
           </Scroll>
 
           <Popover.Arrow asChild>

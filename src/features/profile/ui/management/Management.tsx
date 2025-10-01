@@ -20,6 +20,7 @@ import {
 } from '@/features/profile/api'
 import { useSearchParams } from 'next/navigation'
 import { useAppDispatch } from '@/app/store/store'
+import { useLocale } from 'next-intl'
 
 export const Management = () => {
   const [typeSubscription, setTypeSubscription] = useState<SubscriptionType>(SubscriptionType.DAY)
@@ -31,6 +32,8 @@ export const Management = () => {
   const { data: currentSubscription } = useGetCurrentSubscriptionQuery()
   const [pay] = useCreatePaymentMutation()
   const dispatch = useAppDispatch()
+
+  const locale = useLocale()
 
   const updateAccountType = (newType: AccountType) => {
     dispatch(
@@ -69,8 +72,8 @@ export const Management = () => {
         typeSubscription,
         paymentType,
         amount: price[typeSubscription],
-        baseUrl: 'http://localhost:3000/settings?part=management',
-        // baseUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings?part=management&`,
+        baseUrl: `http://localhost:3000/${locale}/settings?part=management`,
+        // baseUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}//${locale}/settings?part=management&`,
       }).unwrap()
 
       if (response?.url) {

@@ -34,16 +34,6 @@
   }
 }
 
-%replyButton {
-  @extend %sharedMetaStyles;
-  font-weight: var(--font-weight-semibold);
-  padding: 0;
-  height: var(--line-height-m);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
 %replyForm {
   margin-top: 8px;
   margin-left: 20px;

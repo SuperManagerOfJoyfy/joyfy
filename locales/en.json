@@ -1,0 +1,394 @@
+{
+  "header": {
+    "login": "Log in",
+    "signup": "Sign up",
+    "chooseLanguage": "Choose language"
+  },
+  "sidebar": {
+    "home": "Home",
+    "create": "Create",
+    "myProfile": "My Profile",
+    "messenger": "Messenger",
+    "search": "Search",
+    "statistics": "Statistics",
+    "favorites": "Favorites",
+    "logout": "Log Out",
+    "usersList": "Users list",
+    "paymentsList": "Payments list",
+    "postsList": "Posts list"
+  },
+  "languages": {
+    "english": "English",
+    "russian": "Russian"
+  },
+  "auth": {
+    "signup": {
+      "title": "Sign Up",
+      "button": "Sign Up",
+      "footerQuestion": "Do you have an account?",
+      "footerLink": "Sign In",
+      "fields": {
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirmation": "Confirm password",
+        "agreePrefix": "I agree to the",
+        "terms": "Terms of Service",
+        "and": "and",
+        "privacy": "Privacy Policy"
+      }
+    },
+    "login": {
+      "title": "Sign In",
+      "button": "Sign In",
+      "fields": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "forgotPassword": "Forgot Password",
+      "footerQuestion": "Don't have an account?",
+      "footerLink": "Sign Up"
+    },
+    "linkExpired": {
+      "title": "Email verification link expired",
+      "description": "Looks like the verification link has expired. Not to worry, we can send the link again",
+      "button": "Resend verification link",
+      "emailLabel": "Email"
+    }
+  },
+  "dashboard": {
+    "registeredUsers": "Registered users",
+    "showMore": "Show more",
+    "hide": "Hide"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Oops! The page you're looking for doesn't exist or has been moved.",
+    "button": "Go to Homepage"
+  },
+  "verifyEmail": {
+    "title": "Verify Email"
+  },
+  "statistics": {
+    "title": "Statistics Page"
+  },
+  "profileSettings": {
+    "tabs": {
+      "info": "General Information",
+      "devices": "Devices",
+      "management": "Account Management",
+      "payments": "My Payments"
+    }
+  },
+  "profilePhoto": {
+    "addButton": "Add a Profile Photo",
+    "deleteTitle": "Delete Photo",
+    "deleteQuestion": "Are you sure you want to delete the photo?",
+    "deleteSuccess": "Avatar has been deleted",
+    "avatarAlt": "avatar"
+  },
+  "profileInfoForm": {
+    "labels": {
+      "username": "Username",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "dateOfBirth": "Date of Birth",
+      "country": "Select your country",
+      "city": "Select your city",
+      "aboutMe": "About Me"
+    },
+    "errors": {
+      "age13": "You must be at least 13 years old. See our {privacyPolicy}."
+    },
+    "buttons": {
+      "save": "Save changes"
+    },
+    "links": {
+      "privacy": "Privacy Policy"
+    }
+  },
+  "devices": {
+    "currentTitle": "Current device",
+    "terminateOthers": "Terminate all other sessions",
+    "activeTitle": "Active sessions",
+    "toast": {
+      "terminated": "Successfully terminated from all other sessions",
+      "error": "Something went wrong. Please try again."
+    },
+    "emptyOthers": "No other active sessions"
+  },
+  "paymentModal": {
+    "title": "Create payment",
+    "initial": {
+      "text": "Auto-renewal will be enabled with this payment. You can disable it anytime in your profile settings.",
+      "agree": "I agree*",
+      "ok": "OK"
+    },
+    "success": {
+      "text": "Payment was successful!",
+      "button": "Ok"
+    },
+    "error": {
+      "text": "Transaction failed. Please, write to support",
+      "button": "Back to payment"
+    }
+  },
+  "subscriptionCard": {
+    "title": "Current Subscription:",
+    "expire": "Expire at",
+    "nextPayment": "Next payment",
+    "toast": {
+      "cancel": "You successfully cancel auto renewal subscription!",
+      "renew": "You successfully renew auto renewal subscription!"
+    },
+    "autoRenewal": "Auto-Renewal"
+  },
+  "businessSubscription": {
+    "change": "Change your subscription:",
+    "costs": "Your subscription costs:",
+    "or": "Or",
+    "ariaPaypal": "Pay with PayPal",
+    "ariaStripe": "Pay with Stripe"
+  },
+  "myPayments": {
+    "loading": "Loading payments...",
+    "error": "Error loading payments. Please try again.",
+    "empty": "No payments found"
+  },
+  "paymentsTable": {
+    "headers": {
+      "dateOfPayment": "Date of Payment",
+      "endDateOfSubscription": "End date of subscription",
+      "price": "Price",
+      "subscriptionType": "Subscription Type",
+      "paymentType": "Payment Type"
+    }
+  },
+  "pagination": {
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "show": "Show",
+    "onPage": "on page"
+  },
+  "favorites": {
+    "title": "Favorites ({count})",
+    "empty": "No saved posts yet. Start saving posts by clicking the bookmark icon!"
+  },
+  "logoutModal": {
+    "title": "Log Out",
+    "description": "Do you really want to log out of your account?{email}"
+  },
+  "confirm": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "userSearch": {
+    "title": "Search",
+    "placeholder": "Search",
+    "noResults": "No users found",
+    "recent": {
+      "title": "Recent requests",
+      "emptyTitle": "Oops! This place looks empty!",
+      "emptyCaption": "No recent requests"
+    }
+  },
+  "userProfile": {
+    "settings": "Profile Settings",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "sendMessage": "Send Message",
+    "stats": {
+      "following": "Following",
+      "followers": "Followers",
+      "publications": "Publications"
+    },
+    "verifiedAlt": "verified"
+  },
+  "postModal": {
+    "editTitle": "Edit Post"
+  },
+  "postEditForm": {
+    "cancel": "Cancel",
+    "save": "Save Changes",
+    "menu": {
+      "edit": "Edit Post",
+      "delete": "Delete Post",
+      "follow": "Follow",
+      "unfollow": "Unfollow",
+      "copyLink": "Copy Link"
+    },
+    "confirmDelete": "Are you sure you want to delete this post?",
+    "confirmCancel": "Are you sure you want to exit post editing? Your changes will not be saved.",
+    "updateSuccess": "Post updated successfully!",
+    "deleteSuccess": "Post deleted successfully.",
+    "deleteError": "Post cannot be deleted.",
+    "copySuccess": "Link copied to clipboard"
+  },
+  "createPost": {
+    "upload": {
+      "placeholder": "Drag and drop your image here or click to browse",
+      "dragPlaceholder": "Drop the image here",
+      "primaryButton": "Select from Computer",
+      "openDraft": "Open Draft",
+      "loadingDraft": "Loading Draft..."
+    },
+    "modal": {
+      "uploadTitle": "Add Photo",
+      "cropTitle": "Cropping",
+      "filterTitle": "Filters",
+      "descriptionTitle": "Publication"
+    }
+  },
+  "closePostModal": {
+    "title": "Close",
+    "confirm": "Do you really want to close the creation of a publication?",
+    "warning": "If you close, everything will be deleted.",
+    "buttons": {
+      "discard": "Discard",
+      "discardAria": "Discard the publication creation",
+      "saveDraft": "Save draft",
+      "saveDraftAria": "Save the publication as draft",
+      "saving": "Saving..."
+    }
+  },
+  "messages": {
+    "auth": {
+      "logoutSuccess": "You have been logged out",
+      "logoutError": "JWT accessToken is missing, expired or incorrect"
+    },
+    "post": {
+      "published": "Post successfully published!",
+      "draftSaved": "Draft saved successfully",
+      "draftLoaded": "Draft loaded",
+      "discarded": "Draft discarded"
+    },
+    "profile": {
+      "settingsSuccess": "Your settings are saved",
+      "settingsError": "Error! Server is not available"
+    },
+    "favorites": {
+      "added": "Post added to favorites",
+      "removed": "Post removed from favorites",
+      "loginRequired": "You need to log in to use this feature"
+    }
+  },
+  "infoPage": {
+    "backToSignup": "Back to Sign Up",
+    "privacyPolicyTitle": "Privacy Policy"
+  },
+  "messenger": {
+    "title": "Messenger"
+  },
+  "avatar": {
+    "modal": {
+      "uploadTitle": "Add Profile Photo",
+      "positionTitle": "Crop Profile Photo"
+    },
+    "upload": {
+      "placeholder": "Drag and drop your profile photo here or click to browse",
+      "dragPlaceholder": "Drop your profile photo here",
+      "primaryButton": "Select Photo"
+    },
+    "uploadSuccess": "Avatar uploaded successfully",
+    "saveButton": "Save"
+  },
+  "flow": {
+    "confirm": {
+      "title": "Close",
+      "description": "Are you sure you want to exit without saving changes?"
+    },
+    "buttons": {
+      "next": "Next",
+      "publish": "Publish",
+      "publishing": "Publishing...",
+      "closeAria": "Close"
+    },
+    "steps": {
+      "upload": {
+        "title": "Add Photo"
+      },
+      "crop": {
+        "title": "Cropping"
+      },
+      "filter": {
+        "title": "Filters"
+      },
+      "description": {
+        "title": "Publication"
+      },
+      "avatarUpload": {
+        "title": "Add Profile Photo"
+      },
+      "avatarPosition": {
+        "title": "Crop Profile Photo"
+      }
+    },
+    "filters": {
+      "normal": "Normal",
+      "clarendon": "Clarendon",
+      "lark": "Lark",
+      "gingham": "Gingham",
+      "moon": "Moon",
+      "reyes": "Reyes",
+      "juno": "Juno",
+      "slumber": "Slumber",
+      "crema": "Crema"
+    }
+  },
+  "publication": {
+    "descriptionLabel": "Add publication description",
+    "descriptionPlaceholder": "Your caption goes here..."
+  },
+  "postsGrid": {
+    "noPosts": "There are no posts yet"
+  },
+  "emailConfirmation": {
+    "successTitle": "Congratulations!",
+    "successDescription": "Your email has been confirmed",
+    "successButton": "Sign in",
+    "errorTitle": "Error",
+    "errorDescription": "Please try again later",
+    "networkErrorTitle": "Network Error",
+    "networkErrorDescription": "Could not connect to the server"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "newPrefix": "New notification!",
+    "newTag": "New",
+    "markAll": "Mark all as read",
+    "delete": "Delete"
+  },
+  "comments": {
+    "form": {
+      "placeholder": "Add a comment...",
+      "publish": "Publish",
+      "publishing": "Publishing..."
+    },
+    "reply": {
+      "placeholder": "Write an answer...",
+      "cancel": "Cancel",
+      "action": "Answer"
+    },
+    "answers": {
+      "view": "View answers ({count})",
+      "hide": "Hide answers"
+    },
+    "likes": "Like: {count}",
+    "loading": "Loading comments..."
+  },
+  "post": {
+    "notLoggedIn": "You are not logged in"
+  },
+  "settings": {
+    "accountType": {
+      "personal": "Personal",
+      "business": "Business",
+      "title": "Account type:"
+    },
+    "subscription": {
+      "day": "$10 per 1 Day",
+      "weekly": "$50 per 7 Days",
+      "monthly": "$100 per month"
+    }
+  }
+}

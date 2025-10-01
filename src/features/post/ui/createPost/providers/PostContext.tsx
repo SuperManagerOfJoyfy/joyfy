@@ -209,7 +209,7 @@ export const PostContextProvider = ({ children, userId }: { children: ReactNode;
       setImages((prev) => prev.map((img, i) => (i === imageIdx ? { ...img, src: originalSrc } : img)))
 
       setImagesEditData((prev) =>
-        prev.map((data, i) => (i === imageIdx ? { scale: 1, aspectRatio: 'original', imageFilter: 'Normal' } : data))
+        prev.map((data, i) => (i === imageIdx ? { scale: 1, aspectRatio: 'original', imageFilter: 'normal' } : data))
       )
     },
     [currentImageIdx, images]
