@@ -1,11 +1,33 @@
 import { BaseQueryFn, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 import { PATH } from '../config/routes'
 import { handleErrors } from '@/shared/utils/handleErrors/handleErrors'
 import LocalStorage from '../utils/localStorage/localStorage'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { setToken } from '@/features/auth/model/authSlice'
 
+/** —— i18n helpers —— */
+const LOCALES = ['en', 'ru'] as const
+
+function getLocaleFromPath(pathname: string): string {
+  if (!pathname.startsWith('/')) return 'en'
+  const seg = pathname.split('/')[1]
+  return (LOCALES as readonly string[]).includes(seg) ? seg : 'en'
+}
+
+function stripLocale(pathname: string): string {
+  if (!pathname.startsWith('/')) return pathname
+  const seg = pathname.split('/')[1]
+  return (LOCALES as readonly string[]).includes(seg) ? pathname.slice(seg.length + 1) || '/' : pathname
+}
+
+function withLocalePath(path: string): string {
+  if (typeof window === 'undefined') return path
+  const locale = getLocaleFromPath(window.location.pathname)
+  return `/${locale}${path}`
+}
+
+/** —— base queries —— */
 const mutex = new Mutex()
 let lastRefreshResult: boolean | null = null
 let lastRefreshAttempt = 0
@@ -16,9 +38,7 @@ const createBaseQuery = () =>
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = LocalStorage.getToken()
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`)
-      }
+      if (token) headers.set('Authorization', `Bearer ${token}`)
       return headers
     },
   })
@@ -27,10 +47,9 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
   args,
   api,
   extraOptions
-) => {
-  return createBaseQuery()(args, api, extraOptions)
-}
+) => createBaseQuery()(args, api, extraOptions)
 
+/** —— reauth wrapper —— */
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,
   api,
@@ -38,72 +57,71 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 ) => {
   await mutex.waitForUnlock()
 
+  // API
   const isAuthMeRequest = typeof args !== 'string' && args.url === '/auth/me'
   const isRefreshEndpoint = typeof args !== 'string' && args.url === '/auth/update-tokens' && args.method === 'POST'
   const isLoginEndpoint = typeof args !== 'string' && args.url === '/auth/login' && args.method === 'POST'
   const isGoogleLoginEndpoint = typeof args !== 'string' && args.url === '/auth/google/login' && args.method === 'POST'
 
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : ''
+  const rawPath = typeof window !== 'undefined' ? window.location.pathname : ''
+  const pathNoLocale = stripLocale(rawPath)
 
-  const isPublicPage =
-    [
-      PATH.ROOT,
-      PATH.AUTH.REGISTRATION,
-      PATH.AUTH.LOGIN,
-      PATH.AUTH.PRIVACY_POLICY,
-      PATH.AUTH.TERMS_OF_SERVICE,
-      PATH.AUTH.EMAIL_CONFIRMED,
-      PATH.USER.PROFILE,
-      PATH.AUTH.GOOGLE,
-      PATH.AUTH.GITHUB,
-    ].includes(currentPath) || currentPath.startsWith(PATH.USER.PROFILE)
+  const PUBLIC_PATHS = new Set<string>([
+    PATH.ROOT, // '/'
+    PATH.AUTH.LOGIN, // '/auth/login'
+    PATH.AUTH.REGISTRATION, // '/auth/registration'
+    PATH.AUTH.PRIVACY_POLICY, // '/auth/privacy-policy'
+    PATH.AUTH.TERMS_OF_SERVICE, // '/auth/terms-of-service'
+    PATH.AUTH.EMAIL_CONFIRMED, // '/auth/email-confirmed'
+    PATH.AUTH.GOOGLE, // '/auth/google'
+    PATH.AUTH.GITHUB, // '/auth/github'
+  ])
+
+  const isPublicPage = PUBLIC_PATHS.has(pathNoLocale) || pathNoLocale.startsWith(PATH.USER.PROFILE)
 
   if (isLoginEndpoint || isGoogleLoginEndpoint) {
-    const result = await baseQuery(args, api, extraOptions)
-    handleErrors(api, result)
-    return result
+    const res = await baseQuery(args, api, extraOptions)
+    handleErrors(api, res)
+    return res
   }
 
   let result = await baseQuery(args, api, extraOptions)
 
   if (result.error?.status === 401 && !isRefreshEndpoint) {
-    const currentTime = Date.now()
-    const refreshCooldown = 3000
+    if (isAuthMeRequest && isPublicPage) {
+      handleErrors(api, result)
+      return result
+    }
 
-    if (lastRefreshResult === false && currentTime - lastRefreshAttempt < refreshCooldown) {
-      console.log('Skipping refresh - recent failure')
+    const now = Date.now()
+    const cooldownMs = 3000
+    if (lastRefreshResult === false && now - lastRefreshAttempt < cooldownMs) {
       return result
     }
 
     if (!mutex.isLocked()) {
       const release = await mutex.acquire()
-
       try {
         lastRefreshAttempt = Date.now()
         lastRefreshResult = null
 
-        console.log('Attempting to refresh token')
+        const refresh = await baseQuery({ url: '/auth/update-tokens', method: 'POST' }, api, extraOptions)
 
-        const refreshResult = await baseQuery({ url: '/auth/update-tokens', method: 'POST' }, api, extraOptions)
-
-        if (!refreshResult.error) {
-          console.log('Token refresh successful')
+        if (!refresh.error) {
           lastRefreshResult = true
-
-          const data = refreshResult.data as { accessToken: string }
+          const data = refresh.data as { accessToken: string }
           LocalStorage.setToken(data.accessToken)
           api.dispatch(setToken(data.accessToken))
-
           result = await baseQuery(args, api, extraOptions)
         } else {
-          console.log('Token refresh failed:', refreshResult.error)
           lastRefreshResult = false
-          if (!(isAuthMeRequest && isPublicPage)) {
-            LocalStorage.removeToken()
+          LocalStorage.removeToken()
+          if (typeof window !== 'undefined') {
             localStorage.removeItem('userEmail')
-
-            if (typeof window !== 'undefined') {
-              window.location.href = PATH.AUTH.LOGIN
+            const target = withLocalePath(PATH.AUTH.LOGIN)
+            if (rawPath !== target) {
+              window.location.href = target
+            } else {
             }
           }
         }
@@ -111,17 +129,13 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
         release()
       }
     } else {
-      console.log('Waiting for token refresh to complete')
       await mutex.waitForUnlock()
-
       if (lastRefreshResult === true) {
-        console.log('Using recently refreshed token')
         result = await baseQuery(args, api, extraOptions)
       }
     }
   }
 
   handleErrors(api, result)
-
   return result
 }

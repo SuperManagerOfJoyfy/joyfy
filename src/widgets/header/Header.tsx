@@ -1,10 +1,11 @@
 'use client'
 
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 import Image, { StaticImageData } from 'next/image'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useTranslations, useLocale } from 'next-intl'
+import { Link, usePathname, useRouter } from '@/i18n/navigation'
 
+import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { NotificationsPopover } from '@/features/notifications/ui/NotificationsPopover'
 import { PATH } from '@/shared/config/routes'
 import { Button, SelectBox, SelectItem, UserCard } from '@/shared/ui'
@@ -28,18 +29,27 @@ const LanguageSelect = ({ flag, language }: LanguageSelectProps) => (
   </div>
 )
 
-const AuthActions = () => (
-  <div className={s.buttons}>
-    <Button as={Link} href={PATH.AUTH.LOGIN} size="small" variant="text">
-      Log in
-    </Button>
-    <Button as={Link} href={PATH.AUTH.REGISTRATION} size="small" variant="primary">
-      Sign up
-    </Button>
-  </div>
-)
+const AuthActions = () => {
+  const t = useTranslations('header')
+  return (
+    <div className={s.buttons}>
+      <Button as={Link} href={PATH.AUTH.LOGIN} size="small" variant="text">
+        {t('login')}
+      </Button>
+      <Button as={Link} href={PATH.AUTH.REGISTRATION} size="small" variant="primary">
+        {t('signup')}
+      </Button>
+    </div>
+  )
+}
 
 export const Header = () => {
+  const { data: user, isLoading } = useGetMeQuery()
+  const tHeader = useTranslations('header')
+  const tLang = useTranslations('languages')
+  const locale = useLocale() // -> 'en' | 'ru'
+  const router = useRouter()
+  const pathname = usePathname()
   const { data: me, isLoading: isMeLoading } = useGetMeQuery()
   const [showButtons, setShowButtons] = useState(true)
   const { data: profile } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
@@ -61,6 +71,10 @@ export const Header = () => {
         }
       : null
 
+  const handleLanguageChange = (nextLocale: string) => {
+    router.replace(pathname, { locale: nextLocale as 'en' | 'ru' })
+  }
+
   return (
     <header className={s.header}>
       <div className={s.container}>
@@ -68,16 +82,22 @@ export const Header = () => {
           <Image src={Logo} alt="logo" width={40} height={40} />
           <Image src={Letters} alt="logo" height={20} />
         </Link>
+
         <div className={s.actions}>
           {currentUser && <UserCard user={currentUser} />}
           <div className={s.notificationContainer}>{me && <NotificationsPopover />}</div>
 
-          <SelectBox className={s.selector} placeholder="Choose language">
-            <SelectItem value="English">
-              <LanguageSelect flag={flagUnitedKingdom} language="English" />
+          <SelectBox
+            className={s.selector}
+            placeholder={tHeader('chooseLanguage')}
+            onValueChange={handleLanguageChange}
+            value={locale}
+          >
+            <SelectItem value="en">
+              <LanguageSelect flag={flagUnitedKingdom} language={tLang('english')} />
             </SelectItem>
-            <SelectItem value="Russian">
-              <LanguageSelect flag={flagRussia} language="Russian" />
+            <SelectItem value="ru">
+              <LanguageSelect flag={flagRussia} language={tLang('russian')} />
             </SelectItem>
           </SelectBox>
 

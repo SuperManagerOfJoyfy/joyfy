@@ -1,11 +1,12 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useLazyGetMeQuery } from '@/features/auth/api/authApi'
 import { PATH } from '@/shared/config/routes'
 import LocalStorage from '@/shared/utils/localStorage/localStorage'
 import { Loader } from '@/shared/ui/loader/Loader'
+import { useRouter } from '@/i18n/navigation'
 
 export const GithubOAuthSuccess = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -50,7 +51,7 @@ export const GithubOAuthSuccess = () => {
   }, [searchParams, router, triggerGetMe])
 
   if (isLoading) {
-    return <Loader fullScreen message="Processing authentication..." />
+    return <Loader fullScreen />
   }
 
   return null

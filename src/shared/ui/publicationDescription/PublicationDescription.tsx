@@ -1,6 +1,8 @@
 import { ChangeEvent } from 'react'
 import clsx from 'clsx'
 import { TextArea, Typography } from '@/shared/ui'
+import { useTranslations } from 'next-intl'
+
 import s from './PublicationDescription.module.scss'
 
 type Props = {
@@ -11,11 +13,13 @@ type Props = {
 }
 
 export const PublicationDescription = ({ value, onChange, disabled, className }: Props) => {
+  const t = useTranslations('publication')
+
   return (
-    <div className={clsx(s.formContainer)}>
+    <div className={clsx(s.formContainer, className)}>
       <TextArea
-        label="Add publication description"
-        placeholder="Your caption goes here..."
+        label={t('descriptionLabel')}
+        placeholder={t('descriptionPlaceholder')}
         value={value}
         onChange={onChange}
         maxLength={500}

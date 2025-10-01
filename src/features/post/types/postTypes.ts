@@ -1,16 +1,17 @@
 export const IMAGE_FILTERS = {
-  Normal: 'none',
-  Clarendon: 'contrast(125%) saturate(120%)',
-  Lark: 'brightness(110%) contrast(90%) saturate(110%)',
-  Gingham: 'contrast(90%) sepia(20%)',
-  Moon: 'grayscale(100%) contrast(110%) brightness(110%)',
-  Reyes: 'brightness(115%) contrast(85%) sepia(22%)',
-  Juno: 'saturate(160%) contrast(95%)',
-  Slumber: 'brightness(90%) contrast(110%) sepia(20%)',
-  Crema: 'saturate(85%) contrast(90%) brightness(115%)',
+  normal: 'none',
+  clarendon: 'contrast(125%) saturate(120%)',
+  lark: 'brightness(110%) contrast(90%) saturate(110%)',
+  gingham: 'contrast(90%) sepia(20%)',
+  moon: 'grayscale(100%) contrast(110%) brightness(110%)',
+  reyes: 'brightness(115%) contrast(85%) sepia(22%)',
+  juno: 'saturate(160%) contrast(95%)',
+  slumber: 'brightness(90%) contrast(110%) sepia(20%)',
+  crema: 'saturate(85%) contrast(90%) brightness(115%)',
 } as const
 
-export const IMAGE_FILTERS_LIST = Object.keys(IMAGE_FILTERS) as Array<keyof typeof IMAGE_FILTERS>
+export type FilterKey = keyof typeof IMAGE_FILTERS
+export const IMAGE_FILTERS_LIST = Object.keys(IMAGE_FILTERS) as FilterKey[]
 
 export const ASPECT_RATIOS = ['original', '1:1', '4:5', '16:9'] as const
 

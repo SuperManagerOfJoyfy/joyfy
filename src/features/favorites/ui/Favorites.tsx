@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { Typography } from '@/shared/ui'
 import { PostsGrid } from '@/entities/post/ui/postsGrid/PostsGrid'
@@ -13,6 +14,7 @@ import { useFavorites } from '../hooks/useFavorites'
 import s from './Favorites.module.scss'
 
 export const Favorites = () => {
+  const t = useTranslations('favorites')
   const { favoritesPosts } = useFavorites()
   const { data: me } = useGetMeQuery()
   const router = useRouter()
@@ -35,16 +37,15 @@ export const Favorites = () => {
 
   return (
     <>
-      <Typography variant="h1">Favorites ({favoritesPosts.length})</Typography>
+      <Typography variant="h1">{t('title', { count: favoritesPosts.length })}</Typography>
 
       {favoritesPosts.length === 0 ? (
         <div className={s.emptyState}>
-          <Typography variant="body1">No saved posts yet. Start saving posts by clicking the bookmark icon!</Typography>
+          <Typography variant="body1">{t('empty')}</Typography>
         </div>
       ) : (
         <div className={s.posts}>
           <PostsGrid posts={favoritesPosts} onPostClick={openPostModal} />
-
           {canShowModal && (
             <PostModal userProfile={{ userId: me.userId, userName: me.userName }} initialPost={selectedPost!} />
           )}

@@ -1,6 +1,8 @@
+'use client'
+
 import { ReactNode } from 'react'
 import { Button, Modal, Typography } from '@/shared/ui'
-
+import { useTranslations } from 'next-intl'
 import s from './confirmModal.module.scss'
 
 type Props = {
@@ -12,6 +14,8 @@ type Props = {
 }
 
 export const ConfirmModal = ({ title, description, isOpen, setIsOpen, onConfirm }: Props) => {
+  const t = useTranslations('confirm')
+
   function handleConfirm() {
     onConfirm()
     setIsOpen(false)
@@ -23,12 +27,11 @@ export const ConfirmModal = ({ title, description, isOpen, setIsOpen, onConfirm 
         <Typography>{description}</Typography>
 
         <div className={s.buttons}>
-          <Button className={s.button} variant={'outline'} onClick={handleConfirm}>
-            Yes
+          <Button className={s.button} variant="outline" onClick={handleConfirm}>
+            {t('yes')}
           </Button>
-
           <Button className={s.button} onClick={() => setIsOpen(false)}>
-            No
+            {t('no')}
           </Button>
         </div>
       </div>

@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { UserItem } from '@/features/userSearch/api'
 import { TextField, UserCard } from '@/shared/ui'
@@ -9,6 +8,8 @@ import { BaseUserList } from '@/features/userSearch/ui'
 import { useSearchUser } from '@/features/userSearch/utils/hooks'
 import { PATH } from '@/shared/config/routes'
 import s from './Sidebar.module.scss'
+import { useRouter } from '@/i18n/navigation'
+import { useLocale } from 'next-intl'
 
 export const Sidebar = () => {
   const { users, isFetching, handleChangeValue, handleFetchMore, hasMore, searchValue, clearSearch } = useSearchUser({
@@ -17,9 +18,10 @@ export const Sidebar = () => {
   const [_, setPickerOpen] = useState(false)
 
   const router = useRouter()
+  const locale = useLocale()
 
   const handleSelectUser = (user: UserItem) => {
-    router.push(`${PATH.USER.MESSENGER}/${user.id}`)
+    router.push(`${PATH.USER.MESSENGER}/${user.id}`, { locale })
     clearSearch()
     setPickerOpen(false)
   }

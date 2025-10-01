@@ -1,5 +1,6 @@
 import { useDeletePostMutation } from '@/features/post/api/postsApi'
 import { useFollowUserByIdMutation, useUnfollowUserByIdMutation } from '@/features/profile/api'
+import { useTranslations } from 'next-intl'
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
 
@@ -16,6 +17,8 @@ export const usePostDropdownMenuActions = ({ userId, postId, ownerId, isFollowin
   const [followById, { isLoading: followIsLoading }] = useFollowUserByIdMutation()
   const [unfollow, { isLoading: unfollowIsLoading }] = useUnfollowUserByIdMutation()
 
+  const t = useTranslations('postEditForm')
+
   const handleEdit = useCallback(() => {
     setIsEditing(true)
   }, [setIsEditing])
@@ -23,9 +26,9 @@ export const usePostDropdownMenuActions = ({ userId, postId, ownerId, isFollowin
   const handleDelete = useCallback(async () => {
     try {
       await deletePost({ postId, userId })
-      toast.success('Post deleted successfully.')
+      toast.success(t('deleteSuccess'))
     } catch (error) {
-      toast.error('Post cannot be deleted')
+      toast.error(t('deleteError'))
     }
   }, [postId, deletePost])
 
@@ -39,7 +42,7 @@ export const usePostDropdownMenuActions = ({ userId, postId, ownerId, isFollowin
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(window.location.href)
-    toast.success('Link copied to clipboard')
+    toast.success(t('copySuccess'))
   }, [postId])
 
   return {

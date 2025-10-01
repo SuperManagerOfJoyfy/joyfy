@@ -1,5 +1,8 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import { IoImageOutline } from 'react-icons/io5'
+import { useTranslations } from 'next-intl'
 
 import { createAvatarFlow } from '@/features/profile/ui/profilePhoto/hooks/avatarFlow'
 import { CreateItemModal } from '@/features/imageFlow/ui/createItemModal/CreateItemModal'
@@ -11,18 +14,18 @@ type AvatarModalProps = {
 }
 
 export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
+  const t = useTranslations()
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [modalResetKey, setModalResetKey] = useState(0)
 
-  const avatarFlow = createAvatarFlow()
+  const avatarFlow = createAvatarFlow(t)
 
   const handleFilesSelected = (files: File[]) => {
-    const selectedFile = files[0]
-    if (selectedImage) {
-      URL.revokeObjectURL(selectedImage)
-    }
-    const imageUrl = URL.createObjectURL(selectedFile)
-    setSelectedImage(imageUrl)
+    const file = files[0]
+    if (!file) return
+    if (selectedImage) URL.revokeObjectURL(selectedImage)
+    const url = URL.createObjectURL(file)
+    setSelectedImage(url)
   }
 
   const handleComplete = () => {
@@ -30,23 +33,19 @@ export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
   }
 
   const handleClose = () => {
-    if (selectedImage) {
-      URL.revokeObjectURL(selectedImage)
-    }
+    if (selectedImage) URL.revokeObjectURL(selectedImage)
     setSelectedImage(null)
-    // Force modal to re-render and reset to initial step
-    setModalResetKey((prev) => prev + 1)
+    setModalResetKey((k) => k + 1)
     onClose()
   }
 
-  // Reset state when modal opens
   useEffect(() => {
     if (open && selectedImage) {
-      // Clean up any existing image URL
       URL.revokeObjectURL(selectedImage)
       setSelectedImage(null)
-      setModalResetKey((prev) => prev + 1)
+      setModalResetKey((k) => k + 1)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   const hasUnsavedChanges = () => selectedImage !== null
@@ -55,8 +54,8 @@ export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
     'avatar-upload': {
       onFilesSelected: handleFilesSelected,
       placeholder: '',
-      dragPlaceholder: 'Drop your profile photo here',
-      primaryButtonText: 'Select Photo',
+      dragPlaceholder: t('avatar.upload.dragPlaceholder'),
+      primaryButtonText: t('avatar.upload.primaryButton'),
       icon: <IoImageOutline size={50} />,
       maxImages: MAX_IMAGES,
       acceptedTypes: ACCEPTED_TYPES,
@@ -65,7 +64,7 @@ export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
       largeBottomPadding: true,
     },
     'avatar-position': {
-      imageSrc: selectedImage,
+      imageSrc: selectedImage ?? undefined,
       onUpload: handleComplete,
     },
   }
@@ -81,8 +80,8 @@ export const AvatarModal = ({ open, onClose }: AvatarModalProps) => {
       hasUnsavedChanges={hasUnsavedChanges}
       stepProps={stepProps}
       confirmModalConfig={{
-        title: 'Close',
-        description: 'Are you sure you want to exit without saving changes?',
+        title: t('closePostModal.title'),
+        description: t('closePostModal.confirm'),
       }}
     />
   )

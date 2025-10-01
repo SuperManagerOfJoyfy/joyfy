@@ -1,10 +1,10 @@
 'use client'
 
 import { KeyboardEvent, useState } from 'react'
-
 import { Button, TextArea } from '@/shared/ui'
 import { useCreateCommentMutation } from '@/features/comments/api/commentsApi'
 import { PAGINATION_DEFAULTS } from '../utils'
+import { useTranslations } from 'next-intl'
 
 import s from './PostComment.module.scss'
 
@@ -14,15 +14,13 @@ type PostCommentFormProps = {
 
 export const PostCommentForm = ({ postId }: PostCommentFormProps) => {
   const [content, setContent] = useState('')
-
   const [createComment, { isLoading }] = useCreateCommentMutation()
+  const t = useTranslations('comments')
 
   const handleSubmit = async () => {
     if (!content.trim()) return
-
     const commentContent = content.trim()
     setContent('')
-
     try {
       await createComment({ postId, content: commentContent }).unwrap()
     } catch (error) {
@@ -43,7 +41,7 @@ export const PostCommentForm = ({ postId }: PostCommentFormProps) => {
   return (
     <div className={s.commentForm}>
       <TextArea
-        placeholder="Add a Comment..."
+        placeholder={t('form.placeholder')}
         textAreaClassName={s.commentInput}
         wrapperClassName={s.inputWrapper}
         value={content}
@@ -53,7 +51,7 @@ export const PostCommentForm = ({ postId }: PostCommentFormProps) => {
         disabled={isLoading}
       />
       <Button variant="text" onClick={handleSubmit} disabled={isDisabled || isLoading}>
-        {isLoading ? 'Publishing...' : 'Publish'}
+        {isLoading ? t('form.publishing') : t('form.publish')}
       </Button>
     </div>
   )

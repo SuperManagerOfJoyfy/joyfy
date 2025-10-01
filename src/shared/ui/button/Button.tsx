@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 import { clsx } from 'clsx'
 import s from './Button.module.scss'
 
-const buttonVariant = ['primary', 'secondary', 'outline', 'text', 'link', 'icon', 'clean'] as const
+const buttonVariant = ['primary', 'secondary', 'outline', 'text', 'link', 'icon', 'comment', 'clean'] as const
 
 type ButtonVariant = (typeof buttonVariant)[number]
 

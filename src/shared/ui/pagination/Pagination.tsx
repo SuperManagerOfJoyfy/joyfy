@@ -1,5 +1,8 @@
+'use client'
+
 import clsx from 'clsx'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import { useTranslations } from 'next-intl'
 
 import s from './pagination.module.scss'
 
@@ -23,6 +26,7 @@ export const Pagination = ({
   onPageChange,
   totalPages = 1,
 }: Props) => {
+  const t = useTranslations('pagination')
   const pages = usePagination(currentPage, totalPages)
 
   const handlePageClick = (page: '...' | number) => {
@@ -31,48 +35,14 @@ export const Pagination = ({
     }
   }
 
-  const options = [
-    {
-      value: '10',
-      children: (
-        <div>
-          <span>10</span>
-        </div>
-      ),
-    },
-    {
-      value: '20',
-      children: (
-        <div>
-          <span>20</span>
-        </div>
-      ),
-    },
-    {
-      value: '30',
-      children: (
-        <div>
-          <span>30</span>
-        </div>
-      ),
-    },
-    {
-      value: '50',
-      children: (
-        <div>
-          <span>50</span>
-        </div>
-      ),
-    },
-    {
-      value: '100',
-      children: (
-        <div>
-          <span>100</span>
-        </div>
-      ),
-    },
-  ]
+  const options = ['10', '20', '30', '50', '100'].map((v) => ({
+    value: v,
+    children: (
+      <div>
+        <span>{v}</span>
+      </div>
+    ),
+  }))
 
   return (
     <div className={clsx(s.pagination, className)}>
@@ -81,8 +51,9 @@ export const Pagination = ({
           className={clsx(s.button, currentPage === 1 && s.arrowDisabled)}
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
-          type={'button'}
-          aria-label="Previous page"
+          type="button"
+          aria-label={t('previousPage')}
+          title={t('previousPage')}
         >
           <FiChevronLeft />
         </button>
@@ -93,7 +64,7 @@ export const Pagination = ({
             disabled={page === '...'}
             key={index}
             onClick={() => handlePageClick(Number(page))}
-            type={'button'}
+            type="button"
           >
             {page}
           </button>
@@ -103,31 +74,30 @@ export const Pagination = ({
           className={clsx(s.button, (currentPage === totalPages || totalPages === 0) && s.arrowDisabled)}
           disabled={currentPage === totalPages || totalPages === 0}
           onClick={() => onPageChange(currentPage + 1)}
-          type={'button'}
-          aria-label="Next page"
+          type="button"
+          aria-label={t('nextPage')}
+          title={t('nextPage')}
         >
           <FiChevronRight />
         </button>
       </div>
 
       <div className={s.perPage}>
-        <span>Show</span>
+        <span>{t('show')}</span>
 
         <SelectBox
           className={s.select}
           value={itemsPerPage.toString()}
           onValueChange={(v) => onItemsPerPageChange(Number(v))}
         >
-          {options.map((o) => {
-            return (
-              <SelectItem className={s.item} key={o.value} value={o.value}>
-                {o.children}
-              </SelectItem>
-            )
-          })}
+          {options.map((o) => (
+            <SelectItem className={s.item} key={o.value} value={o.value}>
+              {o.children}
+            </SelectItem>
+          ))}
         </SelectBox>
 
-        <span>on page</span>
+        <span>{t('onPage')}</span>
       </div>
     </div>
   )

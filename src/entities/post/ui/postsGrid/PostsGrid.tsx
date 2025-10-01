@@ -1,10 +1,11 @@
 'use client'
 
 import { Post } from '@/features/post/types/postTypes'
-
 import Image from 'next/image'
 import { FaHeart } from 'react-icons/fa'
 import { FaComment } from 'react-icons/fa6'
+import { useTranslations } from 'next-intl'
+
 import fallback from './fallbackNoImage.png'
 import s from './PostsGrid.module.scss'
 
@@ -14,7 +15,11 @@ type Props = {
 }
 
 export const PostsGrid = ({ onPostClick, posts }: Props) => {
-  if (!posts || posts.length === 0) return <div className={s.noPostsMsg}>There are no posts yet</div>
+  const t = useTranslations('postsGrid')
+
+  if (!posts || posts.length === 0) {
+    return <div className={s.noPostsMsg}>{t('noPosts')}</div>
+  }
 
   return (
     <div className={s.gridContainer}>

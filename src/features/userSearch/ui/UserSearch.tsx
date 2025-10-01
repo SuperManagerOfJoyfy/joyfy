@@ -8,8 +8,9 @@ import { BaseUserList } from './BaseUserList'
 import { RecentRequests } from './RecentRequests'
 import { User } from './User'
 import s from './UserSearch.module.scss'
-import { selectCurrentUserId } from '@/features/auth/model/authSlice'
+import { useTranslations } from 'next-intl'
 import { useSelector } from 'react-redux'
+import { selectCurrentUserId } from '@/features/auth/model/authSlice'
 
 export const UserSearch = () => {
   const userId = useSelector(selectCurrentUserId)
@@ -18,9 +19,17 @@ export const UserSearch = () => {
   })
   const { recentRequests, addRequest } = useRecentRequests(userId)
 
+  const t = useTranslations('userSearch')
+
   return (
     <div className={s.userSearch}>
-      <TextField search placeholder="Search" onChange={handleChangeValue} value={searchValue} isLoading={isFetching} />
+      <TextField
+        search
+        placeholder={t('placeholder')}
+        onChange={handleChangeValue}
+        value={searchValue}
+        isLoading={isFetching}
+      />
 
       {users.length > 0 ? (
         <BaseUserList
@@ -30,6 +39,7 @@ export const UserSearch = () => {
           hasMore={hasMore}
           onLoadMore={handleFetchMore}
           searchValue={searchValue}
+          noResultsText={t('noResults')}
           renderUser={(u) => <User user={u} handleRequestClick={addRequest} />}
         />
       ) : (

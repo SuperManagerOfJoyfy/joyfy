@@ -1,11 +1,12 @@
 'use client'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 import { CreatePostModal } from './createPostModal'
 import { useGetUserProfileQuery } from '@/features/profile/api/profileApi'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { PATH } from '@/shared/config/routes'
+import { useRouter } from '@/i18n/navigation'
 
 export enum ECreatePostCloseModal {
   redirectToHome,

@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, CSSProperties, memo } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { clsx } from 'clsx'
 
 import s from './Sidebar.module.scss'

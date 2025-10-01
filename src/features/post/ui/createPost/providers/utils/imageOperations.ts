@@ -26,7 +26,7 @@ export const createNewImages = (files: File[], startIndex: number) => {
     newEditData.push({
       scale: 1,
       aspectRatio: ASPECT_RATIOS[0],
-      imageFilter: 'Normal' as const,
+      imageFilter: 'normal' as const,
     })
   })
 

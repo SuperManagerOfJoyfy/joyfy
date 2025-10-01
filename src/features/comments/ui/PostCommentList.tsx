@@ -3,6 +3,7 @@ import { sortCommentsByUserPriority } from '../utils'
 import { useGetCommentsQuery } from '../api/commentsApi'
 import { CommentItem } from './CommentItem'
 import { Comment } from '../api/commentsApi.types'
+import { useTranslations } from 'next-intl'
 
 type PostCommentListProps = {
   comments?: Comment[]
@@ -11,6 +12,7 @@ type PostCommentListProps = {
 }
 
 export const PostCommentList = ({ comments: propComments, postId, userId }: PostCommentListProps) => {
+  const t = useTranslations('comments')
   const { data: commentsData, isLoading } = useGetCommentsQuery(
     {
       postId,
@@ -19,15 +21,13 @@ export const PostCommentList = ({ comments: propComments, postId, userId }: Post
       sortBy: 'createdAt',
       sortDirection: 'desc',
     },
-    {
-      skip: !postId,
-    }
+    { skip: !postId }
   )
 
   const comments = propComments || commentsData?.items || []
   const sortedComments = sortCommentsByUserPriority(comments, userId)
 
-  if (isLoading) return <Loader message="Loading comments..." />
+  if (isLoading) return <Loader message={t('loading')} />
 
   return (
     <>

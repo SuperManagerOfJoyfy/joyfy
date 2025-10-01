@@ -2,40 +2,44 @@ import { ReactNode } from 'react'
 import { Path } from 'react-hook-form'
 import { SignupSchema } from '../../utils/schemas/SignupSchema'
 import { z } from 'zod'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { PATH } from '@/shared/config/routes'
 import s from './signupForm.module.scss'
+import { useTranslations } from 'next-intl'
 
 export const useSignupFields = (disableAll: boolean) => {
+  const t = useTranslations('auth.signup.fields')
+
   const fields: {
     name: Path<z.infer<typeof SignupSchema>>
     label: ReactNode
     type?: string
   }[] = [
-    { name: 'userName', label: 'Username' },
-    { name: 'email', label: 'Email', type: 'email' },
-    { name: 'password', label: 'Password', type: 'password' },
+    { name: 'userName', label: t('username') },
+    { name: 'email', label: t('email'), type: 'email' },
+    { name: 'password', label: t('password'), type: 'password' },
     {
       name: 'passwordConfirmation',
-      label: 'Confirm password',
+      label: t('passwordConfirmation'),
       type: 'password',
     },
     {
       name: 'agreeToTerms',
       label: (
         <span className={s.label}>
-          I agree to the{' '}
+          {t('agreePrefix')}{' '}
           <Link href={PATH.AUTH.TERMS_OF_SERVICE} target="_blank" className={disableAll ? s.disabledLink : ''}>
-            Terms of Service{' '}
-          </Link>
-          and{' '}
+            {t('terms')}
+          </Link>{' '}
+          {t('and')}{' '}
           <Link href={PATH.AUTH.PRIVACY_POLICY} target="_blank" className={disableAll ? s.disabledLink : ''}>
-            Privacy Policy
+            {t('privacy')}
           </Link>
         </span>
       ),
       type: 'checkbox',
     },
   ]
+
   return fields
 }

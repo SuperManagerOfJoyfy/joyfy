@@ -34,10 +34,6 @@
   margin-left: 55px;
 }
 
-.viewAnswers {
-  @extend %replyButton;
-}
-
 .answers {
   margin-top: 8px;
 }
@@ -48,8 +44,4 @@
 
 .replyActions {
   @extend %replyActions;
-  button {
-    @extend %replyButton;
-    color: var(--color-accent-500);
-  }
 }

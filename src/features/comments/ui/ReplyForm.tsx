@@ -1,8 +1,8 @@
 import { useState } from 'react'
-
 import { Button, TextArea } from '@/shared/ui'
 import { useCreateCommentAnswerMutation } from '@/features/comments/api/commentsApi'
 import { PAGINATION_DEFAULTS } from '../utils/constant'
+import { useTranslations } from 'next-intl'
 
 type ReplyFormProps = {
   postId: number
@@ -15,16 +15,14 @@ type ReplyFormProps = {
 export const ReplyForm = ({ postId, commentId, onCancel, className, actionsClassName }: ReplyFormProps) => {
   const [content, setContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-
   const [createAnswer] = useCreateCommentAnswerMutation()
+  const t = useTranslations('comments')
 
   const handleSubmit = async () => {
     if (!content.trim()) return
-
     const answerContent = content.trim()
     setContent('')
     setIsSubmitting(true)
-
     try {
       await createAnswer({ postId, commentId, content: answerContent }).unwrap()
       onCancel()
@@ -48,7 +46,7 @@ export const ReplyForm = ({ postId, commentId, onCancel, className, actionsClass
   return (
     <div className={className}>
       <TextArea
-        placeholder="Write an answer..."
+        placeholder={t('reply.placeholder')}
         value={content}
         onChange={(e) => setContent(e.target.value)}
         onKeyPress={handleKeyPress}
@@ -57,10 +55,10 @@ export const ReplyForm = ({ postId, commentId, onCancel, className, actionsClass
       />
       <div className={actionsClassName}>
         <Button variant="text" onClick={onCancel} noPadding disabled={isSubmitting} className="replyButton">
-          Cancel
+          {t('reply.cancel')}
         </Button>
         <Button variant="text" onClick={handleSubmit} disabled={isDisabled} noPadding className="replyButton">
-          {isSubmitting ? 'Publishing...' : 'Publish'}
+          {isSubmitting ? t('form.publishing') : t('form.publish')}
         </Button>
       </div>
     </div>

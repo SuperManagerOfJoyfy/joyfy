@@ -1,8 +1,10 @@
+'use client'
+
 import { ModalFlow } from '@/features/imageFlow/types'
 import { StepUpload } from '@/features/imageFlow/ui'
 import { StepAvatarPosition } from '@/features/profile/ui/profilePhoto/ui/stepAvatarPosition/StepAvatarPosition'
 
-export const createAvatarFlow = (): ModalFlow => ({
+export const createAvatarFlow = (t: (key: string) => string): ModalFlow => ({
   steps: ['avatar-upload', 'avatar-position'],
   components: {
     'avatar-upload': StepUpload,
@@ -10,13 +12,13 @@ export const createAvatarFlow = (): ModalFlow => ({
   },
   config: {
     'avatar-upload': {
-      title: 'Add Profile Photo',
+      title: t('avatar.modal.uploadTitle'),
       size: 'md',
       cardPadding: 'default',
       centerTitle: false,
     },
     'avatar-position': {
-      title: 'Crop Profile Photo',
+      title: t('avatar.modal.positionTitle'),
       size: 'md',
       cardPadding: 'top-only',
       centerTitle: true,

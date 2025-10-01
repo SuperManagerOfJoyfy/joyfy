@@ -1,4 +1,7 @@
+'use client'
+
 import { Button, Modal, Typography } from '@/shared/ui'
+import { useTranslations } from 'next-intl'
 
 import s from './ClosePostModal.module.scss'
 
@@ -10,27 +13,11 @@ type ClosePostModalProps = {
   isSaving?: boolean
 }
 
-const MODAL_CONTENT = {
-  title: 'Close',
-  confirmationText: 'Do you really want to close the creation of a publication?',
-  warningText: 'If you close, everything will be deleted.',
-  buttons: {
-    discard: {
-      text: 'Discard',
-      ariaLabel: 'Discard the publication creation',
-    },
-    saveDraft: {
-      text: 'Save draft',
-      loadingText: 'Saving...',
-      ariaLabel: 'Save the publication as draft',
-    },
-  },
-} as const
-
 export const ClosePostModal = ({ open, onClose, onConfirm, hasContent, isSaving = false }: ClosePostModalProps) => {
+  const t = useTranslations('closePostModal')
+
   const handleAction = (action: 'discard' | 'save') => {
     if (isSaving) return
-
     const saveDraft = action === 'save'
     onConfirm(saveDraft)
   }
@@ -41,13 +28,13 @@ export const ClosePostModal = ({ open, onClose, onConfirm, hasContent, isSaving 
   }
 
   return (
-    <Modal open={open} onOpenChange={handleModalClose} title={MODAL_CONTENT.title}>
+    <Modal open={open} onOpenChange={handleModalClose} title={t('title')}>
       <div className={s.container}>
-        <Typography variant="body1">{MODAL_CONTENT.confirmationText}</Typography>
+        <Typography variant="body1">{t('confirm')}</Typography>
 
         {hasContent && (
           <Typography variant="body2" className={s.warningText}>
-            {MODAL_CONTENT.warningText}
+            {t('warning')}
           </Typography>
         )}
 
@@ -55,21 +42,21 @@ export const ClosePostModal = ({ open, onClose, onConfirm, hasContent, isSaving 
           <Button
             variant="outline"
             onClick={() => handleAction('discard')}
-            title={MODAL_CONTENT.buttons.discard.text}
-            aria-label={MODAL_CONTENT.buttons.discard.ariaLabel}
+            title={t('buttons.discard')}
+            aria-label={t('buttons.discardAria')}
             disabled={isSaving}
           >
-            {MODAL_CONTENT.buttons.discard.text}
+            {t('buttons.discard')}
           </Button>
 
           {hasContent && (
             <Button
               onClick={() => handleAction('save')}
-              title={MODAL_CONTENT.buttons.saveDraft.text}
-              aria-label={MODAL_CONTENT.buttons.saveDraft.ariaLabel}
+              title={t('buttons.saveDraft')}
+              aria-label={t('buttons.saveDraftAria')}
               disabled={isSaving}
             >
-              {isSaving ? MODAL_CONTENT.buttons.saveDraft.loadingText : MODAL_CONTENT.buttons.saveDraft.text}
+              {isSaving ? t('buttons.saving') : t('buttons.saveDraft')}
             </Button>
           )}
         </div>

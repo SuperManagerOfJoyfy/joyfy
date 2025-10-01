@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import { Button, PublicationDescription, UserCard } from '@/shared/ui'
 import { User } from '@/shared/ui/userCard'
-
 import s from './PostEditForm.module.scss'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   user: User
@@ -25,6 +25,8 @@ export const PostEditForm = ({
   isSaving,
   onFormChange,
 }: Props) => {
+  const t = useTranslations('postEditForm')
+
   const [description, setDescription] = useState(initialDescription)
 
   useEffect(() => {
@@ -47,10 +49,10 @@ export const PostEditForm = ({
 
       <div className={s.actionButtons}>
         <Button variant="outline" onClick={onCancelEdit} disabled={isSaving}>
-          Cancel
+          {t('cancel')}
         </Button>
         <Button onClick={handleSave} disabled={isSaving}>
-          Save Changes
+          {t('save')}
         </Button>
       </div>
     </div>

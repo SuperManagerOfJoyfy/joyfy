@@ -1,14 +1,16 @@
+'use client'
+
 import { useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 
 import { createPostFlow, Step } from '@/features/post/ui/createPost/hooks/postFlow'
 import { CreateItemModal } from '@/features/imageFlow/ui/createItemModal/CreateItemModal'
-import { MESSAGES } from '@/shared/config/messages'
 import { UserProfile } from '@/features/profile/api/profileApi.types'
 
 import { ECreatePostCloseModal } from '../CreatePost'
 import { ClosePostModal } from '../closeModal/ClosePostModal'
 import { usePostContext, PostContextProvider } from '../providers/PostContext'
+import { useTranslations } from 'next-intl'
 
 type CreatePostModalProps = {
   open: boolean
@@ -17,6 +19,9 @@ type CreatePostModalProps = {
 }
 
 const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) => {
+  const t = useTranslations('createPost')
+  const tMessages = useTranslations('messages.post')
+
   const {
     images,
     publishPost,
@@ -36,7 +41,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
   const [isLoadingDraft, setIsLoadingDraft] = useState(false)
   const [modalKey, setModalKey] = useState(0)
 
-  const postFlow = createPostFlow()
+  const postFlow = createPostFlow(t)
 
   const hasUnsavedChanges = useCallback(() => {
     return images.length > 0 || description.trim().length > 0
@@ -50,7 +55,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
     setIsPublishing(true)
     try {
       await publishPost()
-      toast.success(MESSAGES.POST.POST_PUBLISHED)
+      toast.success(tMessages('published'))
       onClose(ECreatePostCloseModal.redirectToProfile)
     } catch (error) {
     } finally {
@@ -89,7 +94,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
       setIsSavingDraft(true)
       try {
         await saveDraft()
-        toast.success(MESSAGES.POST.POST_DRAFT)
+        toast.success(tMessages('draftSaved'))
         onClose(ECreatePostCloseModal.redirectToHome)
       } finally {
         setIsSavingDraft(false)
@@ -98,7 +103,7 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
       try {
         if (hasDraft) await deleteDraft()
         clearAll()
-        toast.info(MESSAGES.POST.POST_DISCARDED)
+        toast.info(tMessages('discarded'))
       } finally {
         onClose(ECreatePostCloseModal.default)
       }
@@ -108,11 +113,11 @@ const CreatePostModalContent = ({ open, onClose, user }: CreatePostModalProps) =
   const stepProps = {
     upload: {
       onFilesSelected: addImage,
-      placeholder: 'Drag and drop your image here or click to browse',
-      dragPlaceholder: 'Drop the image here',
-      primaryButtonText: 'Select from Computer',
+      placeholder: t('upload.placeholder'),
+      dragPlaceholder: t('upload.dragPlaceholder'),
+      primaryButtonText: t('upload.primaryButton'),
       showDraftButton: hasDraft && images.length === 0,
-      draftButtonText: isLoadingDraft ? 'Loading Draft...' : 'Open Draft',
+      draftButtonText: isLoadingDraft ? t('upload.loadingDraft') : t('upload.openDraft'),
       onDraftClick: handleLoadDraft,
       draftButtonDisabled: isDraftLoading || isLoadingDraft,
     },

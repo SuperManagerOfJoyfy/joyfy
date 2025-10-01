@@ -1,9 +1,11 @@
+'use client'
+
 import { Button, Card, RadioGroup, Typography } from '@/shared/ui'
 import { PaypalIcon } from '@/shared/ui/icons/PaypalIcon'
 import { StripeIcon } from '@/shared/ui/icons/StripeIcon'
 import s from './businessSubscription.module.scss'
-import { subscriptionOptions } from '@/features/profile/ui/management'
 import { PaymentType, SubscriptionType } from '@/features/profile/api'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   subscription: string
@@ -14,6 +16,15 @@ type Props = {
 }
 
 export const BusinessSubscription = ({ subscription, onChange, current, onOpenModal, setPaymentType }: Props) => {
+  const t = useTranslations('businessSubscription')
+  const tSub = useTranslations('settings.subscription')
+
+  const subscriptionOptions = [
+    { label: tSub('day'), value: 'DAY' },
+    { label: tSub('weekly'), value: 'WEEKLY' },
+    { label: tSub('monthly'), value: 'MONTHLY' },
+  ]
+
   const onOpenChange = (type: PaymentType) => {
     setPaymentType(type)
     onOpenModal()
@@ -22,7 +33,7 @@ export const BusinessSubscription = ({ subscription, onChange, current, onOpenMo
   return (
     <div>
       <Typography className={s.title} variant="h3">
-        {current ? 'Change your subscription:' : 'Your subscription costs:'}
+        {current ? t('change') : t('costs')}
       </Typography>
 
       <Card className={s.card}>
@@ -39,18 +50,18 @@ export const BusinessSubscription = ({ subscription, onChange, current, onOpenMo
         <Button
           variant={'secondary'}
           className={s.button}
-          aria-label="Pay with PayPal"
+          aria-label={t('ariaPaypal')}
           onClick={() => onOpenChange(PaymentType.PAYPAL)}
         >
           <PaypalIcon />
         </Button>
 
-        <span>Or</span>
+        <span>{t('or')}</span>
 
         <Button
           variant={'secondary'}
           className={s.button}
-          aria-label="Pay with Stripe"
+          aria-label={t('ariaStripe')}
           onClick={() => onOpenChange(PaymentType.STRIPE)}
         >
           <StripeIcon />
