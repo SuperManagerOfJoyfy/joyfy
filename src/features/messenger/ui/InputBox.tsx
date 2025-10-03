@@ -39,6 +39,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
       }
       setSelectedImage(file)
     }
+    e.target.value = ''
   }
 
   const handleSend = async () => {
