@@ -9,7 +9,7 @@ import { getTranslations } from 'next-intl/server'
 import s from './EmailConfirmation.module.scss'
 
 export const EmailConfirmation = async ({ code }: { code: string }) => {
-  const t = await getTranslations('auth.emailConfirmation')
+  const t = await getTranslations('emailConfirmation')
 
   try {
     const confirmRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/registration-confirmation`, {
@@ -25,7 +25,7 @@ export const EmailConfirmation = async ({ code }: { code: string }) => {
         <EmailVerification title={t('successTitle')} description={t('successDescription')} imageSrc={infoImg}>
           <div className={s.confirmWrapper}>
             <Button as={Link} fullWidth href={PATH.AUTH.LOGIN}>
-              {t('signInButton')}
+              {t('successButton')}
             </Button>
           </div>
         </EmailVerification>
