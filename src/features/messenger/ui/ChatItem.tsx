@@ -15,17 +15,12 @@ type Props = {
 export const ChatItem = ({ chat, currentUser, selectedId, onSelect }: Props) => {
   const user = { id: chat.ownerId, userName: chat.userName, avatar: chat.avatars?.[0]?.url || '' }
 
-  //это две проверки так как по сокетах у нас теперь тоже передаются картинки,
-  // я решил использовать наш ендпоинт который возращает ссылку на картику.
-  // То есть мы можем отправитб текст/картинку/картинку+текст
-
-  //если текст
   let message = chat.messageText
-  //если картинка
+
   if (chat.messageText.includes('https://staging-it-incubator.s3.eu-central-1')) {
     message = 'Image'
   }
-  //если картинка+текст
+
   if (chat.messageText.includes('|||')) {
     message = chat.messageText.split('|||')[0]
   }

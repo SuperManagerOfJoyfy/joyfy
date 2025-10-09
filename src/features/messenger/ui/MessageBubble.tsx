@@ -76,7 +76,6 @@ export const MessageBubble = ({
 
   const messageType = imageUrl && text ? 'imageWithText' : imageUrl ? 'imageOnly' : 'textOnly'
 
-  // Edit handlers
   const handleEditMessage = (id: number, text: string) => {
     const socket = getSocket()
     if (socket && text.trim()) {
