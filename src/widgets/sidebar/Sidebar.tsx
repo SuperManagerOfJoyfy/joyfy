@@ -17,6 +17,7 @@ export type SidebarItem = {
   style?: CSSProperties
   onClick?: () => void
   isActive?: (currentPath?: string) => boolean
+  badge?: number
 }
 
 type Props = {
@@ -69,6 +70,20 @@ export const Sidebar = memo(({ items, activePath, onItemClick, disabled = false,
 
     const iconToRender = isActive && item.activeIcon ? item.activeIcon : item.icon
 
+    const linkContent = (
+      <>
+        <span className={s.icon} aria-hidden="true">
+          {iconToRender}
+        </span>
+        <span className={s.title}>{item.title}</span>
+        {item.badge && (
+          <span className={s.badge} aria-label={`${item.badge} unread messages`}>
+            {item.badge}
+          </span>
+        )}
+      </>
+    )
+
     if (!item.path) {
       return (
         <li key={item.id} className={s.sidebarItem} style={item.style}>
@@ -80,10 +95,7 @@ export const Sidebar = memo(({ items, activePath, onItemClick, disabled = false,
             aria-disabled={isItemDisabled}
             aria-label={item.title}
           >
-            <span className={s.icon} aria-hidden="true">
-              {iconToRender}
-            </span>
-            <span className={s.title}>{item.title}</span>
+            {linkContent}
           </button>
         </li>
       )
@@ -106,10 +118,7 @@ export const Sidebar = memo(({ items, activePath, onItemClick, disabled = false,
           aria-disabled={isItemDisabled}
           aria-label={item.title}
         >
-          <span className={s.icon} aria-hidden="true">
-            {iconToRender}
-          </span>
-          <span className={s.title}>{item.title}</span>
+          {linkContent}
         </Link>
       </li>
     )

@@ -5,14 +5,14 @@ import { useSearchParams } from 'next/navigation'
 
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { LogoutModal } from '@/features/auth/ui'
-import { PATH } from '@/shared/config/routes'
-import { createSidebarItems, Header, Sidebar } from '@/widgets'
-import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { Loader } from '@/shared/ui'
 import { CreatePost } from '@/features/post/ui'
+import { Loader } from '@/shared/ui'
+import { createSidebarItems, Header, Sidebar } from '@/widgets'
 import { useTranslations } from 'next-intl'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 
 import s from '../../styles/layout.module.scss'
+import { useGetChatListQuery } from '@/features/messenger/api'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -32,6 +32,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const onOpenLogoutModalHandler = (value = true) => setIsModalOpen(value)
   const tSidebar = useTranslations('sidebar')
 
+  const { data: chatData } = useGetChatListQuery({})
+  const unreadMessagesCount = chatData?.notReadCount
+
   const sidebarItems = useMemo(
     () =>
       createSidebarItems(
@@ -45,7 +48,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
             window.history.pushState(null, '', `?${current.toString()}`)
           },
         },
-        tSidebar
+        tSidebar,
+        unreadMessagesCount
       ),
     [onOpenLogoutModalHandler, user?.userId, pathname, router, searchParams, tSidebar]
   )
