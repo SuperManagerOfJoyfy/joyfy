@@ -10,6 +10,7 @@ import s from './InputBox.module.scss'
 import { useUploadImageMutation } from '@/features/post/api'
 import { isValidUrl } from '@/features/messenger/utils'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 type Props = {
   dialoguePartnerId: string
@@ -22,6 +23,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
   const [isRecording, setIsRecording] = useState(false)
   const [isSending, setIsSending] = useState(false)
 
+  const t = useTranslations('messenger.input')
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const [uploadImage] = useUploadImageMutation()
@@ -34,7 +36,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
     const file = e.target.files?.[0]
     if (file) {
       if (file.size > 1024 * 1024) {
-        alert('Размер изображения не должен превышать 1 МБ')
+        alert(t('imageTooLarge'))
         return
       }
       setSelectedImage(file)
@@ -104,11 +106,11 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
       <div className={s.inputBox}>
         {selectedImage && (
           <div className={s.imagePreview}>
-            <Image src={URL.createObjectURL(selectedImage)} width={36} height={36} alt="Preview" />
+            <Image src={URL.createObjectURL(selectedImage)} width={36} height={36} alt={t('previewAlt')} />
             <button
               className={s.removeButton}
               onClick={() => setSelectedImage(null)}
-              aria-label="Remove image"
+              aria-label={t('removeImage')}
               disabled={isSending}
             >
               ×
@@ -116,7 +118,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
           </div>
         )}
         <TextArea
-          placeholder="Type message..."
+          placeholder={t('placeholder')}
           value={messageText}
           onChange={handleTextMessageChange}
           onKeyDown={handleKeyDown}
@@ -141,7 +143,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
         {/* Show send message button when text or image */}
         {hasContent && !voiceBlob && (
           <Button variant="text" className={s.inputButton} onClick={handleSend} disabled={isSending}>
-            Send message
+            {t('send')}
           </Button>
         )}
       </div>

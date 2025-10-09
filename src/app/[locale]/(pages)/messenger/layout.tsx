@@ -5,13 +5,15 @@ import { Typography } from '@/shared/ui'
 import { Sidebar } from '@/features/messenger/ui'
 import s from './MessengerLayout.module.scss'
 
+type Params = { locale: string; dialoguePartnerId?: string }
+
 type Props = {
   children: ReactNode
-  params: { locale: string; dialoguePartnerId?: string }
+  params: Promise<Params>
 }
 
 export default async function MessengerLayout({ children, params }: Props) {
-  const { locale } = params
+  const { locale } = await params
   setRequestLocale(locale)
 
   const t = await getTranslations({ locale, namespace: 'messenger' })

@@ -5,6 +5,7 @@ import { MessageItem } from '../api'
 import { useMessengerController } from '../hooks/useMessengerController'
 import { InputBox } from './InputBox'
 import { MessageBubble } from './MessageBubble'
+import { useTranslations } from 'next-intl'
 import s from './ChatArea.module.scss'
 
 type Props = {
@@ -15,6 +16,8 @@ type Props = {
 export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
   const { chatMessages, handleDelete, loadOlderMessages, isLoading, hasMore, isLoadingMore, scrollRef } =
     useMessengerController(dialoguePartnerId)
+
+  const t = useTranslations('messenger')
 
   if (isLoading) {
     return <Loader />
@@ -50,7 +53,7 @@ export const ChatArea = ({ selectedUser, dialoguePartnerId }: Props) => {
               )
             })
           ) : (
-            <div className={s.noMessages}>No messages yet</div>
+            <div className={s.noMessages}>{t('noMessages')}</div>
           )}
         </div>
       </Scroll>

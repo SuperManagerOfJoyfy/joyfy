@@ -1,6 +1,5 @@
 'use client'
-import { SignupForm } from '@/features/auth/ui/signupForm'
-import { SentEmailModal } from '@/features/auth/ui'
+import { SentEmailModal, SignupForm } from '@/features/auth/ui'
 import { useState } from 'react'
 
 const Registration = () => {
