@@ -34,7 +34,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
     const file = e.target.files?.[0]
     if (file) {
       if (file.size > 1024 * 1024) {
-        toast.error('Image size must not exceed 1 MB')
+        toast.error(t('imageTooLarge'))
         return
       }
       setSelectedImage(file)
@@ -132,7 +132,6 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
           </div>
         )}
 
-        {/* Show send message button when text or image */}
         {hasContent && (
           <Button
             variant="text"
@@ -141,7 +140,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
             disabled={isSending}
             aria-label={isSending ? 'Sending message...' : 'Send message'}
           >
-            Send message
+            {t('send')}
           </Button>
         )}
       </div>
