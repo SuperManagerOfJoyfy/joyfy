@@ -3,17 +3,20 @@ import { WS_EVENT_PATH } from '@/shared/constants'
 import { useEffect, useRef } from 'react'
 import {
   MessageStatus,
+  messengerApi,
   useDeleteMessageMutation,
   useGetChatMessagesQuery,
   useLazyGetOlderMessagesQuery,
   useUpdateMessageStatusMutation,
 } from '../api'
+import { useAppDispatch } from '@/app/store/store'
 
 export const useMessengerController = (dialoguePartnerId: string) => {
   const { data: messagesData, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
   const [trigger, { isFetching: isLoadingMore }] = useLazyGetOlderMessagesQuery()
   const [deleteMessage] = useDeleteMessageMutation()
   const [updateMessageStatus] = useUpdateMessageStatusMutation()
+  const dispatch = useAppDispatch()
 
   const chatMessages = messagesData?.items || []
 
@@ -36,6 +39,14 @@ export const useMessengerController = (dialoguePartnerId: string) => {
       if (unreadMessagesIds.length > 0) {
         updateMessageStatus({ ids: unreadMessagesIds, dialoguePartnerId })
       }
+
+      // Update the chat list's unread count
+      dispatch(
+        messengerApi.util.updateQueryData('getChatList', { cursor: undefined }, (draft) => {
+          // Reduce the global unread count by the number of messages being marked as read
+          draft.notReadCount = Math.max(0, (draft.notReadCount || 0) - unreadMessagesIds.length)
+        })
+      )
     }
   }, [chatMessages, dialoguePartnerId, updateMessageStatus])
 
