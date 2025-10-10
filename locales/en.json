@@ -22,6 +22,24 @@
     "russian": "Russian"
   },
   "auth": {
+    "validation": {
+      "email": "Email must be in format example@example.com",
+      "password": {
+        "minLength": "Minimum 6 characters",
+        "maxLength": "Maximum 20 characters",
+        "uppercase": "Password must contain at least one uppercase letter",
+        "number": "Password must contain at least one number",
+        "specialChar": "Password must contain at least one special character"
+      },
+      "userName": {
+        "min": "Minimum 6 characters",
+        "max": "Maximum 30 characters",
+        "invalid": "Only letters, numbers, '_' and '-' are allowed"
+      },
+      "agreeToTerms": "You must agree to the Terms of Service",
+      "passwordsDoNotMatch": "Passwords do not match. Try again.",
+      "required": "This field is required"
+    },
     "signup": {
       "title": "Sign Up",
       "button": "Sign Up",
@@ -54,6 +72,11 @@
       "description": "Looks like the verification link has expired. Not to worry, we can send the link again",
       "button": "Resend verification link",
       "emailLabel": "Email"
+    },
+    "sentEmail": {
+      "title": "Email sent",
+      "description": "We have sent a link to confirm your email to {email}",
+      "button": "OK"
     }
   },
   "dashboard": {
@@ -98,13 +121,37 @@
       "aboutMe": "About Me"
     },
     "errors": {
-      "age13": "You must be at least 13 years old. See our {privacyPolicy}."
+      "age13": "You must be at least 13 years old. See our <privacyPolicy>Privacy Policy</privacyPolicy>."
     },
     "buttons": {
       "save": "Save changes"
     },
     "links": {
       "privacy": "Privacy Policy"
+    },
+    "validation": {
+      "required": "This field is required",
+      "userName": {
+        "min": "Minimum 6 characters",
+        "max": "Maximum 30 characters",
+        "invalid": "Invalid characters entered"
+      },
+      "name": {
+        "max": "Maximum 50 characters",
+        "invalid": "Invalid characters entered"
+      },
+      "dateOfBirth": {
+        "format": "Date must be in format dd.mm.yyyy",
+        "age13": "A user under 13 cannot create a profile. Privacy Policy"
+      },
+      "aboutMe": {
+        "maxLength": "About Me must be 200 characters or fewer"
+      }
+    },
+    "citySelect": {
+      "placeholder": "Select city",
+      "search": "Search cities...",
+      "loadMore": "Load more... ({count} remaining)"
     }
   },
   "devices": {
@@ -273,11 +320,27 @@
     }
   },
   "infoPage": {
-    "backToSignup": "Back to Sign Up",
+    "back": "Back",
     "privacyPolicyTitle": "Privacy Policy"
   },
   "messenger": {
-    "title": "Messenger"
+    "title": "Messenger",
+    "banner": "Choose who you would like to talk to",
+    "searchPlaceholder": "Search user",
+    "you": "You",
+    "input": {
+      "placeholder": "Type a message…",
+      "send": "Send message",
+      "removeImage": "Remove image",
+      "imageTooLarge": "Image must be at most 1 MB",
+      "previewAlt": "Selected image preview"
+    },
+    "message": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "imageAlt": "image"
+    },
+    "noMessages": "No messages yet"
   },
   "avatar": {
     "modal": {

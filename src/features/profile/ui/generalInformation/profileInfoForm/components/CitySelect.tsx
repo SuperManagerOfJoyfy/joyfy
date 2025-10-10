@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
-
 import { getCitiesForCountry } from '@/features/profile/api/countriesApi'
 import { SelectBox, SelectItem } from '@/shared/ui'
+import { useTranslations } from 'next-intl'
 import s from '../ProfileInfoForm.module.scss'
 
 export const CitySelect = () => {
@@ -11,6 +11,8 @@ export const CitySelect = () => {
   const [cities, setCities] = useState<string[]>([])
   const [filter, setFilter] = useState('')
   const [displayLimit, setDisplayLimit] = useState(50)
+
+  const t = useTranslations('profileInfoForm.citySelect')
 
   useEffect(() => {
     if (!selectedCountry) {
@@ -39,39 +41,38 @@ export const CitySelect = () => {
     <Controller
       name="city"
       control={control}
-      render={({ field }) => {
-        return (
-          <SelectBox
-            placeholder="Select city"
-            onValueChange={field.onChange}
-            value={field.value || undefined}
-            disabled={!selectedCountry}
-            className={s.selectBox}
-          >
-            <div>
-              <input
-                type="text"
-                placeholder="Search cities..."
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className={s.searchCityInput}
-                autoFocus
-              />
-            </div>
+      render={({ field }) => (
+        <SelectBox
+          placeholder={t('placeholder')}
+          onValueChange={field.onChange}
+          value={field.value || undefined}
+          disabled={!selectedCountry}
+          className={s.selectBox}
+        >
+          <div>
+            <input
+              type="text"
+              placeholder={t('search')}
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className={s.searchCityInput}
+              autoFocus
+            />
+          </div>
 
-            {displayedCities.map((city) => (
-              <SelectItem key={city} value={city}>
-                {city}
-              </SelectItem>
-            ))}
-            {hasMore && (
-              <button type="button" onClick={() => setDisplayLimit((prev) => prev + 50)} className={s.displayMoreBtn}>
-                Load more... ({filteredCities.length - displayLimit} remaining)
-              </button>
-            )}
-          </SelectBox>
-        )
-      }}
+          {displayedCities.map((city) => (
+            <SelectItem key={city} value={city}>
+              {city}
+            </SelectItem>
+          ))}
+
+          {hasMore && (
+            <button type="button" onClick={() => setDisplayLimit((prev) => prev + 50)} className={s.displayMoreBtn}>
+              {t('loadMore', { count: filteredCities.length - displayLimit })}
+            </button>
+          )}
+        </SelectBox>
+      )}
     />
   )
 }

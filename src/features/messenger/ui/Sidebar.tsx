@@ -9,9 +9,11 @@ import { useSearchUser } from '@/features/userSearch/utils/hooks'
 import { PATH } from '@/shared/config/routes'
 import s from './Sidebar.module.scss'
 import { useRouter } from '@/i18n/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 export const Sidebar = () => {
+  const t = useTranslations('messenger')
+
   const { users, isFetching, handleChangeValue, handleFetchMore, hasMore, searchValue, clearSearch } = useSearchUser({
     path: PATH.USER.MESSENGER,
   })
@@ -33,7 +35,7 @@ export const Sidebar = () => {
       <div className={s.searchBox}>
         <TextField
           search
-          placeholder="Search user"
+          placeholder={t('searchPlaceholder')}
           onChange={handleChangeValue}
           value={searchValue}
           isLoading={isFetching}

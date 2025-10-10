@@ -1,8 +1,9 @@
 'use client'
-import { useState } from 'react'
+
+import { useState, useMemo } from 'react'
 import { z } from 'zod'
 import { useRegisterMutation } from '@/features/auth/api/authApi'
-import { SignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
+import { createSignupSchema } from '@/features/auth/utils/schemas/SignupSchema'
 import { RegisterRequest } from '@/features/auth/api/authApi.types'
 import { PATH } from '@/shared/config/routes'
 import { Card, Form, Typography } from '@/shared/ui'
@@ -19,6 +20,7 @@ type Props = {
 
 export const SignupForm = ({ onSubmitSuccess }: Props) => {
   const t = useTranslations('auth.signup')
+  const tv = useTranslations('auth.validation')
 
   const [isSocialLoading, setIsSocialLoading] = useState(false)
   const [signup, { isLoading }] = useRegisterMutation()
@@ -27,9 +29,32 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
 
   const disableAll = isSocialLoading || isLoading
 
+  const signupSchema = useMemo(() => {
+    const schema = createSignupSchema({
+      required: tv('required'),
+      email: tv('email'),
+      password: {
+        minLength: tv('password.minLength'),
+        maxLength: tv('password.maxLength'),
+        uppercase: tv('password.uppercase'),
+        number: tv('password.number'),
+        specialChar: tv('password.specialChar'),
+      },
+      userName: {
+        min: tv('userName.min'),
+        max: tv('userName.max'),
+        invalid: tv('userName.invalid'),
+      },
+      agreeToTerms: tv('agreeToTerms'),
+      passwordsDoNotMatch: tv('passwordsDoNotMatch'),
+    })
+
+    return schema
+  }, [tv])
+
   const fields = useSignupFields(disableAll)
 
-  const handleSignupSubmit = async (data: z.infer<typeof SignupSchema>) => {
+  const handleSignupSubmit = async (data: z.infer<typeof signupSchema>) => {
     const registerData: RegisterRequest = {
       ...data,
       baseUrl: `${window.location.origin}/${locale}`,
@@ -51,9 +76,9 @@ export const SignupForm = ({ onSubmitSuccess }: Props) => {
       <SocialLinks isDisabled={disableAll} onStartLoading={() => setIsSocialLoading(true)} />
 
       <Form
-        btnText={t('title')}
+        btnText={t('button')}
         fields={fields}
-        schema={SignupSchema}
+        schema={signupSchema}
         onSubmit={handleSignupSubmit}
         disabled={disableAll}
       />
