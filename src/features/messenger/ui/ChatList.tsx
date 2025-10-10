@@ -15,6 +15,8 @@ export const ChatList = () => {
   const { data: chatData, isLoading } = useGetChatListQuery({ cursor: undefined })
   const [fetchMoreChats, { isFetching: isLoadingMore }] = useLazyGetChatListQuery()
 
+  console.log(chatData)
+
   const router = useRouter()
   const params = useParams()
   const rawSelectedId = params?.dialoguePartnerId

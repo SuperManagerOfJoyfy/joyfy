@@ -40,7 +40,8 @@ export const createSidebarItems = (
   role: 'user' | 'admin',
   userId?: number,
   handlers: SidebarActionHandlers = {},
-  t?: (key: string) => string
+  t?: (key: string) => string,
+  unreadMessagesCount?: number
 ): SidebarItem[] => {
   const translate = t || ((key: string) => key)
 
@@ -106,6 +107,7 @@ export const createSidebarItems = (
       path: PATH.USER.MESSENGER,
       icon: <FiMessageCircle />,
       activeIcon: <FaComments />,
+      badge: unreadMessagesCount && unreadMessagesCount > 0 ? unreadMessagesCount : undefined,
     },
     {
       id: 'search',

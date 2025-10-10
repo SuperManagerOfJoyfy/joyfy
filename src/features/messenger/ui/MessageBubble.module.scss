@@ -1,7 +1,7 @@
 .bubbleRow {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
 }
 
 .receiver {
@@ -107,16 +107,6 @@
       color: var(--color-light-100);
     }
   }
-
-  // Footer for image with text (no extra styles needed, inherits from textContainer)
-  &.imageWithTextFooter {
-    // Styles are inherited from textContainer background
-  }
-
-  // Footer for text only (default styles apply)
-  &.textOnlyFooter {
-    // Default footer styles apply
-  }
 }
 
 .timestamp {
@@ -163,7 +153,7 @@
 
 .editInput {
   background-color: var(--color-dark-500);
-  border: 1px solid var(--color-dark-300); // Fixed: was missing border width
+  border: 1px solid var(--color-dark-300);
   font-size: var(--font-size-s);
   padding: 4px;
   border-radius: 4px;
@@ -172,7 +162,6 @@
   word-wrap: break-word;
 
   &:focus {
-    // Fixed: was missing &
     border: 1px solid var(--color-accent-500);
     outline: none;
   }

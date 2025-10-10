@@ -1,7 +1,6 @@
 'use client'
 
 import React, { ChangeEvent, useRef, useState } from 'react'
-import { IoMicOutline } from 'react-icons/io5'
 import { PiImageSquare } from 'react-icons/pi'
 import { Button, TextArea } from '@/shared/ui'
 import { getSocket } from '@/shared/config/socket'
@@ -10,6 +9,7 @@ import s from './InputBox.module.scss'
 import { useUploadImageMutation } from '@/features/post/api'
 import { isValidUrl } from '@/features/messenger/utils'
 import Image from 'next/image'
+import { toast } from 'react-toastify'
 import { useTranslations } from 'next-intl'
 
 type Props = {
@@ -19,8 +19,6 @@ type Props = {
 export const InputBox = ({ dialoguePartnerId }: Props) => {
   const [messageText, setMessageText] = useState('')
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
-  const [voiceBlob, setVoiceBlob] = useState<Blob | null>(null)
-  const [isRecording, setIsRecording] = useState(false)
   const [isSending, setIsSending] = useState(false)
 
   const t = useTranslations('messenger.input')
@@ -36,7 +34,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
     const file = e.target.files?.[0]
     if (file) {
       if (file.size > 1024 * 1024) {
-        alert(t('imageTooLarge'))
+        toast.error('Image size must not exceed 1 MB')
         return
       }
       setSelectedImage(file)
@@ -49,7 +47,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
     if (!socket) return
 
     setIsSending(true)
-    //если в поле сообщения только текст
+
     if (messageText.trim() && !selectedImage) {
       socket.emit(WS_EVENT_PATH.RECEIVE_MESSAGE, {
         receiverId: +dialoguePartnerId,
@@ -58,7 +56,6 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
       setMessageText('')
     }
 
-    //если в поле сообщения только картинка (с текстом или без)
     if (selectedImage) {
       const formData = new FormData()
       formData.append('file', selectedImage)
@@ -66,13 +63,13 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
       try {
         const response = await uploadImage(formData).unwrap()
         const url = response.images[0].url
-        //проверка валидна ли ссылка с ответа
+
         if (!isValidUrl(url)) {
           console.log('Invalid image URL:', url)
           return
         }
         let finalMessage = url
-        // кейс если вдруговозле картинки есть текст
+
         if (messageText.trim()) {
           finalMessage = `${messageText.trim()}|||${url}`
         }
@@ -89,8 +86,6 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
     setIsSending(false)
   }
 
-  // TODO: Implement voice message sending
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -99,7 +94,7 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
   }
 
   //Determine what button to show
-  const hasContent = messageText.trim() || selectedImage || voiceBlob
+  const hasContent = messageText.trim() || selectedImage
 
   return (
     <div className={s.inputBoxWrapper}>
@@ -131,19 +126,22 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
       <div className={s.Buttons}>
         {!hasContent && (
           <div className={s.iconsWrapper}>
-            <button className={s.iconButton}>
-              <IoMicOutline size={20} />
-            </button>
-            <button className={s.iconButton} onClick={() => fileInputRef.current?.click()}>
+            <button className={s.iconButton} onClick={() => fileInputRef.current?.click()} aria-label="Attach image">
               <PiImageSquare size={20} />
             </button>
           </div>
         )}
 
         {/* Show send message button when text or image */}
-        {hasContent && !voiceBlob && (
-          <Button variant="text" className={s.inputButton} onClick={handleSend} disabled={isSending}>
-            {t('send')}
+        {hasContent && (
+          <Button
+            variant="text"
+            className={s.inputButton}
+            onClick={handleSend}
+            disabled={isSending}
+            aria-label={isSending ? 'Sending message...' : 'Send message'}
+          >
+            Send message
           </Button>
         )}
       </div>
@@ -156,14 +154,8 @@ export const InputBox = ({ dialoguePartnerId }: Props) => {
         accept="image/*"
         style={{ display: 'none' }}
         onChange={handleImageSelect}
+        aria-label="Select image file"
       />
-
-      {/* Show send voice button when voice is recorded */}
-      {/*{voiceBlob && !isRecording && (*/}
-      {/*  <Button variant="text" className={s.inputButton}>*/}
-      {/*    Send voice*/}
-      {/*  </Button>*/}
-      {/*)}*/}
     </div>
   )
 }

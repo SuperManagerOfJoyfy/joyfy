@@ -46,6 +46,7 @@
   font-size: 14px;
   line-height: 171%;
   font-weight: var(--font-weight-medium);
+  gap: 12px;
 
   &:hover:not(.sidebarLink--disabled) {
     color: var(--color-accent-100);
@@ -95,4 +96,20 @@
   background-color: inherit;
   cursor: pointer;
   border: none;
+}
+
+.badge {
+  background-color: var(--color-danger-500);
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: 2px 0 0 0;
+  border-radius: 50%;
+  margin-left: auto;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
