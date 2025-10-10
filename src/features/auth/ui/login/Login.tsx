@@ -1,21 +1,25 @@
 'use client'
 
 import { SocialLinks } from '@/features/auth/ui/socialLinks'
-import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
+import { createEmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
 import { PATH } from '@/shared/config/routes'
 import { Form, Typography } from '@/shared/ui'
 import { Card } from '@/shared/ui/card'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { z } from 'zod'
 import s from './login.module.scss'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
-const loginSchema = z.object({
-  email: EmailSchema,
-  password: z.string().min(1, 'Required'),
-})
+const makeLoginSchema = (tv: ReturnType<typeof useTranslations>) =>
+  z.object({
+    email: createEmailSchema({
+      required: tv('required'),
+      email: tv('email'),
+    }),
+    password: z.string().min(1, tv('required')),
+  })
 
 type Props = {
   className?: string
@@ -23,10 +27,14 @@ type Props = {
   onSubmit: (data: LoginFormValues) => void
 }
 
-export type LoginFormValues = z.infer<typeof loginSchema>
+export type LoginFormValues = z.infer<ReturnType<typeof makeLoginSchema>>
 
 export const Login = ({ className, isLoading, onSubmit }: Props) => {
   const t = useTranslations('auth.login')
+  const tv = useTranslations('auth.validation')
+
+  const loginSchema = useMemo(() => makeLoginSchema(tv), [tv])
+
   const [isSocialLoading, setIsSocialLoading] = useState(false)
 
   const fields = [

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ComponentProps, KeyboardEvent, MouseEvent, ReactNode, useId, useState } from 'react'
+import { ComponentProps, KeyboardEvent, ReactNode, useId, useState } from 'react'
 import s from './TextField.module.scss'
 import { Label } from '@/shared/ui/label/Label'
 import { FiSearch } from 'react-icons/fi'

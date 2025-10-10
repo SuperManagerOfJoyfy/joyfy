@@ -11,6 +11,7 @@ import Image from 'next/image'
 import React, { Fragment, useState } from 'react'
 import { BiEditAlt, BiTrash } from 'react-icons/bi'
 import { IoCheckmark, IoCheckmarkDone } from 'react-icons/io5'
+import { useTranslations } from 'next-intl'
 import s from './MessageBubble.module.scss'
 
 type Props = {
@@ -57,6 +58,8 @@ export const MessageBubble = ({
   status,
   onDelete,
 }: Props) => {
+  const t = useTranslations('messenger.message')
+
   const [messageText, setMessageText] = useState(originalMessage)
   const [edit, setEdit] = useState(false)
 
@@ -65,8 +68,8 @@ export const MessageBubble = ({
   let imageUrl: string | undefined
 
   if (messageText.includes('|||')) {
-    const [t, img] = messageText.split('|||')
-    text = t
+    const [tText, img] = messageText.split('|||')
+    text = tText
     if (isValidUrl(img)) imageUrl = img
   } else if (isValidUrl(messageText)) {
     imageUrl = messageText
@@ -121,7 +124,7 @@ export const MessageBubble = ({
         return (
           <Fragment>
             <div className={s.imageContainer}>
-              <Image src={imageUrl!} width={360} height={360} alt="image" className={s.picture} priority />
+              <Image src={imageUrl!} width={360} height={360} alt={t('imageAlt')} className={s.picture} priority />
             </div>
             <MessageFooter messageType={messageType} isSender={isSender} createdAt={createdAt} status={status} />
           </Fragment>
@@ -131,7 +134,7 @@ export const MessageBubble = ({
         return (
           <Fragment>
             <div className={s.imageContainer}>
-              <Image src={imageUrl!} width={360} height={360} alt="image" className={s.picture} priority />
+              <Image src={imageUrl!} width={360} height={360} alt={t('imageAlt')} className={s.picture} priority />
             </div>
             <div className={s.textContainer}>
               <Typography className={s.messageText} variant="body2">
@@ -173,11 +176,11 @@ export const MessageBubble = ({
           <ContextMenu.Content className={s.contextMenuContent}>
             {!imageUrl && (
               <ContextMenu.Item className={s.contextMenuItem} onSelect={activateEdit}>
-                <BiEditAlt /> Edit
+                <BiEditAlt /> {t('edit')}
               </ContextMenu.Item>
             )}
             <ContextMenu.Item className={s.contextMenuItem} onSelect={() => onDelete(id)}>
-              <BiTrash /> Delete
+              <BiTrash /> {t('delete')}
             </ContextMenu.Item>
           </ContextMenu.Content>
         </ContextMenu.Portal>
