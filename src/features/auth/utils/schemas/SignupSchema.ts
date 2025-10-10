@@ -1,26 +1,62 @@
-import { EmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
-import { PasswordSchema } from '@/features/auth/utils/schemas/PasswordSchema'
 import { z } from 'zod'
+import { createEmailSchema } from './EmailSchema'
+import { createPasswordSchema } from './PasswordSchema'
 
-export const SignupSchema = z
-  .object({
-    userName: z
-      .string()
-      .min(6, 'Minimum number of characters 6')
-      .max(30, 'Maximum number of characters 30')
-      .regex(/^[0-9A-Za-z_-]+$/, { message: 'Invalid characters entered' }),
+export const createSignupSchema = (messages: {
+  required: string
+  email: string
+  password: {
+    minLength: string
+    maxLength: string
+    uppercase: string
+    number: string
+    specialChar: string
+  }
+  userName: {
+    min: string
+    max: string
+    invalid: string
+  }
+  agreeToTerms: string
+  passwordsDoNotMatch: string
+}) =>
+  z
+    .object({
+      userName: z
+        .string()
+        .min(1, messages.required)
+        .min(6, messages.userName.min)
+        .max(30, messages.userName.max)
+        .regex(/^[0-9A-Za-z_-]+$/, { message: messages.userName.invalid }),
 
-    email: EmailSchema,
-    password: PasswordSchema,
-    passwordConfirmation: PasswordSchema,
+      email: createEmailSchema({
+        required: messages.required,
+        email: messages.email,
+      }),
 
-    agreeToTerms: z.literal(true, {
-      errorMap: () => ({ message: 'You must agree to the Terms & Conditions' }),
-    }),
-  })
-  .refine((arg) => arg.password === arg.passwordConfirmation, {
-    message: 'Passwords do not match. Try again.',
-    path: ['passwordConfirmation'],
-  })
+      password: createPasswordSchema({
+        required: messages.required,
+        ...messages.password,
+      }),
 
-type SignupSchema = z.infer<typeof SignupSchema>
+      passwordConfirmation: z.string({ required_error: messages.required }).min(1, { message: messages.required }),
+
+      agreeToTerms: z.literal(true, {
+        errorMap: () => ({ message: messages.agreeToTerms }),
+      }),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.passwordConfirmation) {
+        return
+      }
+
+      if (data.password !== data.passwordConfirmation) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: messages.passwordsDoNotMatch,
+          path: ['passwordConfirmation'],
+        })
+      }
+    })
+
+export type SignupSchema = z.infer<ReturnType<typeof createSignupSchema>>

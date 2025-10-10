@@ -1,7 +1,7 @@
 'use client'
 
 import { UserProfile } from '@/features/profile/api/profileApi.types'
-import { ProfileInfo, ProfileInfoSchema } from '@/features/profile/utils/schema/ProfileInfoSchema'
+import { createProfileInfoSchema, ProfileInfo } from '@/features/profile/utils/schema/ProfileInfoSchema'
 import { Button, ControlledDatePicker, ControlledTextArea, ControlledTextField, Loader, Separator } from '@/shared/ui'
 import { formatDateToString } from '@/shared/utils/dateFunctions'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -21,6 +21,8 @@ type Props = {
 
 export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => {
   const t = useTranslations('profileInfoForm')
+  const tv = useTranslations('profileInfoForm.validation')
+
   const { aboutMe, userName, firstName, lastName, dateOfBirth, country, city } = userInfo || {}
 
   const initialValues = useMemo<ProfileInfo>(
@@ -36,8 +38,32 @@ export const ProfileInfoForm = ({ userInfo, onSubmit, isSubmitting }: Props) => 
     [userName, firstName, lastName, dateOfBirth, country, city, aboutMe]
   )
 
+  const profileInfoSchema = useMemo(
+    () =>
+      createProfileInfoSchema({
+        required: tv('required'),
+        userName: {
+          min: tv('userName.min'),
+          max: tv('userName.max'),
+          invalid: tv('userName.invalid'),
+        },
+        name: {
+          max: tv('name.max'),
+          invalid: tv('name.invalid'),
+        },
+        dateOfBirth: {
+          format: tv('dateOfBirth.format'),
+          age13: tv('dateOfBirth.age13'),
+        },
+        aboutMe: {
+          maxLength: tv('aboutMe.maxLength'),
+        },
+      }),
+    [tv]
+  )
+
   const methods = useForm<ProfileInfo>({
-    resolver: zodResolver(ProfileInfoSchema),
+    resolver: zodResolver(profileInfoSchema),
     mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: initialValues,
