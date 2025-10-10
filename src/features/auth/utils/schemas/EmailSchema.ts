@@ -1,9 +1,6 @@
 import { z } from 'zod'
 
-export const EmailSchema = z.string().email('Email must match format example@example.com')
+export const createEmailSchema = (messages: { required: string; email: string }) =>
+  z.string().min(1, messages.required).email(messages.email)
 
-type EmailSchema = z.infer<typeof EmailSchema>
-
-export const EmailFormSchema = z.object({
-  email: EmailSchema,
-})
+export type EmailSchema = z.infer<ReturnType<typeof createEmailSchema>>
