@@ -12,7 +12,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://joyfy.online
 const frontendOrigin =
   typeof window !== 'undefined' && window.location.hostname === 'localhost'
     ? 'http://localhost:3000'
-    : 'https://joyfy.online'
+    : process.env.NEXT_PUBLIC_DOMAIN || 'https://joyfy.online'
 
 type SocialLinksProps = {
   isDisabled: boolean
