@@ -4,8 +4,7 @@
   align-items: center;
   flex-shrink: 0;
   overflow: hidden;
-  padding-top: 6px;
-  padding-left: 6px;
+  padding-left: 12px;
 
   .inputWrapper {
     flex: 1;
@@ -24,6 +23,10 @@
       background-color: transparent;
       font-size: var(--font-size-s);
       line-height: 1.4;
+
+      &::placeholder {
+        font-size: var(--font-size-xs);
+      }
     }
   }
 }

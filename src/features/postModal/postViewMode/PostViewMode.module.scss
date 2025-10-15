@@ -1,7 +1,7 @@
+@use '@/styles/mixins' as *;
+
 .contentHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-between;
   padding: 0 18px 0 24px;
   height: var(--header-height);
   flex-shrink: 0;
@@ -14,23 +14,28 @@
 }
 
 .postReactions {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
 }
 
 .postLikes {
-  padding-left: 16px;
+  padding-left: 24px;
   margin-top: 8px;
 }
 
 .icons {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 12px;
+  @include flex-between;
   cursor: pointer;
 
   .redHeart {
     color: red;
+  }
+
+  &.modal {
+    padding: 0 24px;
+  }
+
+  &.feed {
+    padding: 0;
   }
 }
 
@@ -39,6 +44,10 @@
   gap: 24px;
 }
 
+.iconButton {
+  padding: 0;
+}
+
 .date {
-  padding: 2px 0 2px 18px;
+  padding: 2px 0 2px 24px;
 }
