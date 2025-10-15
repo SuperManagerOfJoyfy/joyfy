@@ -1,12 +1,9 @@
 import { Post } from '@/features/post/types/postTypes'
-import { DropdownMenu, UserCard } from '@/shared/ui'
-import { HiDotsHorizontal } from 'react-icons/hi'
-import { PostDropdownMenuItems } from './PostDropdownMenuItems'
-
-import s from './PostViewMode.module.scss'
+import { UserCard } from '@/shared/ui'
+import { usePostModalContext } from '../context/PostModalContext'
 import { OwnPostDropdownMenu } from './OwnPostDropdownMenu'
 import { PublicPostDropdownMenu } from './PublicPostDropdownMenu'
-import { usePostModalContext } from '../context/PostModalContext'
+import s from './PostViewMode.module.scss'
 
 type Props = {
   post: Post
@@ -24,16 +21,6 @@ export const PostContentHeader = ({ post }: Props) => {
       ) : (
         <PublicPostDropdownMenu postId={post.id} ownerId={post.ownerId} isFollowing={isFollowing} />
       )}
-      {/* <DropdownMenu trigger={<HiDotsHorizontal />}>
-        <PostDropdownMenuItems
-          isOwnPost={isOwnPost}
-          isFollowing={isFollowing}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          onFollowToggle={onFollowToggle}
-          onCopyLink={onCopyLink}
-        />
-      </DropdownMenu> */}
     </div>
   )
 }
