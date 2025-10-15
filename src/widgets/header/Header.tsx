@@ -1,7 +1,7 @@
 'use client'
 
 import Image, { StaticImageData } from 'next/image'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 
@@ -16,20 +16,21 @@ import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import s from './Header.module.scss'
 import { useGetUserProfileQuery } from '@/features/profile/api'
 import { useSocket } from '@/shared/config/useSocket'
+import React from 'react'
 
 type LanguageSelectProps = {
   flag: StaticImageData
   language: string
 }
 
-const LanguageSelect = ({ flag, language }: LanguageSelectProps) => (
+const LanguageSelect = React.memo(({ flag, language }: LanguageSelectProps) => (
   <div className={s.selectItem}>
     <Image src={flag} alt={`${language} flag`} width={20} height={20} />
     {language}
   </div>
-)
+))
 
-const AuthActions = () => {
+const AuthActions = React.memo(() => {
   const t = useTranslations('header')
   return (
     <div className={s.buttons}>
@@ -41,39 +42,35 @@ const AuthActions = () => {
       </Button>
     </div>
   )
-}
+})
 
 export const Header = () => {
-  const { data: user, isLoading } = useGetMeQuery()
   const tHeader = useTranslations('header')
   const tLang = useTranslations('languages')
   const locale = useLocale() // -> 'en' | 'ru'
   const router = useRouter()
   const pathname = usePathname()
   const { data: me, isLoading: isMeLoading } = useGetMeQuery()
-  const [showButtons, setShowButtons] = useState(true)
   const { data: profile } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
-
-  useEffect(() => {
-    if (!isMeLoading) {
-      setShowButtons(!me)
-    }
-  }, [isMeLoading, me])
+  const showButtons = !isMeLoading && !me
 
   useSocket()
 
-  const currentUser =
-    me && profile
-      ? {
-          id: me.userId,
-          userName: me.userName,
-          avatar: profile.avatars?.[0]?.url ?? '',
-        }
-      : null
+  const currentUser = useMemo(() => {
+    if (!me || !profile) return null
+    return {
+      id: me.userId,
+      userName: me.userName,
+      avatar: profile.avatars?.[0]?.url ?? '',
+    }
+  }, [me, profile])
 
-  const handleLanguageChange = (nextLocale: string) => {
-    router.replace(pathname, { locale: nextLocale as 'en' | 'ru' })
-  }
+  const handleLanguageChange = useCallback(
+    (nextLocale: string) => {
+      router.replace(pathname, { locale: nextLocale as 'en' | 'ru' })
+    },
+    [router, pathname]
+  )
 
   return (
     <header className={s.header}>
