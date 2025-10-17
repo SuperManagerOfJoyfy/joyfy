@@ -1,7 +1,7 @@
+@use '@/styles/mixins' as *;
+
 .contentHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-between;
   padding: 0 18px 0 24px;
   height: var(--header-height);
   flex-shrink: 0;
@@ -14,23 +14,28 @@
 }
 
 .postReactions {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
 }
 
 .postLikes {
   padding-left: 24px;
-  margin-top: 16px;
+  margin-top: 8px;
 }
 
 .icons {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 24px 0 24px;
+  @include flex-between;
   cursor: pointer;
 
   .redHeart {
     color: red;
+  }
+
+  &.modal {
+    padding: 0 24px;
+  }
+
+  &.feed {
+    padding: 0;
   }
 }
 
@@ -39,39 +44,10 @@
   gap: 24px;
 }
 
-.postLikes {
-  padding-left: 24px;
+.iconButton {
+  padding: 0;
 }
 
 .date {
-  padding-left: 24px;
-}
-
-.commentForm {
-  display: flex;
-  height: 60px;
-  align-items: center;
-  flex-shrink: 0;
-  overflow: hidden;
-  padding-top: 6px;
-
-  .inputWrapper {
-    flex: 1;
-    min-width: 0;
-    height: 100%;
-    border: none;
-    background-color: transparent !important;
-
-    &:hover,
-    &:focus-within {
-      background-color: transparent !important;
-      border: none;
-    }
-
-    .commentInput {
-      background-color: transparent !important;
-      font-size: var(--font-size-s);
-      line-height: 1.4;
-    }
-  }
+  padding: 2px 0 2px 24px;
 }

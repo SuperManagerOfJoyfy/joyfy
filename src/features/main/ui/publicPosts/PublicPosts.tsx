@@ -2,13 +2,13 @@
 
 import clsx from 'clsx'
 
-import { formatNumberToSixDigits, timeAgo } from '@/features/main/utils'
-import { Post } from '@/features/post/types/postTypes'
-import { Avatar, Button, Card, DateStamp, ImageSlider, Typography } from '@/shared/ui'
 import { useState } from 'react'
-import { PublicPostModal } from '../publicPostModal'
-import { useTranslations } from 'next-intl'
+import { formatNumberToSixDigits } from '@/features/main/utils'
+import { Post } from '@/features/post/types/postTypes'
 import { Link } from '@/i18n/navigation'
+import { Avatar, Button, Card, DateStamp, ImageSlider, Typography } from '@/shared/ui'
+import { PostModal } from '@/features/postModal/ui'
+import { useTranslations } from 'next-intl'
 
 import s from './publicPosts.module.scss'
 
@@ -20,8 +20,8 @@ type Props = {
 export const PublicPosts = ({ count, posts }: Props) => {
   const t = useTranslations('dashboard')
   const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({})
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [post, setPost] = useState<Post | null>(null)
+  const [_, setIsModalOpen] = useState(false)
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
 
   const toggleExpand = (id: number) => {
     setExpandedPosts((prev) => ({
@@ -31,13 +31,25 @@ export const PublicPosts = ({ count, posts }: Props) => {
   }
 
   const openModalHandler = (postData: Post) => {
-    setPost(postData)
+    setSelectedPost(postData)
     setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedPost(null)
   }
 
   return (
     <>
-      <PublicPostModal open={isModalOpen} closeModal={() => setIsModalOpen(false)} post={post} />
+      {selectedPost && (
+        <PostModal
+          initialPost={selectedPost}
+          userProfile={{ userId: selectedPost.ownerId, userName: selectedPost.userName }}
+          manageUrl={false}
+          onClose={closeModal}
+        />
+      )}
       <Card className={s.card}>
         <Typography as="h2" fontWeight="bold">
           {t('registeredUsers')}
