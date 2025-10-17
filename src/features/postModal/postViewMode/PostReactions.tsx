@@ -1,29 +1,33 @@
 'use client'
 
-import { useCallback } from 'react'
-import { FaRegBookmark, FaRegHeart, FaHeart, FaBookmark } from 'react-icons/fa'
-import { FiSend } from 'react-icons/fi'
-import { toast } from 'react-toastify'
 import { useTranslations } from 'next-intl'
+import { useCallback } from 'react'
+import { useRouter } from '@/i18n/navigation'
+import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart } from 'react-icons/fa'
+import { FiSend } from 'react-icons/fi'
+import { IoChatbubbleEllipsesOutline } from 'react-icons/io5'
+import { toast } from 'react-toastify'
+import clsx from 'clsx'
 
+import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { useFavorites } from '@/features/favorites/hooks/useFavorites'
+import { favoritesUtils } from '@/features/favorites/utils/favoritesUtils'
 import { Likes } from '@/features/post/api'
 import { Post } from '@/features/post/types/postTypes'
-import { favoritesUtils } from '@/features/favorites/utils/favoritesUtils'
 import { Button } from '@/shared/ui'
-import { useFavorites } from '@/features/favorites/hooks/useFavorites'
-import { useGetMeQuery } from '@/features/auth/api/authApi'
 
-import s from './PostViewMode.module.scss'
 import { PATH } from '@/shared/config/routes'
-import { useRouter } from '@/i18n/navigation'
+import s from './PostViewMode.module.scss'
 
 type Props = {
   myLike: boolean
   changeLikeStatus: (action: Likes) => void
   post: Post
+  variant?: 'modal' | 'feed'
+  onCommentClick?: () => void
 }
 
-export const PostReactions = ({ myLike, changeLikeStatus, post }: Props) => {
+export const PostReactions = ({ myLike, changeLikeStatus, post, variant = 'modal', onCommentClick }: Props) => {
   const { data: me } = useGetMeQuery()
   const router = useRouter()
 
@@ -53,7 +57,7 @@ export const PostReactions = ({ myLike, changeLikeStatus, post }: Props) => {
 
   return (
     <div className={s.postReactions}>
-      <div className={s.icons}>
+      <div className={clsx(s.icons, s[variant])}>
         <div className={s.leftIcons}>
           <Button
             variant="icon"
@@ -63,6 +67,12 @@ export const PostReactions = ({ myLike, changeLikeStatus, post }: Props) => {
           >
             {myLike ? <FaHeart className={s.redHeart} /> : <FaRegHeart className={s.icon} />}
           </Button>
+
+          {variant === 'feed' && (
+            <Button variant="icon" className={s.iconButton} onClick={onCommentClick} aria-label="Post comments">
+              <IoChatbubbleEllipsesOutline />
+            </Button>
+          )}
 
           <Button variant="icon" className={s.iconButton} aria-label="Share post">
             <FiSend className={s.icon} />

@@ -8,26 +8,12 @@ import s from './PostViewMode.module.scss'
 
 type Props = {
   post: Post
-  isOwnPost: boolean
-  isFollowing: boolean
-  onEdit: () => void
-  onDelete: () => void
-  onFollowToggle: () => void
-  onCopyLink: () => void
 }
 
-export const PostContent = ({ post, isOwnPost, isFollowing, onEdit, onDelete, onFollowToggle, onCopyLink }: Props) => {
+export const PostContent = ({ post }: Props) => {
   return (
     <>
-      <PostContentHeader
-        post={post}
-        isOwnPost={isOwnPost}
-        isFollowing={isFollowing}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        onFollowToggle={onFollowToggle}
-        onCopyLink={onCopyLink}
-      />
+      <PostContentHeader post={post} />
 
       <Separator />
 

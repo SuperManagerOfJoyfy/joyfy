@@ -8,7 +8,7 @@ import { Post } from '@/features/post/types/postTypes'
 import { Loader } from '@/shared/ui/loader/Loader'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useDebounce } from './useDebounce'
+import { useDebounce } from '@/shared/hooks'
 
 type Props = {
   initialPostsData: GetPostsResponse

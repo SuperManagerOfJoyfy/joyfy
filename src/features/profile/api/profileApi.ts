@@ -1,5 +1,11 @@
 import { joyfyApi } from '@/shared/api/joyfyApi'
-import { PublicUserProfile, UploadedAvatarResponse, UserProfile, UserProfileWithFollowers } from './profileApi.types'
+import {
+  PublicUserProfile,
+  UploadedAvatarResponse,
+  UserFollowers,
+  UserProfile,
+  UserProfileWithFollowers,
+} from './profileApi.types'
 
 export const profileApi = joyfyApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -25,6 +31,22 @@ export const profileApi = joyfyApi.injectEndpoints({
         method: 'GET',
       }),
       providesTags: ['Profile'],
+    }),
+
+    getUserFollowing: builder.query<UserFollowers, string>({
+      query: (userName) => ({
+        url: `/users/${userName}/following`,
+        method: 'GET',
+      }),
+      providesTags: ['Following'],
+    }),
+
+    getUserFollowers: builder.query<UserFollowers, string>({
+      query: (userName) => ({
+        url: `/users/${userName}/followers`,
+        method: 'GET',
+      }),
+      providesTags: ['Following'],
     }),
 
     followUserById: builder.mutation<void, number>({
@@ -85,4 +107,6 @@ export const {
   useGetUserProfileWithFollowersQuery,
   useFollowUserByIdMutation,
   useUnfollowUserByIdMutation,
+  useGetUserFollowingQuery,
+  useGetUserFollowersQuery,
 } = profileApi
