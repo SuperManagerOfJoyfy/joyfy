@@ -7,7 +7,6 @@ import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { useGetUserFollowingQuery } from '@/features/profile/api'
 import { useGetFeedPostsQuery, useLazyGetFeedPostsQuery } from '../api/feedApi'
 import s from './Feed.module.scss'
-import { ErrorBoundary } from '@/shared/ui/errorBoundary/ErrorBoundary'
 
 export const Feed = () => {
   const { data: feedData, isLoading } = useGetFeedPostsQuery({})
