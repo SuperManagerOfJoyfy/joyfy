@@ -5,7 +5,7 @@
     "chooseLanguage": "Выберите язык"
   },
   "sidebar": {
-    "home": "Лента",
+    "feed": "Лента",
     "create": "Создать",
     "myProfile": "Мой профиль",
     "messenger": "Сообщения",
