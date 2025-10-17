@@ -1,3 +1,5 @@
+import { store } from '@/app/store/store'
+import { postsApi } from '@/features/post/api'
 import { GetPostsResponse } from '@/features/post/api/postsApi.types'
 import { PostsGridWithInfiniteScroll } from '@/features/post/ui/postsGridWithInfiniteScroll'
 import { PostModal } from '@/features/postModal/ui'
