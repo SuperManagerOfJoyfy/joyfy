@@ -262,14 +262,14 @@
       "delete": "Delete Post",
       "follow": "Follow",
       "unfollow": "Unfollow",
-      "copyLink": "Copy Link"
+      "copyLink": "Copy Link",
+      "copySuccess": "Link copied to clipboard"
     },
     "confirmDelete": "Are you sure you want to delete this post?",
     "confirmCancel": "Are you sure you want to exit post editing? Your changes will not be saved.",
     "updateSuccess": "Post updated successfully!",
     "deleteSuccess": "Post deleted successfully.",
-    "deleteError": "Post cannot be deleted.",
-    "copySuccess": "Link copied to clipboard"
+    "deleteError": "Post cannot be deleted."
   },
   "createPost": {
     "upload": {
