@@ -72,3 +72,8 @@
     color: var(--color-accent-500);
   }
 }
+
+.noPostsMsg {
+  height: 100%;
+  @include flex-center;
+}
