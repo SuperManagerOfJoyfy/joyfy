@@ -2,6 +2,7 @@ import { joyfyApi } from '@/shared/api/joyfyApi'
 import { FeedQueryParams, FeedResponse } from './feedApi.types'
 
 export const feedApi = joyfyApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getFeedPosts: builder.query<FeedResponse, FeedQueryParams>({
       query: ({ endCursorPostId, pageSize = 8 }) => ({
@@ -11,7 +12,11 @@ export const feedApi = joyfyApi.injectEndpoints({
 
       serializeQueryArgs: ({ endpointName }) => endpointName,
 
-      merge: (currentCache, newItems) => {
+      merge: (currentCache, newItems, { arg }) => {
+        if (!arg?.endCursorPostId) {
+          return { ...newItems }
+        }
+
         const existingIds = new Set(currentCache.items.map((post) => post.id))
         const newUniqueItems = newItems.items.filter((post) => !existingIds.has(post.id))
         return {
@@ -19,6 +24,11 @@ export const feedApi = joyfyApi.injectEndpoints({
           items: [...currentCache.items, ...newUniqueItems],
         }
       },
+
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.endCursorPostId !== previousArg?.endCursorPostId
+      },
+
       providesTags: ['Feed'],
       keepUnusedDataFor: 300,
     }),
