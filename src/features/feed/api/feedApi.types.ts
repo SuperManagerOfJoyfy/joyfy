@@ -1,14 +1,7 @@
 import { Post } from '@/features/post/types/postTypes'
+import { PaginatedResponse } from '@/features/profile/api/profileApi.types'
 
-export type FeedResponse = {
-  totalCount: number
-  pagesCount: number
-  page: number
-  pageSize: number
-  prevCursor: number
-  nextCursor: number
-  items: Post[]
-}
+export type FeedResponse = PaginatedResponse<Post>
 
 export type FeedQueryParams = {
   endCursorPostId?: number

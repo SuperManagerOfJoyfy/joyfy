@@ -47,15 +47,17 @@ export type UploadedAvatarResponse = {
   avatars: AvatarType[]
 }
 
-export type UserFollowers = {
+export type PaginatedResponse<T> = {
   totalCount: number
   pagesCount: number
   page: number
   pageSize: number
   prevCursor: number
   nextCursor: number
-  items: UserFollowersItem[]
+  items: T[]
 }
+
+export type UserFollowers = PaginatedResponse<UserFollowersItem>
 
 export type UserFollowersItem = {
   id: number
