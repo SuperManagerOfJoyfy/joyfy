@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 
 import fallback from './fallbackNoImage.png'
 import s from './PostsGrid.module.scss'
+import { CommentCount } from '@/features/comments/ui/CommentCount'
 
 type Props = {
   posts: Post[] | undefined
@@ -39,7 +40,7 @@ export const PostsGrid = ({ onPostClick, posts }: Props) => {
                 <span> {post.likesCount}</span>
               </span>
               <span className={s.likeItem}>
-                <FaComment /> <span>0</span>
+                <FaComment /> <CommentCount postId={post.id} />
               </span>
             </div>
           </div>
