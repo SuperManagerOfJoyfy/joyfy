@@ -2,7 +2,7 @@
 
 import { useFollowUserByIdMutation, useUnfollowUserByIdMutation } from '@/features/profile/api'
 import { DropdownMenu, DropdownMenuItem } from '@/shared/ui'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { BiCopy } from 'react-icons/bi'
 import { HiDotsHorizontal } from 'react-icons/hi'
@@ -16,6 +16,7 @@ type PublicPostDropdownMenuProps = {
 }
 
 export const PublicPostDropdownMenu = ({ postId, ownerId, isFollowing }: PublicPostDropdownMenuProps) => {
+  const locale = useLocale()
   const t = useTranslations('postEditForm.menu')
 
   const [open, setOpen] = useState(false)
@@ -38,9 +39,6 @@ export const PublicPostDropdownMenu = ({ postId, ownerId, isFollowing }: PublicP
     try {
       if (next) await followById(ownerId).unwrap()
       else await unfollow(ownerId).unwrap()
-
-      // let user see the new label briefly, then close
-      //setTimeout(() => setOpen(false), 500)
     } catch (error) {
       setLocalFollowing(!next) // revert on error
       console.error('Follow action failed:', error)
@@ -48,7 +46,7 @@ export const PublicPostDropdownMenu = ({ postId, ownerId, isFollowing }: PublicP
   }
 
   const handleCopyLink = () => {
-    const url = `${window.location.origin}/post/${postId}`
+    const url = `${window.location.origin}/${locale}/profile/${ownerId}?postId=${postId}`
     navigator.clipboard.writeText(url)
     toast.success(t('copySuccess'))
     setOpen(false)
