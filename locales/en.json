@@ -95,6 +95,11 @@
   "statistics": {
     "title": "Statistics Page"
   },
+
+  "feed": {
+    "empty": "Your feed is empty. Follow people to see posts."
+  },
+
   "profileSettings": {
     "tabs": {
       "info": "General Information",

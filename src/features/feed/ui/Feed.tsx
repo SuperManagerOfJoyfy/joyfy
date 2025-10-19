@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Post } from '@/features/post/types/postTypes'
 import { LazyLoader, Loader } from '@/shared/ui'
 import { FeedPost } from './FeedPost'
@@ -9,6 +10,7 @@ import { useGetFeedPostsQuery, useLazyGetFeedPostsQuery } from '../api/feedApi'
 import s from './Feed.module.scss'
 
 export const Feed = () => {
+  const t = useTranslations('feed')
   const { data: feedData, isLoading } = useGetFeedPostsQuery({})
   const [fetchMore, { isFetching: isLoadingMore }] = useLazyGetFeedPostsQuery()
   const { data: me } = useGetMeQuery()
@@ -32,6 +34,10 @@ export const Feed = () => {
   }
 
   if (isLoading) return <Loader />
+
+  if (!feedPosts || feedPosts.length === 0) {
+    return <div className={s.noPostsMsg}>{t('empty')}</div>
+  }
 
   return (
     <div className={s.feedContainer}>
