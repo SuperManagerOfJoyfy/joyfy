@@ -100,11 +100,9 @@
   "statistics": {
     "title": "Статистика"
   },
-
   "feed": {
     "empty": "Ваша лента пуста. Подпишитесь на пользователей, чтобы видеть их публикации."
   },
-
   "profileSettings": {
     "tabs": {
       "info": "Общая информация",
@@ -418,7 +416,7 @@
   "emailConfirmation": {
     "successTitle": "Поздравляем!",
     "successDescription": "Ваш email был успешно подтверждён",
-    "successButton": "Войти",
+    "signInButton": "Войти",
     "errorTitle": "Ошибка",
     "errorDescription": "Попробуйте ещё раз позже",
     "networkErrorTitle": "Сетевая ошибка",
