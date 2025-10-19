@@ -413,7 +413,7 @@
   "emailConfirmation": {
     "successTitle": "Congratulations!",
     "successDescription": "Your email has been confirmed",
-    "successButton": "Sign in",
+    "signInButton": "Sign in",
     "errorTitle": "Error",
     "errorDescription": "Please try again later",
     "networkErrorTitle": "Network Error",
