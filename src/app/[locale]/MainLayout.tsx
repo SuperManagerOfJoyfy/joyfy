@@ -11,8 +11,10 @@ import { createSidebarItems, Header, Sidebar } from '@/widgets'
 import { useTranslations } from 'next-intl'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 
-import s from '../../styles/layout.module.scss'
 import { useGetChatListQuery } from '@/features/messenger/api'
+import s from '../../styles/layout.module.scss'
+import { useSelector } from 'react-redux'
+import { selectToken } from '@/features/auth/model/authSlice'
 
 type MainLayoutProps = {
   children: ReactNode
@@ -22,8 +24,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
+  const token = useSelector(selectToken)
 
-  const { data: user, isLoading } = useGetMeQuery()
+  const { data: me, isLoading } = useGetMeQuery()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
@@ -32,14 +35,22 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const onOpenLogoutModalHandler = (value = true) => setIsModalOpen(value)
   const tSidebar = useTranslations('sidebar')
 
-  const { data: chatData } = useGetChatListQuery({})
-  const unreadMessagesCount = chatData?.notReadCount
+  const { data: chatData } = useGetChatListQuery(
+    {},
+    {
+      skip: !token, // ← don't run while logged out
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+    }
+  )
+  const unreadMessagesCount = chatData?.notReadCount ?? 0
 
   const sidebarItems = useMemo(
     () =>
       createSidebarItems(
         'user',
-        user?.userId,
+        me?.userId,
         {
           onOpenLogoutModalHandler,
           onCreatePost: () => {
@@ -51,7 +62,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         tSidebar,
         unreadMessagesCount
       ),
-    [onOpenLogoutModalHandler, user?.userId, pathname, router, searchParams, tSidebar]
+    [onOpenLogoutModalHandler, me?.userId, pathname, router, searchParams, tSidebar, unreadMessagesCount]
   )
 
   const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
@@ -82,7 +93,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <div className={s.layoutWrapper}>
       {!hideHeader && <Header />}
       <div className={s.containerLayout}>
-        {!isLoading && user && (
+        {!isLoading && me && (
           <div className={s.sidebarContainer}>
             <Sidebar
               items={sidebarItems}
@@ -93,7 +104,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 }
               }}
             />
-            <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} email={user?.email} />
+            <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} email={me?.email} />
           </div>
         )}
 
