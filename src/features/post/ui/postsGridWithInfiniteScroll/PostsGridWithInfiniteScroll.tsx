@@ -53,7 +53,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
     const total = cachedData?.totalCount ?? initialPostsData.totalCount
 
     return posts.length < total
-  }, [isUninitialized, cachedData, initialPostsData.totalCount, posts.length])
+  }, [isUninitialized, cachedData, initialPostsData.totalCount, posts?.length])
 
   const fetchMore = useCallback(async () => {
     if (!hasMore || isFetchingRef.current) return
@@ -106,7 +106,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
   return (
     <>
       {<PostsGrid posts={posts} onPostClick={openPostModal} />}
-      {hasMore && posts.length > 0 && (
+      {hasMore && posts?.length > 0 && (
         <div ref={loaderRef}>
           <Loader reduced />
         </div>
