@@ -17,11 +17,18 @@ export type UserProfileType = { userId: number; userName: string }
 type Props = {
   initialPost: Post
   userProfile: UserProfileType
+  isIntercepted: boolean
+  postId: number
 }
 
-export const PostModal = ({ initialPost, userProfile }: Props) => {
+export const PostModal = ({ initialPost, postId, userProfile, isIntercepted }: Props) => {
   return (
-    <PostModalContextProvider initialPost={initialPost} userProfile={userProfile}>
+    <PostModalContextProvider
+      initialPost={initialPost}
+      userProfile={userProfile}
+      isIntercepted={isIntercepted}
+      postId={postId}
+    >
       <PostModalLayout />
     </PostModalContextProvider>
   )

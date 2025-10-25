@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { useAppDispatch } from '@/app/store/store'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
@@ -14,6 +13,7 @@ import { UserProfileType } from '../ui'
 import { UserProfileWithFollowers } from '@/features/profile/api/profileApi.types'
 import { useGetUserProfileWithFollowersQuery } from '@/features/profile/api/profileApi'
 import { useTranslations } from 'next-intl'
+import { usePathname, useRouter } from '@/i18n/navigation'
 
 export type ConfirmAction = 'delete' | 'cancelEdit' | null
 
@@ -55,7 +55,9 @@ type PostModalContextValue = {
 type PostModalProviderProps = {
   children: ReactNode
   initialPost: Post
+  postId: number
   userProfile: UserProfileType
+  isIntercepted: boolean
 }
 
 const PostModalContext = createContext<PostModalContextValue | null>(null)
@@ -66,12 +68,18 @@ export const usePostModalContext = () => {
   return context
 }
 
-export const PostModalContextProvider = ({ initialPost, userProfile, children }: PostModalProviderProps) => {
+export const PostModalContextProvider = ({
+  initialPost,
+  postId,
+  userProfile,
+  children,
+  isIntercepted,
+}: PostModalProviderProps) => {
   const dispatch = useAppDispatch()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const postId = Number(searchParams.get('postId'))
+
   const t = useTranslations('postEditForm')
+  const pathname = usePathname()
+  const router = useRouter()
 
   // State
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
@@ -102,9 +110,8 @@ export const PostModalContextProvider = ({ initialPost, userProfile, children }:
 
   // Basic actions
   const dismissModal = () => {
-    const newParams = new URLSearchParams(searchParams.toString())
-    newParams.delete('postId')
-    router.push(`?${newParams.toString()}`, { scroll: false })
+    if (isIntercepted) router.back()
+    else router.push(`${pathname.split('post')[0]}`)
   }
 
   // Dropdown actions

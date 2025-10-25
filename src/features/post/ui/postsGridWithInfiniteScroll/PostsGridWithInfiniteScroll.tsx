@@ -99,9 +99,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
 
   const openPostModal = useCallback(
     (post: Post) => {
-      const newParams = new URLSearchParams(searchParams.toString())
-      newParams.set('postId', post.id.toString())
-      router.push(`?${newParams.toString()}`, { scroll: false })
+      router.push(`${userId}/post/${post.id}`, { scroll: false })
     },
     [searchParams, router]
   )
