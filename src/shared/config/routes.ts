@@ -12,6 +12,7 @@ export const PATH = {
   },
 
   USER: {
+    FEED: '/feed',
     PROFILE: '/profile',
     MESSENGER: '/messenger',
     SEARCH: '/search',

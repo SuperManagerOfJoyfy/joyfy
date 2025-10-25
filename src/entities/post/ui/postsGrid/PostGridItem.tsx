@@ -5,13 +5,14 @@ import { FaComment } from 'react-icons/fa6'
 import fallback from './fallbackNoImage.png'
 import s from './PostsGrid.module.scss'
 import React, { useCallback } from 'react'
+import { CommentCount } from '@/features/comments/ui/CommentCount'
 
 type Props = {
   post: Post
   onPostClick: (post: Post) => void
 }
 export const PostGridItem = React.memo(({ post, onPostClick }: Props) => {
-  const handleClick = useCallback(() => onPostClick(post), [onPostClick, post.id])
+  const handleClick = useCallback(() => onPostClick(post), [onPostClick, post])
   return (
     <div className={s.gridItem} onClick={handleClick}>
       <Image
@@ -28,7 +29,7 @@ export const PostGridItem = React.memo(({ post, onPostClick }: Props) => {
             <span> {post.likesCount}</span>
           </span>
           <span className={s.likeItem}>
-            <FaComment /> <span>0</span>
+            <FaComment /> <CommentCount postId={post.id} />
           </span>
         </div>
       </div>

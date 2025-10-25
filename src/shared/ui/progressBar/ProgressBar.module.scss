@@ -1,0 +1,29 @@
+.progressBar {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  overflow: hidden;
+  z-index: 9999;
+  background: transparent;
+}
+
+.progressBar::before {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 200%;
+  background: linear-gradient(to right, #6f00ff 0%, #8a2be2 40%, #00c853 70%);
+  background-size: 200% 100%;
+  animation: slide 1.5s linear infinite;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
