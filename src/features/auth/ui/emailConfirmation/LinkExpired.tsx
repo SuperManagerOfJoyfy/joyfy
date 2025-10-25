@@ -32,7 +32,10 @@ export const LinkExpired = () => {
 
   const handleSendEmailSubmit = async ({ email }: z.infer<typeof EmailFormSchema>) => {
     try {
-      await resendEmail({ email, baseUrl: 'https://joyfy.online' }).unwrap()
+      await resendEmail({
+        email,
+        baseUrl: process.env.NEXT_PUBLIC_DOMAIN || 'https://joyfy.online',
+      }).unwrap()
       setModalOpen(true)
       setRegisteredEmail(email)
     } catch (error) {}

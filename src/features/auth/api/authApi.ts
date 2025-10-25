@@ -16,6 +16,7 @@ import {
 import { closeSocket } from '@/shared/config/socket'
 
 export const authApi = joyfyApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getMe: builder.query<MeResponse, void>({
       query: () => ({

@@ -4,6 +4,7 @@ import { getSocket } from '@/shared/config/socket'
 import { WS_EVENT_PATH } from '@/shared/constants'
 
 export const notificationsApi = joyfyApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getNotifications: builder.query<NotificationsResponse, NotificationsRequest>({
       query: ({ cursor }) => {

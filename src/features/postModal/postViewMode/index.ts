@@ -1,6 +1,6 @@
 export * from './PostContentHeader'
-export * from './PostDropdownMenuItems'
 export * from './PostFooter'
 export * from './PostModalHeaderMeta'
 export * from './PostContent'
 export * from './PostReactions'
+export * from './PublicPostDropdownMenu'

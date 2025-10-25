@@ -46,3 +46,25 @@ export type UserProfileWithFollowers = UserProfile & {
 export type UploadedAvatarResponse = {
   avatars: AvatarType[]
 }
+
+export type PaginatedResponse<T> = {
+  totalCount: number
+  pagesCount: number
+  page: number
+  pageSize: number
+  prevCursor: number
+  nextCursor: number
+  items: T[]
+}
+
+export type UserFollowers = PaginatedResponse<UserFollowersItem>
+
+export type UserFollowersItem = {
+  id: number
+  userId: number
+  userName: string
+  createdAt: string
+  avatars: AvatarType[]
+  isFollowing: boolean
+  isFollowedBy: boolean
+}

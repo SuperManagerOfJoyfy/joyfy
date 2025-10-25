@@ -5,7 +5,7 @@
     "chooseLanguage": "Выберите язык"
   },
   "sidebar": {
-    "home": "Главная",
+    "feed": "Лента",
     "create": "Создать",
     "myProfile": "Мой профиль",
     "messenger": "Сообщения",
@@ -99,6 +99,9 @@
   },
   "statistics": {
     "title": "Статистика"
+  },
+  "feed": {
+    "empty": "Ваша лента пуста. Подпишитесь на пользователей, чтобы видеть их публикации."
   },
   "profileSettings": {
     "tabs": {
@@ -267,14 +270,14 @@
       "delete": "Удалить пост",
       "follow": "Подписаться",
       "unfollow": "Отписаться",
-      "copyLink": "Скопировать ссылку"
+      "copyLink": "Скопировать ссылку",
+      "copySuccess": "Ссылка скопирована в буфер обмена"
     },
     "confirmDelete": "Вы уверены, что хотите удалить этот пост?",
     "confirmCancel": "Вы уверены, что хотите выйти из редактирования? Ваши изменения не будут сохранены.",
     "updateSuccess": "Пост успешно обновлён!",
     "deleteSuccess": "Пост успешно удалён.",
-    "deleteError": "Не удалось удалить пост.",
-    "copySuccess": "Ссылка скопирована в буфер обмена"
+    "deleteError": "Не удалось удалить пост."
   },
   "createPost": {
     "upload": {
@@ -413,7 +416,7 @@
   "emailConfirmation": {
     "successTitle": "Поздравляем!",
     "successDescription": "Ваш email был успешно подтверждён",
-    "successButton": "Войти",
+    "signInButton": "Войти",
     "errorTitle": "Ошибка",
     "errorDescription": "Попробуйте ещё раз позже",
     "networkErrorTitle": "Сетевая ошибка",

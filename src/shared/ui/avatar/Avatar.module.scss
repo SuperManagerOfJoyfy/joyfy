@@ -3,12 +3,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   vertical-align: middle;
-
-  border-radius: 100%;
+  border-radius: 50%;
+  flex: 0 0 auto;
 
   .avatarImage {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -19,10 +19,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 100%;
     height: 100%;
-
     font-weight: var(--font-weight-medium);
     line-height: 1;
     text-transform: uppercase;
@@ -30,7 +28,8 @@
 
   &[data-size='small'] {
     height: 24px;
-    min-width: 24px;
+    width: 24px;
+    flex: 0 0 24px;
 
     .avatarFallback {
       font-size: 14px;
@@ -38,8 +37,9 @@
   }
 
   &[data-size='medium'] {
+    width: 36px;
     height: 36px;
-    min-width: 36px;
+    flex: 0 0 36px;
 
     .avatarFallback {
       font-size: 18px;
@@ -47,8 +47,9 @@
   }
 
   &[data-size='regular'] {
+    width: 48px;
     height: 48px;
-    min-width: 48px;
+    flex: 0 0 48px;
 
     .avatarFallback {
       font-size: 20px;
@@ -56,8 +57,9 @@
   }
 
   &[data-size='large'] {
+    width: 204px;
     height: 204px;
-    min-width: 204px;
+    flex: 0 0 204px;
 
     .avatarFallback {
       font-size: 90px;

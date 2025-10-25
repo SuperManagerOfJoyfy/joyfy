@@ -1,12 +1,13 @@
 'use client'
 
-import Image, { StaticImageData } from 'next/image'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslations, useLocale } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { useLocale, useTranslations } from 'next-intl'
+import Image, { StaticImageData } from 'next/image'
+import { memo, useCallback, useMemo } from 'react'
 
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { NotificationsPopover } from '@/features/notifications/ui/NotificationsPopover'
+import { useGetUserProfileQuery } from '@/features/profile/api'
 import { PATH } from '@/shared/config/routes'
 import { Button, SelectBox, SelectItem, UserCard } from '@/shared/ui'
 import Letters from '../../../public/logo/letters.png'
@@ -14,23 +15,20 @@ import Logo from '../../../public/logo/logo.png'
 import flagRussia from './assets/flagRussia.png'
 import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import s from './Header.module.scss'
-import { useGetUserProfileQuery } from '@/features/profile/api'
-import { useSocket } from '@/shared/config/useSocket'
-import React from 'react'
 
 type LanguageSelectProps = {
   flag: StaticImageData
   language: string
 }
 
-const LanguageSelect = React.memo(({ flag, language }: LanguageSelectProps) => (
+const LanguageSelect = memo(({ flag, language }: LanguageSelectProps) => (
   <div className={s.selectItem}>
     <Image src={flag} alt={`${language} flag`} width={20} height={20} />
     {language}
   </div>
 ))
 
-const AuthActions = React.memo(() => {
+const AuthActions = memo(() => {
   const t = useTranslations('header')
   return (
     <div className={s.buttons}>
@@ -54,8 +52,6 @@ export const Header = () => {
   const { data: profile } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
   const showButtons = !isMeLoading && !me
 
-  useSocket()
-
   const currentUser = useMemo(() => {
     if (!me || !profile) return null
     return {
@@ -76,8 +72,8 @@ export const Header = () => {
     <header className={s.header}>
       <div className={s.container}>
         <Link href={PATH.ROOT} className={s.logo}>
-          <Image src={Logo} alt="logo" width={40} height={40} />
-          <Image src={Letters} alt="logo" height={20} />
+          <Image src={Logo} alt="logo" width={40} height={40} priority />
+          <Image src={Letters} alt="logo" height={20} priority />
         </Link>
 
         <div className={s.actions}>
