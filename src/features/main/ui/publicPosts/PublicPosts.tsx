@@ -46,6 +46,7 @@ export const PublicPosts = ({ count, posts }: Props) => {
         <PostModal
           initialPost={selectedPost}
           userProfile={{ userId: selectedPost.ownerId, userName: selectedPost.userName }}
+          manageUrl={false}
           onClose={closeModal}
         />
       )}

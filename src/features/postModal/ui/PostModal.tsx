@@ -17,18 +17,16 @@ export type UserProfileType = { userId: number; userName: string }
 type Props = {
   initialPost: Post
   userProfile: UserProfileType
+  manageUrl?: boolean
   onClose?: () => void
-  isIntercepted?: boolean
-  postId?: number
 }
 
-export const PostModal = ({ initialPost, postId, userProfile, onClose, isIntercepted }: Props) => {
+export const PostModal = ({ initialPost, userProfile, manageUrl, onClose }: Props) => {
   return (
     <PostModalContextProvider
       initialPost={initialPost}
       userProfile={userProfile}
-      isIntercepted={isIntercepted}
-      postId={postId}
+      manageUrl={manageUrl}
       onClose={onClose}
     >
       <PostModalLayout />
