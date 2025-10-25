@@ -15,8 +15,8 @@ export default async function Page({ params, searchParams }: PageProps) {
   const { id } = await params
 
   const [userRes, postsRes] = await Promise.all([
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${id}`, { next: { revalidate: 3600 } }),
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/user/${id}?pageSize=8`, { next: { revalidate: 3600 } }),
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${id}`),
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-posts/user/${id}?pageSize=8`),
   ])
 
   const userData: PublicUserProfile = await userRes.json()

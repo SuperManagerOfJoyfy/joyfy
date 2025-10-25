@@ -1,19 +1,18 @@
 'use client'
 
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAppDispatch } from '@/app/store/store'
 import { toast } from 'react-toastify'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { MeResponse } from '@/features/auth/api/authApi.types'
 import { useGetUserProfileWithFollowersQuery } from '@/features/profile/api/profileApi'
+import { usePathname, useRouter } from '@/i18n/navigation'
 import { UserProfileWithFollowers } from '@/features/profile/api/profileApi.types'
 import { Post } from '@/features/post/types/postTypes'
 import { UserProfileType } from '../ui'
 import { postsApi, useDeletePostMutation, useEditPostMutation, useGetPostByIdQuery } from '@/features/post/api'
 import { extractMessage, isFetchBaseQueryError } from '@/shared/utils/handleErrors/handleErrors'
-import { usePathname, useRouter } from '@/i18n/navigation'
 
 export type ConfirmAction = 'delete' | 'cancelEdit' | null
 
@@ -31,7 +30,7 @@ type PostModalContextValue = {
   me: MeResponse | undefined
   currentPost: Post
   initialPost: Post
-  postId: number
+  postId?: number
   isOwnPost: boolean
   isFollowing: boolean
 
@@ -51,11 +50,10 @@ type PostModalContextValue = {
 type PostModalProviderProps = {
   children: ReactNode
   initialPost: Post
-  postId: number
+  postId?: number
   userProfile: UserProfileType
-  manageUrl?: boolean
+  isIntercepted?: boolean
   onClose?: () => void
-  isIntercepted: boolean
 }
 
 const PostModalContext = createContext<PostModalContextValue | null>(null)
@@ -68,26 +66,29 @@ export const usePostModalContext = () => {
 
 export const PostModalContextProvider = ({
   initialPost,
+  postId,
   userProfile,
   children,
-  manageUrl = true,
+  isIntercepted,
   onClose,
 }: PostModalProviderProps) => {
   const dispatch = useAppDispatch()
-  const searchParams = useSearchParams()
-  const postId = manageUrl && searchParams.get('postId') ? Number(searchParams.get('postId')) : undefined
+  const router = useRouter()
   const t = useTranslations('postEditForm')
   const pathname = usePathname()
-  const router = useRouter()
 
   // State
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [hasFormChanges, setHasFormChanges] = useState(false)
+  const [skipQuery, setSkipQuery] = useState(true)
 
   // Data fetching
   const { data: me } = useGetMeQuery()
-  const { data: fetchedPost } = useGetPostByIdQuery(postId!, { skip: !postId, refetchOnMountOrArgChange: false })
+  const { data: fetchedPost } = useGetPostByIdQuery(postId!, {
+    skip: skipQuery || !postId,
+    refetchOnMountOrArgChange: false,
+  })
   const [editPost, { isLoading: isUpdating }] = useEditPostMutation()
   const [deletePostMutation] = useDeletePostMutation()
   const { data: userWithFollowers = {} as UserProfileWithFollowers } = useGetUserProfileWithFollowersQuery(
@@ -96,10 +97,11 @@ export const PostModalContextProvider = ({
 
   // Initialize post data in cache
   useEffect(() => {
-    if (initialPost && !manageUrl) {
+    if (initialPost && postId) {
       dispatch(postsApi.util.upsertQueryData('getPostById', initialPost.id, initialPost))
+      setSkipQuery(false)
     }
-  }, [dispatch, initialPost, manageUrl])
+  }, [dispatch, initialPost, postId])
 
   // Derived state
   const currentPost = fetchedPost || initialPost
@@ -109,13 +111,9 @@ export const PostModalContextProvider = ({
 
   // Basic actions
   const dismissModal = () => {
-    if (manageUrl) {
-      const newParams = new URLSearchParams(searchParams.toString())
-      newParams.delete('postId')
-      router.push(`?${newParams.toString()}`, { scroll: false })
-    } else if (onClose) {
-      onClose()
-    }
+    if (isIntercepted) router.back()
+    router.push(`${pathname.split('post')[0]}`)
+    onClose?.()
   }
 
   // Modal-specific actions

@@ -18,9 +18,7 @@ export default async function InterceptedPostModal({ params }: PageProps) {
     post = await postRes.json()
   }
 
-  const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${id}`, {
-    next: { revalidate: 3600 },
-  })
+  const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/public-user/profile/${id}`)
 
   const userData: PublicUserProfile = await userRes.json()
 

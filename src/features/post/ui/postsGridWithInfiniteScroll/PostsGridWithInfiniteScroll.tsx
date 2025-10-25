@@ -18,7 +18,6 @@ type Props = {
 export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [trigger] = useLazyGetPostsQuery()
   const loaderRef = useRef<HTMLDivElement>(null)
   const isInitializedRef = useRef(false)
@@ -101,7 +100,7 @@ export const PostsGridWithInfiniteScroll = ({ initialPostsData, userId }: Props)
     (post: Post) => {
       router.push(`${userId}/post/${post.id}`, { scroll: false })
     },
-    [searchParams, router]
+    [router]
   )
 
   return (
