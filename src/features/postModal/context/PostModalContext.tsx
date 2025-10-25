@@ -30,7 +30,7 @@ type PostModalContextValue = {
   me: MeResponse | undefined
   currentPost: Post
   initialPost: Post
-  postId?: number
+  postId: number
   isOwnPost: boolean
   isFollowing: boolean
 

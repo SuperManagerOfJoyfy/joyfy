@@ -33,13 +33,7 @@ export const Sidebar = () => {
   return (
     <aside className={s.sidebar}>
       <div className={s.searchBox}>
-        <TextField
-          search
-          placeholder={t('searchPlaceholder')}
-          onChange={handleChangeValue}
-          value={searchValue}
-          isLoading={isFetching}
-        />
+        <TextField search placeholder={t('searchPlaceholder')} onChange={handleChangeValue} value={searchValue} />
       </div>
 
       <div className={s.body}>
