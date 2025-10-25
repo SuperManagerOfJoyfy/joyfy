@@ -12,6 +12,7 @@ export const PATH = {
   },
 
   USER: {
+    FEED: '/home/publications-followers',
     PROFILE: '/profile',
     MESSENGER: '/messenger',
     SEARCH: '/search',

@@ -46,7 +46,7 @@ export const PostCommentForm = ({ postId }: PostCommentFormProps) => {
         wrapperClassName={s.inputWrapper}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         maxLength={PAGINATION_DEFAULTS.COMMENT_MAX_LENGTH}
         disabled={isLoading}
       />

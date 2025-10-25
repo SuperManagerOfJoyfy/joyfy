@@ -1,3 +1,5 @@
+@use '@/styles/mixins' as *;
+
 .userInfo {
   display: flex;
   gap: 6px;
@@ -8,6 +10,9 @@
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+
   &:hover {
     color: var(--color-accent-500);
   }
@@ -15,8 +20,7 @@
 
 .textBlock {
   font-size: var(--font-size-s);
-  display: flex;
-  flex-direction: column;
+  line-height: var(--line-height-m);
   flex: 1 1 auto;
   min-width: 0;
   word-break: break-word;
@@ -33,22 +37,38 @@
   align-items: flex-start;
 
   .userName {
-    font-size: var(--font-size-s);
-    font-weight: var(--font-weight-bold);
     margin-right: 6px;
   }
 }
 
+.inline .textBlock {
+  display: block;
+}
+
+.inline .headerRow {
+  display: inline;
+}
+
+.inline .userName {
+  display: inline;
+  margin-right: 4px;
+}
+
+.inline .childrenText {
+  display: inline;
+  font-size: var(--font-size-s);
+  color: var(--color-light-100);
+  margin: 0;
+  word-break: break-word;
+}
+
 .stacked .textBlock,
 .withDate .textBlock {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
 }
 
 .headerRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-between;
 }
 
 .childrenText {

@@ -12,6 +12,19 @@ import { WS_EVENT_PATH } from '@/shared/constants'
 import { selectCurrentUserId } from '@/features/auth/model/authSlice'
 import { store } from '@/app/store/store'
 
+const waitForSocket = async (timeoutMs = 5000) => {
+  const start = Date.now()
+  return new Promise<ReturnType<typeof getSocket> | null>((resolve) => {
+    const tick = () => {
+      const s = getSocket()
+      if (s) return resolve(s)
+      if (Date.now() - start >= timeoutMs) return resolve(null)
+      setTimeout(tick, 100)
+    }
+    tick()
+  })
+}
+
 export const messengerApi = joyfyApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -75,31 +88,53 @@ export const messengerApi = joyfyApi.injectEndpoints({
 
       // For real time updates
       async onCacheEntryAdded(dialoguePartnerId, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
-        const socket = getSocket()
-        if (!socket) return
-
-        const currentUserId = selectCurrentUserId(store.getState())
-
         await cacheDataLoaded
 
-        const handleReceiveMessage = (message: MessageItem) => {
-          updateCachedData((draft) => {
-            const idx = draft.items.findIndex((m) => m.id === message.id)
+        let socket = await waitForSocket()
+
+        if (!socket) return
+
+        const meId = selectCurrentUserId(store.getState())
+
+        const handleReceiveMessage = (data: MessageItem | MessageItem[], callback?: Function) => {
+          // Normalize to array
+          const messages = Array.isArray(data) ? data : [data]
+
+          messages.forEach((message) => {
+            console.log('📬 Received message update:', {
+              id: message.id,
+              status: message.status,
+              isSender: message.ownerId === meId,
+              hasCallback: !!callback,
+            })
+
+            if (!message || !message.id) return
+
             const isCurrentChat =
-              (message.ownerId === currentUserId && message.receiverId === +dialoguePartnerId) ||
-              (message.ownerId === +dialoguePartnerId && message.receiverId === currentUserId)
+              (message.ownerId === meId && message.receiverId === +dialoguePartnerId) ||
+              (message.ownerId === +dialoguePartnerId && message.receiverId === meId)
 
             if (!isCurrentChat) return
 
-            if (idx !== -1) {
-              draft.items[idx] = { ...draft.items[idx], ...message }
-            } else {
-              // Add new message if not present
-              draft.items.push(message)
-              draft.totalCount += 1
-              store.dispatch(messengerApi.util.invalidateTags(['ChatList']))
+            updateCachedData((draft) => {
+              const idx = draft.items.findIndex((m) => m.id === message.id)
+
+              if (idx !== -1) {
+                draft.items[idx] = { ...draft.items[idx], ...message }
+              } else {
+                // Add new message if not present
+                draft.items.push(message)
+                draft.totalCount += 1
+              }
+            })
+
+            // Acknowledge receipt if this is MESSAGE_SEND (recipient receiving new message)
+            if (callback && message.ownerId !== meId && message.status === MessageStatus.SENT) {
+              callback({ message, receiverId: meId })
             }
           })
+
+          store.dispatch(messengerApi.util.invalidateTags(['ChatList']))
         }
 
         const handleDeleteMessage = (messageId: number) => {
@@ -118,14 +153,34 @@ export const messengerApi = joyfyApi.injectEndpoints({
           })
         }
 
-        socket.on(WS_EVENT_PATH.RECEIVE_MESSAGE, handleReceiveMessage)
-        socket.on(WS_EVENT_PATH.MESSAGE_DELETED, handleDeleteMessage)
-        socket.on(WS_EVENT_PATH.UPDATE_MESSAGE, handleUpdateMessage)
+        const bind = (s: any) => {
+          s.on(WS_EVENT_PATH.RECEIVE_MESSAGE, handleReceiveMessage)
+          s.on(WS_EVENT_PATH.MESSAGE_SEND, handleReceiveMessage)
+          s.on(WS_EVENT_PATH.MESSAGE_DELETED, handleDeleteMessage)
+          s.on(WS_EVENT_PATH.UPDATE_MESSAGE, handleUpdateMessage)
+        }
+
+        const unbind = (s: any) => {
+          s.off(WS_EVENT_PATH.RECEIVE_MESSAGE, handleReceiveMessage)
+          s.off(WS_EVENT_PATH.MESSAGE_SEND, handleReceiveMessage)
+          s.off(WS_EVENT_PATH.MESSAGE_DELETED, handleDeleteMessage)
+          s.off(WS_EVENT_PATH.UPDATE_MESSAGE, handleUpdateMessage)
+        }
+
+        bind(socket)
+        // Rebind if socket instance changes (after reconnect)
+        const rebinder = setInterval(() => {
+          const s = getSocket()
+          if (s && s !== socket) {
+            unbind(socket)
+            socket = s
+            bind(socket)
+          }
+        }, 1000)
 
         await cacheEntryRemoved
-        socket.off(WS_EVENT_PATH.RECEIVE_MESSAGE, handleReceiveMessage)
-        socket.off(WS_EVENT_PATH.MESSAGE_DELETED, handleDeleteMessage)
-        socket.off(WS_EVENT_PATH.UPDATE_MESSAGE, handleUpdateMessage)
+        clearInterval(rebinder)
+        unbind(socket)
       },
     }),
 
@@ -173,6 +228,7 @@ export const messengerApi = joyfyApi.injectEndpoints({
             }
           })
         )
+
         try {
           await queryFulfilled
 
@@ -187,6 +243,29 @@ export const messengerApi = joyfyApi.injectEndpoints({
                   (m) => m.ownerId !== +dialoguePartnerId && m.receiverId !== +dialoguePartnerId
                 )
                 chatDraft.totalCount -= 1
+              })
+            )
+          } else {
+            // Find the new last message
+            const lastMessage = remainingItems[remainingItems.length - 1]
+            // Find the chat in the chat list
+            dispatch(
+              messengerApi.util.updateQueryData('getChatList', { cursor: undefined }, (chatDraft) => {
+                const chat = chatDraft.items.find(
+                  (m) => m.ownerId === +dialoguePartnerId || m.receiverId === +dialoguePartnerId
+                )
+                if (chat) {
+                  // If the deleted message was the latest, update chat list preview
+                  if (chat.messageText === lastMessage.messageText) {
+                    // Do nothing, already up to date
+                    return
+                  } else if (chat.messageText && chat.messageText !== lastMessage.messageText) {
+                    chat.messageText = lastMessage.messageText
+                    chat.createdAt = lastMessage.createdAt
+                    chat.updatedAt = lastMessage.updatedAt
+                    chat.status = lastMessage.status
+                  }
+                }
               })
             )
           }

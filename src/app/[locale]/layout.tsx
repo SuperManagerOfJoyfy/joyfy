@@ -1,3 +1,4 @@
+import React from 'react'
 import type { ReactNode } from 'react'
 import { Suspense } from 'react'
 import { NextIntlClientProvider } from 'next-intl'
@@ -12,6 +13,7 @@ import MainLayout from './MainLayout'
 import { ReduxProvider } from '../providers/ReduxProvider'
 import { AuthInitializer } from '@/features/auth/ui/AuthInitializer'
 import { Loader, ToastSnackbar } from '@/shared/ui'
+import { SocketProvider } from '@/shared/config/SocketProvider'
 
 export const metadata = {
   title: 'Joyfy',
@@ -47,6 +49,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ToastSnackbar />
             <AuthInitializer />
+            <SocketProvider />
             <Suspense fallback={<Loader />}>
               <MainLayout>{children}</MainLayout>
             </Suspense>
