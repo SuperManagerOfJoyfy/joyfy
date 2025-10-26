@@ -1,14 +1,10 @@
 'use client'
 
 import { Post } from '@/features/post/types/postTypes'
-import Image from 'next/image'
-import { FaHeart } from 'react-icons/fa'
-import { FaComment } from 'react-icons/fa6'
 import { useTranslations } from 'next-intl'
-
-import fallback from './fallbackNoImage.png'
 import s from './PostsGrid.module.scss'
-import { CommentCount } from '@/features/comments/ui/CommentCount'
+import { useCallback } from 'react'
+import { PostGridItem } from '@/entities/post/ui/postsGrid/PostGridItem'
 
 type Props = {
   posts: Post[] | undefined
@@ -22,30 +18,16 @@ export const PostsGrid = ({ onPostClick, posts }: Props) => {
     return <div className={s.noPostsMsg}>{t('noPosts')}</div>
   }
 
+  const handleClick = useCallback(
+    (post: Post) => {
+      onPostClick(post)
+    },
+    [onPostClick]
+  )
+
   return (
     <div className={s.gridContainer}>
-      {posts?.map((post) => (
-        <div className={s.gridItem} onClick={() => onPostClick(post)} key={post.id}>
-          <Image
-            src={post.images[0] ? post.images[0].url : fallback}
-            alt="post image"
-            width={235}
-            height={235}
-            priority
-          />
-          <div className={s.overlay}>
-            <div className={s.likes}>
-              <span className={s.likeItem}>
-                <FaHeart color="red" />
-                <span> {post.likesCount}</span>
-              </span>
-              <span className={s.likeItem}>
-                <FaComment /> <CommentCount postId={post.id} />
-              </span>
-            </div>
-          </div>
-        </div>
-      ))}
+      {posts?.map((post) => <PostGridItem post={post} onPostClick={handleClick} key={post.id} />)}
     </div>
   )
 }
