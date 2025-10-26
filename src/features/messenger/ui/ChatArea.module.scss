@@ -1,7 +1,8 @@
+@use '@/styles/mixins' as *;
+
 .chatArea {
+  @include flex-column;
   flex: 1;
-  display: flex;
-  flex-direction: column;
   height: 100%;
 }
 
@@ -14,24 +15,16 @@
 }
 
 .chatBody {
+  @include flex-column;
   flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
   overflow-y: auto;
   padding: 12px;
   height: 100%;
 }
 
 .noMessages {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center;
   height: 100%;
-}
-
-.scrollArea {
-  height: 100%;
-  width: 100%;
 }
 
 .chatFooter {

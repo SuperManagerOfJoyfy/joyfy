@@ -7,15 +7,13 @@ import { useGetChatListQuery, useLazyGetChatListQuery } from '../api'
 import { PATH } from '@/shared/config/routes'
 import { ChatItem } from './ChatItem'
 import { useCallback } from 'react'
-import s from './Sidebar.module.scss'
+import s from './MessengerSidebar.module.scss'
 import { useRouter } from '@/i18n/navigation'
 
 export const ChatList = () => {
   const { data: currentUser } = useGetMeQuery()
   const { data: chatData, isLoading } = useGetChatListQuery({ cursor: undefined })
   const [fetchMoreChats, { isFetching: isLoadingMore }] = useLazyGetChatListQuery()
-
-  console.log(chatData)
 
   const router = useRouter()
   const params = useParams()
@@ -45,7 +43,7 @@ export const ChatList = () => {
   }
 
   return (
-    <Scroll>
+    <>
       {isLoading ? (
         <Loader reduced className={s.loader} />
       ) : (
@@ -60,6 +58,6 @@ export const ChatList = () => {
         ))
       )}
       <LazyLoader onLoadMore={handleFetchMore} hasMore={hasMore} isFetching={isLoadingMore} />
-    </Scroll>
+    </>
   )
 }
