@@ -7,9 +7,9 @@ import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { LogoutModal } from '@/features/auth/ui'
 import { CreatePost } from '@/features/post/ui'
 import { Loader } from '@/shared/ui'
-import { createSidebarItems, Header, Sidebar } from '@/widgets'
+import { createSidebarItems, Header, Sidebar, SidebarItem } from '@/widgets'
 import { useTranslations } from 'next-intl'
-import { ReactNode, useEffect, useMemo, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useGetChatListQuery } from '@/features/messenger/api'
 import s from '../../styles/layout.module.scss'
@@ -31,8 +31,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pendingPath, setPendingPath] = useState<string | null>(null)
   const [isAppInitialized, setIsAppInitialized] = useState(false)
-
-  const onOpenLogoutModalHandler = (value = true) => setIsModalOpen(value)
   const tSidebar = useTranslations('sidebar')
 
   const { data: chatData } = useGetChatListQuery(
@@ -46,28 +44,45 @@ export default function MainLayout({ children }: MainLayoutProps) {
   )
   const unreadMessagesCount = chatData?.notReadCount ?? 0
 
-  const sidebarItems = useMemo(
-    () =>
-      createSidebarItems(
-        'user',
-        me?.userId,
-        {
-          onOpenLogoutModalHandler,
-          onCreatePost: () => {
-            const current = new URLSearchParams(searchParams.toString())
-            current.set('action', 'create')
-            window.history.pushState(null, '', `?${current.toString()}`)
-          },
-        },
-        tSidebar,
-        unreadMessagesCount
-      ),
-    [onOpenLogoutModalHandler, me?.userId, pathname, router, searchParams, tSidebar, unreadMessagesCount]
+  const onOpenLogoutModalHandler = useCallback((value = true) => {
+    setIsModalOpen(value)
+  }, [])
+
+  const onCreatePost = useCallback(() => {
+    const current = new URLSearchParams(searchParams.toString())
+    current.set('action', 'create')
+    window.history.pushState(null, '', `?${current.toString()}`)
+  }, [searchParams])
+
+  const sidebarActions = useMemo(
+    () => ({
+      onOpenLogoutModalHandler,
+      onCreatePost,
+    }),
+    [onOpenLogoutModalHandler, onCreatePost]
   )
 
-  const fullPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
+  const handleItemClick = useCallback(
+    (item: SidebarItem) => {
+      if (item.path) {
+        router.push(item.path)
+      }
+    },
+    [router]
+  )
+
+  const sidebarItems = useMemo(
+    () => createSidebarItems('user', me?.userId, sidebarActions, tSidebar, unreadMessagesCount),
+    [me?.userId, sidebarActions, unreadMessagesCount]
+  )
+
   const showLoader = pendingPath && pathname !== pendingPath
   const hideHeader = pathname.includes('/auth/google')
+
+  const activePath = useMemo(() => {
+    if (pendingPath) return pendingPath
+    return searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname
+  }, [pathname, searchParams, pendingPath])
 
   useEffect(() => {
     if (pathname === pendingPath) {
@@ -95,15 +110,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <div className={s.containerLayout}>
         {!isLoading && me && (
           <div className={s.sidebarContainer}>
-            <Sidebar
-              items={sidebarItems}
-              activePath={pendingPath || fullPath}
-              onItemClick={(item) => {
-                if (item.path) {
-                  router.push(item.path)
-                }
-              }}
-            />
+            <Sidebar items={sidebarItems} activePath={activePath} onItemClick={handleItemClick} />
             <LogoutModal open={isModalOpen} onOpenLogoutModalHandler={onOpenLogoutModalHandler} email={me?.email} />
           </div>
         )}

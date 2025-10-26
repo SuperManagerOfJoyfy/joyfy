@@ -3,7 +3,7 @@
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import Image, { StaticImageData } from 'next/image'
-import { useEffect, useState } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { NotificationsPopover } from '@/features/notifications/ui/NotificationsPopover'
@@ -21,14 +21,14 @@ type LanguageSelectProps = {
   language: string
 }
 
-const LanguageSelect = ({ flag, language }: LanguageSelectProps) => (
+const LanguageSelect = memo(({ flag, language }: LanguageSelectProps) => (
   <div className={s.selectItem}>
     <Image src={flag} alt={`${language} flag`} width={20} height={20} />
     {language}
   </div>
-)
+))
 
-const AuthActions = () => {
+const AuthActions = memo(() => {
   const t = useTranslations('header')
   return (
     <div className={s.buttons}>
@@ -40,7 +40,7 @@ const AuthActions = () => {
       </Button>
     </div>
   )
-}
+})
 
 export const Header = () => {
   const tHeader = useTranslations('header')
@@ -49,27 +49,24 @@ export const Header = () => {
   const router = useRouter()
   const pathname = usePathname()
   const { data: me, isLoading: isMeLoading } = useGetMeQuery()
-  const [showButtons, setShowButtons] = useState(true)
   const { data: profile } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
+  const showButtons = !isMeLoading && !me
 
-  useEffect(() => {
-    if (!isMeLoading) {
-      setShowButtons(!me)
+  const currentUser = useMemo(() => {
+    if (!me || !profile) return null
+    return {
+      id: me.userId,
+      userName: me.userName,
+      avatar: profile.avatars?.[0]?.url ?? '',
     }
-  }, [isMeLoading, me])
+  }, [me, profile])
 
-  const currentUser =
-    me && profile
-      ? {
-          id: me.userId,
-          userName: me.userName,
-          avatar: profile.avatars?.[0]?.url ?? '',
-        }
-      : null
-
-  const handleLanguageChange = (nextLocale: string) => {
-    router.replace(pathname, { locale: nextLocale as 'en' | 'ru' })
-  }
+  const handleLanguageChange = useCallback(
+    (nextLocale: string) => {
+      router.replace(pathname, { locale: nextLocale as 'en' | 'ru' })
+    },
+    [router, pathname]
+  )
 
   return (
     <header className={s.header}>
