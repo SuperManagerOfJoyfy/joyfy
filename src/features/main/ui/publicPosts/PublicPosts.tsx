@@ -32,11 +32,11 @@ export const PublicPosts = ({ count, posts }: Props) => {
 
   const openModalHandler = (postData: Post) => {
     setSelectedPost(postData)
-    setIsModalOpen(true)
+    //setIsModalOpen(true)
   }
 
   const closeModal = () => {
-    setIsModalOpen(false)
+    //setIsModalOpen(false)
     setSelectedPost(null)
   }
 
@@ -46,7 +46,7 @@ export const PublicPosts = ({ count, posts }: Props) => {
         <PostModal
           initialPost={selectedPost}
           userProfile={{ userId: selectedPost.ownerId, userName: selectedPost.userName }}
-          manageUrl={false}
+          //isPublicView={true}
           onClose={closeModal}
         />
       )}

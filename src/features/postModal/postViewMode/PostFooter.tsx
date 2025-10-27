@@ -4,6 +4,7 @@ import { Post } from '@/features/post/types/postTypes'
 import { DateStamp, Separator } from '@/shared/ui'
 import { useTranslations } from 'next-intl'
 import { PostReactions } from './PostReactions'
+import { usePostModalContext } from '../context/PostModalContext'
 
 import { usePostLike } from '@/features/post/hooks'
 import s from './PostViewMode.module.scss'
@@ -15,8 +16,22 @@ type PostFooterProps = {
 
 export const PostFooter = ({ createdAt, post }: PostFooterProps) => {
   const { likes, count, myLike, changeLikeStatus } = usePostLike(post.id)
+  const { isPublicView } = usePostModalContext()
 
   const t = useTranslations('post')
+
+  if (isPublicView) {
+    return (
+      <div className={s.stickyFooter}>
+        {count > 0 && (
+          <>
+            <PostLikes users={likes} count={count} className={s.postLikes} />
+            <DateStamp date={createdAt} className={s.date} />
+          </>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className={s.stickyFooter}>

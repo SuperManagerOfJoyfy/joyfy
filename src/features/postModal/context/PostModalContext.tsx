@@ -25,6 +25,7 @@ type PostModalContextValue = {
   hasFormChanges: boolean
   setHasFormChanges: (value: boolean) => void
   isUpdating: boolean
+  isPublicView: boolean
 
   // Data
   me: MeResponse | undefined
@@ -51,7 +52,6 @@ type PostModalProviderProps = {
   children: ReactNode
   initialPost: Post
   userProfile: UserProfileType
-  manageUrl?: boolean
   onClose?: () => void
 }
 
@@ -63,18 +63,14 @@ export const usePostModalContext = () => {
   return context
 }
 
-export const PostModalContextProvider = ({
-  initialPost,
-  userProfile,
-  children,
-  manageUrl = true,
-  onClose,
-}: PostModalProviderProps) => {
+export const PostModalContextProvider = ({ initialPost, userProfile, children, onClose }: PostModalProviderProps) => {
+  const { data: me } = useGetMeQuery()
   const dispatch = useAppDispatch()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const postId = manageUrl && searchParams.get('postId') ? Number(searchParams.get('postId')) : undefined
   const t = useTranslations('postEditForm')
+  const isPublicView = !me
+  const postId = !isPublicView && searchParams.get('postId') ? Number(searchParams.get('postId')) : undefined
 
   // State
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
@@ -82,7 +78,6 @@ export const PostModalContextProvider = ({
   const [hasFormChanges, setHasFormChanges] = useState(false)
 
   // Data fetching
-  const { data: me } = useGetMeQuery()
   const { data: fetchedPost } = useGetPostByIdQuery(postId!, { skip: !postId, refetchOnMountOrArgChange: false })
   const [editPost, { isLoading: isUpdating }] = useEditPostMutation()
   const [deletePostMutation] = useDeletePostMutation()
@@ -92,10 +87,10 @@ export const PostModalContextProvider = ({
 
   // Initialize post data in cache
   useEffect(() => {
-    if (initialPost && !manageUrl) {
+    if (initialPost && !isPublicView) {
       dispatch(postsApi.util.upsertQueryData('getPostById', initialPost.id, initialPost))
     }
-  }, [dispatch, initialPost, manageUrl])
+  }, [dispatch, initialPost, isPublicView])
 
   // Derived state
   const currentPost = fetchedPost || initialPost
@@ -105,12 +100,12 @@ export const PostModalContextProvider = ({
 
   // Basic actions
   const dismissModal = () => {
-    if (manageUrl) {
+    if (onClose) {
+      onClose()
+    } else {
       const newParams = new URLSearchParams(searchParams.toString())
       newParams.delete('postId')
       router.push(`?${newParams.toString()}`, { scroll: false })
-    } else if (onClose) {
-      onClose()
     }
   }
 
@@ -143,7 +138,7 @@ export const PostModalContextProvider = ({
     try {
       await deletePostMutation({ postId: currentPostId || 0, userId: me?.userId || 0 })
       toast.success(t('deleteSuccess'))
-      dismissModal() // Close modal after successful delete
+      dismissModal()
     } catch (error) {
       toast.error(t('deleteError'))
     }
@@ -196,6 +191,7 @@ export const PostModalContextProvider = ({
     isOwnPost,
     isFollowing,
     initialPost,
+    isPublicView,
 
     // Modal-specific actions
     handleEdit,

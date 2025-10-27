@@ -11,16 +11,18 @@ type Props = {
 
 export const PostContentHeader = ({ post }: Props) => {
   const { ownerId, userName, avatarOwner } = post
-  const { isFollowing, isOwnPost, handleEdit, handleConfirmDelete } = usePostModalContext()
+  const { isFollowing, isOwnPost, handleEdit, handleConfirmDelete, isPublicView } = usePostModalContext()
 
   return (
     <div className={s.contentHeader}>
       <UserCard user={{ id: ownerId, userName, avatar: avatarOwner }} />
-      {isOwnPost ? (
-        <OwnPostDropdownMenu onEdit={handleEdit} onDelete={handleConfirmDelete} />
-      ) : (
-        <PublicPostDropdownMenu postId={post.id} ownerId={post.ownerId} isFollowing={isFollowing} />
-      )}
+
+      {!isPublicView &&
+        (isOwnPost ? (
+          <OwnPostDropdownMenu onEdit={handleEdit} onDelete={handleConfirmDelete} />
+        ) : (
+          <PublicPostDropdownMenu postId={post.id} ownerId={post.ownerId} isFollowing={isFollowing} />
+        ))}
     </div>
   )
 }
