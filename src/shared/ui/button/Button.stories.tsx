@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { MdLanguage } from 'react-icons/md'
 import Image from 'next/image'
 import flagUnitedKingdom from '../header/assets/flagUnitedKingdom.png'

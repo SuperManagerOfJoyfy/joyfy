@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/nextjs'
 import infoImg from '@/features/auth/assets/images/EmailVerification/confirm.png'
 import expiredImg from '@/features/auth/assets/images/EmailVerification/expired.png'
 import { EmailVerification } from './EmailVerification'

@@ -1,55 +1,56 @@
 'use client'
 
-import s from './Recaptcha.module.scss'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import s from './Recaptcha.module.scss'
 
 type Props = {
-  onVerify: (token: string | null) => void
+  onVerifyAction: (token: string | null) => void
   siteKey: string
 }
 
-export const Recaptcha = ({ onVerify, siteKey }: Props) => {
-  const [isVerified, setIsVerified] = useState(false)
+export const Recaptcha = ({ onVerifyAction, siteKey }: Props) => {
+  const recaptchaRef = useRef<ReCAPTCHA | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [expired, setExpired] = useState(false)
 
   const handleRecaptchaChange = (token: string | null) => {
-    setError(null)
     setExpired(false)
     if (token) {
-      setIsVerified(true)
-      onVerify(token)
+      setError(null)
+      onVerifyAction(token)
     } else {
-      setIsVerified(false)
-      onVerify(null)
+      setError('Verification failed. Please try again.')
+      onVerifyAction(null)
     }
   }
 
   const handleRecaptchaError = () => {
-    setError('Ошибка проверки reCAPTCHA')
-    setIsVerified(false)
-    onVerify(null)
+    setError('An error occurred during verification. Please try again.')
+    recaptchaRef.current?.reset()
+    onVerifyAction(null)
   }
 
   const handleRecaptchaExpired = () => {
     setExpired(true)
-    setIsVerified(false)
-    onVerify(null)
+    recaptchaRef.current?.reset()
+    setError('Verification expired. Please check the box again.')
+    onVerifyAction(null)
   }
 
   return (
     <div className={s.container}>
       <ReCAPTCHA
+        ref={recaptchaRef}
         sitekey={siteKey}
         onChange={handleRecaptchaChange}
         onErrored={handleRecaptchaError}
         onExpired={handleRecaptchaExpired}
         theme="dark"
       />
-      {isVerified && <div>{isVerified ? 'Проверка пройдена' : 'Проверка не пройдена'}</div>}
-      {error && <div>{error}</div>}
-      {expired && <div>{expired ? 'Срок действия истек' : ''}</div>}
+      {(error || expired) && (
+        <p className={s.errorMessage}>{error ?? 'Verification expired. Please check the box again.'}</p>
+      )}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Label } from '@/shared/ui/label/Label'
 import { TextField } from '@/shared/ui/textField/TextField'
 

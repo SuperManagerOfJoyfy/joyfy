@@ -67,6 +67,23 @@
       "footerQuestion": "Don't have an account?",
       "footerLink": "Sign Up"
     },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "button": "Send Link",
+      "fields": {
+        "email": "Email"
+      },
+      "footerLink": "Back to Sign In",
+      "description": "Enter your email address and we will send you further instructions"
+    },
+    "newPassword": {
+      "title": "Create New Password",
+      "button": "Create New Password",
+      "fields": {
+        "newPassword": "New password",
+        "passwordConfirmation": "Password confirmation"
+      }
+    },
     "linkExpired": {
       "title": "Email verification link expired",
       "description": "Looks like the verification link has expired. Not to worry, we can send the link again",

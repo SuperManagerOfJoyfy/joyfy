@@ -1,12 +1,12 @@
 import { Recaptcha } from '@/shared/ui/reCaptcha/Recaptcha'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/nextjs'
 
 const meta: Meta<typeof Recaptcha> = {
   title: 'Components/Recaptcha',
   component: Recaptcha,
   tags: ['autodocs'],
   argTypes: {
-    onVerify: { action: 'verified' },
+    onVerifyAction: { action: 'verified' },
   },
 }
 
@@ -16,8 +16,7 @@ type Story = StoryObj<typeof Recaptcha>
 
 export const Default: Story = {
   args: {
-    // siteKey: '6LfpOuMqAAAAAE9xTZ1PP4CH-WUsTq5al9vEw0nJ',
-    siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-    onVerify: (token) => console.log('reCAPTCHA token:', token),
+    siteKey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
+    onVerifyAction: (token) => console.log('reCAPTCHA token:', token),
   },
 }
