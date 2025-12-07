@@ -1,6 +1,6 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { DefaultValues, FieldValues, Path, SubmitHandler, useForm } from 'react-hook-form'
 import { ZodType } from 'zod'
 import s from './form.module.scss'
@@ -16,6 +16,7 @@ export type FormProps<T extends FieldValues> = {
   type?: string
   additionalContent?: ReactNode
   disabled?: boolean
+  serverError?: { field: Path<T>; message: string } | null
 }
 
 export const Form = <T extends FieldValues>({
@@ -25,6 +26,7 @@ export const Form = <T extends FieldValues>({
   onSubmit,
   additionalContent,
   disabled = false,
+  serverError,
 }: FormProps<T>) => {
   const defaultValues: DefaultValues<T> = fields.reduce((acc, field) => {
     if (field.type === 'checkbox') {
@@ -35,12 +37,21 @@ export const Form = <T extends FieldValues>({
     return acc
   }, {} as DefaultValues<T>)
 
-  const { control, handleSubmit, watch, reset } = useForm<T>({
+  const { control, handleSubmit, watch, reset, setError } = useForm<T>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues,
   })
+
+  useEffect(() => {
+    if (serverError) {
+      setError(serverError.field, {
+        type: 'server',
+        message: serverError.message,
+      })
+    }
+  }, [serverError, setError])
 
   const values = watch()
 

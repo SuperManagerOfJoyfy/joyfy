@@ -38,7 +38,15 @@
       },
       "agreeToTerms": "You must agree to the Terms of Service",
       "passwordsDoNotMatch": "Passwords do not match. Try again.",
-      "required": "This field is required"
+      "required": "This field is required",
+      "recaptchaFailed": "Validation failed",
+      "recaptchaExpired": "The verification period has expired",
+      "recaptchaError": "Verification error",
+      "maxLength": "Maximum {count} characters",
+      "invalidCharacters": "Invalid characters entered",
+      "dateFormat": "The date must be in the format dd.mm.yyyy",
+      "tooYoung": "You must be at least 13 years old. See Privacy Policy.",
+      "aboutMeMax": "The \"About Me\" field must contain no more than 200 characters."
     },
     "signup": {
       "title": "Sign Up",
@@ -74,7 +82,8 @@
         "email": "Email"
       },
       "footerLink": "Back to Sign In",
-      "description": "Enter your email address and we will send you further instructions"
+      "description": "Enter your email address and we will send you further instructions",
+      "successDescription": "The link has been sent by email.\nIf you don’t receive an email send link again"
     },
     "newPassword": {
       "title": "Create New Password",

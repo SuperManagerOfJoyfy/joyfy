@@ -13,12 +13,12 @@ const Page = () => {
     try {
       await newPassword(data).unwrap()
     } catch (error) {
-      console.error(error)
+      console.log(error)
     }
   }
 
   return (
-    <div className="container">
+    <div>
       <NewPassword isLoading={isLoading} onSubmitAction={handleRecoverPassword} />
     </div>
   )
