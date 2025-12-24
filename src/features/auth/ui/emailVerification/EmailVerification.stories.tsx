@@ -1,7 +1,7 @@
-import { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/react'
 import infoImg from '@/features/auth/assets/images/EmailVerification/confirm.png'
 import expiredImg from '@/features/auth/assets/images/EmailVerification/expired.png'
-import { EmailVerification } from './EmailVerification'
+import { EmailVerification } from '@/features/auth/ui'
 import { Button, TextField } from '@/shared/ui'
 
 const meta: Meta<typeof EmailVerification> = {
