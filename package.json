@@ -36,7 +36,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.5.0",
     "next-intl": "^4.3.9",
-    "next": "15.4.7",
+    "next": "16.1.0-canary.19",
     "react": "^19.0.0",
     "react-datepicker": "^8.2.0",
     "react-dom": "^19.0.0",
