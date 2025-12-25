@@ -1,8 +1,7 @@
-import { EmailConfirmation } from '@/features/auth/ui/emailConfirmation/EmailConfirmation'
 import { PublicPosts } from '@/features/main/ui/publicPosts/PublicPosts'
 import { Post } from '@/features/post/types/postTypes'
 import { setRequestLocale } from 'next-intl/server'
-import { redirect } from 'next/navigation'
+import { AuthActionHandler } from '@/features/auth/ui/authActionHandler/AuthActionHandler'
 
 type PageProps = {
   searchParams: Promise<{ code?: string; email?: string }>
@@ -17,16 +16,10 @@ export default async function HomePage({ searchParams, params }: PageProps) {
   const code = searchParam?.code
   const email = searchParam?.email
 
-  console.log('Code ' + code)
-  console.log('Email ' + email)
   setRequestLocale(locale)
 
-  if (code && email) {
-    redirect(`/${locale}/auth/new-password?code=${code}&email=${email}`)
-  }
-
   if (code) {
-    return <EmailConfirmation code={code} />
+    return <AuthActionHandler code={code} email={email} locale={locale} />
   }
 
   let count = 0

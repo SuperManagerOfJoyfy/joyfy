@@ -1,6 +1,6 @@
 'use client'
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { LazyLoader, Scroll, Typography } from '@/shared/ui'
 import { UserItem } from '../api'
 import { useTranslations } from 'next-intl'
@@ -15,7 +15,7 @@ type BaseUserListProps = {
   className?: string
   onLoadMore: () => Promise<void>
   onSelect?: (user: UserItem) => void
-  renderUser: (user: UserItem) => React.ReactNode
+  renderUser: (user: UserItem) => ReactNode
 }
 
 export const BaseUserList = ({

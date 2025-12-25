@@ -91,7 +91,8 @@
       "fields": {
         "newPassword": "New password",
         "passwordConfirmation": "Password confirmation"
-      }
+      },
+      "description": "Your password must be between 6 and 20 characters"
     },
     "linkExpired": {
       "title": "Email verification link expired",
@@ -332,7 +333,8 @@
   "messages": {
     "auth": {
       "logoutSuccess": "You have been logged out",
-      "logoutError": "JWT accessToken is missing, expired or incorrect"
+      "logoutError": "JWT accessToken is missing, expired or incorrect",
+      "resetPasswordSuccess": "New password has been created successfully"
     },
     "post": {
       "published": "Post successfully published!",

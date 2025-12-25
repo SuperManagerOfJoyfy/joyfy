@@ -44,6 +44,12 @@ export const NewPassword = ({ className, isLoading, onSubmitAction }: Props) => 
 
   const newPasswordSchema = useMemo(() => makeNewPasswordSchema(tv), [tv])
 
+  const additionalContent = (
+    <div className={s.content}>
+      <Typography variant="body2">{t('description')}</Typography>
+    </div>
+  )
+
   const fields = [
     { name: 'password' as const, label: t('fields.newPassword'), type: 'password' },
     { name: 'confirmPassword' as const, label: t('fields.passwordConfirmation'), type: 'password' },
@@ -66,8 +72,8 @@ export const NewPassword = ({ className, isLoading, onSubmitAction }: Props) => 
         schema={newPasswordSchema}
         onSubmit={handleSubmit}
         disabled={isLoading}
+        additionalContent={additionalContent}
       />
-      {/*<Typography variant="caption2">{t('description')}</Typography>*/}
     </Card>
   )
 }

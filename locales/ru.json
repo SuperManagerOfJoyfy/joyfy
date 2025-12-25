@@ -91,7 +91,8 @@
       "fields": {
         "newPassword": "Новый пароль",
         "passwordConfirmation": "Подтверждение пароля"
-      }
+      },
+      "description": "Ваш пароль должен содержать от 6 до 20 символов."
     },
     "linkExpired": {
       "title": "Ссылка для подтверждения почты истекла",
@@ -330,7 +331,8 @@
   "messages": {
     "auth": {
       "logoutSuccess": "Вы вышли из системы",
-      "logoutError": "JWT accessToken отсутствует, просрочен или неверен"
+      "logoutError": "JWT accessToken отсутствует, просрочен или неверен",
+      "resetPasswordSuccess": "Новый пароль был создан успешно"
     },
     "post": {
       "published": "Публикация успешно опубликована!",
