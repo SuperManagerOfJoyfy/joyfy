@@ -12,7 +12,7 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://joyfy.online
 const frontendOrigin =
   typeof window !== 'undefined' && window.location.hostname === 'localhost'
     ? 'http://localhost:3000'
-    : 'https://joyfy.online'
+    : process.env.NEXT_PUBLIC_DOMAIN
 
 type SocialLinksProps = {
   isDisabled: boolean
@@ -28,9 +28,8 @@ export const SocialLinks = ({ isDisabled, onStartLoading }: SocialLinksProps) =>
     localStorage.setItem('locale', locale)
 
     const redirectUrl = `${frontendOrigin}/${locale}/auth/github`
-    const githubAuthUrl = `${apiBaseUrl}/auth/github/login?redirect_url=${encodeURIComponent(redirectUrl)}`
 
-    window.location.href = githubAuthUrl
+    window.location.href = `${apiBaseUrl}/auth/github/login?redirect_url=${encodeURIComponent(redirectUrl)}`
   }, [isDisabled, onStartLoading])
 
   const handleGoogleLogin = useCallback(() => {
@@ -42,9 +41,7 @@ export const SocialLinks = ({ isDisabled, onStartLoading }: SocialLinksProps) =>
 
     const redirectUrl = `${frontendOrigin}/auth/google`
 
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUrl)}&response_type=code&scope=email%20profile&prompt=select_account`
-
-    window.location.href = googleAuthUrl
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUrl)}&response_type=code&scope=email%20profile&prompt=select_account`
   }, [isDisabled, onStartLoading])
 
   return (

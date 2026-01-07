@@ -16,6 +16,7 @@ import {
 import { closeSocket } from '@/shared/config/socket'
 
 export const authApi = joyfyApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getMe: builder.query<MeResponse, void>({
       query: () => ({
@@ -104,6 +105,14 @@ export const authApi = joyfyApi.injectEndpoints({
       }),
     }),
 
+    passwordRecoveryResending: builder.mutation<void, EmailInputDto>({
+      query: (body) => ({
+        url: '/auth/password-recovery-resending',
+        method: 'POST',
+        body,
+      }),
+    }),
+
     recoverPassword: builder.mutation<void, RecoverPasswordRequest>({
       query: (body) => ({
         url: '/auth/password-recovery',
@@ -180,4 +189,5 @@ export const {
   useLazyGetMeQuery,
   useGoogleLoginMutation,
   useDeleteUserMutation,
+  usePasswordRecoveryResendingMutation,
 } = authApi

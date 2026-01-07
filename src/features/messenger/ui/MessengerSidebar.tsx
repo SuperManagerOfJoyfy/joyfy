@@ -7,11 +7,11 @@ import { ChatList } from './ChatList'
 import { BaseUserList } from '@/features/userSearch/ui'
 import { useSearchUser } from '@/features/userSearch/utils/hooks'
 import { PATH } from '@/shared/config/routes'
-import s from './Sidebar.module.scss'
+import s from './MessengerSidebar.module.scss'
 import { useRouter } from '@/i18n/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 
-export const Sidebar = () => {
+export const MessengerSidebar = () => {
   const t = useTranslations('messenger')
 
   const { users, isFetching, handleChangeValue, handleFetchMore, hasMore, searchValue, clearSearch } = useSearchUser({
@@ -33,13 +33,7 @@ export const Sidebar = () => {
   return (
     <aside className={s.sidebar}>
       <div className={s.searchBox}>
-        <TextField
-          search
-          placeholder={t('searchPlaceholder')}
-          onChange={handleChangeValue}
-          value={searchValue}
-          isLoading={isFetching}
-        />
+        <TextField search placeholder={t('searchPlaceholder')} onChange={handleChangeValue} value={searchValue} />
       </div>
 
       <div className={s.body}>

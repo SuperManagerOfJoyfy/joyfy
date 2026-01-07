@@ -1,5 +1,5 @@
 import { Login } from './Login'
-import type { Meta } from '@storybook/react'
+import type { Meta } from '@storybook/nextjs'
 
 const meta = {
   component: Login,

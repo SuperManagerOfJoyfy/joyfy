@@ -5,7 +5,7 @@
     "chooseLanguage": "Choose language"
   },
   "sidebar": {
-    "home": "Home",
+    "feed": "Feed",
     "create": "Create",
     "myProfile": "My Profile",
     "messenger": "Messenger",
@@ -38,7 +38,15 @@
       },
       "agreeToTerms": "You must agree to the Terms of Service",
       "passwordsDoNotMatch": "Passwords do not match. Try again.",
-      "required": "This field is required"
+      "required": "This field is required",
+      "recaptchaFailed": "Validation failed",
+      "recaptchaExpired": "The verification period has expired",
+      "recaptchaError": "Verification error",
+      "maxLength": "Maximum {count} characters",
+      "invalidCharacters": "Invalid characters entered",
+      "dateFormat": "The date must be in the format dd.mm.yyyy",
+      "tooYoung": "You must be at least 13 years old. See Privacy Policy.",
+      "aboutMeMax": "The \"About Me\" field must contain no more than 200 characters."
     },
     "signup": {
       "title": "Sign Up",
@@ -66,6 +74,25 @@
       "forgotPassword": "Forgot Password",
       "footerQuestion": "Don't have an account?",
       "footerLink": "Sign Up"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "button": "Send Link",
+      "fields": {
+        "email": "Email"
+      },
+      "footerLink": "Back to Sign In",
+      "description": "Enter your email address and we will send you further instructions",
+      "successDescription": "The link has been sent by email.\nIf you don’t receive an email send link again"
+    },
+    "newPassword": {
+      "title": "Create New Password",
+      "button": "Create New Password",
+      "fields": {
+        "newPassword": "New password",
+        "passwordConfirmation": "Password confirmation"
+      },
+      "description": "Your password must be between 6 and 20 characters"
     },
     "linkExpired": {
       "title": "Email verification link expired",
@@ -95,6 +122,11 @@
   "statistics": {
     "title": "Statistics Page"
   },
+
+  "feed": {
+    "empty": "Your feed is empty. Follow people to see posts."
+  },
+
   "profileSettings": {
     "tabs": {
       "info": "General Information",
@@ -262,14 +294,14 @@
       "delete": "Delete Post",
       "follow": "Follow",
       "unfollow": "Unfollow",
-      "copyLink": "Copy Link"
+      "copyLink": "Copy Link",
+      "copySuccess": "Link copied to clipboard"
     },
     "confirmDelete": "Are you sure you want to delete this post?",
     "confirmCancel": "Are you sure you want to exit post editing? Your changes will not be saved.",
     "updateSuccess": "Post updated successfully!",
     "deleteSuccess": "Post deleted successfully.",
-    "deleteError": "Post cannot be deleted.",
-    "copySuccess": "Link copied to clipboard"
+    "deleteError": "Post cannot be deleted."
   },
   "createPost": {
     "upload": {
@@ -301,7 +333,8 @@
   "messages": {
     "auth": {
       "logoutSuccess": "You have been logged out",
-      "logoutError": "JWT accessToken is missing, expired or incorrect"
+      "logoutError": "JWT accessToken is missing, expired or incorrect",
+      "resetPasswordSuccess": "New password has been created successfully"
     },
     "post": {
       "published": "Post successfully published!",
@@ -408,7 +441,7 @@
   "emailConfirmation": {
     "successTitle": "Congratulations!",
     "successDescription": "Your email has been confirmed",
-    "successButton": "Sign in",
+    "signInButton": "Sign in",
     "errorTitle": "Error",
     "errorDescription": "Please try again later",
     "networkErrorTitle": "Network Error",

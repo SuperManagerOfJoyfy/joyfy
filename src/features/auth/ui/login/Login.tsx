@@ -44,11 +44,7 @@ export const Login = ({ className, isLoading, onSubmit }: Props) => {
 
   const additionalContent = (
     <div className={s.content}>
-      <Link
-        href="/auth/new-password" // TODO
-        aria-disabled={isSocialLoading || isLoading}
-        className={s.forgot}
-      >
+      <Link href="/auth/forgot-password" aria-disabled={isSocialLoading || isLoading} className={s.forgot}>
         {t('forgotPassword')}
       </Link>
     </div>

@@ -8,7 +8,7 @@ import { usePostContext } from '../../providers/PostContext'
 import s from './StepFilters.module.scss'
 
 export const StepFilters = () => {
-  const t = useTranslations('filters')
+  const t = useTranslations('flow.filters')
   const { images, imagePreviews, imagesEditData, setImageEditData, setCurrentImageIndex, currentImageIdx } =
     usePostContext()
 

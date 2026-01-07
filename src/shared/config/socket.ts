@@ -5,6 +5,7 @@ let socket: Socket | null = null
 // Create and return the socket singleton
 export const connectSocket = (token: string): Socket => {
   if (socket) {
+    socket.removeAllListeners()
     socket.disconnect()
     socket = null
   }
@@ -20,6 +21,7 @@ export const connectSocket = (token: string): Socket => {
 // Fully close and clean up the socket
 export const closeSocket = () => {
   if (socket) {
+    socket.removeAllListeners()
     socket.disconnect()
     socket = null
   }

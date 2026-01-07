@@ -37,14 +37,14 @@ export const ChatItem = ({ chat, currentUser, selectedId, onSelect }: Props) => 
   const dialoguePartnerId = chat.ownerId === currentUser?.userId ? chat.receiverId : chat.ownerId
 
   return (
-    <li
+    <div
       key={chat.id}
-      className={clsx(s.chatItem, selectedId === chat.receiverId.toString() && s.selected)}
+      className={clsx(s.chatItem, selectedId === dialoguePartnerId.toString() && s.selected)}
       onClick={() => onSelect(dialoguePartnerId)}
     >
       <UserCard layout="withDate" user={user} date={chat.createdAt}>
         {displayText}
       </UserCard>
-    </li>
+    </div>
   )
 }

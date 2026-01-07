@@ -1,7 +1,7 @@
 import { Avatar } from '@/shared/ui'
 import { formatChatTimestamp } from '@/shared/utils/dateFunctions'
 import clsx from 'clsx'
-import { User } from '../../types/userCard.types'
+import { User } from '@/shared/ui/userCard'
 import s from './UserCard.module.scss'
 import { PATH } from '@/shared/config/routes'
 import { Link } from '@/i18n/navigation'

@@ -72,8 +72,8 @@ export const Management = () => {
         typeSubscription,
         paymentType,
         amount: price[typeSubscription],
-        //baseUrl: `http://localhost:3000/${locale}/settings?part=management`,
-        baseUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}//${locale}/settings?part=management&`,
+        // baseUrl: `http://localhost:3000/${locale}/settings?part=management`,
+        baseUrl: `${process.env.NEXT_PUBLIC_DOMAIN}/${locale}/settings?part=management&`,
       }).unwrap()
 
       if (response?.url) {

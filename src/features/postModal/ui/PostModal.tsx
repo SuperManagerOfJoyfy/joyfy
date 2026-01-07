@@ -17,11 +17,13 @@ export type UserProfileType = { userId: number; userName: string }
 type Props = {
   initialPost: Post
   userProfile: UserProfileType
+  isPublicView?: boolean
+  onClose?: () => void
 }
 
-export const PostModal = ({ initialPost, userProfile }: Props) => {
+export const PostModal = ({ initialPost, userProfile, onClose }: Props) => {
   return (
-    <PostModalContextProvider initialPost={initialPost} userProfile={userProfile}>
+    <PostModalContextProvider initialPost={initialPost} userProfile={userProfile} onClose={onClose}>
       <PostModalLayout />
     </PostModalContextProvider>
   )

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import type { User } from '../../types/userCard.types'
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { User } from '@/shared/ui/userCard'
 import { UserCard } from './UserCard'
 
 const meta: Meta<typeof UserCard> = {
