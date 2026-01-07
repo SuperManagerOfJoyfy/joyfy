@@ -37,7 +37,7 @@ export const UserProfile = (userProfile: PublicUserProfile) => {
   const [followById, { isLoading: followIsLoading }] = useFollowUserByIdMutation()
   const [unfollow, { isLoading: unfollowIsLoading }] = useUnfollowUserByIdMutation()
 
-  const profileAvatar = userProfile.avatars?.[0]?.url || ''
+  const profileAvatar = userProfile.avatars[0]?.url
   const bioText = userProfile.aboutMe || ''
 
   return (

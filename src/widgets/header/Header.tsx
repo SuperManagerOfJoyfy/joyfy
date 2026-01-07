@@ -1,13 +1,12 @@
 'use client'
 
-import { Link, usePathname, useRouter } from '@/i18n/navigation'
-import { useLocale, useTranslations } from 'next-intl'
 import Image, { StaticImageData } from 'next/image'
-import { memo, useCallback, useMemo } from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslations, useLocale } from 'next-intl'
+import { Link, usePathname, useRouter } from '@/i18n/navigation'
 
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { NotificationsPopover } from '@/features/notifications/ui/NotificationsPopover'
-import { useGetUserProfileQuery } from '@/features/profile/api'
 import { PATH } from '@/shared/config/routes'
 import { Button, SelectBox, SelectItem, UserCard } from '@/shared/ui'
 import Letters from '../../../public/logo/letters.png'
@@ -15,20 +14,22 @@ import Logo from '../../../public/logo/logo.png'
 import flagRussia from './assets/flagRussia.png'
 import flagUnitedKingdom from './assets/flagUnitedKingdom.png'
 import s from './Header.module.scss'
+import { useGetUserProfileQuery } from '@/features/profile/api'
+import { useSocket } from '@/shared/config/useSocket'
 
 type LanguageSelectProps = {
   flag: StaticImageData
   language: string
 }
 
-const LanguageSelect = memo(({ flag, language }: LanguageSelectProps) => (
+const LanguageSelect = ({ flag, language }: LanguageSelectProps) => (
   <div className={s.selectItem}>
     <Image src={flag} alt={`${language} flag`} width={20} height={20} />
     {language}
   </div>
-))
+)
 
-const AuthActions = memo(() => {
+const AuthActions = () => {
   const t = useTranslations('header')
   return (
     <div className={s.buttons}>
@@ -40,40 +41,46 @@ const AuthActions = memo(() => {
       </Button>
     </div>
   )
-})
+}
 
 export const Header = () => {
+  const { data: user, isLoading } = useGetMeQuery()
   const tHeader = useTranslations('header')
   const tLang = useTranslations('languages')
   const locale = useLocale() // -> 'en' | 'ru'
   const router = useRouter()
   const pathname = usePathname()
   const { data: me, isLoading: isMeLoading } = useGetMeQuery()
+  const [showButtons, setShowButtons] = useState(true)
   const { data: profile } = useGetUserProfileQuery(undefined, { skip: !me?.userId })
-  const showButtons = !isMeLoading && !me
 
-  const currentUser = useMemo(() => {
-    if (!me || !profile) return null
-    return {
-      id: me.userId,
-      userName: me.userName,
-      avatar: profile.avatars?.[0]?.url ?? '',
+  useEffect(() => {
+    if (!isMeLoading) {
+      setShowButtons(!me)
     }
-  }, [me, profile])
+  }, [isMeLoading, me])
 
-  const handleLanguageChange = useCallback(
-    (nextLocale: string) => {
-      router.replace(pathname, { locale: nextLocale as 'en' | 'ru' })
-    },
-    [router, pathname]
-  )
+  useSocket()
+
+  const currentUser =
+    me && profile
+      ? {
+          id: me.userId,
+          userName: me.userName,
+          avatar: profile.avatars?.[0]?.url ?? '',
+        }
+      : null
+
+  const handleLanguageChange = (nextLocale: string) => {
+    router.replace(pathname, { locale: nextLocale as 'en' | 'ru' })
+  }
 
   return (
     <header className={s.header}>
       <div className={s.container}>
         <Link href={PATH.ROOT} className={s.logo}>
-          <Image src={Logo} alt="logo" width={40} height={40} priority />
-          <Image src={Letters} alt="logo" height={20} priority />
+          <Image src={Logo} alt="logo" width={40} height={40} />
+          <Image src={Letters} alt="logo" height={20} />
         </Link>
 
         <div className={s.actions}>

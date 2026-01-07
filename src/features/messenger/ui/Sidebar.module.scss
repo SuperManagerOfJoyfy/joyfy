@@ -1,7 +1,6 @@
-@use '@/styles/mixins' as *;
-
 .sidebar {
-  @include flex-column;
+  display: flex;
+  flex-direction: column;
   height: 80vh;
   min-width: 270px;
   border-right: 1px solid var(--color-dark-300);
@@ -19,10 +18,10 @@
 }
 
 .body {
-  @include flex-column;
   flex: 1 1 auto;
   min-height: 0;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .usersList {

@@ -1,6 +1,6 @@
 import { SelectBox, SelectItem } from '@/shared/ui/selectBox/SelectBox'
-import { Meta, StoryObj } from '@storybook/nextjs'
-import { action } from 'storybook/actions'
+import { Meta, StoryObj } from '@storybook/react'
+import { action } from '@storybook/addon-actions'
 
 const meta: Meta<typeof SelectBox> = {
   title: 'Components/SelectBox',

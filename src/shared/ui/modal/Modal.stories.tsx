@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Meta, StoryObj } from '@storybook/nextjs'
+import { Meta, StoryObj } from '@storybook/react'
 
 import { Modal } from './Modal'
 import { Button } from '../button'

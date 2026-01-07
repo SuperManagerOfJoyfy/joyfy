@@ -7,7 +7,6 @@ import { ConfirmModal } from '@/shared/ui/confirmModal/ConfirmModal'
 import { closeSocket } from '@/shared/config/socket'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-import { memo } from 'react'
 
 type Props = {
   email?: string
@@ -15,7 +14,7 @@ type Props = {
   onOpenLogoutModalHandler: (value: boolean) => void
 }
 
-export const LogoutModal = memo(({ open, onOpenLogoutModalHandler, email }: Props) => {
+export const LogoutModal = ({ open, onOpenLogoutModalHandler, email }: Props) => {
   const t = useTranslations('logoutModal')
   const tMessages = useTranslations('messages.auth')
 
@@ -44,4 +43,4 @@ export const LogoutModal = memo(({ open, onOpenLogoutModalHandler, email }: Prop
       onConfirm={onLogoutButtonClickHandler}
     />
   )
-})
+}

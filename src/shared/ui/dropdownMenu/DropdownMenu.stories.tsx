@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/nextjs'
+import { Meta, StoryObj } from '@storybook/react'
 import { DropdownMenu } from './DropdownMenu'
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu'
 

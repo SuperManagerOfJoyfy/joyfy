@@ -1,12 +1,12 @@
-import { PostLikes } from '@/entities/post/ui/postLikes/ui/PostLikes'
-import { PostCommentForm } from '@/features/comments/ui/PostCommentForm'
-import { Post } from '@/features/post/types/postTypes'
-import { DateStamp, Separator } from '@/shared/ui'
-import { useTranslations } from 'next-intl'
+import { Likes, useCreatePostLikeMutation, useGetPostLikesQuery } from '@/features/post/api'
 import { PostReactions } from './PostReactions'
-import { usePostModalContext } from '../context/PostModalContext'
+import { PostLikes } from '@/entities/post/ui/postLikes/ui/PostLikes'
+import { DateStamp, Separator } from '@/shared/ui'
+import { PostCommentForm } from '@/features/comments/ui/PostCommentForm'
+import { useGetMeQuery } from '@/features/auth/api/authApi'
+import { Post } from '@/features/post/types/postTypes'
+import { useTranslations } from 'next-intl'
 
-import { usePostLike } from '@/features/post/hooks'
 import s from './PostViewMode.module.scss'
 
 type PostFooterProps = {
@@ -15,28 +15,29 @@ type PostFooterProps = {
 }
 
 export const PostFooter = ({ createdAt, post }: PostFooterProps) => {
-  const { likes, count, myLike, changeLikeStatus } = usePostLike(post.id)
-  const { isPublicView } = usePostModalContext()
-
+  const { data: likes } = useGetPostLikesQuery(post.id)
+  const { data: me } = useGetMeQuery()
+  const [like] = useCreatePostLikeMutation()
   const t = useTranslations('post')
 
-  if (isPublicView) {
-    return (
-      <div className={s.stickyFooter}>
-        {count > 0 && (
-          <>
-            <PostLikes users={likes} count={count} className={s.postLikes} />
-            <DateStamp date={createdAt} className={s.date} />
-          </>
-        )}
-      </div>
-    )
+  const users = likes?.items ?? []
+  const count = likes?.totalCount ?? 0
+  const myLike = !!users.find((user) => user.userId === me?.userId)
+
+  const changeLikeStatus = async (action: Likes) => {
+    try {
+      if (me) {
+        await like({ postId: post.id, likeStatus: action })
+      } else {
+        alert(t('notLoggedIn'))
+      }
+    } catch (error) {}
   }
 
   return (
     <div className={s.stickyFooter}>
       <PostReactions myLike={myLike} changeLikeStatus={changeLikeStatus} post={post} />
-      {count > 0 && <PostLikes users={likes} count={count} className={s.postLikes} />}
+      {count > 0 && <PostLikes users={users} count={count} className={s.postLikes} />}
       <DateStamp date={createdAt} className={s.date} />
       <Separator />
       <PostCommentForm postId={post.id} />

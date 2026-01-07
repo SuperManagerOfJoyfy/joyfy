@@ -78,9 +78,9 @@ export const createSidebarItems = (
 
   const userItems: SidebarItem[] = [
     {
-      id: 'feed',
-      title: translate('feed'),
-      path: PATH.USER.FEED,
+      id: 'home',
+      title: translate('home'),
+      path: PATH.ROOT,
       icon: <FiHome />,
       activeIcon: <FaHome />,
     },

@@ -5,14 +5,13 @@ import expiredImg from '@/features/auth/assets/images/EmailVerification/expired.
 import { Form } from '@/shared/ui'
 import { z } from 'zod'
 import { createEmailSchema } from '@/features/auth/utils/schemas/EmailSchema'
-import { useMemo, useState } from 'react'
-import { usePasswordRecoveryResendingMutation, useResendEmailConfirmationMutation } from '@/features/auth/api/authApi'
+import { useState, useMemo } from 'react'
+import { useResendEmailConfirmationMutation } from '@/features/auth/api/authApi'
 import { SentEmailModal } from '@/features/auth/ui'
 import { useTranslations } from 'next-intl'
 import s from './EmailConfirmation.module.scss'
-import { ReasonType } from '@/features/auth/ui/authActionHandler/AuthActionHandler'
 
-export const LinkExpired = ({ reason, locale }: { reason: ReasonType; locale: string }) => {
+export const LinkExpired = () => {
   const t = useTranslations('auth.linkExpired')
   const tv = useTranslations('auth.validation')
 
@@ -28,28 +27,15 @@ export const LinkExpired = ({ reason, locale }: { reason: ReasonType; locale: st
   )
 
   const [modalOpen, setModalOpen] = useState(false)
-  const [targetEmail, setTargetEmail] = useState('')
-
-  // Две разные мутации
-  const [resendConfirmation] = useResendEmailConfirmationMutation()
-  const [resendRecovery] = usePasswordRecoveryResendingMutation()
+  const [registeredEmail, setRegisteredEmail] = useState('')
+  const [resendEmail] = useResendEmailConfirmationMutation()
 
   const handleSendEmailSubmit = async ({ email }: z.infer<typeof EmailFormSchema>) => {
     try {
-      const baseUrl = `${window.location.origin}/${locale}`
-
-      if (reason === 'RECOVERY') {
-        debugger
-        await resendRecovery({ email, baseUrl }).unwrap()
-      } else {
-        await resendConfirmation({ email, baseUrl }).unwrap()
-      }
-
-      setTargetEmail(email)
+      await resendEmail({ email, baseUrl: 'https://joyfy.online' }).unwrap()
       setModalOpen(true)
-    } catch (error) {
-      console.error('Failed to resend link:', error)
-    }
+      setRegisteredEmail(email)
+    } catch (error) {}
   }
 
   return (
@@ -64,7 +50,7 @@ export const LinkExpired = ({ reason, locale }: { reason: ReasonType; locale: st
           />
         </div>
       </EmailVerification>
-      <SentEmailModal open={modalOpen} onOpenChange={setModalOpen} email={targetEmail} />
+      <SentEmailModal open={modalOpen} email={registeredEmail} />
     </>
   )
 }

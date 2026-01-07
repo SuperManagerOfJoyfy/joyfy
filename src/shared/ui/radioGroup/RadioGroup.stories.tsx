@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/react'
 import { RadioGroup } from '@/shared/ui/radioGroup/RadioGroup'
 
 const meta = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/react'
 import { subDays, subHours, subMinutes, subMonths } from 'date-fns'
 import { DateStamp } from './DateStamp'
 

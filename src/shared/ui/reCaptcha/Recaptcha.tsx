@@ -1,68 +1,55 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import ReCAPTCHA from 'react-google-recaptcha'
 import s from './Recaptcha.module.scss'
+import { useState } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 type Props = {
-  onVerifyAction: (token: string | null) => void
+  onVerify: (token: string | null) => void
   siteKey: string
-  showRequiredError?: boolean
-  messages?: {
-    required: string
-    failed: string
-    expired: string
-    error: string
-  }
 }
 
-export const Recaptcha = ({ onVerifyAction, siteKey, showRequiredError, messages }: Props) => {
-  const recaptchaRef = useRef<ReCAPTCHA | null>(null)
+export const Recaptcha = ({ onVerify, siteKey }: Props) => {
+  const [isVerified, setIsVerified] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [expired, setExpired] = useState(false)
 
-  useEffect(() => {
-    if (showRequiredError) {
-      setError(messages?.required ?? 'This field is required')
-      recaptchaRef.current?.reset()
-    }
-  }, [showRequiredError])
-
   const handleRecaptchaChange = (token: string | null) => {
+    setError(null)
     setExpired(false)
     if (token) {
-      setError(null)
-      onVerifyAction(token)
+      setIsVerified(true)
+      onVerify(token)
     } else {
-      setError(messages?.failed ?? 'Verification failed')
-      onVerifyAction(null)
+      setIsVerified(false)
+      onVerify(null)
     }
   }
 
   const handleRecaptchaError = () => {
-    setError(messages?.error ?? 'Verification error')
-    recaptchaRef.current?.reset()
-    onVerifyAction(null)
+    setError('Ошибка проверки reCAPTCHA')
+    setIsVerified(false)
+    onVerify(null)
   }
 
   const handleRecaptchaExpired = () => {
     setExpired(true)
-    recaptchaRef.current?.reset()
-    setError(messages?.expired ?? 'Verification expired')
-    onVerifyAction(null)
+    setIsVerified(false)
+    onVerify(null)
   }
 
   return (
     <div className={s.container}>
       <ReCAPTCHA
-        ref={recaptchaRef}
         sitekey={siteKey}
         onChange={handleRecaptchaChange}
         onErrored={handleRecaptchaError}
         onExpired={handleRecaptchaExpired}
         theme="dark"
       />
-      {(error || expired) && <p className={s.errorMessage}>{error}</p>}
+      {isVerified && <div>{isVerified ? 'Проверка пройдена' : 'Проверка не пройдена'}</div>}
+      {error && <div>{error}</div>}
+      {expired && <div>{expired ? 'Срок действия истек' : ''}</div>}
     </div>
   )
 }

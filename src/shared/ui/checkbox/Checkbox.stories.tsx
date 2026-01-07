@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/react'
 import { Checkbox } from '@/shared/ui/checkbox/Checkbox'
 import { useEffect, useState } from 'react'
 

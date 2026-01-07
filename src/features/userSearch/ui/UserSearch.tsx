@@ -11,7 +11,6 @@ import s from './UserSearch.module.scss'
 import { useTranslations } from 'next-intl'
 import { useSelector } from 'react-redux'
 import { selectCurrentUserId } from '@/features/auth/model/authSlice'
-import { ProgressBar } from '@/shared/ui/progressBar/ProgressBar'
 
 export const UserSearch = () => {
   const userId = useSelector(selectCurrentUserId)
@@ -23,26 +22,29 @@ export const UserSearch = () => {
   const t = useTranslations('userSearch')
 
   return (
-    <>
-      <div className={s.userSearch}>
-        <TextField search placeholder={t('placeholder')} onChange={handleChangeValue} value={searchValue} />
+    <div className={s.userSearch}>
+      <TextField
+        search
+        placeholder={t('placeholder')}
+        onChange={handleChangeValue}
+        value={searchValue}
+        isLoading={isFetching}
+      />
 
-        {users.length > 0 ? (
-          <BaseUserList
-            className={s.usersList}
-            users={users}
-            isFetching={isFetching}
-            hasMore={hasMore}
-            onLoadMore={handleFetchMore}
-            searchValue={searchValue}
-            noResultsText={t('noResults')}
-            renderUser={(u) => <User user={u} handleRequestClick={addRequest} />}
-          />
-        ) : (
-          <RecentRequests recentRequests={recentRequests} addRequest={addRequest} />
-        )}
-      </div>
-      {isFetching && <ProgressBar />}
-    </>
+      {users.length > 0 ? (
+        <BaseUserList
+          className={s.usersList}
+          users={users}
+          isFetching={isFetching}
+          hasMore={hasMore}
+          onLoadMore={handleFetchMore}
+          searchValue={searchValue}
+          noResultsText={t('noResults')}
+          renderUser={(u) => <User user={u} handleRequestClick={addRequest} />}
+        />
+      ) : (
+        <RecentRequests recentRequests={recentRequests} addRequest={addRequest} />
+      )}
+    </div>
   )
 }

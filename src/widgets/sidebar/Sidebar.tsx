@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, CSSProperties, memo, useCallback } from 'react'
+import { ReactNode, CSSProperties, memo } from 'react'
 import { Link } from '@/i18n/navigation'
 import { clsx } from 'clsx'
 
@@ -50,18 +50,14 @@ const determineActiveState = (itemPath: string | undefined, currentPath: string 
   return false
 }
 
-const SidebarItemComponent = memo(
-  ({
-    item,
-    activePath,
-    disabled,
-    onItemClick,
-  }: {
-    item: SidebarItem
-    activePath?: string
-    disabled: boolean
-    onItemClick: (item: SidebarItem) => void
-  }) => {
+export const Sidebar = memo(({ items, activePath, onItemClick, disabled = false, className = '' }: Props) => {
+  const handleItemClick = (item: SidebarItem) => {
+    if (disabled || item.disabled) return
+    item.onClick?.()
+    onItemClick?.(item)
+  }
+
+  const renderItem = (item: SidebarItem) => {
     const isActive = item.isActive ? item.isActive(activePath) : determineActiveState(item.path, activePath)
     const isItemDisabled = disabled || item.disabled
 
@@ -88,22 +84,13 @@ const SidebarItemComponent = memo(
       </>
     )
 
-    const handleItemClick = useCallback((e: React.MouseEvent) => {
-      if (isItemDisabled) {
-        e?.preventDefault()
-        return
-      }
-      item.onClick?.()
-      onItemClick(item)
-    }, [])
-
     if (!item.path) {
       return (
         <li key={item.id} className={s.sidebarItem} style={item.style}>
           <button
             type="button"
             className={linkClassNames}
-            onClick={handleItemClick}
+            onClick={() => handleItemClick(item)}
             disabled={isItemDisabled}
             aria-disabled={isItemDisabled}
             aria-label={item.title}
@@ -119,7 +106,13 @@ const SidebarItemComponent = memo(
         <Link
           href={isItemDisabled ? '#' : item.path}
           className={linkClassNames}
-          onClick={handleItemClick}
+          onClick={(e) => {
+            if (isItemDisabled) {
+              e.preventDefault()
+              return
+            }
+            handleItemClick(item)
+          }}
           tabIndex={isItemDisabled ? -1 : 0}
           aria-current={isActive ? 'page' : undefined}
           aria-disabled={isItemDisabled}
@@ -130,34 +123,13 @@ const SidebarItemComponent = memo(
       </li>
     )
   }
-)
-SidebarItemComponent.displayName = 'SidebarItemComponent'
-
-export const Sidebar = memo(({ items, activePath, onItemClick, disabled = false, className = '' }: Props) => {
-  const handleItemClick = useCallback(
-    (item: SidebarItem) => {
-      if (disabled || item.disabled) return
-      onItemClick?.(item)
-    },
-    [disabled, onItemClick]
-  )
 
   const sidebarClassNames = clsx(s.sidebar, disabled && s.disabled, className)
 
   return (
     <aside className={sidebarClassNames} role="navigation" aria-label="Sidebar Navigation">
       <nav className={s.sidebarNav}>
-        <ul className={s.sidebarList}>
-          {items.map((item) => (
-            <SidebarItemComponent
-              key={item.id}
-              item={item}
-              activePath={activePath}
-              disabled={disabled}
-              onItemClick={handleItemClick}
-            />
-          ))}
-        </ul>
+        <ul className={s.sidebarList}>{items.map(renderItem)}</ul>
       </nav>
     </aside>
   )

@@ -5,8 +5,21 @@ import { PostContent } from '../postViewMode'
 import s from './PostModal.module.scss'
 
 export const PostModalBody = () => {
-  const { isEditing, isUpdating, currentPost, postId, setHasFormChanges, savePostChanges, handleCancelEdit } =
-    usePostModalContext()
+  const {
+    isEditing,
+    isUpdating,
+    isOwnPost,
+    isFollowing,
+    currentPost,
+    postId,
+    setHasFormChanges,
+    savePostChanges,
+    handleCancelEdit,
+    handleEdit,
+    setConfirmAction,
+    handleFollowToggle,
+    handleCopyLink,
+  } = usePostModalContext()
 
   const { description, ownerId, userName, avatarOwner } = currentPost
   const user = { id: ownerId, userName, avatar: avatarOwner }
@@ -24,7 +37,15 @@ export const PostModalBody = () => {
           onFormChange={setHasFormChanges}
         />
       ) : (
-        <PostContent post={currentPost} />
+        <PostContent
+          post={currentPost}
+          isOwnPost={isOwnPost}
+          isFollowing={isFollowing}
+          onEdit={handleEdit}
+          onDelete={() => setConfirmAction('delete')}
+          onFollowToggle={handleFollowToggle}
+          onCopyLink={handleCopyLink}
+        />
       )}
     </div>
   )

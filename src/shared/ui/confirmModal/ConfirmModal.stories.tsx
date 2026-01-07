@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/nextjs'
+import { Meta } from '@storybook/react'
 import { ConfirmModal } from './ConfirmModal'
 import { Button } from '@/shared/ui'
 import { useState } from 'react'

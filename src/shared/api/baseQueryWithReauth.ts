@@ -79,8 +79,6 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 
   const isPublicPage = PUBLIC_PATHS.has(pathNoLocale) || pathNoLocale.startsWith(PATH.USER.PROFILE)
 
-  const hasToken = !!LocalStorage.getToken()
-
   if (isLoginEndpoint || isGoogleLoginEndpoint) {
     const res = await baseQuery(args, api, extraOptions)
     handleErrors(api, res)
@@ -90,13 +88,8 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
   let result = await baseQuery(args, api, extraOptions)
 
   if (result.error?.status === 401 && !isRefreshEndpoint) {
-    // ✅ If logged out, do not refresh or toast on any 401
-    if (!hasToken) {
-      return result
-    }
-
-    // ✅ If /auth/me on a public page, do not toast/redirect
     if (isAuthMeRequest && isPublicPage) {
+      handleErrors(api, result)
       return result
     }
 

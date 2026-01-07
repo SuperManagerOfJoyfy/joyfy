@@ -1,5 +1,5 @@
 import { StepUpload } from './StepUpload'
-import type { Meta } from '@storybook/nextjs'
+import type { Meta } from '@storybook/react'
 
 const meta = {
   title: 'features/StepUpload',

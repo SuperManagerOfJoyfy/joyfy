@@ -16,6 +16,7 @@ export type TextFieldProps = ComponentProps<'input'> & {
   startIcon?: ReactNode
   onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void
   onShowPasswordClick?: () => void
+  isLoading?: boolean
 }
 
 export const TextField = ({
@@ -30,6 +31,7 @@ export const TextField = ({
   disabled,
   required,
   type = 'text',
+  isLoading,
   ...rest
 }: TextFieldProps) => {
   const [showPassword, setShowPassword] = useState(false)
@@ -93,6 +95,11 @@ export const TextField = ({
           <button type="button" tabIndex={-1} onClick={togglePasswordHandler} className={classNames.endIconButton}>
             {showPassword ? <FiEye /> : <FiEyeOff />}
           </button>
+        )}
+        {isLoading && (
+          <div className={s.loaderWrapper}>
+            <Loader embedded />
+          </div>
         )}
       </div>
       {showError && <p className={classNames.errorText}>{errorMessage}</p>}

@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/nextjs'
+import { Meta, StoryObj } from '@storybook/react'
 import { FiHome, FiPlusCircle, FiUser, FiMessageCircle, FiSearch, FiBarChart2, FiStar, FiLogOut } from 'react-icons/fi'
 
 import { Sidebar } from './Sidebar'

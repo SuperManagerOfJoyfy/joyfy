@@ -1,18 +1,19 @@
 'use client'
 
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { useAppDispatch } from '@/app/store/store'
-import { toast } from 'react-toastify'
 import { useGetMeQuery } from '@/features/auth/api/authApi'
 import { MeResponse } from '@/features/auth/api/authApi.types'
-import { useGetUserProfileWithFollowersQuery } from '@/features/profile/api/profileApi'
-import { UserProfileWithFollowers } from '@/features/profile/api/profileApi.types'
+import { postsApi, useEditPostMutation, useGetPostByIdQuery } from '@/features/post/api'
 import { Post } from '@/features/post/types/postTypes'
-import { UserProfileType } from '../ui'
-import { postsApi, useDeletePostMutation, useEditPostMutation, useGetPostByIdQuery } from '@/features/post/api'
+import { usePostDropdownMenuActions } from '../hooks'
+import { toast } from 'react-toastify'
 import { extractMessage, isFetchBaseQueryError } from '@/shared/utils/handleErrors/handleErrors'
+import { UserProfileType } from '../ui'
+import { UserProfileWithFollowers } from '@/features/profile/api/profileApi.types'
+import { useGetUserProfileWithFollowersQuery } from '@/features/profile/api/profileApi'
+import { useTranslations } from 'next-intl'
 
 export type ConfirmAction = 'delete' | 'cancelEdit' | null
 
@@ -25,7 +26,6 @@ type PostModalContextValue = {
   hasFormChanges: boolean
   setHasFormChanges: (value: boolean) => void
   isUpdating: boolean
-  isPublicView: boolean
 
   // Data
   me: MeResponse | undefined
@@ -35,10 +35,14 @@ type PostModalContextValue = {
   isOwnPost: boolean
   isFollowing: boolean
 
-  // Modal-specific actions
+  // Actions from dropdown
   handleEdit: () => void
-  handleConfirmDelete: () => void
   handleDelete: () => Promise<void>
+  handleFollowToggle: () => void
+  handleCopyLink: () => void
+
+  // Modal-specific actions
+  handleDeletePost: () => Promise<void>
   handleModalClose: () => void
   handleCancelEdit: () => void
   handleConfirmAction: () => Promise<void>
@@ -52,7 +56,6 @@ type PostModalProviderProps = {
   children: ReactNode
   initialPost: Post
   userProfile: UserProfileType
-  onClose?: () => void
 }
 
 const PostModalContext = createContext<PostModalContextValue | null>(null)
@@ -63,55 +66,60 @@ export const usePostModalContext = () => {
   return context
 }
 
-export const PostModalContextProvider = ({ initialPost, userProfile, children, onClose }: PostModalProviderProps) => {
-  const { data: me } = useGetMeQuery()
+export const PostModalContextProvider = ({ initialPost, userProfile, children }: PostModalProviderProps) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const postId = Number(searchParams.get('postId'))
   const t = useTranslations('postEditForm')
-  const isPublicView = !me
-  const postId = !isPublicView && searchParams.get('postId') ? Number(searchParams.get('postId')) : undefined
 
   // State
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [hasFormChanges, setHasFormChanges] = useState(false)
+  const [skipQuery, setSkipQuery] = useState(true)
 
   // Data fetching
-  const { data: fetchedPost } = useGetPostByIdQuery(postId!, { skip: !postId, refetchOnMountOrArgChange: false })
+  const { data: me } = useGetMeQuery()
+  const { data: post } = useGetPostByIdQuery(postId, { skip: skipQuery })
   const [editPost, { isLoading: isUpdating }] = useEditPostMutation()
-  const [deletePostMutation] = useDeletePostMutation()
   const { data: userWithFollowers = {} as UserProfileWithFollowers } = useGetUserProfileWithFollowersQuery(
     userProfile.userName
   )
 
   // Initialize post data in cache
   useEffect(() => {
-    if (initialPost && !isPublicView) {
+    if (initialPost) {
       dispatch(postsApi.util.upsertQueryData('getPostById', initialPost.id, initialPost))
+      setSkipQuery(false)
     }
-  }, [dispatch, initialPost, isPublicView])
+  }, [dispatch, initialPost])
 
   // Derived state
-  const currentPost = fetchedPost || initialPost
-  const currentPostId = currentPost.id
+  const currentPost = post || initialPost
   const isOwnPost = currentPost?.ownerId === me?.userId
   const isFollowing = userWithFollowers.isFollowing
 
   // Basic actions
   const dismissModal = () => {
-    if (onClose) {
-      onClose()
-    } else {
-      const newParams = new URLSearchParams(searchParams.toString())
-      newParams.delete('postId')
-      router.push(`?${newParams.toString()}`, { scroll: false })
-    }
+    const newParams = new URLSearchParams(searchParams.toString())
+    newParams.delete('postId')
+    router.push(`?${newParams.toString()}`, { scroll: false })
   }
 
+  // Dropdown actions
+  const { handleEdit, handleDelete, handleFollowToggle, handleCopyLink } = usePostDropdownMenuActions({
+    userId: userProfile.userId,
+    postId: postId || 0,
+    ownerId: currentPost?.ownerId ?? 0,
+    isFollowing,
+    setIsEditing,
+  })
+
   // Modal-specific actions
-  const handleEdit = () => {
-    setIsEditing(true)
+  const handleDeletePost = async () => {
+    await handleDelete()
+    dismissModal()
   }
 
   const savePostChanges = async (postId: number, description: string) => {
@@ -134,20 +142,6 @@ export const PostModalContextProvider = ({ initialPost, userProfile, children, o
     }
   }
 
-  const handleDelete = async () => {
-    try {
-      await deletePostMutation({ postId: currentPostId || 0, userId: me?.userId || 0 })
-      toast.success(t('deleteSuccess'))
-      dismissModal()
-    } catch (error) {
-      toast.error(t('deleteError'))
-    }
-  }
-
-  const handleConfirmDelete = () => {
-    setConfirmAction('delete')
-  }
-
   const handleModalClose = () => {
     if (isEditing && hasFormChanges) {
       setConfirmAction('cancelEdit')
@@ -166,7 +160,7 @@ export const PostModalContextProvider = ({ initialPost, userProfile, children, o
 
   const handleConfirmAction = async () => {
     if (confirmAction === 'delete') {
-      await handleDelete()
+      await handleDeletePost()
     } else if (confirmAction === 'cancelEdit') {
       setIsEditing(false)
       setHasFormChanges(false)
@@ -187,16 +181,19 @@ export const PostModalContextProvider = ({ initialPost, userProfile, children, o
     // Data
     me,
     currentPost,
-    postId: currentPostId,
+    postId,
     isOwnPost,
     isFollowing,
     initialPost,
-    isPublicView,
+
+    // Dropdown-menu actions
+    handleEdit,
+    handleDelete,
+    handleFollowToggle,
+    handleCopyLink,
 
     // Modal-specific actions
-    handleEdit,
-    handleConfirmDelete,
-    handleDelete,
+    handleDeletePost,
     handleModalClose,
     handleCancelEdit,
     handleConfirmAction,

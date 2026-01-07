@@ -12,21 +12,22 @@ import {
 import { useAppDispatch } from '@/app/store/store'
 
 export const useMessengerController = (dialoguePartnerId: string) => {
-  const { data: messagesData, isLoading } = useGetChatMessagesQuery(dialoguePartnerId, { skip: !dialoguePartnerId })
+  const { data: messagesData, isLoading } = useGetChatMessagesQuery(dialoguePartnerId)
   const [trigger, { isFetching: isLoadingMore }] = useLazyGetOlderMessagesQuery()
   const [deleteMessage] = useDeleteMessageMutation()
   const [updateMessageStatus] = useUpdateMessageStatusMutation()
   const dispatch = useAppDispatch()
 
-  const chatMessages = messagesData?.items ?? []
+  const chatMessages = messagesData?.items || []
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const scroll = scrollRef?.current
     if (!scroll || !chatMessages.length) return
-
-    scroll.scrollTop = scroll.scrollHeight
+    if (scroll) {
+      scroll.scrollTop = scroll.scrollHeight
+    }
   }, [chatMessages.length])
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/react'
 import { Form, FormProps } from '@/shared/ui/form/Form'
 import { FieldValues, useForm } from 'react-hook-form'
 import { z } from 'zod'
