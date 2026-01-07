@@ -1,6 +1,6 @@
-import type { Preview } from '@storybook/react'
+import type { Preview } from '@storybook/nextjs'
 import '@/styles/globals.css'
-import { themes } from '@storybook/theming'
+import { themes } from 'storybook/theming'
 
 const preview: Preview = {
   parameters: {
@@ -15,12 +15,17 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: 'dark',
-      values: [
-        { name: 'light', value: 'var(--color-light-100)' },
-        { name: 'dark', value: 'var(--color-dark-700)' },
-        { name: 'gray', value: 'var(--color-dark-100)' },
-      ],
+      options: {
+        light: { name: 'light', value: 'var(--color-light-100)' },
+        dark: { name: 'dark', value: 'var(--color-dark-700)' },
+        gray: { name: 'gray', value: 'var(--color-dark-100)' },
+      },
+    },
+  },
+
+  initialGlobals: {
+    backgrounds: {
+      value: 'dark',
     },
   },
 }

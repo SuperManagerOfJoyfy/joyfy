@@ -105,6 +105,14 @@ export const authApi = joyfyApi.injectEndpoints({
       }),
     }),
 
+    passwordRecoveryResending: builder.mutation<void, EmailInputDto>({
+      query: (body) => ({
+        url: '/auth/password-recovery-resending',
+        method: 'POST',
+        body,
+      }),
+    }),
+
     recoverPassword: builder.mutation<void, RecoverPasswordRequest>({
       query: (body) => ({
         url: '/auth/password-recovery',
@@ -181,4 +189,5 @@ export const {
   useLazyGetMeQuery,
   useGoogleLoginMutation,
   useDeleteUserMutation,
+  usePasswordRecoveryResendingMutation,
 } = authApi
